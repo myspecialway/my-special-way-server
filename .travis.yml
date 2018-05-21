@@ -8,3 +8,7 @@ jobs:
       script: yarn
     - stage: linter
       script: yarn tslint
+    - stage: unit tests
+      script: yarn test
+    - stage: build
+      script: yarn prestart:prod
