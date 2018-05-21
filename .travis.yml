@@ -4,5 +4,7 @@ node_js:
 
 jobs:
   include:
+    - stage: yarn
+      script: yarn
     - stage: linter
       script: yarn tslint
