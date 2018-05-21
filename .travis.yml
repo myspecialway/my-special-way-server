@@ -2,13 +2,15 @@ language: node_js
 node_js:
   - "node"
 
+stages:
+  - name: deploy
+    if: branch = master
+
 jobs:
   include:
-    - stage: yarn
-      script: yarn
-    - stage: linter
-      script: yarn tslint
-    - stage: unit tests
-      script: yarn test
     - stage: build
+      script: yarn tslint
+      script: yarn test
       script: yarn prestart:prod
+    - stage: deploy
+      script: echo deploying
