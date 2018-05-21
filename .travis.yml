@@ -1,0 +1,8 @@
+laguage: node_js
+node_js:
+  - "latest"
+
+jobs:
+  include:
+    - stage: linter
+      script: yarn tslint
