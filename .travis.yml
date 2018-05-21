@@ -1,12 +1,24 @@
 language: node_js
 node_js:
-  - "node"
-
+- node
+sudo: required
+services:
+- docker
 cache:
   directories:
-    - "node_modules"
-
+  - node_modules
+before_script:
+- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 script:
-  - "yarn tslint"
-  - "yarn test"
-  - "yarn build"
+- yarn tslint
+- yarn test
+- yarn build
+
+deploy:
+  provider: script
+  script: docker push myspecialway/msw-server
+
+env:
+  global:
+  - secure: JZU/wMSEQfUObS0NXk2qU03Z+ggtWPPH3IwRJxocEX1Fp0qcgJzEb03IVzf36ep/da81MZAe/pUUUayJS3XbxPzi4cLSdGqi4FCQLL+deYnbJwkme+OPjTnawcdaBCVJ0+rIkYpoDc4blm4f2/G6CT0dIYXpoQEGBUAY9cD4Xi81F9WdNlMbUnliQDLJ8nFUvX4HrgdmKOIYDTqmZn7xD4wxB77gagxJYEuHO2LQbiEvvHa0FmSr+Y/h7R/kJpy4ZGXtQYQIwk6+FWeOTUcqvLJRUHT1MuIzhMepzIcvQwskfAITfG+2guMj10rr+FpRAsHbLP8+xKJHT1t8d6rJj0QF7JRP2ayXzx274fxcg3OYQco0kWLG0U6u+LPheo7N0VOPT4Qy/bvGk6M2KUpQvaO3Q5HULtyVbvpCfQG1iGmOofjYBDztgYdDXQnFx+Sd/y6BsiURRgVojxhwn3aGSO5N+boP6FZ/vVtAHSGfEt2c+ncvTnTYHYP5Qgzp9igv3PHjIno68BBycgcivSBI2KjkXwDDxFNd0TKacn+ASOFUinnCVZwnJ9ONbkRAeF6v2akNZHy0q2T8jjWA1Fdy5wmHI2v/dAXMqNFtGIivIW/T8WcyamjSmPUIxAHRG/lJqo9h87cd4kcrTjdKen3rNqFKTEuvLkwZ1e3T+RsQ/Ow=
+  - secure: Vu8WgFdpwvmjocGqpHS+aTM/Q9khXpV4toXAupyOVXx4gn1Tl2AL9pE0bivqy8kvAmNZcUbp6m3REzEMoncTbCRkC1YXEqRWs3ayph1c4rK9Ufa993mXWi1p4MrGmQrmW+jSI+GlhxltoZLqJpTNvQiLtCqyliF6YgqtBGcPgeD9lyQ2x03CoEbB88GhtIWxV0crdgwPEU9DIZx5D2/irrI0NvTkYWK2ljMNyeLc9oxiPYEX7Kh6V9XAQOxwCNPh4EIXYaaMhCFlYbcsvSfZeaDQ7CX4sAHi6klm4GjQQ6Sx1r8jpyl9kQTkPcq3NIqP+yzkW7tj9kWCgi1faS4oPTEoYfzKpNZuWXdvT2o2b6dTxq6y/JDrUR6C94YjitYBAAxm8vVFH3yzYEh7b7x8O1h+rTTKJCsUfbXVBeIH90zZuEs5k6BHvCy7ezgp3ivStvWPH7LynujwlRPtlnRNYeHSXa6lkpzTOHH7fBYjIIFocjEwluyM/q6jWR/fooA0staapupEpBLoheasPpgoyXCIWy0XBcBvJmcM2UPf2nf/ZedywcVaeNc90OOZouFcT8h2hiX8Qamq+uVDBJZOkp6ontDu56RkS2rNOGIIKokMnnBez35PnF2QX1iMxyFtBprz4gjE8s1VqKhnisnzWstfrZC8iNghg+ATJvwNP2o=

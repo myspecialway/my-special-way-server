@@ -1,0 +1,5 @@
+#!/bin/bash
+
+docker pull node:carbon
+cd dist
+docker build . -t myspecialway/msw-server:$(./scripts/echo-version ./package.json)
