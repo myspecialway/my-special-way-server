@@ -5,8 +5,9 @@
   "author": "my-special-way",
   "license": "MIT",
   "scripts": {
-    "build": "rm -rf dist && tsc && cp -t ./dist ./Dockerfile package.json",
+    "build": "./scripts/build",
     "docker": "./scripts/docker",
+    "docker:push": "./scripts/docker-push",
     "format": "prettier --write \"**/*.ts\"",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",

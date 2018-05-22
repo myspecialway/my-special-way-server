@@ -13,10 +13,8 @@ script:
 - yarn tslint
 - yarn test
 - yarn build
-
-deploy:
-  provider: script
-  script: docker push myspecialway/msw-server
+- yarn docker
+- yarn docker:push
 
 env:
   global:
