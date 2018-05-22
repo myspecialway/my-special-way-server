@@ -6,9 +6,11 @@
   "license": "MIT",
   "scripts": {
     "build": "./scripts/build",
+    "bump": "yarn version --new-version patch",
     "docker": "./scripts/docker",
     "docker:push": "./scripts/docker-push",
     "format": "prettier --write \"**/*.ts\"",
+    "git:push": "git push -u origin $BRANCH",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "prestart:prod": "rm -rf dist && tsc",

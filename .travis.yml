@@ -15,8 +15,10 @@ script:
 - yarn tslint
 - yarn test
 - yarn build
+- yarn bump
 - yarn docker
 - yarn docker:push
+- yarn git:push
 env:
   global:
   - secure: JZU/wMSEQfUObS0NXk2qU03Z+ggtWPPH3IwRJxocEX1Fp0qcgJzEb03IVzf36ep/da81MZAe/pUUUayJS3XbxPzi4cLSdGqi4FCQLL+deYnbJwkme+OPjTnawcdaBCVJ0+rIkYpoDc4blm4f2/G6CT0dIYXpoQEGBUAY9cD4Xi81F9WdNlMbUnliQDLJ8nFUvX4HrgdmKOIYDTqmZn7xD4wxB77gagxJYEuHO2LQbiEvvHa0FmSr+Y/h7R/kJpy4ZGXtQYQIwk6+FWeOTUcqvLJRUHT1MuIzhMepzIcvQwskfAITfG+2guMj10rr+FpRAsHbLP8+xKJHT1t8d6rJj0QF7JRP2ayXzx274fxcg3OYQco0kWLG0U6u+LPheo7N0VOPT4Qy/bvGk6M2KUpQvaO3Q5HULtyVbvpCfQG1iGmOofjYBDztgYdDXQnFx+Sd/y6BsiURRgVojxhwn3aGSO5N+boP6FZ/vVtAHSGfEt2c+ncvTnTYHYP5Qgzp9igv3PHjIno68BBycgcivSBI2KjkXwDDxFNd0TKacn+ASOFUinnCVZwnJ9ONbkRAeF6v2akNZHy0q2T8jjWA1Fdy5wmHI2v/dAXMqNFtGIivIW/T8WcyamjSmPUIxAHRG/lJqo9h87cd4kcrTjdKen3rNqFKTEuvLkwZ1e3T+RsQ/Ow=
