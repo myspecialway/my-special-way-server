@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/myspecialway/my-special-way-server.svg?branch=master)](https://travis-ci.org/myspecialway/my-special-way-server)
+
 # my-special-way-server
 
 ## Description
