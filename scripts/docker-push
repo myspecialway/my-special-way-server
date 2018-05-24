@@ -6,3 +6,4 @@ then
     docker push myspecialway/msw-server:latest
 else
     docker push myspecialway/msw-server:$BRANCH
+fi

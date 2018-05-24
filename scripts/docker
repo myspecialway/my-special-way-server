@@ -7,3 +7,4 @@ then
     docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
 else
     docker build . -t myspecialway/msw-server:$BRANCH
+fi
