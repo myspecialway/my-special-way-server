@@ -2,7 +2,7 @@
 
 docker pull node:carbon
 
-if [$BRANCH === 'master']
+if [ "$BRANCH" == 'master' ]
 then
     docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
 else

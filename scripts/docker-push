@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [$BRANCH == 'master']
+if [ "$BRANCH" == 'master' ]
 then
-    docker push myspecialway/msw-server:$(./scripts/echo-version package.json)
-    docker push myspecialway/msw-server:latest
+   docker push myspecialway/msw-server:$(./scripts/echo-version package.json)
+   docker push myspecialway/msw-server:latest
 else
-    docker push myspecialway/msw-server:$BRANCH
+   docker push myspecialway/msw-server:$BRANCH
 fi  
