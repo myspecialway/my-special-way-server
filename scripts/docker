@@ -6,5 +6,5 @@ if [ "$BRANCH" == 'master' ]
 then
     docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
 else
-    docker build . -t myspecialway/msw-server:$BRANCH
+    docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/\//\\\//g')
 fi
