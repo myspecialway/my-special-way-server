@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "lib": [
+      "esnext.asynciterable",
+      "esnext",
+      "dom"
+    ],
     "declaration": false,
     "noImplicitAny": false,
     "removeComments": true,
