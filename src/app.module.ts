@@ -1,6 +1,6 @@
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { graphqlExpress } from 'apollo-server-express';
-import { GraphQLModule, GraphQLFactory,   } from '@nestjs/graphql';
+import { GraphQLModule, GraphQLFactory } from '@nestjs/graphql';
 import * as express_graphql from 'express-graphql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -23,7 +23,7 @@ export class AppModule implements  NestModule {
 
     // Root resolver
     private root = {
-      message: () => 'Welcome to My-Special-W@@y!'
+      message: () => 'Welcome to My-Special-W@@y!',
     };
   configure(consumer: MiddlewareConsumer) {
     const typeDefs = this.graphQLFactory.mergeTypesByPaths('./**/*.graphql');
@@ -34,7 +34,7 @@ export class AppModule implements  NestModule {
       .apply(express_graphql({
         schema: this.sChema,
         rootValue: this.root,
-        graphiql: true
+        graphiql: true,
     }))
       .forRoutes('/graphql');
   }
