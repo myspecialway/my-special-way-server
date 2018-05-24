@@ -1,4 +1,9 @@
 #!/bin/bash
 
 docker pull node:carbon
-docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
+
+if [$BRANCH = "master"]
+then
+    docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
+else
+    docker build . -t myspecialway/msw-server:$BRANCH
