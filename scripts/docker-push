@@ -5,5 +5,5 @@ then
    docker push myspecialway/msw-server:$(./scripts/echo-version package.json)
    docker push myspecialway/msw-server:latest
 else
-   docker push myspecialway/msw-server:$BRANCH
+   docker push myspecialway/msw-server:$(echo $BRANCH | sed 's/\//_/g')
 fi  
