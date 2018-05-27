@@ -7,14 +7,15 @@ services:
 cache:
   directories:
   - node_modules
+
+
 before_script:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - ./scripts/prepare-repo
-
-script:
 - yarn tslint
 - yarn test:ci
 - yarn build
+script:
 - yarn bump
 - yarn docker
 - yarn docker:push
