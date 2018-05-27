@@ -15,11 +15,11 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/GET /', () => {
+  it('/GET /graphql?query={ message }', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .get('/graphql?query=%7B%0A%20%20message%0A%7D')
       .expect(200)
-      .expect('Welcome to My-Special-W@@y!');
+      .expect('{"data":{"message":"Welcome to My-Special-W@@y!"}}');
   });
   it('/POST /', () => {
     return request(app.getHttpServer())

@@ -1,9 +1,23 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
   "testRegex": ".e2e-spec.ts$",
   "coverageDirectory": "../coverage",
   "transform": {
-    "^.+\\.(t|j)s$": "ts-jest"
-  }
+    "^.+\\.tsx?$": "ts-jest"
+  },
+  "moduleDirectories": ["node_modules", "../node_modules"],
+  "moduleFileExtensions": [
+    "ts",
+    "tsx",
+    "js",
+    "jsx",
+    "json",
+    "node"
+  ],
+  "collectCoverageFrom": [
+      "../src/*.{js,jsx,ts}",
+      "!**/node_modules/**",
+      "!**/vendor/**"
+    ]
+  
 }
