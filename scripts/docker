@@ -1,15 +1,17 @@
 #!/bin/bash
 
-docker pull node:carbon
+echo debug::docker:: TRAVIS_PULL_REQUEST=$TRAVIS_PULL_REQUEST
 if [ "$TRAVIS_PULL_REQUEST" == "true" ]
 then
     echo info::docker:: branch is a pull request, skipping docker 
 elif [ "$BRANCH" = 'master' ]
 then
    echo info::docker:: build is on \"master\" branch incrementing version and building
+   docker pull node:carbon
    yarn version --new-version patch
    docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
 else
     echo info::docker:: branch $BRANCH is not master, building without version increment
-   docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
+    docker pull node:carbon
+    docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
 fi
