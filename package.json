@@ -10,7 +10,7 @@
     "docker": "./scripts/docker",
     "docker:push": "./scripts/docker-push",
     "format": "prettier --write \"**/*.ts\"",
-    "git:push": "git push -u origin $BRANCH",
+    "git:push": "./scripts/git-push",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
     "start:dev": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
