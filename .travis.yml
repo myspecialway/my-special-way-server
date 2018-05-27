@@ -14,8 +14,7 @@ before_install:
 install:
 # - yarn tslint
 # - yarn test
-# - yarn build
-# - yarn bump
+- yarn build
 - yarn docker
 # - yarn docker:push
 # - yarn git:push
