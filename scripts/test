@@ -1,0 +1,10 @@
+#!/bin/bash
+
+jest --coverage 
+codecov 
+rm -rf coverage
+
+jest --config ./test/jest-e2e.json --coverage 
+codecov 
+rm -rf coverage
+

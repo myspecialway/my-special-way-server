@@ -19,8 +19,7 @@
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json --coverage ",
-    "test:ut:ci": "jest --coverage && codecov",
-    "test:e2e:ci": "jest --config ./test/jest-e2e.json --coverage && codecov",
+    "test:ci": "bash ./scripts/test",
     "tslint": "tslint -c tslint.json src/**/*.ts",
     "webpack": "webpack --config webpack.config.js"
   },
