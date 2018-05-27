@@ -7,14 +7,17 @@ services:
 cache:
   directories:
   - node_modules
+
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - . ./scripts/prepare-repo
 
 install:
 - yarn tslint
-- yarn test
+- yarn test:ci
 - yarn build
+
+after_success:
 - yarn docker
 - yarn docker:push
 - yarn git:push
