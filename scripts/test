@@ -1,10 +1,8 @@
 #!/bin/bash
 
-jest --coverage 
-codecov 
+jest --coverage && codecov || exit 1
 rm -rf coverage
 
-jest --config ./test/jest-e2e.json --coverage 
-codecov 
+jest --config ./test/jest-e2e.json --coverage  && codecov || exit 1
 rm -rf coverage
 
