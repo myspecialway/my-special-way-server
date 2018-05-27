@@ -1,13 +1,13 @@
 #!/bin/bash
 
-if [ "$BRANCH" == 'master' ]
+if [ "$TRAVIS_PULL_REQUEST" == "true" ]
+then
+    echo info::docker-push:: branch is a pull request skipping push to hub
+elif [ "$BRANCH" == 'master' ]
 then
     echo info::docker-push:: branch is \"master\" pushing new version and latest docker tags
     docker push myspecialway/msw-server:$(./scripts/echo-version package.json)
     docker push myspecialway/msw-server:latest
-elif [ "$TRAVIS_PULL_REQUEST" == "true" ]
-then
-    echo info::docker-push:: branch is a pull request skipping push to hub
 else
     echo info::docker-push:: branch is not \"master\" pushing custom branch docker tag
     docker push myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
