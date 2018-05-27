@@ -13,7 +13,8 @@ before_script:
 
 script:
 - yarn tslint
-- yarn test
+- yarn test:ut:ci
+- yarn test:e2e:ci
 - yarn build
 - yarn bump
 - yarn docker
