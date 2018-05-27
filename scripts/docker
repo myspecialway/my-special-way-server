@@ -8,9 +8,8 @@ then
    docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
 elif [ "$TRAVIS_PULL_REQUEST" == "true" ]
 then
-    echo branch is a pull request, skipping docker 
+    echo info::docker:: branch is a pull request, skipping docker 
 else
-    echo branch $BRANCH is not master, building without version increment
-    echo myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
+    echo info::docker:: branch $BRANCH is not master, building without version increment
    docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
 fi

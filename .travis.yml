@@ -12,12 +12,12 @@ before_install:
 - . ./scripts/prepare-repo
 
 install:
-# - yarn tslint
-# - yarn test
+- yarn tslint
+- yarn test
 - yarn build
 - yarn docker
-# - yarn docker:push
-# - yarn git:push
+- yarn docker:push
+- yarn git:push
 
 notifications:
   slack:

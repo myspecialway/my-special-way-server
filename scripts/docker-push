@@ -2,8 +2,10 @@
 
 if [ "$BRANCH" == 'master' ]
 then
-   docker push myspecialway/msw-server:$(./scripts/echo-version package.json)
-   docker push myspecialway/msw-server:latest
+    echo info::docker-push:: branch is \"master\" pushing new version and latest docker tags
+    docker push myspecialway/msw-server:$(./scripts/echo-version package.json)
+    docker push myspecialway/msw-server:latest
 else
-   docker push myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
+    echo info::docker-push:: branch is not \"master\" publishing custom branch docker tag
+    docker push myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
 fi  
