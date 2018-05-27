@@ -1,13 +1,13 @@
 #!/bin/bash
 
 docker pull node:carbon
-
-if [ "$BRANCH" == 'master' ]
+echo ---------------------------------------$BRANCH
+if [ "$BRANCH" = 'master' ]
 then
-    docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
+   # docker build . -t myspecialway/msw-server:$(./scripts/echo-version package.json) -t myspecialway/msw-server:latest
 else
     echo $BRANCH
     echo $BRANCH | sed 's/\///g'
     echo myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
-    docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
+  #  docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/\///g')
 fi
