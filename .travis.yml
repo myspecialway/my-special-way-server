@@ -4,9 +4,6 @@ node_js:
 sudo: required
 services:
 - docker
-cache:
-  directories:
-  - node_modules
 
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
