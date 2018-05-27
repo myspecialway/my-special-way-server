@@ -9,7 +9,7 @@ cache:
   - node_modules
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- ./scripts/prepare-repo
+- . ./scripts/prepare-repo
 
 install:
 # - yarn tslint
