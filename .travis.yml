@@ -15,7 +15,7 @@ install:
 - yarn test:ci
 - yarn build
 
-after_success:
+script:
 - yarn docker
 - yarn docker:push
 - yarn git:push
