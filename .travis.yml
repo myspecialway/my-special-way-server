@@ -16,7 +16,7 @@ install:
 # - yarn test
 # - yarn build
 # - yarn bump
-- ./scripts/docker
+- yarn docker
 # - yarn docker:push
 # - yarn git:push
 

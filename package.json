@@ -7,7 +7,7 @@
   "scripts": {
     "build": "./scripts/build",
     "bump": "yarn version --new-version patch",
-    "docker": "./scripts/docker",
+    "docker": "source ./scripts/docker",
     "docker:push": "./scripts/docker-push",
     "format": "prettier --write \"**/*.ts\"",
     "git:push": "git push -u origin $BRANCH",
