@@ -53,14 +53,14 @@ The test will run also on CI once you do your first commit also generating
 
 ### Coding style tests
 
-Based on [TSLint](https://palantir.github.io/tslint/) - please refer to [tslint.json](tslint.json) for definition of the rules
-Violations will fail your builds
-Adding TSLint plugin to your IDE will spair you the trouble of fixing after the commit
+Based on [TSLint](https://palantir.github.io/tslint/) - please refer to [tslint.json](tslint.json) for definition of the rules.
+Violations will fail your builds.
+Adding TSLint plugin to your IDE will spare you the trouble of fixing after the commit
 
 ## Deployment
 
-Commit to master through a PR will bump the version, update docker hub with your image and deploy to Azure
-Commit to your branch will update to docker hub with custom tag, you will need to run the docker manually for now
+Commit to master through a PR will bump the version, update docker hub with your image and deploy to Azure.
+Commit to your branch will update to docker hub with custom tag, you will need to run the docker manually for now.
 
 ## Built With
 
@@ -72,7 +72,7 @@ Commit to your branch will update to docker hub with custom tag, you will need t
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
-Also this - [git flow]h(ttps://guides.github.com/introduction/flow/)
+Also this [git flow](ttps://guides.github.com/introduction/flow/)
 
 ## Versioning
 
@@ -81,7 +81,7 @@ We use [SemVer](http://semver.org/) for versioning.
 ## Authors
 
 
-See also the list of [contributors](https://github.com/my-special-way/my-special-way-server/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/myspecialway/my-special-way-server/graphs/contributors) who participated in this project.
 
 ## License
 
