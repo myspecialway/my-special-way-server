@@ -3,8 +3,6 @@
 
 # my-special-way-server
 
-# Project Title
-
 Server part of the My special way project enabling indoor navigation for schools
 Demo master version running at https://msw-server.azurewebsites.net/
 
