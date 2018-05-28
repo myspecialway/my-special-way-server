@@ -1,0 +1,8 @@
+#!/bin/bash
+
+npx jest --coverage && npx codecov || exit 1
+rm -rf coverage
+
+npx jest --rootDir=. --testRegex=.e2e-spec.ts$ --maxWorkers=4 --coverage --coverageReporters=lcov --coverageDirectory=coverage && npx codecov || exit 1
+rm -rf coverage
+
