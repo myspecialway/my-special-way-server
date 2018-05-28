@@ -15,12 +15,26 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
+  it('/GET /graphql?query={ message }', () => {
+    return request(app.getHttpServer())
+      .get('/graphql?query=%7B%0A%20%20message%0A%7D')
+      .expect(200)
+      .expect('{"data":{"message":"Welcome to My-Special-W@@y!"}}');
+  });
+
   it('/GET /', () => {
     return request(app.getHttpServer())
       .get('/')
       .expect(200)
       .expect('Welcome to My-Special-W@@y!');
   });
+
+  it('/GET /graphiql', () => {
+    return request(app.getHttpServer())
+      .get('/graphiql')
+      .expect(200);
+  });
+
   it('/POST /', () => {
     return request(app.getHttpServer())
       .post('/')

@@ -4,18 +4,18 @@ node_js:
 sudo: required
 services:
 - docker
-cache:
-  directories:
-  - node_modules
-before_script:
+
+before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- ./scripts/prepare-repo
+- . ./scripts/prepare-repo
+
+install:
+- yarn   
+- yarn tslint
+- yarn test:ci
+- yarn build
 
 script:
-- yarn tslint
-- yarn test
-- yarn build
-- yarn bump
 - yarn docker
 - yarn docker:push
 - yarn git:push
