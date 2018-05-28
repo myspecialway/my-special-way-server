@@ -72,7 +72,7 @@ Commit to your branch will update to docker hub with custom tag, you will need t
 
 Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
 
-Also this [git flow](ttps://guides.github.com/introduction/flow/)
+Also this [git flow](https://guides.github.com/introduction/flow/)
 
 ## Versioning
 
