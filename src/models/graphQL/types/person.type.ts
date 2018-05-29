@@ -1,89 +1,89 @@
-import { GraphQLObjectType, GraphQLNonNull, 
+import { GraphQLObjectType, GraphQLNonNull,
     GraphQLID, GraphQLString} from 'graphql';
 
 const addressType = new GraphQLObjectType({
     name: 'address',
-    fields: function () {
+    fields: () => {
         return {
             street: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             zip: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             city: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             country: {
-                type: GraphQLString
-            }
-        }
-    }
+                type: GraphQLString,
+            },
+        };
+    },
 });
-    
+
 const contactType = new GraphQLObjectType({
     name: 'contact',
-    fields: function () {
+    fields: () => {
         return {
             email: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             phone: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             emergencyContact_1: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             emergencyContact_2: {
-                type: GraphQLString
-            }
-        }
-    }
+                type: GraphQLString,
+            },
+        };
+    },
 });
 
 const demographyType = new GraphQLObjectType({
     name: 'demography',
-    fields: function () {
+    fields: () => {
       return {
             name : {
-                type: GraphQLString
+                type: GraphQLString,
             },
             firstName: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             birthday: {
-                type: GraphQLString
+                type: GraphQLString,
             },
             contacts: {
-                type : contactType
+                type : contactType,
             },
             address: {
-                type :demographyType
-            }
-        }
-    }
+                type : demographyType,
+            },
+        };
+    },
 });
 
 // Person Type
 const personType = new GraphQLObjectType({
   name: 'person',
-  fields: function () {
+  fields: () => {
     return {
       personId: {
-        type: new GraphQLNonNull(GraphQLID)
+        type: new GraphQLNonNull(GraphQLID),
       },
       type: {
-        type: GraphQLString
+        type: GraphQLString,
       },
       status : {
-        type: GraphQLString
+        type: GraphQLString,
       },
       password: {
-        type: GraphQLString
+        type: GraphQLString,
       },
       demography : {
-        type: demographyType
-      }
-    }
-  }
+        type: demographyType,
+      },
+    };
+  },
 });
