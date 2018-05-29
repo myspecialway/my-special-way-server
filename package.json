@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.18",
+  "version": "0.0.19",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "test:ut": "jest --coverage",
     "test:e2e": "jest --config ./test/jest-e2e.json --coverage ",
     "test:ci": "bash ./scripts/test",
-    "test": "bash ./scripts/test",
+    "test": "jest && jest --config ./test/jest-e2e.json",
     "tslint": "tslint -c tslint.json src/**/*.ts",
     "webpack": "webpack --config webpack.config.js"
   },
