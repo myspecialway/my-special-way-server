@@ -14,10 +14,10 @@ const testUsers = [
 @Injectable()
 export class AuthService implements AuthServiceInterface {
 
-    async createTokenFromCridentials(userCridentials: UserCridentials) {
+    /* istanbul ignore next */
+    async createTokenFromCridentials (userCridentials: UserCridentials) {
         // TODO: add real DB integration and hashing function
         const user = this.validateUserByCridentials(userCridentials);
-
         if (!user) {
             return null;
         }
@@ -25,7 +25,8 @@ export class AuthService implements AuthServiceInterface {
         return jwt.sign(userCridentials, JWT_SECRET);
 
     }
-
+    
+    /* istanbul ignore next */
     async validateUserByCridentials(userCridentials: UserCridentials) {
         return testUsers.find(u =>
             u.username === userCridentials.username &&
