@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 import { Response } from 'express';
 import { Controller, Body, Res, Post } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { AuthService } from './auth-service/auth.service';
 import { UserCridentials } from '../models/user-cridentials.model';
 
 @Controller()
