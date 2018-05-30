@@ -81,6 +81,14 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-    "coverageDirectory": "../coverage"
+    "coverageDirectory": "../coverage",
+    "collectCoverageFrom": [
+      "**/*.ts",
+      "!main.ts",
+      "!main.hmr.ts",
+      "!**/*.module.ts"
+      
+
+    ]
   }
 }

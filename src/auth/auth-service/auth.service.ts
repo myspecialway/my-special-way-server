@@ -15,7 +15,7 @@ const testUsers = [
 export class AuthService implements AuthServiceInterface {
 
     /* istanbul ignore next */
-    async createTokenFromCridentials (userCridentials: UserCridentials) {
+    async createTokenFromCridentials(userCridentials: UserCridentials) {
         // TODO: add real DB integration and hashing function
         const user = this.validateUserByCridentials(userCridentials);
         if (!user) {
@@ -25,7 +25,7 @@ export class AuthService implements AuthServiceInterface {
         return jwt.sign(userCridentials, JWT_SECRET);
 
     }
-    
+
     /* istanbul ignore next */
     async validateUserByCridentials(userCridentials: UserCridentials) {
         return testUsers.find(u =>
