@@ -18,7 +18,7 @@
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage",
-    "test:e2e": "jest --config ./test/jest-e2e.json --coverage ",
+    "test:e2e": "jest --config ./jest-e2e.json --coverage ",
     "test:ci": "bash ./scripts/test",
     "test": "jest && jest --config ./test/jest-e2e.json",
     "tslint": "tslint -c tslint.json src/**/*.ts",

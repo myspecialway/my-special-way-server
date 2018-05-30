@@ -5,7 +5,10 @@
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
-  "moduleDirectories": ["node_modules", "../node_modules"],
+  "moduleDirectories": [
+    "node_modules",
+    "../node_modules"
+  ],
   "moduleFileExtensions": [
     "ts",
     "tsx",
@@ -15,9 +18,10 @@
     "node"
   ],
   "collectCoverageFrom": [
-      "../src/*.{js,jsx,ts}",
-      "!**/node_modules/**",
-      "!**/vendor/**"
-    ]
-  
+    "src/**/*.ts",
+    "!src/main.ts",
+    "!src/main.hmr.ts",
+    "!src/**/*.module.ts",
+    "!src/**/*.spec.ts"
+  ]
 }
