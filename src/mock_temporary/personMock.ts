@@ -1,4 +1,4 @@
-{
+let personModelMock = {
     "persons" :[
         {
             "personId": 10001,
@@ -70,4 +70,6 @@
             }
         }
     ]
-}
+};
+
+export const personModel = personModelMock;

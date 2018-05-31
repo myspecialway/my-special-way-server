@@ -65,7 +65,7 @@ const demographyType = new GraphQLObjectType({
 });
 
 // Person Type
-const personType = new GraphQLObjectType({
+export const personType = new GraphQLObjectType({
   name: 'person',
   fields: () => {
     return {
