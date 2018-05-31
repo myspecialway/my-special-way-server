@@ -1,9 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+
+const instance = express();
+/* Express middleware. */
+instance.use(bodyParser.json());
+instance.use(bodyParser.urlencoded({ extended: false }));
+/* End of express middleware. */
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, instance);
   app.enableCors();
   await app.listen(3000);
-  // console.log('NestJS GraphQL Server Now Running On localhost:3000/graphql');
 }
-bootstrap();
+bootstrap().then(() => console.log('Application is listening on port 3000.'));;
