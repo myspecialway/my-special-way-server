@@ -10,14 +10,14 @@ export const queryType = new GraphQLObjectType({
     return {
       persons: {
         type: new GraphQLList(personType),
-        resolve:() => {
+        resolve: () => {
           const persons = personModel;
           if (!persons) {
             throw new Error('Error occurred while getting persons');
           }
           return persons;
-        }
-      }
-    }
-  }
+        },
+      },
+    };
+  },
 });

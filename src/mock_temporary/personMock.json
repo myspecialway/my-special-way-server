@@ -1,4 +1,4 @@
-let personModelMock = {
+{
     "persons" :[
         {
             "personId": 10001,
