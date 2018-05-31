@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.19",
+  "version": "0.0.20",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -69,7 +69,7 @@
     "webpack-node-externals": "^1.6.0"
   },
   "jest": {
-    "automock":false,
+    "automock": false,
     "moduleFileExtensions": [
       "js",
       "json",
@@ -87,8 +87,6 @@
       "!main.ts",
       "!main.hmr.ts",
       "!**/*.module.ts"
-      
-
     ]
   }
 }
