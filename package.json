@@ -20,7 +20,7 @@
     "test:ut": "jest --coverage",
     "test:e2e": "jest --config ./jest-e2e.json --coverage ",
     "test:ci": "bash ./scripts/test",
-    "test": "jest && jest --config ./test/jest-e2e.json",
+    "test": "jest && jest --config ./jest-e2e.json",
     "tslint": "tslint -c tslint.json src/**/*.ts",
     "webpack": "webpack --config webpack.config.js"
   },

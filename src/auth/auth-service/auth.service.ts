@@ -17,7 +17,7 @@ export class AuthService implements AuthServiceInterface {
     /* istanbul ignore next */
     async createTokenFromCridentials(userCridentials: UserCridentials) {
         // TODO: add real DB integration and hashing function
-        const user = this.validateUserByCridentials(userCridentials);
+        const user = await this.validateUserByCridentials(userCridentials);
         if (!user) {
             return null;
         }
