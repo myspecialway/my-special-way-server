@@ -6,6 +6,7 @@ import { GraphQLModule, GraphQLFactory } from '@nestjs/graphql';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { buildSchema } from 'graphql';
 import { GraphqlController } from './graphql.controller';
+import * as passport from 'passport';
 
 @Module({
     imports: [],
@@ -16,6 +17,10 @@ export class GraphqlModule implements NestModule {
     constructor() {}
     public configure(consumer: MiddlewareConsumer) {
         consumer
+        .apply(passport.initialize())
+            .forRoutes('/graphql')
+            .apply(passport.authenticate('jwt', { session: false }))
+            .forRoutes('/graphql')
             .apply(AuthMiddleware)
             .forRoutes(GraphqlController)
         /**
