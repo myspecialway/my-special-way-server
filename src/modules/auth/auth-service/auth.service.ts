@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { Injectable } from '@nestjs/common';
-import { UserCridentials } from '../../models/user-cridentials.model';
+import { UserCridentials } from '../../../models/user-credentials.model';
 import { AuthServiceInterface } from './auth.service.interface';
 
 export const JWT_SECRET = '3678ee53-5207-4124-bc58-fef9d48d12b1';

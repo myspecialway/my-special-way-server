@@ -1,6 +1,6 @@
 import { JwtStrategy } from './jwt.strategy';
 import { AuthServiceInterface } from './auth-service/auth.service.interface';
-import { UserCridentials } from '../models/user-cridentials.model';
+import { UserCridentials } from '../../models/user-credentials.model';
 
 describe('jwt strategy', () => {
     let jwt: JwtStrategy;

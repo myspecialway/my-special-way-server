@@ -1,4 +1,4 @@
-import { UserCridentials } from '../../models/user-cridentials.model';
+import { UserCridentials } from '../../../models/user-credentials.model';
 
 export interface AuthServiceInterface{
     createTokenFromCridentials(userCridentials: UserCridentials);
