@@ -10,7 +10,7 @@ import { GraphqlController } from './graphql.controller';
 @Module({
     imports: [],
     controllers: [GraphqlController],
-    components: [],
+    providers: [],
 })
 export class GraphqlModule implements NestModule {
     constructor() {}
