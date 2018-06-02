@@ -9,7 +9,7 @@ import { buildSchema } from 'graphql';
 export class GraphqlController {
     constructor() { }
 
-    private _schema:GraphQLSchema = buildSchema(`type Query {
+    private _schema: GraphQLSchema = buildSchema(`type Query {
         message: String
     }`);
 

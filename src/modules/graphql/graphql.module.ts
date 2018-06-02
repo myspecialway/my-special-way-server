@@ -10,13 +10,10 @@ import { GraphqlController } from './graphql.controller';
 @Module({
     imports: [],
     controllers: [GraphqlController],
-    components: [
-      
-    ]
+    components: [],
 })
 export class GraphqlModule implements NestModule {
     constructor() {}
-  
     public configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(AuthMiddleware)
@@ -29,4 +26,3 @@ export class GraphqlModule implements NestModule {
         .forRoutes('/graphiql');
     }
 }
-
