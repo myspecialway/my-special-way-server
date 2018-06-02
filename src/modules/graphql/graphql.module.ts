@@ -17,17 +17,17 @@ export class GraphqlModule implements NestModule {
     constructor() {}
     public configure(consumer: MiddlewareConsumer) {
         consumer
-        .apply(passport.initialize())
+            .apply(passport.initialize())
             .forRoutes('/graphql')
             .apply(passport.authenticate('jwt', { session: false }))
             .forRoutes('/graphql')
             .apply(AuthMiddleware)
             .forRoutes(GraphqlController)
-        /**
-         * on using graphiQL all the requests are forwarded to the routes defines in the controller.
-         * GraphiQL help to debug, and it simulates client queries
-         */
-        .apply(graphiqlExpress({ endpointURL: '/graphql' }))
-        .forRoutes('/graphiql');
+            /**
+             * on using graphiQL all the requests are forwarded to the routes defines in the controller.
+             * GraphiQL help to debug, and it simulates client queries
+             */
+            .apply(graphiqlExpress({ endpointURL: '/graphql' }))
+            .forRoutes('/graphiql');
     }
 }
