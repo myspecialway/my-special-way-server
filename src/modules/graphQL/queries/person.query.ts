@@ -1,6 +1,6 @@
 import { GraphQLObjectType } from 'graphql';
 import { GraphQLList } from 'graphql';
-import { personModel } from '../../mock_temporary/personMock';
+import { personModel } from '../../../mock_temporary/personMock';
 import { personType } from '../types/person.type';
 
 // Query
