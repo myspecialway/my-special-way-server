@@ -22,6 +22,10 @@
     "!src/main.ts",
     "!src/main.hmr.ts",
     "!src/**/*.module.ts",
-    "!src/**/*.spec.ts"
+    "!src/**/*.spec.ts",
+    "temporary_disabling_coverage_until_feature_is_done",
+    "!src/mock_temporary/*.*",
+    "!src/modules/graphql/queries/*.*",
+    "!src/modules/graphql/types/*.*"
   ]
 }
