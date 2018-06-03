@@ -3,6 +3,7 @@ import { GraphQLList } from 'graphql';
 import { personModel } from '../../../mock_temporary/personMock';
 import { personType } from '../types/person.type';
 
+/* istanbul ignore next */
 // Query
 export const queryType = new GraphQLObjectType({
   name: 'Query',

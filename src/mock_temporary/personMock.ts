@@ -71,7 +71,7 @@
 //         }
 //     ]
 // };
-
+ /* istanbul ignore next */
 export const personModel = {
     persons : [
         {
