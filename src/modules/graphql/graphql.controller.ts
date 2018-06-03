@@ -5,6 +5,7 @@ import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
 import { buildSchema } from 'graphql';
 
+/* istanbul ignore next */
 @Controller()
 export class GraphqlController {
     constructor() { }

@@ -1,5 +1,5 @@
 'use strict';
-
+/* istanbul ignore next */
 import { NestMiddleware, Injectable } from '@nestjs/common';
 import { Request, Response, NextFunction } from 'express';
 import * as passport from 'passport';
