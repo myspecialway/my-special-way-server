@@ -26,6 +26,7 @@
     "temporary_disabling_coverage_until_feature_is_done",
     "!src/mock_temporary/*.*",
     "!src/modules/graphql/queries/*.*",
-    "!src/modules/graphql/types/*.*"
+    "!src/modules/graphql/types/*.*",
+    "!src/**/*.temp.ts"
   ]
 }
