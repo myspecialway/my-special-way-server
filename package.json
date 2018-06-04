@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./jest-e2e.json --coverage ",
     "test:ci": "bash ./scripts/test",
     "test": "jest && jest --config ./jest-e2e.json",
-    "tslint": "tslint -c tslint.json src/**/*.ts",
+    "tslint": "tslint 'src/**/*.ts'",
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
@@ -64,7 +64,7 @@
     "ts-loader": "^4.1.0",
     "ts-node": "^4.1.0",
     "tsconfig-paths": "^3.1.1",
-    "tslint": "5.3.2",
+    "tslint": "5.10.0",
     "webpack": "^4.2.0",
     "webpack-cli": "^2.0.13",
     "webpack-node-externals": "^1.6.0"

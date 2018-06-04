@@ -19,12 +19,12 @@ export class GraphqlController {
     };
 
     @Post('graphql')
-    public async create(@Request() req, @Response() res, @Next() next) {
+    public async postGraphql(@Request() req, @Response() res, @Next() next) {
         return graphqlExpress({ schema: this._schema, rootValue: this._root })(req, res, next);
     }
 
     @Get('graphql')
-    public async read(@Request() req, @Response() res, @Next() next) {
+    public async getGraphql(@Request() req, @Response() res, @Next() next) {
         return graphqlExpress({ schema: this._schema, rootValue: this._root })(req, res, next);
     }
 }
