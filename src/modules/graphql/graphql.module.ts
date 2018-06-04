@@ -5,7 +5,7 @@ import { AuthMiddleware } from '../common/index';
 import { GraphQLModule, GraphQLFactory } from '@nestjs/graphql';
 import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { buildSchema } from 'graphql';
-import { GraphqlController } from './graphql.controller';
+import { GraphqlController } from './graphql.controller.temp';
 import * as passport from 'passport';
 
 @Module({

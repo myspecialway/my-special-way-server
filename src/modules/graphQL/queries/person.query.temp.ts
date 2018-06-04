@@ -1,9 +1,8 @@
 import { GraphQLObjectType } from 'graphql';
 import { GraphQLList } from 'graphql';
 import { personModel } from '../../../mock_temporary/personMock';
-import { personType } from '../types/person.type';
+import { personType } from '../types/person.type.temp';
 
-/* istanbul ignore next */
 // Query
 export const queryType = new GraphQLObjectType({
   name: 'Query',

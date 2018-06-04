@@ -1,3 +1,4 @@
+/* istanbul ignore next */
 import { GraphQLObjectType, GraphQLNonNull,
     GraphQLID, GraphQLString} from 'graphql';
 

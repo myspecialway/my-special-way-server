@@ -87,7 +87,8 @@
       "**/*.ts",
       "!main.ts",
       "!main.hmr.ts",
-      "!**/*.module.ts"
+      "!**/*.module.ts",
+      "!**/*.temp.ts"
     ]
   }
 }
