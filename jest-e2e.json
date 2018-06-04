@@ -21,7 +21,7 @@
     "src/**/*.ts",
     "!src/main.ts",
     "!src/main.hmr.ts",
-    "!src/**/*.module.ts",
-    "!src/**/*.spec.ts"
+    "!src/**/*.spec.ts",
+    "!src/**/*.temp.ts"
   ]
 }

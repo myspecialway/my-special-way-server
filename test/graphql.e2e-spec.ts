@@ -17,7 +17,7 @@ describe('AppController (e2e)', () => {
 
   it('should get 401 error on unauthenticated graphql query', () => {
     return request(app.getHttpServer())
-      .get('/graphql?query=%7B%0A%20%20message%0A%7D')
+      .post('/graphql?query=%7B%0A%20%20message%0A%7D')
       .expect(401);
   });
 

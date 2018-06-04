@@ -21,7 +21,7 @@
     "test:e2e": "jest --config ./jest-e2e.json --coverage ",
     "test:ci": "bash ./scripts/test",
     "test": "jest && jest --config ./jest-e2e.json",
-    "tslint": "tslint -c tslint.json src/**/*.ts",
+    "tslint": "tslint 'src/**/*.ts'",
     "webpack": "webpack --config webpack.config.js"
   },
   "dependencies": {
@@ -48,6 +48,7 @@
   "devDependencies": {
     "@playlyfe/gql": "^2.6.0",
     "@types/express": "^4.0.39",
+    "@types/graphql": "^0.13.1",
     "@types/jest": "^21.1.8",
     "@types/jsonwebtoken": "^7.2.7",
     "@types/node": "^9.3.0",
@@ -63,7 +64,7 @@
     "ts-loader": "^4.1.0",
     "ts-node": "^4.1.0",
     "tsconfig-paths": "^3.1.1",
-    "tslint": "5.3.2",
+    "tslint": "5.10.0",
     "webpack": "^4.2.0",
     "webpack-cli": "^2.0.13",
     "webpack-node-externals": "^1.6.0"
@@ -86,7 +87,8 @@
       "**/*.ts",
       "!main.ts",
       "!main.hmr.ts",
-      "!**/*.module.ts"
+      "!**/*.module.ts",
+      "!**/*.temp.ts"
     ]
   }
 }
