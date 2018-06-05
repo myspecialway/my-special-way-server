@@ -5,7 +5,6 @@ import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
 import { GraphQlService } from './schemas/graphql.service';
 
-/* istanbul ignore next */
 @Controller()
 export class GraphqlController {
     private schema: GraphQLSchema;
