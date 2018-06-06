@@ -1,6 +1,6 @@
 import { Response } from 'express';
 
-xdescribe('', () => {
+describe('', () => {
 
     beforeEach(() => {
 
