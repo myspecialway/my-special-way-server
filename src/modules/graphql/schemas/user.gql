@@ -1,0 +1,11 @@
+type User{
+    id: ID!
+    username: String!
+    password: String!
+    type: UserType
+}
+
+enum UserType{
+    PRINCIPLE
+    TEACHER
+}
