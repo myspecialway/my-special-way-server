@@ -1,32 +1,17 @@
-import { IResolvers } from 'graphql-tools';
+import { Resolver, Query } from '@nestjs/graphql';
+import { UsersPersistanceService } from '../../persistance/users.persistance';
 
-export const userResolvers = {
-    users: (a, b, c, d) => {
+@Resolver('User')
+export class UsersResolver {
+    constructor(private usersPersistance: UsersPersistanceService) { }
 
-        console.log(a);
-        console.log(b);
-        console.log(c);
-        console.log(d);
-    },
-    user: (a, b, c, d) => {
-        console.log(a);
-        console.log(b);
-        console.log(c);
-        console.log(d);
-    },
-};
+    @Query('users')
+    async getUsers(obj, args, context, info) {
+        return this.usersPersistance.getAll();
+    }
 
-const users = [
-    {
-        id: '1',
-        username: 'first',
-    },
-    {
-        id: '2',
-        username: 'second',
-    },
-    {
-        id: '3',
-        username: 'third',
-    },
-];
+    @Query('user')
+    async getUserById(obj, args, context, info) {
+        return this.usersPersistance.getById(args.id);
+    }
+}

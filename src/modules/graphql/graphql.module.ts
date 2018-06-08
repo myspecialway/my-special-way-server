@@ -1,16 +1,21 @@
-'use strict';
-
-import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
-import { AuthMiddleware } from '../common/index';
-import { GraphQLModule, GraphQLFactory } from '@nestjs/graphql';
-import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import * as passport from 'passport';
-import { GraphQlService } from './schemas';
+import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
+import { GraphQLModule } from '@nestjs/graphql';
+import { graphiqlExpress } from 'apollo-server-express';
+import { GraphQlService } from './schemas/graphql.service';
 import { GraphqlController } from './graphql.controller.temp';
+import { UsersResolver } from './resolvers/users.resolver';
+import { PersistanceModule } from '../persistance/persistance.module';
 
 @Module({
-    imports: [GraphQLModule],
-    providers: [GraphQlService],
+    imports: [
+        GraphQLModule,
+        PersistanceModule,
+    ],
+    providers: [
+        GraphQlService,
+        UsersResolver,
+    ],
     controllers: [GraphqlController],
 })
 export class GraphqlModule implements NestModule {

@@ -3,7 +3,7 @@
 import { Controller, Post, Get, Request, Response, Next } from '@nestjs/common';
 import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
-import { GraphQlService } from './schemas';
+import { GraphQlService } from './schemas/graphql.service';
 
 /* istanbul ignore next */
 @Controller()
