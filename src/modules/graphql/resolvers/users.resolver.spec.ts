@@ -1,31 +1,31 @@
 import { UsersResolver } from './users.resolver';
-import { UsersPersistanceService } from '../../persistance/users.persistance';
+import { UsersPersistenceService } from '../../persistence/users.persistence';
 
 describe('user resolver', () => {
     let usersResolver: UsersResolver;
-    let userPersistance: Partial<UsersPersistanceService>;
+    let userPersistence: Partial<UsersPersistenceService>;
     beforeEach(() => {
-        userPersistance = {
+        userPersistence = {
             getAll: jest.fn(),
             getById: jest.fn(),
         };
 
-        usersResolver = new UsersResolver(userPersistance as UsersPersistanceService);
+        usersResolver = new UsersResolver(userPersistence as UsersPersistenceService);
     });
 
     it('should call getAll function and resutn users for on getUsers', async () => {
-        (userPersistance.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
+        (userPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
 
         const response = await usersResolver.getUsers(null, null, null, null);
         expect(response).toEqual([{ username: 'test' }]);
-        expect(userPersistance.getAll).toHaveBeenCalled();
+        expect(userPersistence.getAll).toHaveBeenCalled();
     });
 
     it('should call getById function and return user on getUserById', async () => {
-        (userPersistance.getById as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
+        (userPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
 
         const response = await usersResolver.getUserById(null, { id: 'someid' }, null, null);
         expect(response).toEqual({ username: 'test' });
-        expect(userPersistance.getById).toHaveBeenCalledWith('someid');
+        expect(userPersistence.getById).toHaveBeenCalledWith('someid');
     });
 });

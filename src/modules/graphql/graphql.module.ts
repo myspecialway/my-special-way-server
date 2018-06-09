@@ -5,12 +5,12 @@ import { graphiqlExpress } from 'apollo-server-express';
 import { GraphQlService } from './schemas/graphql.service';
 import { GraphqlController } from './graphql-controller/graphql.controller.temp';
 import { UsersResolver } from './resolvers/users.resolver';
-import { PersistanceModule } from '../persistance/persistance.module';
+import { PersistenceModule } from '../persistence/persistence.module';
 
 @Module({
     imports: [
         GraphQLModule,
-        PersistanceModule,
+        PersistenceModule,
     ],
     providers: [
         GraphQlService,

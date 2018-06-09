@@ -1,17 +1,17 @@
 import { Resolver, Query } from '@nestjs/graphql';
-import { UsersPersistanceService } from '../../persistance/users.persistance';
+import { UsersPersistenceService } from '../../persistence/users.persistence';
 
 @Resolver('User')
 export class UsersResolver {
-    constructor(private usersPersistance: UsersPersistanceService) { }
+    constructor(private usersPersistence: UsersPersistenceService) { }
 
     @Query('users')
     async getUsers(obj, args, context, info) {
-        return this.usersPersistance.getAll();
+        return this.usersPersistence.getAll();
     }
 
     @Query('user')
     async getUserById(obj, args, context, info) {
-        return this.usersPersistance.getById(args.id);
+        return this.usersPersistence.getById(args.id);
     }
 }
