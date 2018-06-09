@@ -1,13 +1,13 @@
-type User{
-    _id: ID!
-    username: String!
-    email: String
-    firstname: String
-    lastname: String
-    role: UserType
+type User {
+  _id: ID!
+  username: String!
+  email: String
+  firstname: String
+  lastname: String
+  role: UserType
 }
 
-enum UserType{
-    PRINCIPLE
-    TEACHER
+enum UserType {
+  PRINCIPLE
+  TEACHER
 }

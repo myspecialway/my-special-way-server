@@ -1,0 +1,6 @@
+type Class {
+  _id: ID!
+  level: String!
+  number: Int!
+  name: String!
+}
