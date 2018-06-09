@@ -3,8 +3,9 @@ import { personModel } from '../../../mock_temporary/personMock';
 import { personType } from '../types/person.type.temp';
 
 // Query
-export const queryType = new GraphQLObjectType({
-  name: 'Query',
+export const queryPersonType = new GraphQLObjectType({
+  name: 'personQuery',
+  description: `This represents a personQuery`,
   fields: () => {
     return {
       persons: {

@@ -72,8 +72,7 @@
 //     ]
 // };
  /* istanbul ignore next */
-export const personModel = {
-    persons : [
+export const personModel =  [
         {
             personId: 10001,
             type: 'child',
@@ -143,5 +142,4 @@ export const personModel = {
                 },
             },
         },
-    ],
-};
+    ];

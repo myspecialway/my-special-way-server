@@ -1,7 +1,11 @@
 import { buildSchema, GraphQLSchema, GraphQLObjectType } from 'graphql';
-import { queryType } from '../queries/person.query.temp';
+import { queryPersonType } from '../queries/person.query.temp';
 export class GraphqlService {
     constructor(){}
+
+    //import { GraphQLModule, GraphQLFactory } from '@nestjs/graphql';
+    // const typeDefs = this.graphQLFactory.mergeTypesByPaths('./**/*.graphql');
+    // const schema = this.graphQLFactory.createSchema({ typeDefs });
 
     public get schema() : GraphQLSchema {
         return buildSchema(`type Query {
@@ -9,11 +13,13 @@ export class GraphqlService {
         }`);
     }
 
-    private _schema = new GraphQLSchema({
-        query: queryType,
-        mutation: new GraphQLObjectType({
-          name: 'Mutation',
-          fields: null//mutation
+    public get _schema():GraphQLSchema {
+        return new GraphQLSchema({
+            query: queryPersonType/*,
+            mutation: new GraphQLObjectType({
+            name: 'Mutation',
+            fields: null//mutation
+            })*/
         })
-      })
+        }
 }
