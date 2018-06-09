@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { DbService } from './db';
+import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
 import { UserDbModel } from 'models/user.db.model';
 

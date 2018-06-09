@@ -1,5 +1,5 @@
 import { Module, LoggerService } from '@nestjs/common';
-import { DbService } from './db';
+import { DbService } from './db.service';
 import { UsersPersistanceService } from './users.persistance';
 
 @Module({

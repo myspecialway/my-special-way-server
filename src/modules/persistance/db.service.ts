@@ -5,7 +5,7 @@ const MONGO_CONNECTION_ERROR_MESSAGE = 'no connection available please connect u
 
 @Injectable()
 export class DbService {
-    private db: Db;
+    public db: Db;
     async initConnection(connectionString: string, dbName: string) {
         if (this.db) {
             logger.warn('initConnection:: connection already established', 'db');
@@ -17,7 +17,7 @@ export class DbService {
             this.db = connection.db(dbName);
             logger.log('initConnection:: connection initiated', 'db');
         } catch (error) {
-            logger.error('initConnection:: error connecting to db', error, 'db');
+            logger.error('initConnection:: error connecting to db', error.stack, 'db');
             throw error;
         }
     }
