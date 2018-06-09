@@ -4,10 +4,10 @@ import { Collection, ObjectID } from 'mongodb';
 import { UserDbModel } from 'models/user.db.model';
 
 @Injectable()
-export class UsersPersistanceService extends Logger {
+export class UsersPersistenceService extends Logger {
     private _collection: Collection<UserDbModel>;
     constructor(private dbService: DbService) {
-        super('UsersPersistanceService');
+        super('UsersPersistenceService');
     }
 
     get collection() {

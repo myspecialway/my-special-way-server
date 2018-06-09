@@ -1,17 +1,17 @@
 import { Module, LoggerService } from '@nestjs/common';
 import { DbService } from './db.service';
-import { UsersPersistanceService } from './users.persistance';
+import { UsersPersistenceService } from './users.persistence';
 
 @Module({
     providers: [
         DbService,
-        UsersPersistanceService,
+        UsersPersistenceService,
     ],
     exports: [
-        UsersPersistanceService,
+        UsersPersistenceService,
     ],
 })
-export class PersistanceModule {
+export class PersistenceModule {
     constructor(private dbService: DbService) {
         dbService.initConnection('mongodb://admin:Aa123456@ds016118.mlab.com:16118/msw-dev', 'msw-dev');
     }
