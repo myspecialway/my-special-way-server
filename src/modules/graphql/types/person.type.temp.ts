@@ -4,7 +4,7 @@ import { GraphQLObjectType, GraphQLNonNull,
 
 const addressType = new GraphQLObjectType({
     name: 'address',
-    description: `address`,
+    description: `This represents an address`,
     fields: () => {
         return {
             street: {
@@ -25,7 +25,7 @@ const addressType = new GraphQLObjectType({
 
 const contactType = new GraphQLObjectType({
     name: 'contact',
-    description: `contact`,
+    description: `This represents a contact`,
     fields: () => {
         return {
             email: {
@@ -46,7 +46,7 @@ const contactType = new GraphQLObjectType({
 
 const demographyType = new GraphQLObjectType({
     name: 'demography',
-    description: `demography`,
+    description: `This represents a demography`,
     fields: () => {
       return {
             name : {
@@ -71,7 +71,7 @@ const demographyType = new GraphQLObjectType({
 // Person Type
 export const personType = new GraphQLObjectType({
   name: 'person',
-  description: `person`,
+  description: `This represents a  person`,
   fields: () => {
     return {
       personId: {

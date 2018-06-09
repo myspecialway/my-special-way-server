@@ -12,11 +12,11 @@ export class GraphqlController {
     @Post('graphql')
     public async postGraphql(@Request() req, @Response() res, @Next() next) {
         // TODO: why do we need to return a new object ExpressHandler on each request?
-        return graphqlExpress({ schema: this._graphqlService._schema, rootValue: this._graphqlService.root })(req, res, next);
+        return graphqlExpress({ schema: this._graphqlService.schema, rootValue: this._graphqlService.root })(req, res, next);
     }
 
     @Get('graphql')
     public async getGraphql(@Request() req, @Response() res, @Next() next) {
-        return graphqlExpress({ schema: this._graphqlService._schema, rootValue: this._graphqlService.root })(req, res, next);
+        return graphqlExpress({ schema: this._graphqlService.schema, rootValue: this._graphqlService.root })(req, res, next);
     }
 }
