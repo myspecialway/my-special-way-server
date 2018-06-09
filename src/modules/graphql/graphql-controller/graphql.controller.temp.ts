@@ -9,22 +9,14 @@ import { GraphqlService } from '../graphql-service/graphql.service.temp';
 export class GraphqlController {
     constructor(private readonly _graphqlService: GraphqlService) { }
 
-    // private _schema: GraphQLSchema = buildSchema(`type Query {
-    //     message: String
-    // }`);
-
-    private _root = {
-        message: () => 'Welcome to My-Special-W@@y!',
-    };
-
     @Post('graphql')
     public async postGraphql(@Request() req, @Response() res, @Next() next) {
-        //TODO: why do we need to return a new object ExpressHandler on each request?
-        return graphqlExpress({ schema: this._graphqlService._schema, rootValue: this._root })(req, res, next);
+        // TODO: why do we need to return a new object ExpressHandler on each request?
+        return graphqlExpress({ schema: this._graphqlService._schema, rootValue: this._graphqlService.root })(req, res, next);
     }
 
     @Get('graphql')
     public async getGraphql(@Request() req, @Response() res, @Next() next) {
-        return graphqlExpress({ schema: this._graphqlService._schema, rootValue: this._root })(req, res, next);
+        return graphqlExpress({ schema: this._graphqlService._schema, rootValue: this._graphqlService.root })(req, res, next);
     }
 }
