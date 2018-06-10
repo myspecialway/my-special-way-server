@@ -21,12 +21,11 @@ describe('grapql service', () => {
         (graphqlFactory.createSchema as jest.Mock).mockImplementationOnce(files => files);
 
         const schema = graphqlService.getSchema();
+        const schemaToTest = schema as any;
 
-        expect(schema).toEqual({
-            typeDefs: '/Users/dvernovsky/programming/my-special-way/my-special-way-server' +
-                '/src/modules/graphql/schemas/file1.gql/Users/dvernovsky/programming/my-s' +
-                'pecial-way/my-special-way-server/src/modules/graphql/schemas/file2.gql',
-        });
+        expect(schemaToTest.typeDefs).toContain('file1.gql');
+        expect(schemaToTest.typeDefs).toContain('file2.gql');
+        expect(schemaToTest.typeDefs).not.toContain('otherfile.txt');
     });
 
     it('should rethrow an error and write to log if error has been thrown throughout the execution', () => {
