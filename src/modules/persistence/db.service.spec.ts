@@ -37,7 +37,7 @@ describe('db service', () => {
         dbService.initConnection('url', 'db').catch(error => expect(error).toBeDefined());
     });
 
-    it('should return connection from getConnection', async ()=>{
+    it('should return connection from getConnection', async () => {
         (MongoClient.connect as jest.Mock).mockReturnValueOnce(Promise.resolve({
             db: jest.fn().mockReturnValue('dbmock'),
         }));

@@ -68,7 +68,7 @@ describe('users persistence', () => {
 
         // this function gets called 2 times because first time it's been called via the test itself
         // this needs to be refactored
-    
+
         expect(dbServiceMock.getConnection).toHaveBeenCalledTimes(2);
     });
 });
