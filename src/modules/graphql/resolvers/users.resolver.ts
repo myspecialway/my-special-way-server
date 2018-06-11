@@ -1,5 +1,5 @@
 import { Resolver, Query } from '@nestjs/graphql';
-import { UsersPersistenceService } from '../../persistence/users.persistence';
+import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 
 @Resolver('User')
 export class UsersResolver {

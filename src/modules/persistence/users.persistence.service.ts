@@ -11,7 +11,7 @@ export class UsersPersistenceService extends Logger {
         super('UsersPersistenceService');
     }
 
-    get collection() {
+    private get collection() {
         if (this._collection) {
             return this._collection;
         }
