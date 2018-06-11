@@ -3,19 +3,23 @@ import * as mongoMock from './mongo-mock';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
+import { Cursor } from 'mongodb';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
-    mongoMock.init();
-
+    mongoMock.setupMongoMock();
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
 
     app = moduleFixture.createNestApplication();
     await app.init();
+  });
+
+  beforeEach(() => {
+    mongoMock.setupMongoMock();
   });
 
   it('should get 401 error on unauthenticated graphql query', () => {
@@ -26,6 +30,10 @@ describe('AppController (e2e)', () => {
 
   // Must mock the db
   it('should return query response when authenticated', () => {
+    mongoMock.setFindREturnValue({
+      toArray: jest.fn(),
+    } as Partial<Cursor>);
+
     return request(app.getHttpServer())
       .get('/graphql?query=%7Busers%20%7Busername%7D%7D')
       // tslint:disable-next-line:max-line-length
