@@ -1,0 +1,15 @@
+type Timetable {
+  _id: ID!
+  # The timetable's lessons held on a Sunday.
+  sun: [Lesson!]!
+  # The timetable's lessons held on a Monday.
+  mon: [Lesson!]!
+  # The timetable's lessons held on a Tuesday.
+  tue: [Lesson!]!
+  # The timetable's lessons held on a Wednesday.
+  wed: [Lesson!]!
+  # The timetable's lessons held on a Thursday.
+  thu: [Lesson!]!
+  # The timetable's lessons held on a Friday.
+  fri: [Lesson!]!
+}

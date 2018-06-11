@@ -1,6 +1,6 @@
 import { Response } from 'express';
 
-xdescribe('auth controller', () => {
+describe('auth controller', () => {
 
     beforeEach(() => {
 

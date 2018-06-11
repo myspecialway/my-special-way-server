@@ -1,10 +1,10 @@
-/* istanbul ignore next */
+
 import { GraphQLObjectType, GraphQLNonNull,
     GraphQLID, GraphQLString} from 'graphql';
 
-/* istanbul ignore next */
 const addressType = new GraphQLObjectType({
     name: 'address',
+    description: `This represents an address`,
     fields: () => {
         return {
             street: {
@@ -23,9 +23,9 @@ const addressType = new GraphQLObjectType({
     },
 });
 
-/* istanbul ignore next */
 const contactType = new GraphQLObjectType({
     name: 'contact',
+    description: `This represents a contact`,
     fields: () => {
         return {
             email: {
@@ -44,9 +44,9 @@ const contactType = new GraphQLObjectType({
     },
 });
 
-/* istanbul ignore next */
 const demographyType = new GraphQLObjectType({
     name: 'demography',
+    description: `This represents a demography`,
     fields: () => {
       return {
             name : {
@@ -68,10 +68,10 @@ const demographyType = new GraphQLObjectType({
     },
 });
 
-/* istanbul ignore next */
 // Person Type
 export const personType = new GraphQLObjectType({
   name: 'person',
+  description: `This represents a  person`,
   fields: () => {
     return {
       personId: {
