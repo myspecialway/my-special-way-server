@@ -1,4 +1,5 @@
 import * as request from 'supertest';
+import * as mongoMock from './mongo-mock';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
 import { INestApplication } from '@nestjs/common';
@@ -7,6 +8,8 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
+    mongoMock.init();
+
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
@@ -22,9 +25,9 @@ describe('AppController (e2e)', () => {
   });
 
   // Must mock the db
-  xit('should return query response when authenticated', () => {
+  it('should return query response when authenticated', () => {
     return request(app.getHttpServer())
-    .get('/graphql?query=%7Busers%20%7Busername%7D%7D')
+      .get('/graphql?query=%7Busers%20%7Busername%7D%7D')
       // tslint:disable-next-line:max-line-length
       .set('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6Im1zdyIsInBhc3N3b3JkIjoiQWExMjM0NTYiLCJpYXQiOjE1Mjc2ODI5NTJ9.DKk93uF464t-c7WQVtxIvEE77PsUVwdX9vL_y8Is8_4')
       .expect(200)
