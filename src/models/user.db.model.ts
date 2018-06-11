@@ -2,13 +2,14 @@ export interface UserDbModel {
     _id: string;
     username: string;
     password: string;
+    passwordSalt: string;
     firstname: string;
     lastname: string;
     email: string;
-    role: UserType;
+    role: UserRole;
 }
 
-enum UserType {
+export enum UserRole {
     PRINCIPLE = 'PRINCIPLE',
     TEACHER = 'TEACHER',
 }
