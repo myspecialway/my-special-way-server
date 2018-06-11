@@ -10,7 +10,7 @@ export class UsersPersistenceService extends Logger {
         super('UsersPersistenceService');
     }
 
-    get collection() {
+    private get collection() {
         if (this._collection) {
             return this._collection;
         }
@@ -25,6 +25,7 @@ export class UsersPersistenceService extends Logger {
             return this.collection.find({}).toArray();
         } catch (error) {
             this.error('getAll:: error fetching users', error.stack);
+            throw error;
         }
     }
 
@@ -35,6 +36,7 @@ export class UsersPersistenceService extends Logger {
             return this.collection.findOne({ _id });
         } catch (error) {
             this.error(`getAll:: error fetching user by id ${id}`, error.stack);
+            throw error;
         }
     }
 }
