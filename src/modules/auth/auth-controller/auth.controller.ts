@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import { Controller, Body, Res, Post } from '@nestjs/common';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
-import { AuthServiceInterface } from '../auth-service/auth.service.interface';
+import { AuthService } from '../auth-service/auth.service';
 
 @Controller()
 export class AuthController {
-    constructor(private readonly authService: AuthServiceInterface) { }
+    constructor(private readonly authService: AuthService) { }
 
     @Post('/login')
     async login(@Res() res: Response, @Body() body: UserLoginRequest): Promise<void> {

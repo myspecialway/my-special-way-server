@@ -11,7 +11,6 @@ export class DbService {
             logger.warn('initConnection:: connection already established', 'db');
             return;
         }
-
         try {
             const connection = await MongoClient.connect(connectionString);
             this.db = connection.db(dbName);
