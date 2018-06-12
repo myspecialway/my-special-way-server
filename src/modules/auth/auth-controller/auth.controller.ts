@@ -1,11 +1,11 @@
 import { Response } from 'express';
 import { Controller, Body, Res, Post } from '@nestjs/common';
-import { AuthService } from '../auth-service/auth.service';
-import { UserLoginRequest } from 'models/user-login-request.model';
+import { UserLoginRequest } from '../../../models/user-login-request.model';
+import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 
 @Controller()
 export class AuthController {
-    constructor(private readonly authService: AuthService) { }
+    constructor(private readonly authService: AuthServiceInterface) { }
 
     @Post('/login')
     async login(@Res() res: Response, @Body() body: UserLoginRequest): Promise<void> {
@@ -16,6 +16,8 @@ export class AuthController {
                 error: 'server error',
                 message: 'unknown server error',
             });
+
+            return;
         }
 
         if (!token) {
