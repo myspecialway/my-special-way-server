@@ -6,6 +6,8 @@ import { GraphQlService } from './schemas/graphql.service';
 import { GraphqlController } from './graphql-controller/graphql.controller.temp';
 import { UsersResolver } from './resolvers/users.resolver';
 import { PersistenceModule } from '../persistence/persistence.module';
+import graphqlPlayground from 'graphql-playground-middleware-express';
+
 
 @Module({
     imports: [
@@ -14,7 +16,7 @@ import { PersistenceModule } from '../persistence/persistence.module';
     ],
     providers: [
         GraphQlService,
-        UsersResolver,
+        // UsersResolver,
     ],
     controllers: [GraphqlController],
 })
@@ -23,9 +25,11 @@ export class GraphqlModule implements NestModule {
         consumer
             .apply(passport.initialize())
             .forRoutes('/graphql')
-            .apply(passport.authenticate('jwt', { session: false }))
+            // .apply(passport.authenticate('jwt', { session: false }))
+            .apply(null)
             .forRoutes('/graphql')
-            .apply(graphiqlExpress({ endpointURL: '/graphql' }))
-            .forRoutes('/graphiql');
+            .apply(graphqlPlayground({endpoint: '/graphql'}))
+            // .apply(graphiqlExpress({ endpointURL: '/graphql' }))
+            .forRoutes('/play');
     }
 }
