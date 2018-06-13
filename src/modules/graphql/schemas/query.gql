@@ -1,7 +1,0 @@
-type Query{
-    people: [Person]
-    person(id: ID!): Person
-    
-    users:  [User]
-    user(id: ID!): User
-}

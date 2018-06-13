@@ -1,5 +1,0 @@
-# A type that describes lat lang cordinates.
-type Point {
-  latitude: Float!
-  longitude: Float!
-}

@@ -1,8 +1,0 @@
-#!/bin/bash
-
-npx jest --coverage && npx codecov || exit 1
-rm -rf coverage
-
-npx jest --config ./jest-e2e.json --coverage && npx codecov || exit 1
-rm -rf coverage
-

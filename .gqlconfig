@@ -1,5 +1,0 @@
-{
-  schema: {
-    files: 'src/modules/graphql/schemas/**/*.gql'
-  }
-}
