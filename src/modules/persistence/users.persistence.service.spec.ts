@@ -71,4 +71,63 @@ describe('users persistence', () => {
 
         expect(dbServiceMock.getConnection).toHaveBeenCalledTimes(2);
     });
+
+    it('should return user from getByUsername on sucess', async () => {
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+            username: 'user1',
+        });
+
+        const [error, user] = await usersPersistanceService.getByUsername('someUsername');
+
+        expect(error).toBeNull();
+        expect(user).toEqual({ username: 'user1' });
+    });
+
+    it('should return an error on persistance error', async () => {
+        expect.hasAssertions();
+
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        const [error, user] = await usersPersistanceService.getByUsername('someUsername');
+
+        expect(error).toBeDefined();
+    });
+
+    it(`should return user and error nulls if user hasn't been found`, async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce(null);
+
+        const [error, user] = await usersPersistanceService.getByUsername('someUsername');
+
+        expect(error).toBeNull();
+        expect(user).toBeNull();
+    });
+
+    it('should return user from authenticateUser on sucess', async () => {
+        expect.hasAssertions();
+
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+            username: 'user1',
+        });
+
+        const [error, user] = await usersPersistanceService.authenticateUser('someUsername');
+
+        expect(error).toBeNull();
+        expect(user).toEqual({ username: 'user1' });
+    });
+
+    it('should return an error on authenticateUser error', async () => {
+        expect.hasAssertions();
+
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        const [error, user] = await usersPersistanceService.authenticateUser('someUsername');
+
+        expect(error).toBeDefined();
+        expect(user).toBeNull();
+    });
 });

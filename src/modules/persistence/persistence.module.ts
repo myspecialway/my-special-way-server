@@ -13,6 +13,6 @@ import { UsersPersistenceService } from './users.persistence.service';
 })
 export class PersistenceModule {
     constructor(private dbService: DbService) {
-        dbService.initConnection('mongodb://admin:Aa123456@ds016118.mlab.com:16118/msw-dev', 'msw-dev');
+        dbService.initConnection('mongodb://localhost', 'msw-dev');
     }
 }

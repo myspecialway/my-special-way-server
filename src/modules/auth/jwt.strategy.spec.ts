@@ -1,27 +1,37 @@
 import { JwtStrategy } from './jwt.strategy';
 import { AuthServiceInterface } from './auth-service/auth.service.interface';
-import { UserCridentials } from '../../models/user-credentials.model';
+import { UserDbModel } from '../../models/user.db.model';
+import { UsersPersistenceService } from '../persistence/users.persistence.service';
+import { InternalServerErrorException } from '@nestjs/common';
 
 describe('jwt strategy', () => {
     let jwt: JwtStrategy;
-    let authServiceMock: AuthServiceInterface;
+    let userPersistenceService: Partial<UsersPersistenceService>;
     beforeEach(() => {
-        authServiceMock = {
-            createTokenFromCridentials: jest.fn(),
-            validateUserByCridentials: jest.fn(),
+        userPersistenceService = {
+            getByUsername: jest.fn(),
         };
 
-        jwt = new JwtStrategy(authServiceMock);
+        jwt = new JwtStrategy(userPersistenceService as UsersPersistenceService);
     });
 
-    it('should return unauthorized exception if user validation failed', async () => {
+    it('should return server error if validation fails', async () => {
+        expect.hasAssertions();
+        const fn = jest.fn();
+
+        (userPersistenceService.getByUsername as jest.Mock).mockReturnValueOnce([new Error('mock error'), null]);
+        await jwt.validate({ username: 'not a user' }, fn);
+
+        expect(fn.mock.calls[0][0] instanceof Error).toBeTruthy();
+    });
+
+    it('should return unauthorized exception if user is not found', async () => {
         // given
-        const validateFn = authServiceMock.validateUserByCridentials as jest.Mock<Promise<UserCridentials>>;
-        validateFn.mockReturnValue(Promise.resolve(null));
+        (userPersistenceService.getByUsername as jest.Mock).mockReturnValueOnce([null, null]);
         const fn = jest.fn();
 
         // when
-        await jwt.validate({ username: 'not a user', password: 'not a password' }, fn);
+        await jwt.validate({ username: 'not a user' }, fn);
 
         // then
         expect(fn.mock.calls[0][0] instanceof Error).toBeTruthy();
@@ -29,17 +39,15 @@ describe('jwt strategy', () => {
 
     it('should return user if user has been found', async () => {
         // given
-        const validateFn = authServiceMock.validateUserByCridentials as jest.Mock<Promise<UserCridentials>>;
-        validateFn.mockReturnValue(Promise.resolve<UserCridentials>({
-            username: 'existingUser',
-            password: 'existingPassword',
-        }));
+        (userPersistenceService.getByUsername as jest.Mock).mockReturnValueOnce([null, {
+            username: 'someUser',
+        }]);
         const fn = jest.fn();
 
         // when
-        await jwt.validate({ username: 'existingUser', password: 'existingPassword' }, fn);
+        await jwt.validate({ username: 'existingUser' }, fn);
 
         // then
-        expect(fn.mock.calls[0][1]).toEqual({ username: 'existingUser', password: 'existingPassword' });
+        expect(fn).toHaveBeenCalledWith(null, { username: 'someUser' });
     });
 });
