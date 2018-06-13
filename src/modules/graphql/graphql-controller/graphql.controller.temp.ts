@@ -7,18 +7,19 @@ import { GraphQlService } from '../schemas/graphql.service';
 
 @Controller()
 export class GraphqlController {
-    private schema: GraphQLSchema;
+    private _schema: GraphQLSchema;
+
     constructor(private graphqlService: GraphQlService) {
-        this.schema = graphqlService.getSchema();
+        this._schema = graphqlService.getSchema();
      }
     @Post('graphql')
     public async postGraphql(@Request() req, @Response() res, @Next() next) {
         // TODO: why do we need to return a new object ExpressHandler on each request?
-        return graphqlExpress({ schema: this.schema })(req, res, next);
+        return graphqlExpress({ schema: this._schema })(req, res, next);
     }
 
     @Get('graphql')
     public async getGraphql(@Request() req, @Response() res, @Next() next) {
-        return graphqlExpress({ schema: this.schema })(req, res, next);
+        return graphqlExpress({ schema: this._schema })(req, res, next);
     }
 }
