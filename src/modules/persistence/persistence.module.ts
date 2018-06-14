@@ -1,14 +1,16 @@
 import { Module, LoggerService } from '@nestjs/common';
 import { DbService } from './db.service';
-import { UsersPersistenceService } from './users.persistence.service';
+import { UsersPersistenceService, ClassPersistenceService } from '.';
 
 @Module({
     providers: [
         DbService,
         UsersPersistenceService,
+        ClassPersistenceService,
     ],
     exports: [
         UsersPersistenceService,
+        ClassPersistenceService,
     ],
 })
 export class PersistenceModule {

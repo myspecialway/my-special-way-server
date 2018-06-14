@@ -4,4 +4,8 @@ type Query{
     
     users:  [User]
     user(id: ID!): User
+
+    classes: [Class]!
+    classById(id: ID!): Class
+    classByName(name: String): Class
 }
