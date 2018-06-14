@@ -2,11 +2,15 @@ import * as request from 'supertest';
 import * as mongoMock from './mongo-mock';
 import { Test } from '@nestjs/testing';
 import { AppModule } from './../src/app.module';
-import { INestApplication } from '@nestjs/common';
+import { INestApplication, RequestTimeoutException } from '@nestjs/common';
 import { Cursor } from 'mongodb';
+import { AuthService } from '../src/modules/auth/auth-service/auth.service';
+import { UsersPersistenceService } from '../src/modules/persistence/users.persistence.service';
+import { DbService } from '../src/modules/persistence/db.service';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
+  let tescherUserAccessToken: string;
 
   beforeAll(async () => {
     mongoMock.setupMongoMock();
@@ -18,8 +22,15 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  beforeEach(() => {
+  beforeEach(async () => {
     mongoMock.setupMongoMock();
+    const dbService = new DbService();
+    dbService.initConnection('', '');
+
+    const authService = new AuthService(new UsersPersistenceService(dbService));
+    const [error, token] = await authService.createTokenFromCridentials('msw-teacher');
+
+    // console.log(error);
   });
 
   it('should get 401 error on unauthenticated graphql query', () => {
@@ -29,10 +40,10 @@ describe('AppController (e2e)', () => {
   });
 
   // Must mock the db
-  it('should return query response when authenticated', () => {
-    mongoMock.setFindREturnValue({
-      toArray: jest.fn(),
-    } as Partial<Cursor>);
+  xit('should return query response when authenticated', () => {
+    // mongoMock.setFindREturnValue({
+    //   toArray: jest.fn(),
+    // } as Partial<Cursor>);
 
     return request(app.getHttpServer())
       .get('/graphql?query=%7Busers%20%7Busername%7D%7D')

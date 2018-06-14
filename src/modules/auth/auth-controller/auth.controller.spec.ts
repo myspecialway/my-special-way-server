@@ -20,25 +20,44 @@ describe('auth controller', () => {
         authController = new AuthController(authServiceMock);
     });
 
-    it('should return with 401 if user is not found', async () => {
-        const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<string>>;
-        createTokenFn.mockReturnValue(null);
+    it('should return 500 server error if error happened', async () => {
+        const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+        createTokenFn.mockReturnValueOnce([new Error('mock error'), null]);
 
         await authController.login(responseMock, null);
 
-        expect(responseMock.status.mock.calls[0][0]).toBe(401);
-        expect(responseMock.json.mock.calls[0][0]).toEqual({
+        expect(responseMock.status).toHaveBeenCalledWith(500);
+        expect(responseMock.json).toHaveBeenCalledWith({
+            error: 'server error',
+            message: 'unknown server error',
+        });
+    });
+
+    it('should return 401 if user token returned null', async () => {
+        expect.hasAssertions();
+
+        const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+        createTokenFn.mockReturnValueOnce([null, null]);
+
+        await authController.login(responseMock, null);
+
+        expect(responseMock.status).toHaveBeenCalledWith(401);
+        expect(responseMock.json).toHaveBeenCalledWith({
             error: 'unauthenticated',
             message: 'username of password are incorrect',
         });
     });
 
-    it('should return token if user has been found', async () => {
-        const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<string>>;
-        createTokenFn.mockReturnValue('some-token');
+    it('should return response with token if user has been found and password match', async () => {
+        expect.hasAssertions();
+
+        const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+        createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
 
         await authController.login(responseMock, null);
 
-        expect(responseMock.json.mock.calls[0][0]).toEqual({ accessToken: 'some-token' });
+        expect(responseMock.json).toHaveBeenCalledWith({
+            accessToken: 'some-very-secret-token',
+        });
     });
 });
