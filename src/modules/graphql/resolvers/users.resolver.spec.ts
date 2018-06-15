@@ -33,35 +33,35 @@ describe('user resolver', () => {
     });
 
     it('should call createUser function and return the new user created', async () => {
-        let MOCK_USER = {   
-                            "username": "ah584d",
-                            "email": "email@test.co.il",
-                            "firstname": "avraham",
-                            "lastname": "hamu",
-                            "role": "PRINCIPLE"
+        const MOCK_USER = {
+                            username: 'ah584d',
+                            email: 'email@test.co.il',
+                            firstname: 'avraham',
+                            lastname: 'hamu',
+                            role: 'PRINCIPLE',
                         };
 
         (userPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve(MOCK_USER));
 
-        const response = await usersResolver.createUser(null, {user:MOCK_USER});
+        const response = await usersResolver.createUser(null, {user: MOCK_USER});
         expect(response).toEqual(MOCK_USER);
         expect(userPersistence.createUser).toHaveBeenCalledWith(MOCK_USER);
     });
 
     it('should call updateUser function and return the user updated', async () => {
-        let MOCK_USER = {   
-                            "username": "ah584d",
-                            "email": "email@test.co.il",
-                            "firstname": "avraham",
-                            "lastname": "hamu",
-                            "role": "PRINCIPLE"
+        const MOCK_USER = {
+                            username: 'ah584d',
+                            email: 'email@test.co.il',
+                            firstname: 'avraham',
+                            lastname: 'hamu',
+                            role: 'PRINCIPLE',
                         };
 
         (userPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve(MOCK_USER));
 
-        const response = await usersResolver.updateUser(null, {id:'someid', user: MOCK_USER});
+        const response = await usersResolver.updateUser(null, {id: 'someid', user: MOCK_USER});
         expect(response).toEqual(MOCK_USER);
-        expect(userPersistence.updateUser).toHaveBeenCalledWith('someid',MOCK_USER);
+        expect(userPersistence.updateUser).toHaveBeenCalledWith('someid', MOCK_USER);
     });
 
     it('should call deleteUser function and return the number of user deleted', async () => {
