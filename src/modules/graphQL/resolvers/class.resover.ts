@@ -1,9 +1,9 @@
-import { Resolver, Query } from '@nestjs/graphql';
-import { ClassPersistenceService } from '../../persistence/';
+import { Resolver, Query, ResolveProperty } from '@nestjs/graphql';
+import { ClassPersistenceService, UsersPersistenceService } from '../../persistence/';
 
 @Resolver('Class')
 export class ClassResolver {
-    constructor(private classPersistence: ClassPersistenceService) {}
+    constructor(private classPersistence: ClassPersistenceService, private userPersistenceService: UsersPersistenceService) {}
 
     @Query('classes')
     async getClasses(obj, args, context, info) {
@@ -18,5 +18,10 @@ export class ClassResolver {
     @Query('classByName')
     async getClassByName(obj, args, context, info) {
         return this.classPersistence.getByName(args.name);
+    }
+
+    @ResolveProperty('students')
+    async getClassStudents(obj, args, context) {
+        return this.userPersistenceService.getClassStudents(obj._id.toHexString());
     }
 }

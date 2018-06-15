@@ -22,7 +22,7 @@ export class ClassPersistenceService extends Logger {
     async getAll() {
         try {
             this.log('getAll:: fetching classes');
-            return this.collection.find({}).toArray();
+            return await this.collection.find({}).toArray();
         } catch (error) {
             this.error('getAll:: error fetching classes', error.stack);
             throw error;
@@ -33,7 +33,7 @@ export class ClassPersistenceService extends Logger {
         try {
             const _id = new ObjectID(id);
             this.log(`getAll:: fetching class by id ${id}`);
-            return this.collection.findOne({ _id });
+            return await this.collection.findOne({ _id });
         } catch (error) {
             this.error(`getAll:: error fetching class by id ${id}`, error.stack);
             throw error;
@@ -44,7 +44,7 @@ export class ClassPersistenceService extends Logger {
         const msg = `getByName:: fetching class by name ${name}`;
         try {
             this.log(msg);
-            return this.collection.findOne({ name });
+            return await this.collection.findOne({ name });
         } catch (error) {
             this.error(msg, error.stack);
             throw error;

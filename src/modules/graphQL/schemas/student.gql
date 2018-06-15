@@ -2,8 +2,8 @@ type Student {
   _id: ID!
   class: Class!
   gender: String!
-  lastname: String!
-  name: String!
+  lastName: String!
+  firstName: String!
   # schedule: Schedule
   # teacher: Teacher!
 }

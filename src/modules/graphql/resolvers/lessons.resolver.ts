@@ -1,5 +1,5 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
-import { UsersPersistenceService } from '../../persistence/users.persistence';
+import { UsersPersistenceService } from '../../persistence/';
 import { LessonDbModel } from '../../../models/lesson.db.model';
 // import { RoomDbModel } from '../../../models/room.db.model';
 

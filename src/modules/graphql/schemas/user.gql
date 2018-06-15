@@ -5,9 +5,11 @@ type User {
   firstname: String
   lastname: String
   role: UserType
+  
 }
 
 enum UserType {
   PRINCIPLE
   TEACHER
+  STUDENT
 }

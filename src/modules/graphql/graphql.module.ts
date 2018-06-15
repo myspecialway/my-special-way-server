@@ -4,7 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { graphiqlExpress } from 'apollo-server-express';
 import { GraphQlService } from './schemas/graphql.service';
 import { GraphqlController } from './graphql-controller/graphql.controller.temp';
-import { UsersResolver, ClassResolver} from './resolvers/';
+import { UsersResolver, ClassResolver, StudentResolver} from './resolvers/';
 import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 
@@ -17,6 +17,7 @@ import graphqlPlayground from 'graphql-playground-middleware-express';
         GraphQlService,
         UsersResolver,
         ClassResolver,
+        StudentResolver,
     ],
     controllers: [GraphqlController],
 })

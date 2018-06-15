@@ -3,6 +3,6 @@ type Class {
   name: String!
   level: String!
   number: Int!
-  # TODO: schedule: Schedule!
-  # TODO: students: [Student]
+  schedule: Schedule!
+  students: [Student]!
 }

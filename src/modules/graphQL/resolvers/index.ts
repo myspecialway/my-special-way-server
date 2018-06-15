@@ -1,3 +1,5 @@
 import { UsersResolver } from './users.resolver';
 import { ClassResolver } from './class.resover';
-export { UsersResolver, ClassResolver };
+import { StudentResolver } from './student.resolver';
+import { LessonsResolver } from './lessons.resolver';
+export { UsersResolver, ClassResolver, StudentResolver, LessonsResolver };
