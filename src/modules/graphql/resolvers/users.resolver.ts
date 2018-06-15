@@ -17,7 +17,7 @@ export class UsersResolver {
 
     @Mutation('addUser')
     async createUser(_,  {user}) {
-        return this.usersPersistence.addUser(user);
+        return this.usersPersistence.createUser(user);
     }
 
     @Mutation('updateUser')

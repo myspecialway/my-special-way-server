@@ -43,17 +43,17 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    public async addUser(user: UserDbModel): Promise<UserDbModel>{
+    public async createUser(user: UserDbModel): Promise<UserDbModel>{
         try {
-            this.log(`UsersPersistenceService::addUser:: add user`);
+            this.log(`UsersPersistenceService::createUser:: creates user`);
             const insertResponse = await this.collection.insertOne(user);
 
             const newDocument = await this.getById(insertResponse.insertedId.toHexString());
-            this.log(`UsersPersistenceService::addUser:: inserted to DB :${JSON.stringify(newDocument)}`);
+            this.log(`UsersPersistenceService::createUser:: inserted to DB :${JSON.stringify(newDocument)}`);
 
             return newDocument;
         } catch (error) {
-            this.error(`UsersPersistenceService::addUser:: error adding user `, error.stack);
+            this.error(`UsersPersistenceService::createUser:: error adding user `, error.stack);
             throw error;
         }
     }
