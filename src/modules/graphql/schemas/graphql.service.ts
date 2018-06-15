@@ -10,9 +10,9 @@ export class GraphQlService extends Logger {
         super('GraphQlService');
     }
 
-    getSchema(): GraphQLSchema {
+    public getSchema(): GraphQLSchema {
         try {
-            this.log('getSchema:: starting schema creation');
+            this.log('GraphQlService::getSchema:: starting schema creation');
             let typeDefs = '';
             const files = fs.readdirSync(__dirname).filter(file => file.includes('.gql'));
 
@@ -21,10 +21,10 @@ export class GraphQlService extends Logger {
             }
 
             const schema = this.graphQlFactory.createSchema({ typeDefs });
-            this.log('getSchema:: schema creation complete');
+            this.log('GraphQlService::getSchema:: graphQl schema creation completed');
             return schema;
         } catch (error) {
-            this.error('getSchema:: error creating schema', error.stack);
+            this.error('GraphQlService::getSchema:: error creating schema', error.stack);
             throw error;
         }
     }

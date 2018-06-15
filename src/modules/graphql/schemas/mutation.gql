@@ -1,0 +1,13 @@
+input InputUser {
+    username: String!
+    email: String
+    firstname: String
+    lastname: String
+    role: UserType
+}
+
+type Mutation {
+    addUser(user:InputUser!) : User
+    updateUser(id: ID!, user:InputUser!) : User
+    deleteUser(id: ID!) : Int
+}

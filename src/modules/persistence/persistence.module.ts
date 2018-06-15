@@ -1,6 +1,7 @@
 import { Module, LoggerService } from '@nestjs/common';
 import { DbService } from './db.service';
 import { UsersPersistenceService, ClassPersistenceService } from '.';
+import { getConfig } from './../../config';
 
 @Module({
     providers: [
@@ -15,6 +16,7 @@ import { UsersPersistenceService, ClassPersistenceService } from '.';
 })
 export class PersistenceModule {
     constructor(private dbService: DbService) {
-        dbService.initConnection('mongodb://admin:Aa123456@ds016118.mlab.com:16118/msw-dev', 'msw-dev');
+        const config = getConfig();
+        dbService.initConnection(config.db.connectionString, config.db.dbName);
     }
 }
