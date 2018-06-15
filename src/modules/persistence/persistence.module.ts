@@ -1,6 +1,6 @@
 import { Module, LoggerService } from '@nestjs/common';
 import { DbService } from './db.service';
-import { RunConfig  as config } from './../../config';
+import { getConfig } from './../../config';
 import { UsersPersistenceService } from './users.persistence.service';
 
 @Module({
@@ -14,6 +14,7 @@ import { UsersPersistenceService } from './users.persistence.service';
 })
 export class PersistenceModule {
     constructor(private dbService: DbService) {
+        const config = getConfig();
         dbService.initConnection(config.db.connectionString, config.db.dbName);
     }
 }
