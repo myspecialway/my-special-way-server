@@ -62,7 +62,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         const _dbId = new ObjectID(id);
         try {
             this.log(`UsersPersistenceService::updateUser:: updating user ${_dbId}`);
-            await this.collection.updateOne({ _id: _dbId }, user);
+            await this.collection.replaceOne({ _id: _dbId }, user);
 
             const updatedDocument = await this.getById(id);
             this.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument)}`);
