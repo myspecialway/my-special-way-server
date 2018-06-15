@@ -22,7 +22,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         return this._collection;
     }
 
-    async getAll(): Promise<UserDbModel[]> {
+    public async getAll(): Promise<UserDbModel[]> {
         try {
             this.log('UsersPersistenceService::getAll:: fetching users');
             return this.collection.find({}).toArray();
@@ -32,21 +32,21 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    async getById(id: string): Promise<UserDbModel>{
+    public async getById(id: string): Promise<UserDbModel>{
         try {
-            const _id = new ObjectID(id);
+            const _dbId = new ObjectID(id);
             this.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
-            return this.collection.findOne({ _id });
+            return this.collection.findOne({ _dbId });
         } catch (error) {
             this.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
             throw error;
         }
     }
 
-    async addUser(user: UserDbModel): Promise<UserDbModel>{
+    public async addUser(user: UserDbModel): Promise<UserDbModel>{
         try {
             this.log(`UsersPersistenceService::addUser:: add user`);
-            const insertResponse = await this._collection.insertOne(user);
+            const insertResponse = await this.collection.insertOne(user);
 
             const newDocument = await this.getById(insertResponse.insertedId.toHexString());
             this.log(`UsersPersistenceService::addUser:: inserted to DB :${JSON.stringify(newDocument)}`);
@@ -58,13 +58,13 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    async updateUser(id: string, user: UserDbModel): Promise<UserDbModel>{
-        const _dbId = id;
+    public async updateUser(id: string, user: UserDbModel): Promise<UserDbModel>{
+        const _dbId = new ObjectID(id);
         try {
             this.log(`UsersPersistenceService::updateUser:: updating user ${_dbId}`);
-            const updateReponse = await this.collection.updateOne({ _id: _dbId }, user);
+            await this.collection.updateOne({ _id: _dbId }, user);
 
-            const updatedDocument = await this.getById(_dbId);
+            const updatedDocument = await this.getById(id);
             this.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument)}`);
 
             return updatedDocument;
@@ -74,7 +74,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    async deleteUser(id: string): Promise<number>{
+    public async deleteUser(id: string): Promise<number>{
         try {
             const _dbId = new ObjectID(id);
             this.log(`UsersPersistenceService::deleteUser:: deleting user by id ${id}`);
@@ -87,7 +87,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    async authenticateUser({ username, password }: UserLoginRequest): Promise<[Error, UserDbModel]> {
+    public async authenticateUser({ username, password }: UserLoginRequest): Promise<[Error, UserDbModel]> {
         try {
             this.log(`UsersPersistenceService::authenticateUser:: authenticating user ${username}`);
             return [null, await this.collection.findOne({ username, password })];
@@ -97,7 +97,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    async getByUsername(username: string): Promise<[Error, UserDbModel]> {
+    public async getByUsername(username: string): Promise<[Error, UserDbModel]> {
         try {
             this.log(`UsersPersistenceService::getByUsername:: fetching user by username ${username}`);
             return [null, await this.collection.findOne({ username })];

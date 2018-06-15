@@ -6,12 +6,12 @@ export class UsersResolver {
     constructor(private usersPersistence: UsersPersistenceService) { }
 
     @Query('users')
-    async getUsers(obj, args, context, info) {
+    async getUsers() {
         return this.usersPersistence.getAll();
     }
 
     @Query('user')
-    async getUserById(obj, args, context, info) {
+    async getUserById(args) {
         return this.usersPersistence.getById(args.id);
     }
 
@@ -20,13 +20,13 @@ export class UsersResolver {
         return this.usersPersistence.addUser(user);
     }
 
-    // @Mutation('updateUser')
-    // async updateUser(obj, args, context, info) {
-    //     return this.usersPersistence.updateUser(args.id, obj);
-    // }
+    @Mutation('updateUser')
+    async updateUser(_,  {id, user}) {
+        return this.usersPersistence.updateUser(id, user);
+    }
 
-    // @Mutation('deleteUser')
-    // async deleteUser(obj, args, context, info) {
-    //     return this.usersPersistence.deleteUser(args.id);
-    // }
+    @Mutation('deleteUser')
+    async deleteUser(_,  {id}) {
+        return this.usersPersistence.deleteUser(id);
+    }
 }

@@ -8,4 +8,6 @@ input InputUser {
 
 type Mutation {
     addUser(user:InputUser!) : User
+    updateUser(id: ID!, user:InputUser!) : User
+    deleteUser(id: ID!) : Int
 }
