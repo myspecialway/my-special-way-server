@@ -41,7 +41,7 @@ describe('user resolver', () => {
                             role: 'PRINCIPLE',
                         };
 
-        (userPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve(MOCK_USER));
+        (userPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
 
         const response = await usersResolver.createUser(null, {user: MOCK_USER});
         expect(response).toEqual(MOCK_USER);
@@ -57,7 +57,7 @@ describe('user resolver', () => {
                             role: 'PRINCIPLE',
                         };
 
-        (userPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve(MOCK_USER));
+        (userPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
 
         const response = await usersResolver.updateUser(null, {id: 'someid', user: MOCK_USER});
         expect(response).toEqual(MOCK_USER);
@@ -66,7 +66,7 @@ describe('user resolver', () => {
 
     it('should call deleteUser function and return the number of user deleted', async () => {
 
-        (userPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve(1));
+        (userPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
 
         const response = await usersResolver.deleteUser(null, { id: 'someid' });
         expect(response).toEqual(1);

@@ -3,10 +3,10 @@ import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
 import { UserDbModel } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
-import { IUsersPersistenceService } from './interfaces/Iusers.persistence.service';
+import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 
 @Injectable()
-export class UsersPersistenceService extends Logger implements IUsersPersistenceService{
+export class UsersPersistenceService extends Logger implements IUsersPersistenceService {
     private _collection: Collection<UserDbModel>;
 
     constructor(private dbService: DbService) {
@@ -32,7 +32,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    public async getById(id: string): Promise<UserDbModel>{
+    public async getById(id: string): Promise<UserDbModel> {
         try {
             const _dbId = new ObjectID(id);
             this.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
@@ -43,22 +43,22 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    public async createUser(user: UserDbModel): Promise<UserDbModel>{
+    public async createUser(user: UserDbModel): Promise<[Error, UserDbModel]> {
         try {
             this.log(`UsersPersistenceService::createUser:: creates user`);
             const insertResponse = await this.collection.insertOne(user);
 
-            const newDocument = await this.getById(insertResponse.insertedId.toHexString());
+            const newDocument = await this.getById(insertResponse.insertedId.toString());
             this.log(`UsersPersistenceService::createUser:: inserted to DB :${JSON.stringify(newDocument)}`);
 
-            return newDocument;
+            return [null, newDocument];
         } catch (error) {
             this.error(`UsersPersistenceService::createUser:: error adding user `, error.stack);
-            throw error;
+            return [error, null];
         }
     }
 
-    public async updateUser(id: string, user: UserDbModel): Promise<UserDbModel>{
+    public async updateUser(id: string, user: UserDbModel): Promise<[Error, UserDbModel]> {
         const _dbId = new ObjectID(id);
         try {
             this.log(`UsersPersistenceService::updateUser:: updating user ${_dbId}`);
@@ -67,23 +67,23 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
             const updatedDocument = await this.getById(id);
             this.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument)}`);
 
-            return updatedDocument;
+            return [null, updatedDocument];
         } catch (error) {
             this.error(`UsersPersistenceService::updateUser:: error updating user ${_dbId}`, error.stack);
-            throw error;
+            return [error, null];
         }
     }
 
-    public async deleteUser(id: string): Promise<number>{
+    public async deleteUser(id: string): Promise<[Error, number]> {
         try {
             const _dbId = new ObjectID(id);
             this.log(`UsersPersistenceService::deleteUser:: deleting user by id ${id}`);
             const deleteResponse = await this.collection.deleteOne({ _id: _dbId });
             this.log(`UsersPersistenceService::deleteUser:: removed ${deleteResponse.deletedCount} documents`);
-            return deleteResponse.deletedCount;
+            return [null, deleteResponse.deletedCount];
         } catch (error) {
             this.error(`UsersPersistenceService::deleteUser:: error deleting user by id ${id}`, error.stack);
-            throw error;
+            return [error, null];
         }
     }
 

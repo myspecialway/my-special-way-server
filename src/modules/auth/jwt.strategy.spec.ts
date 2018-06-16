@@ -1,3 +1,4 @@
+import * as common from '@nestjs/common';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthServiceInterface } from './auth-service/auth.service.interface';
 import { UserDbModel } from '../../models/user.db.model';
@@ -7,6 +8,13 @@ import { InternalServerErrorException } from '@nestjs/common';
 describe('jwt strategy', () => {
     let jwt: JwtStrategy;
     let userPersistenceService: Partial<UsersPersistenceService>;
+
+    beforeAll(() => {
+        const errorFunc = common.Logger.error.bind(common.Logger);
+        common.Logger.error = (message, trace, context) => {
+            errorFunc(message, '', context);
+        };
+    });
     beforeEach(() => {
         userPersistenceService = {
             getByUsername: jest.fn(),
