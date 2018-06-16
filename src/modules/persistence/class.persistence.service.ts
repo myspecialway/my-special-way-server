@@ -51,14 +51,41 @@ export class ClassPersistenceService extends Logger {
         }
     }
 
-    async createClass(newClass) {
+    async createClass(newClass: ClassDbModel): Promise<ClassDbModel> {
         try {
             this.log(`ClassPersistenceService::createClass:: create class`);
             const insertResponse = await this.collection.insertOne(newClass);
             return await this.getById(insertResponse.insertedId.toHexString());
         } catch (error) {
-            this.error(msg, error.stack);
+            this.error('ClassPersistenceService::createClass:: error creating class', error.stack);
             throw error;
         }
+    }
+
+    async updateClass(id: string, classObj: ClassDbModel): Promise<ClassDbModel> {
+        const _id = new ObjectID(id);
+        try {
+            this.log(`ClassPersistence::updateClass:: updating class ${_id}`);
+            await this.collection.replaceOne({ _id}, classObj);
+            const updatedDocument = await this.getById(id);
+            this.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument)}`);
+            return updatedDocument;
+        } catch (error) {
+            this.error(`ClassPersistence::updateClass:: error updating class ${_id}`, error.stack);
+            throw error;
+        }
+    }
+
+    async deleteClass(id: string): Promise<number> {
+        try {
+            const _id = new ObjectID(id);
+            this.log(`ClassPersistence::deleteClass:: deleting class by id ${id}`);
+            const deleteResponse = await this.collection.deleteOne({ _id });
+            this.log(`ClassPersistence::deleteClass:: removed ${deleteResponse.deletedCount} documents`);
+            return deleteResponse.deletedCount;
+          } catch (error) {
+            this.error(`ClassPersistence::deleteClass:: error deleting class by id ${id}`, error.stack);
+            throw error;
+          }
     }
 }

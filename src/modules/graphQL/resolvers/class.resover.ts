@@ -1,5 +1,5 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
-import { ClassPersistenceService, UsersPersistenceService } from '../../persistence/';
+import { ClassPersistenceService, UsersPersistenceService, ClassPersistenceService, ClassPersistenceService } from '../../persistence/';
 
 @Resolver('Class')
 export class ClassResolver {
@@ -28,5 +28,15 @@ export class ClassResolver {
     @Mutation('createClass')
     async createClass(obj, { class: newClass }) {
         return this.classPersistence.createClass(newClass);
+    }
+
+    @Mutation('updateClass')
+    async updateClass(obj, {id, class: classObj}) {
+        return this.classPersistence.updateClass(id, classObj);
+    }
+
+    @Mutation('deleteClass')
+    async deleteClass(obj, {id}) {
+        return this.classPersistence.deleteClass(id);
     }
 }

@@ -18,4 +18,6 @@ type Mutation {
     deleteUser(id: ID!) : Int
 
     createClass(class: InputClass!): Class
+    updateClass(id: ID!, class: InputClass!): Class
+    deleteClass(id: ID!): Int
 }
