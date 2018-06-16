@@ -66,10 +66,7 @@ export class UsersPersistenceService extends Logger
       this.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument)}`);
       return updatedDocument;
     } catch (error) {
-      this.error(
-        `UsersPersistenceService::updateUser:: error updating user ${_dbId}`,
-        error.stack,
-      );
+      this.error(`UsersPersistenceService::updateUser:: error updating user ${_dbId}`, error.stack);
       throw error;
     }
   }

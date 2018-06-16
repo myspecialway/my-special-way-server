@@ -5,7 +5,13 @@ type User {
   firstname: String
   lastname: String
   role: UserType
+  gender: Gender
   
+}
+
+enum Gender {
+  FEMALE
+  MALE
 }
 
 enum UserType {

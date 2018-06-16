@@ -1,5 +1,5 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
-import { ClassPersistenceService, UsersPersistenceService, ClassPersistenceService, ClassPersistenceService } from '../../persistence/';
+import { ClassPersistenceService, UsersPersistenceService } from '../../persistence/';
 
 @Resolver('Class')
 export class ClassResolver {
