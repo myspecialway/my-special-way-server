@@ -1,7 +1,7 @@
 import { Module, LoggerService } from '@nestjs/common';
 import { DbService } from './db.service';
+import { getConfig } from '../../config/config-loader';
 import { UsersPersistenceService, ClassPersistenceService } from '.';
-import { getConfig } from './../../config';
 
 @Module({
     providers: [

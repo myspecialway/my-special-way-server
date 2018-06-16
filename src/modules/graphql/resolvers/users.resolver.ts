@@ -16,17 +16,23 @@ export class UsersResolver {
     }
 
     @Mutation('addUser')
-    async createUser(_,  {user}) {
-        return this.usersPersistence.createUser(user);
+    async createUser(_, { user }) {
+        // TODO: Handle errors!!!!
+        const [__, response] = await this.usersPersistence.createUser(user);
+        return response;
     }
 
     @Mutation('updateUser')
-    async updateUser(_,  {id, user}) {
-        return this.usersPersistence.updateUser(id, user);
+    async updateUser(_, { id, user }) {
+        // TODO: Handle errors!!!!
+        const [__, response] = await this.usersPersistence.updateUser(id, user);
+        return response;
     }
 
     @Mutation('deleteUser')
-    async deleteUser(_,  {id}) {
-        return this.usersPersistence.deleteUser(id);
+    async deleteUser(_, { id }) {
+        // TODO: Handle errors!!!!
+        const [__, response] = await this.usersPersistence.deleteUser(id);
+        return response;
     }
 }

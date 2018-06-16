@@ -1,6 +1,7 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
 import { NestFactory } from '@nestjs/core';
+import { initConfig } from './config/config-loader';
 import { AppModule } from './app.module';
 import * as express from 'express';
 import * as bodyParser from 'body-parser';
@@ -12,6 +13,7 @@ instance.use(bodyParser.urlencoded({ extended: false }));
 /* End of express middleware. */
 
 async function bootstrap() {
+  initConfig();
   const app = await NestFactory.create(AppModule, instance);
   app.enableCors();
   await app.listen(3000);
