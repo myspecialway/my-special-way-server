@@ -93,7 +93,8 @@
       "!main.hmr.ts",
       "!**/*.module.ts",
       "!**/*.temp.ts",
-      "!**/*.model.ts"
+      "!**/*.model.ts",
+      "!config/environments/**/*"
     ]
   }
 }

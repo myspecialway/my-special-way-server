@@ -1,13 +1,12 @@
-import * as fs from 'fs';
 import * as path from 'path';
 import { Config } from './environments/config.model';
 
 let _config: Config;
 
-function initConfig() {
+export function initConfig() {
     const env = process.env.NODE_ENV;
-
-    if (!env) {
+    
+    if (!process.env.NODE_ENV) {
         throw new Error('NODE_ENV environment variable not found - you must define it!');
     }
 
@@ -19,5 +18,4 @@ function initConfig() {
     }
 }
 
-initConfig();
 export function getConfig(){ return _config; }
