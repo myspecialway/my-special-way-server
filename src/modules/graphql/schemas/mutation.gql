@@ -6,8 +6,16 @@ input InputUser {
     role: UserType
 }
 
+input InputClass {
+    name: String!
+    level: String!
+    number: Int!
+}
+
 type Mutation {
     addUser(user:InputUser!) : User
     updateUser(id: ID!, user:InputUser!) : User
     deleteUser(id: ID!) : Int
+
+    createClass(class: InputClass!): Class
 }

@@ -10,14 +10,14 @@ export class ClassPersistenceService extends Logger {
         super('ClassPersistenceService');
     }
 
-    private get collection() {
+    public get collection() {
         if (this._collection) {
-            return this._collection;
+          return this._collection;
         }
         const db = this.dbService.getConnection();
         this._collection = db.collection<ClassDbModel>('classes');
         return this._collection;
-    }
+      }
 
     async getAll() {
         try {
@@ -45,6 +45,17 @@ export class ClassPersistenceService extends Logger {
         try {
             this.log(msg);
             return await this.collection.findOne({ name });
+        } catch (error) {
+            this.error(msg, error.stack);
+            throw error;
+        }
+    }
+
+    async createClass(newClass) {
+        try {
+            this.log(`ClassPersistenceService::createClass:: create class`);
+            const insertResponse = await this.collection.insertOne(newClass);
+            return await this.getById(insertResponse.insertedId.toHexString());
         } catch (error) {
             this.error(msg, error.stack);
             throw error;
