@@ -87,6 +87,11 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
+    "globals": {
+      "ts-jest": {
+        "ignoreCoverageForDecorators": true
+      }
+    },
     "coverageDirectory": "../coverage",
     "collectCoverageFrom": [
       "**/*.ts",

@@ -2,6 +2,11 @@
   "rootDir": ".",
   "testRegex": ".e2e-spec.ts$",
   "coverageDirectory": "../coverage",
+  "globals": {
+    "ts-jest": {
+      "ignoreCoverageForDecorators": true
+    }
+  },
   "transform": {
     "^.+\\.tsx?$": "ts-jest"
   },
