@@ -10,7 +10,6 @@ import { DbService } from '../src/modules/persistence/db.service';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
-  let tescherUserAccessToken: string;
 
   beforeAll(async () => {
     mongoMock.setupMongoMock();
