@@ -12,12 +12,12 @@ export class ClassPersistenceService extends Logger {
 
     public get collection() {
         if (this._collection) {
-          return this._collection;
+            return this._collection;
         }
         const db = this.dbService.getConnection();
         this._collection = db.collection<ClassDbModel>('classes');
         return this._collection;
-      }
+    }
 
     async getAll() {
         try {
@@ -55,7 +55,7 @@ export class ClassPersistenceService extends Logger {
         try {
             this.log(`ClassPersistenceService::createClass:: create class`);
             const insertResponse = await this.collection.insertOne(newClass);
-            return await this.getById(insertResponse.insertedId.toHexString());
+            return await this.getById(insertResponse.insertedId.toString());
         } catch (error) {
             this.error('ClassPersistenceService::createClass:: error creating class', error.stack);
             throw error;

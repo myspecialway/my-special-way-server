@@ -12,6 +12,9 @@ describe('class persistence', () => {
                 collection: jest.fn().mockReturnValue({
                     find: jest.fn(),
                     findOne: jest.fn(),
+                    deleteOne: jest.fn(),
+                    replaceOne: jest.fn(),
+                    insertOne: jest.fn(),
                 } as Partial<Collection>),
             } as Partial<Db>),
         };
@@ -89,5 +92,69 @@ describe('class persistence', () => {
         // this needs to be refactored
 
         expect(dbServiceMock.getConnection).toHaveBeenCalledTimes(2);
+    });
+
+    it('should create a new class successfully on createClass', async () => {
+        expect.hasAssertions();
+        const expected = { name: 'classname' };
+        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
+        (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
+            insertedId: '507f1f77bcf86cd799439011',
+        });
+
+        const createdClass = await classPersistanceService.createClass({});
+
+        expect(createdClass).toEqual(expected);
+    });
+
+    it('should return error on createClass when error happened', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
+            insertedId: '507f1f77bcf86cd799439011',
+        });
+        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        await classPersistanceService.createClass({}).catch((error) => expect(error).not.toBeUndefined());
+    });
+
+    it('should update class sucessfuly on updateClass', async () => {
+        expect.hasAssertions();
+        const expected = { name: 'classname' };
+        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
+
+        const updatedClass = await classPersistanceService.updateClass('507f1f77bcf86cd799439011', {});
+
+        expect(updatedClass).toEqual(expected);
+    });
+
+    it('should return error on UpdateClass when error happened', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection(collectioName).replaceOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        await classPersistanceService.updateClass('507f1f77bcf86cd799439011', {}).catch((error) => expect(error).toBeDefined());
+    });
+
+    it('should delete class successfully on deleteClass', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockReturnValueOnce({
+            deletedCount: 1,
+        });
+
+        const removedCount = await classPersistanceService.deleteClass('507f1f77bcf86cd799439011');
+
+        expect(removedCount).toBe(1);
+    });
+
+    it('should return error on deleteClass when error happened', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        await classPersistanceService.deleteClass('507f1f77bcf86cd799439011').catch((error) => expect(error).toBeDefined());
     });
 });
