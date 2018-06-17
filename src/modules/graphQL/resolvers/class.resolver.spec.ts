@@ -1,4 +1,4 @@
-import { ClassResolver } from '.';
+import { ClassResolver } from './class.resover';
 import { ClassPersistenceService, UsersPersistenceService } from '../../persistence';
 
 describe('class resolver', () => {
