@@ -4,3 +4,4 @@ rm -rf dist
 
 tsc
 cpy src/modules/graphql/schemas/*.gql dist/modules/graphql/schemas
+cpy public dist/public

@@ -106,4 +106,14 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
             return [error, null];
         }
     }
+
+    public async getClassStudents(class_id: string) {
+      try {
+          this.log(`getClassStudents: fetching students of class id ${class_id}`);
+          return await this.collection.find({ class_id, role: 'STUDENT' }).toArray();
+      } catch (error) {
+        this.error(`getClassStudents:: error fetching students by class id ${class_id}`, error.stack);
+        throw error;
+      }
+    }
 }

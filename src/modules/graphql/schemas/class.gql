@@ -1,6 +1,8 @@
 type Class {
   _id: ID!
+  name: String!
   level: String!
   number: Int!
-  name: String!
+  schedule: Schedule!
+  students: [Student]!
 }

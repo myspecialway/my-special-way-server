@@ -1,5 +1,5 @@
 import { UsersResolver } from './users.resolver';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
+import { UsersPersistenceService } from '../../persistence';
 
 describe('user resolver', () => {
     let usersResolver: UsersResolver;

@@ -1,5 +1,5 @@
 type Person {
     id: ID!
     name: String!
-    timetable: Timetable
+    schedule: Schedule
 }

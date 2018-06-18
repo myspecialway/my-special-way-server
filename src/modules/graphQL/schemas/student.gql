@@ -1,0 +1,9 @@
+type Student {
+  _id: ID!
+  class: Class!
+  gender: String!
+  lastname: String!
+  firstname: String!
+  # schedule: Schedule
+  # teacher: Teacher!
+}

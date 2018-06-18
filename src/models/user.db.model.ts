@@ -7,9 +7,11 @@ export interface UserDbModel {
     lastname: string;
     email: string;
     role: UserRole;
+    class_id: string;
 }
 
 export enum UserRole {
     PRINCIPLE = 'PRINCIPLE',
     TEACHER = 'TEACHER',
+    STUDENT = 'STUDENT',
 }
