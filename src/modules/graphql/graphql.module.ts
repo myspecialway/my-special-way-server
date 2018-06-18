@@ -1,7 +1,6 @@
 import * as passport from 'passport';
 import { Module, MiddlewareConsumer, NestModule } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
-// import { graphiqlExpress } from 'apollo-server-express';
 import { GraphQlService } from './schemas/graphql.service';
 import { GraphqlController } from './graphql-controller/graphql.controller.temp';
 import { UsersResolver } from './resolvers/users.resolver';
@@ -31,7 +30,6 @@ export class GraphqlModule implements NestModule {
             .apply(passport.authenticate('jwt', { session: false }))
             .forRoutes('/graphql')
             .apply(graphqlPlayground({endpoint: '/graphql'}))
-            // .apply(graphiqlExpress({ endpointURL: '/graphql' }))
             .forRoutes('/play');
     }
 }
