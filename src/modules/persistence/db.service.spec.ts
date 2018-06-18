@@ -1,10 +1,19 @@
 jest.mock('mongodb');
 
+import * as common from '@nestjs/common';
 import { DbService } from './db.service';
 import { MongoClient } from 'mongodb';
 
 describe('db service', () => {
     let dbService: DbService;
+
+    beforeAll(() => {
+        const errorFunc = common.Logger.error.bind(common.Logger);
+        common.Logger.error = (message, trace, context) => {
+            errorFunc(message, '', context);
+        };
+    });
+
     beforeEach(() => {
         dbService = new DbService();
     });

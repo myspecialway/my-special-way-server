@@ -1,3 +1,4 @@
+import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
@@ -5,12 +6,23 @@ import { Collection, Db } from 'mongodb';
 describe('users persistence', () => {
     let usersPersistanceService: UsersPersistenceService;
     let dbServiceMock: Partial<DbService>;
+
+    beforeAll(() => {
+        const errorFunc = common.Logger.error.bind(common.Logger);
+        common.Logger.error = (message, trace, context) => {
+            errorFunc(message, '', context);
+        };
+    });
+
     beforeEach(() => {
         dbServiceMock = {
             getConnection: jest.fn().mockReturnValue({
                 collection: jest.fn().mockReturnValue({
                     find: jest.fn(),
                     findOne: jest.fn(),
+                    deleteOne: jest.fn(),
+                    replaceOne: jest.fn(),
+                    insertOne: jest.fn(),
                 } as Partial<Collection>),
             } as Partial<Db>),
         };
@@ -129,5 +141,80 @@ describe('users persistence', () => {
 
         expect(error).toBeDefined();
         expect(user).toBeNull();
+    });
+
+    it('should remove user sucessfuly on deleteUser', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').deleteOne as jest.Mock).mockReturnValueOnce({
+            deletedCount: 1,
+        });
+
+        const [error, removedCount] = await usersPersistanceService.deleteUser('507f1f77bcf86cd799439011');
+
+        expect(removedCount).toBe(1);
+    });
+
+    it('should return error on deleteUser when error happened', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').deleteOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        const [error, removedCount] = await usersPersistanceService.deleteUser('507f1f77bcf86cd799439011');
+
+        expect(error).toBeDefined();
+    });
+
+    it('should update user sucessfuly on updateUser', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+            username: 'some updated user',
+        });
+
+        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {});
+
+        expect(updatedUser).toEqual({
+            username: 'some updated user',
+        });
+    });
+
+    it('should return error on updateUser when error happened', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').replaceOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        const [error, _] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {});
+        expect(error).toBeDefined();
+    });
+
+    it('should create user sucessfuly on createUser', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+            username: 'some created user',
+        });
+
+        (dbServiceMock.getConnection().collection('users').insertOne as jest.Mock).mockReturnValueOnce({
+            insertedId: '507f1f77bcf86cd799439011',
+        });
+
+        const [_, createdUser] = await usersPersistanceService.createUser({});
+
+        expect(createdUser).toEqual({
+            username: 'some created user',
+        });
+    });
+
+    it('should return error on createUser when error happened', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection('users').insertOne as jest.Mock).mockReturnValueOnce({
+            insertedId: '507f1f77bcf86cd799439011',
+        });
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        const [error, _] = await usersPersistanceService.createUser({});
+        expect(error).toBeDefined();
     });
 });

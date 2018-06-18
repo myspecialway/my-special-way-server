@@ -2,7 +2,7 @@
   "watch": [
     "src"
   ],
-  "ext": "ts",
+  "ext": "ts,gql",
   "ignore": [
     "src/**/*.spec.ts"
   ],
