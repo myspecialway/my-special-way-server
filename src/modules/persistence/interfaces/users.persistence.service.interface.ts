@@ -13,4 +13,5 @@ export interface IUsersPersistenceService {
     readonly deleteUser: (id: string) => Promise<[Error, number]>;
     readonly authenticateUser: ({ username, password }: UserLoginRequest) => Promise<[Error, UserDbModel]>;
     readonly getByUsername: (username: string) => Promise<[Error, UserDbModel]>;
+    readonly getStudentsByClassId: (class_id: string) => Promise<[Error, Array<UserDbModel>]>;
 }
