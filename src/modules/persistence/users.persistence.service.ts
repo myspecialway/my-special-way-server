@@ -41,7 +41,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
             this.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
             throw error;
         }
-    }
+        }
 
     public async createUser(user: UserDbModel): Promise<[Error, UserDbModel]> {
         try {

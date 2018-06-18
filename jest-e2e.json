@@ -2,8 +2,6 @@
   "rootDir": ".",
   "testRegex": ".e2e-spec.ts$",
   "coverageDirectory": "../coverage",
-  "globalSetup": "<rootDir>/test/utils/setup.ts",
-  "globalTeardown": "<rootDir>/test/utils/teardown.ts",
   "globals": {
     "ts-jest": {
       "ignoreCoverageForDecorators": true
@@ -29,6 +27,7 @@
     "!src/main.ts",
     "!src/main.hmr.ts",
     "!src/**/*.spec.ts",
-    "!src/**/*.temp.ts"
+    "!src/**/*.temp.ts",
+    "!src/config/environments/*"
   ]
 }
