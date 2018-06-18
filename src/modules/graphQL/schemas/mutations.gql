@@ -12,12 +12,25 @@ input InputClass {
     number: Int!
 }
 
+input InputLesson {
+    title: String!
+    icon: String!
+}
+
 type Mutation {
+    # User
     addUser(user:InputUser!) : User
     updateUser(id: ID!, user:InputUser!) : User
     deleteUser(id: ID!) : Int
-
+    
+    # Class
     createClass(class: InputClass!): Class
     updateClass(id: ID!, class: InputClass!): Class
     deleteClass(id: ID!): Int
+    
+    # Lesson
+    createLesson(lesson: InputLesson!): Lesson
+    updateLesson(id: ID!, lesson: InputLesson!): Lesson
+    deleteLesson(id: ID!): Int
 }
+
