@@ -1,6 +1,5 @@
-import { ClassResolver } from './class.resover';
-import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
+import { ClassResolver } from './class.resolver';
+import { ClassPersistenceService, UsersPersistenceService } from '../../persistence';
 
 describe('class resolver', () => {
     let classResolver: ClassResolver;
@@ -16,7 +15,7 @@ describe('class resolver', () => {
             deleteClass: jest.fn(),
         };
         usersPersistence = {
-            getClassStudents: jest.fn(),
+            getStudentsByClassId: jest.fn(),
         };
 
         classResolver = new ClassResolver(classPersistence as ClassPersistenceService, usersPersistence as UsersPersistenceService);
@@ -45,12 +44,12 @@ describe('class resolver', () => {
         expect(classPersistence.getByName).toHaveBeenCalledWith('somename');
     });
 
-    it('should call getClassStudents and return students users', async () => {
+    it('should call getStudentsByClassId and return students users', async () => {
         const expected = [{ username: 'student1', role: 'STUDENT' }, { username: 'student2', role: 'STUDENT' }];
-        (usersPersistence.getClassStudents as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const response = await classResolver.getClassStudents({_id: 'someid'}, null, null);
+        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve(expected));
+        const response = await classResolver.getStudentsByClassId({_id: 'someid'}, null, null);
         expect(response).toEqual(expected);
-        expect(usersPersistence.getClassStudents).toHaveBeenCalledWith('someid');
+        expect(usersPersistence.getStudentsByClassId).toHaveBeenCalledWith('someid');
     });
 
     it('should call createClass and return new created class', async () => {

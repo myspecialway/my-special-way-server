@@ -107,13 +107,13 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    public async getClassStudents(class_id: string) {
-      try {
-          this.log(`getClassStudents: fetching students of class id ${class_id}`);
-          return await this.collection.find({ class_id, role: 'STUDENT' }).toArray();
-      } catch (error) {
-        this.error(`getClassStudents:: error fetching students by class id ${class_id}`, error.stack);
-        throw error;
-      }
+    public async getStudentsByClassId(class_id: string): Promise<[Error, Array<UserDbModel>]> {
+        try {
+            this.log(`UsersPersistenceService::getStudentsByClassId:: fetching students by class id ${class_id}`);
+            return [null, await this.collection.find({ class_id, role: 'STUDENT' }).toArray()];
+        } catch (error) {
+            this.error(`UsersPersistenceService::getStudentsByClassId:: error fetching students by class id ${class_id}`, error.stack);
+            throw [error, null];
+        }
     }
 }
