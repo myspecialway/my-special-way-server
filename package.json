@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -59,8 +59,8 @@
     "@types/passport-jwt": "^3.0.1",
     "@types/supertest": "^2.0.4",
     "codecov": "^3.0.2",
-    "cross-env": "^5.2.0",
     "cpy-cli": "^2.0.0",
+    "cross-env": "^5.2.0",
     "jest": "^23.0.1",
     "nodemon": "^1.14.1",
     "prettier": "^1.11.1",
