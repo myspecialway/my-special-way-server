@@ -10,7 +10,7 @@ export async function startMockMongodb() {
             dbName: 'msw-test', // by default generate random dbName
         },
         binary: {
-            downloadDir: './.mongo-binary', // by default %HOME/.mongodb-binaries
+            downloadDir: './.mongodb-binaries', // by default %HOME/.mongodb-binaries
         },
     });
 

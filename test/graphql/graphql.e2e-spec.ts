@@ -7,12 +7,14 @@ import { AuthService } from '../../src/modules/auth/auth-service/auth.service';
 import { MongoClient } from 'mongodb';
 import { UserDbModel } from '../../src/models/user.db.model';
 
-describe('AppController (e2e)', () => {
+describe('AppController (e2e)', async () => {
   let app: INestApplication;
   let token: string;
-
   beforeEach(async () => {
+    jest.setTimeout(60 * 1000);
     await mongodbHelpers.startMockMongodb();
+    jest.setTimeout(5 * 1000);
+
     await mongodbHelpers.addMockUser({
       username: 'test-user',
       password: 'password',
