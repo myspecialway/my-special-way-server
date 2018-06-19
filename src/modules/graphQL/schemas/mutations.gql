@@ -1,9 +1,11 @@
 input InputUser {
     username: String!
-    email: String
-    firstname: String
-    lastname: String
-    role: UserType
+    email: String!
+    firstname: String!
+    lastname: String!
+    role: UserType!
+    gender: Gender!
+    class_id: String
 }
 
 input InputClass {

@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
+import { UserRole } from '../../../models/user.db.model';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 
 @Resolver('User')
@@ -8,6 +9,11 @@ export class UsersResolver {
     @Query('users')
     async getUsers() {
         return this.usersPersistence.getAll();
+    }
+
+    @Query('students')
+    async getStudents() {
+        return this.usersPersistence.getUserByRole(UserRole.STUDENT);
     }
 
     @Query('user')

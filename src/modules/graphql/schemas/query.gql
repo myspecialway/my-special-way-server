@@ -3,6 +3,7 @@ type Query{
     person(id: ID!): Person
     
     users:  [User]
+    students: [User]
     user(id: ID!): User
 
     classes: [Class]!
