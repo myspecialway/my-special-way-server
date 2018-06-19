@@ -1,45 +1,44 @@
 import * as request from 'supertest';
+import * as mongodbHelpers from '../utils/mongo-db-helpers';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../../src/app.module';
 import { INestApplication } from '@nestjs/common';
-import { UsersPersistenceService } from '../../src/modules/persistence/users.persistence.service';
 import { AuthService } from '../../src/modules/auth/auth-service/auth.service';
+import { MongoClient } from 'mongodb';
+import { UserDbModel } from '../../src/models/user.db.model';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let token: string;
-  let usersPersistenceServiceMock: Partial<UsersPersistenceService>;
 
   beforeEach(async () => {
-    // initialize users persistance mock to act as fake DB
-    usersPersistenceServiceMock = {
-      getAll: jest.fn(),
-      authenticateUser: jest.fn(),
-      getByUsername: async () => [null, { username: 'mock-user' }],
-    } as Partial<UsersPersistenceService>;
+    await mongodbHelpers.startMockMongodb();
+    await mongodbHelpers.addMockUser({
+      username: 'test-user',
+      password: 'password',
+    } as UserDbModel);
 
-    // create test fixture with app and swap the real users persistance with mocked one
     const moduleFixture = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .overrideProvider(UsersPersistenceService)
-      .useValue(usersPersistenceServiceMock)
       .compile();
 
-    // get authService from the fixture and use it to get token for authentication middleware
+    app = moduleFixture.createNestApplication();
+    await app.init();
+
     const authService = moduleFixture.get<AuthService>(AuthService);
-    (usersPersistenceServiceMock.authenticateUser as jest.Mock).mockReturnValueOnce(Promise.resolve([null, { username: 'mock-user' }]));
     [, token] = await authService.createTokenFromCridentials({
       username: 'test-user',
       password: 'password',
     });
+  });
 
-    app = moduleFixture.createNestApplication();
-    await app.init();
+  afterEach(() => {
+    mongodbHelpers.stopMockMongodb();
   });
 
   it('should get 401 error on unauthenticated graphql query', () => {
-    (usersPersistenceServiceMock.authenticateUser as jest.Mock).mockReturnValueOnce(Promise.resolve([null, { username: 'mock-user' }]));
+    // (usersPersistenceServiceMock.authenticateUser as jest.Mock).mockReturnValueOnce(Promise.resolve([null, { username: 'mock-user' }]));
 
     return request(app.getHttpServer())
       .post('/graphql?query=%7B%0A%20%20message%0A%7D')
@@ -47,12 +46,10 @@ describe('AppController (e2e)', () => {
   });
 
   it('should return query response when authenticated', () => {
-    (usersPersistenceServiceMock.getAll as jest.Mock).mockReturnValueOnce([{ username: 'mock-user' }]);
-
     return request(app.getHttpServer())
       .get('/graphql?query=%7Busers%20%7Busername%7D%7D')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
-      .expect(`{"data":{"users":[{"username":"mock-user"}]}}`);
+      .expect(`{"data":{"users":[{"username":"test-user"}]}}`);
   });
 });

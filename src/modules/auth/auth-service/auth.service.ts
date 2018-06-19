@@ -15,6 +15,7 @@ export class AuthService implements AuthServiceInterface {
     /* istanbul ignore next */
     async createTokenFromCridentials(userLogin: UserLoginRequest): Promise<[Error, string]> {
         const [error, user] = await this.validateUserByCridentials(userLogin);
+
         if (error || user === null) {
             return [error, null];
         }
