@@ -1,9 +1,9 @@
 import MongodbMemoryServer from 'mongodb-memory-server';
 import { UserDbModel } from '../../src/models/user.db.model';
 import { MongoClient } from 'mongodb';
+
 let mongod;
-let connectionString: string;
-export async function startMockMongodb() {
+export function startMockMongodb() {
     mongod = new MongodbMemoryServer({
         instance: {
             port: 27018, // by default choose any free port
@@ -13,9 +13,6 @@ export async function startMockMongodb() {
             downloadDir: './.mongodb-binaries', // by default %HOME/.mongodb-binaries
         },
     });
-
-    connectionString = await mongod.getConnectionString();
-    return connectionString;
 }
 
 export function stopMockMongodb() {
@@ -23,6 +20,7 @@ export function stopMockMongodb() {
 }
 
 export async function addMockUser(user: UserDbModel) {
+    const connectionString = await mongod.getConnectionString();
     const connection = await MongoClient.connect(connectionString);
     const usersCollection = connection.db().collection('users');
     await usersCollection.insertOne(user);

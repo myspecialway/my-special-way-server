@@ -4,15 +4,15 @@ import { Test } from '@nestjs/testing';
 import { AppModule } from '../../src/app.module';
 import { INestApplication } from '@nestjs/common';
 import { AuthService } from '../../src/modules/auth/auth-service/auth.service';
-import { MongoClient } from 'mongodb';
 import { UserDbModel } from '../../src/models/user.db.model';
 
 describe('AppController (e2e)', async () => {
   let app: INestApplication;
   let token: string;
+  let mongod;
   beforeEach(async () => {
     jest.setTimeout(60 * 1000);
-    await mongodbHelpers.startMockMongodb();
+    mongod = mongodbHelpers.startMockMongodb();
     jest.setTimeout(5 * 1000);
 
     await mongodbHelpers.addMockUser({
@@ -40,7 +40,6 @@ describe('AppController (e2e)', async () => {
   });
 
   it('should get 401 error on unauthenticated graphql query', () => {
-    // (usersPersistenceServiceMock.authenticateUser as jest.Mock).mockReturnValueOnce(Promise.resolve([null, { username: 'mock-user' }]));
 
     return request(app.getHttpServer())
       .post('/graphql?query=%7B%0A%20%20message%0A%7D')

@@ -34,9 +34,9 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
 
     public async getById(id: string): Promise<UserDbModel> {
         try {
-            const _dbId = new ObjectID(id);
+            const _id = new ObjectID(id);
             this.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
-            return this.collection.findOne({ _dbId });
+            return this.collection.findOne({ _id });
         } catch (error) {
             this.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
             throw error;
