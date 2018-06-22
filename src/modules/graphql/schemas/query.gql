@@ -1,6 +1,6 @@
 type Query{
-    getStudents: [Student]
-    getStudent(id: ID!): Student
+    students: [Student]
+    student(id: ID!): Student
     
     getUsers:  [User]
     getUser(id: ID!): User

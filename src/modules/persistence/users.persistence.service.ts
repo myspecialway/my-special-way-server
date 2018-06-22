@@ -13,6 +13,13 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         super('UsersPersistenceService');
     }
 
+    private _buildMongoFilterFromQuery(query: { [id: string]: string }, id?: string): { [id: string]: string } {
+        if(id) {
+            query['_id'] = id;
+        }
+        return query;
+    }
+
     public get collection() {
         if (this._collection) {
             return this._collection;
@@ -28,6 +35,19 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
             return await this.collection.find({}).toArray();
         } catch (error) {
             this.error('UsersPersistenceService::getAll:: error fetching users', error.stack);
+            throw  [error, null];
+        }
+    }
+
+    // CRUD on users
+    public async getUsersByFilters(queyParams: { [id: string]: string }, id?: string ): Promise<UserDbModel[]> {
+        try {
+            const mongoQuery = this._buildMongoFilterFromQuery(queyParams);
+
+            this.log(`UsersPersistenceService::getUsersByFilters:: fetching users by parameters `);
+            return await this.collection.find(mongoQuery).toArray();
+        } catch (error) {
+            this.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
             throw  [error, null];
         }
     }
@@ -87,6 +107,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
+    // Authentication
     public async authenticateUser({ username, password }: UserLoginRequest): Promise<[Error, UserDbModel]> {
         try {
             this.log(`UsersPersistenceService::authenticateUser:: authenticating user ${username}`);
@@ -107,6 +128,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
+    // Class
     public async getStudentsByClassId(class_id: string): Promise<[Error, Array<UserDbModel>]> {
         try {
             this.log(`UsersPersistenceService::getStudentsByClassId:: fetching students by class id ${class_id}`);
