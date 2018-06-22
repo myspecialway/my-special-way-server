@@ -13,7 +13,7 @@ input InputClass {
 }
 
 type Mutation {
-    addUser(user:InputUser!) : User
+    createUser(user:InputUser!) : User
     updateUser(id: ID!, user:InputUser!) : User
     deleteUser(id: ID!) : Int
 

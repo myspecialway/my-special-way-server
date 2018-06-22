@@ -25,10 +25,10 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     public async getAll(): Promise<UserDbModel[]> {
         try {
             this.log('UsersPersistenceService::getAll:: fetching users');
-            return this.collection.find({}).toArray();
+            return await this.collection.find({}).toArray();
         } catch (error) {
             this.error('UsersPersistenceService::getAll:: error fetching users', error.stack);
-            throw error;
+            throw  [error, null];
         }
     }
 
@@ -36,10 +36,10 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         try {
             const _dbId = new ObjectID(id);
             this.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
-            return this.collection.findOne({ _dbId });
+            return await this.collection.findOne({ _id: _dbId });
         } catch (error) {
             this.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
-            throw error;
+            throw  [error, null];
         }
     }
 

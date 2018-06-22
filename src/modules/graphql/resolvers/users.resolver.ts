@@ -5,17 +5,17 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 export class UsersResolver {
     constructor(private usersPersistence: UsersPersistenceService) { }
 
-    @Query('users')
+    @Query('getUsers')
     async getUsers() {
         return this.usersPersistence.getAll();
     }
 
-    @Query('user')
+    @Query('getUser')
     async getUserById(args) {
         return this.usersPersistence.getById(args.id);
     }
 
-    @Mutation('addUser')
+    @Mutation('createUser')
     async createUser(_, { user }) {
         // TODO: Handle errors!!!!
         const [__, response] = await this.usersPersistence.createUser(user);
