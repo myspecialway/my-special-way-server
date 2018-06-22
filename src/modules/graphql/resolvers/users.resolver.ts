@@ -5,12 +5,12 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 export class UsersResolver {
     constructor(private usersPersistence: UsersPersistenceService) { }
 
-    @Query('getUsers')
+    @Query('users')
     async getUsers() {
         return this.usersPersistence.getAll();
     }
 
-    @Query('getUser')
+    @Query('user')
     async getUserById(args) {
         return this.usersPersistence.getById(args.id);
     }
