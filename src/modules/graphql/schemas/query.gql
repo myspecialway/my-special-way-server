@@ -1,6 +1,6 @@
 type Query{
-    people: [Person]
-    person(id: ID!): Person
+    getStudents: [Student]
+    getStudent(id: ID!): Student
     
     getUsers:  [User]
     getUser(id: ID!): User
