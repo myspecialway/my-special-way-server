@@ -5,7 +5,7 @@ type Student {
   firstname: String
   lastname: String
   gender: Gender
-  class: Class!
+  class: Class
   # schedule: Schedule
   # teacher: Teacher!
 }

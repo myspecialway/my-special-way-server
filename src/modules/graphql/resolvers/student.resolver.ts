@@ -12,8 +12,8 @@ export class StudentResolver {
     }
 
     @Query('student')
-    public async getStudentById(args) {
-        return this.usersPersistence.getUsersByFilters({role: UserRole.STUDENT}, args.id);
+    public async getStudentById(obj, args, context, info) {
+        return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
     }
 
     // @Mutation('createStudent')

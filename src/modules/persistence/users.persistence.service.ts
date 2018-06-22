@@ -13,9 +13,10 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         super('UsersPersistenceService');
     }
 
-    private _buildMongoFilterFromQuery(query: { [id: string]: string }, id?: string): { [id: string]: string } {
-        if(id) {
-            query['_id'] = id;
+    private _buildMongoFilterFromQuery(query: { [id: string]: any }, id?: string): { [id: string]: string } {
+        if (id) {
+            const mongoId = new ObjectID(id);
+            query._id = mongoId;
         }
         return query;
     }
@@ -40,12 +41,24 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     }
 
     // CRUD on users
-    public async getUsersByFilters(queyParams: { [id: string]: string }, id?: string ): Promise<UserDbModel[]> {
+    public async getUsersByFilters(queyParams: { [id: string]: string }): Promise<UserDbModel[]> {
         try {
             const mongoQuery = this._buildMongoFilterFromQuery(queyParams);
 
             this.log(`UsersPersistenceService::getUsersByFilters:: fetching users by parameters `);
             return await this.collection.find(mongoQuery).toArray();
+        } catch (error) {
+            this.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
+            throw  [error, null];
+        }
+    }
+
+    public async getUserByFilters(queyParams: { [id: string]: string }, id?: string ): Promise<UserDbModel> {
+        try {
+            const mongoQuery = this._buildMongoFilterFromQuery(queyParams, id);
+
+            this.log(`UsersPersistenceService::getUsersByFilters:: fetching users by parameters `);
+            return await this.collection.findOne(mongoQuery);
         } catch (error) {
             this.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
             throw  [error, null];
