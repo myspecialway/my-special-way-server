@@ -18,6 +18,7 @@ export class StudentResolver {
 
     @Mutation('createStudent')
     public async createStudent(_, { student }) {
+        // TODO perform permissions rights
         // TODO: Handle errors!!!!
         const [__, response] = await this.usersPersistence.createUser(student);
         return response;
@@ -25,6 +26,7 @@ export class StudentResolver {
 
     @Mutation('updateStudent')
     public async updateStudent(_, { id, student }) {
+        // TODO perform permissions rights
         // TODO: Handle errors!!!!
         const [__, response] = await this.usersPersistence.updateUser(id, student);
         return response;
@@ -32,6 +34,7 @@ export class StudentResolver {
 
     @Mutation('deleteStudent')
     public async deleteStudent(_, { id }) {
+        // TODO perform permissions rights
         // TODO: Handle errors!!!!
         const [__, response] = await this.usersPersistence.deleteUser(id);
         return response;

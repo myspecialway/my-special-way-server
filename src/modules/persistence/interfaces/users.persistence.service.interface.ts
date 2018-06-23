@@ -16,11 +16,6 @@ export interface IUsersPersistenceService {
     readonly updateUser: (id: string, user: UserDbModel) => Promise<[Error, UserDbModel]>;
     readonly deleteUser: (id: string) => Promise<[Error, number]>;
 
-    // CRUD on students
-    readonly createStudent: (user: UserDbModel) => Promise<[Error, UserDbModel]>;
-    readonly updateStudent: (id: string, user: UserDbModel) => Promise<[Error, UserDbModel]>;
-    readonly deleteStudent: (id: string) => Promise<[Error, number]>;
-
     // Authentication
     readonly authenticateUser: ({ username, password }: UserLoginRequest) => Promise<[Error, UserDbModel]>;
     readonly getByUsername: (username: string) => Promise<[Error, UserDbModel]>;
