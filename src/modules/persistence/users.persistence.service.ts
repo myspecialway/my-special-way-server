@@ -9,8 +9,8 @@ import { IUsersPersistenceService } from './interfaces/users.persistence.service
 export class UsersPersistenceService extends Logger implements IUsersPersistenceService {
     private _collection: Collection<UserDbModel>;
 
-    constructor(private dbService: DbService, private _loggerPrefix?: string) {
-        super(_loggerPrefix || 'UsersPersistenceService');
+    constructor(private dbService: DbService/*, private _loggerPrefix: string*/) {
+        super(/*_loggerPrefix || */'UsersPersistenceService');
     }
 
     private _buildMongoFilterFromQuery(query: { [id: string]: any }, id?: string): { [id: string]: string } {

@@ -3,36 +3,36 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 
 @Resolver('User')
 export class UsersResolver {
-    constructor(private usersPersistence: UsersPersistenceService) { }
+    constructor(private _usersPersistence: UsersPersistenceService) { }
 
     @Query('users')
     async getUsers() {
-        return this.usersPersistence.getAll();
+        return this._usersPersistence.getAll();
     }
 
     @Query('user')
     async getUserById(obj, args, context, info) {
-        return this.usersPersistence.getById(args.id);
+        return this._usersPersistence.getById(args.id);
     }
 
     @Mutation('createUser')
     async createUser(_, { user }) {
         // TODO: Handle errors!!!!
-        const [__, response] = await this.usersPersistence.createUser(user);
+        const [__, response] = await this._usersPersistence.createUser(user);
         return response;
     }
 
     @Mutation('updateUser')
     async updateUser(_, { id, user }) {
         // TODO: Handle errors!!!!
-        const [__, response] = await this.usersPersistence.updateUser(id, user);
+        const [__, response] = await this._usersPersistence.updateUser(id, user);
         return response;
     }
 
     @Mutation('deleteUser')
     async deleteUser(_, { id }) {
         // TODO: Handle errors!!!!
-        const [__, response] = await this.usersPersistence.deleteUser(id);
+        const [__, response] = await this._usersPersistence.deleteUser(id);
         return response;
     }
 }

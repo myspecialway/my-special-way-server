@@ -6,23 +6,23 @@ import { IStudentPersistenceService } from './interfaces/student.persistence.ser
 import { UsersPersistenceService } from './users.persistence.service';
 
 @Injectable()
-export class StudentPersistenceService extends UsersPersistenceService implements IStudentPersistenceService {
+export class StudentPersistenceService  extends UsersPersistenceService implements IStudentPersistenceService {
 
     constructor(private _dbService: DbService) {
-        super(_dbService, 'StudentPersistenceService');
+        super(_dbService/*, 'StudentPersistenceService'*/);
     }
 
     public async createStudent(user: UserDbModel): Promise<[Error, UserDbModel]> {
         try {
             user.role = UserRole.STUDENT;
-            this.log(`UsersPersistenceService::createStudent:: creates user`);
+            this.log(`UsersPersistenceService::createStudent:: creates student`);
             const insertResponse = await this.createUser(user);
 
             this.log(`UsersPersistenceService::createStudent:: inserted to DB :${JSON.stringify(insertResponse)}`);
 
             return insertResponse;
         } catch (error) {
-            this.error(`UsersPersistenceService::createStudent:: error adding user `, error.stack);
+            this.error(`UsersPersistenceService::createStudent:: error adding student `, error.stack);
             return [error, null];
         }
     }
@@ -30,7 +30,7 @@ export class StudentPersistenceService extends UsersPersistenceService implement
     public async updateStudent(id: string, user: UserDbModel): Promise<[Error, UserDbModel]> {
         try {
             user.role = UserRole.STUDENT;
-            this.log(`UsersPersistenceService::updateStudent:: updating user ${id}`);
+            this.log(`UsersPersistenceService::updateStudent:: updating student ${id}`);
             await this.updateUser(id, user);
 
             const updatedDocument = await this.getById(id);
@@ -38,19 +38,19 @@ export class StudentPersistenceService extends UsersPersistenceService implement
 
             return [null, updatedDocument];
         } catch (error) {
-            this.error(`UsersPersistenceService::updateStudent:: error updating user ${id}`, error.stack);
+            this.error(`UsersPersistenceService::updateStudent:: error updating student ${id}`, error.stack);
             return [error, null];
         }
     }
 
     public async deleteStudent(id: string): Promise<[Error, number]> {
         try {
-            this.log(`UsersPersistenceService::deleteStudent:: deleting user by id ${id}`);
+            this.log(`UsersPersistenceService::deleteStudent:: deleting student by id ${id}`);
             const deleteResponse = await this.deleteUser(id);
             this.log(`UsersPersistenceService::deleteStudent:: removed ${deleteResponse[1]} documents`);
             return [null, deleteResponse[1]];
         } catch (error) {
-            this.error(`UsersPersistenceService::deleteStudent:: error deleting user by id ${id}`, error.stack);
+            this.error(`UsersPersistenceService::deleteStudent:: error deleting student by id ${id}`, error.stack);
             return [error, null];
         }
     }
