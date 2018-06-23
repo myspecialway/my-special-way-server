@@ -11,7 +11,7 @@ export class UsersResolver {
     }
 
     @Query('getUser')
-    async getUserById(args) {
+    async getUserById(obj, args, context, info) {
         return this.usersPersistence.getById(args.id);
     }
 
