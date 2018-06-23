@@ -1,7 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
-import { ObjectID } from 'mongodb';
-import { UserDbModel, UserRole } from 'models/user.db.model';
+import { UserDbModel, UserRole } from '../../models/user.db.model';
 import { IStudentPersistenceService } from './interfaces/student.persistence.service.interface';
 import { UsersPersistenceService } from './users.persistence.service';
 
@@ -12,11 +11,11 @@ export class StudentPersistenceService  extends UsersPersistenceService implemen
         super(_dbService/*, 'StudentPersistenceService'*/);
     }
 
-    public async createStudent(user: UserDbModel): Promise<[Error, UserDbModel]> {
+    public async createStudent(student: UserDbModel): Promise<[Error, UserDbModel]> {
         try {
-            user.role = UserRole.STUDENT;
+            student.role = UserRole.STUDENT;
             this.log(`UsersPersistenceService::createStudent:: creates student`);
-            const insertResponse = await this.createUser(user);
+            const insertResponse = await this.createUser(student);
 
             this.log(`UsersPersistenceService::createStudent:: inserted to DB :${JSON.stringify(insertResponse)}`);
 
@@ -27,11 +26,11 @@ export class StudentPersistenceService  extends UsersPersistenceService implemen
         }
     }
 
-    public async updateStudent(id: string, user: UserDbModel): Promise<[Error, UserDbModel]> {
+    public async updateStudent(id: string, student: UserDbModel): Promise<[Error, UserDbModel]> {
         try {
-            user.role = UserRole.STUDENT;
+            student.role = UserRole.STUDENT;
             this.log(`UsersPersistenceService::updateStudent:: updating student ${id}`);
-            await this.updateUser(id, user);
+            await this.updateUser(id, student);
 
             const updatedDocument = await this.getById(id);
             this.log(`UsersPersistenceService::updateStudent:: updated DB :${JSON.stringify(updatedDocument)}`);

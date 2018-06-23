@@ -1,6 +1,5 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { StudentPersistenceService } from '../../persistence/student.persistence.service';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
 
 @Resolver('Student')

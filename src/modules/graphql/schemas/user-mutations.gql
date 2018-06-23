@@ -8,7 +8,7 @@ input InputUser {
 }
 
 input InputStudent {
-    username: String!
+    username: String
     email: String
     firstname: String
     lastname: String
@@ -27,7 +27,7 @@ type Mutation {
     updateUser(id: ID!, user: InputUser!) : User
     deleteUser(id: ID!) : Int
 
-    createStudent(user: InputStudent!) : Student
+    createStudent(student: InputStudent!) : Student
     updateStudent(id: ID!, student: InputStudent!) : Student
     deleteStudent(id: ID!) : Int
 
