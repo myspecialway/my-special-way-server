@@ -9,12 +9,17 @@ export interface IUsersPersistenceService {
     readonly getAll: () => Promise<UserDbModel[]>;
     readonly getUsersByFilters: (queyParams: { [id: string]: string }, id?: string ) => Promise<UserDbModel[]>;
     readonly getUserByFilters: (queyParams: { [id: string]: string }, id?: string ) => Promise<UserDbModel>;
-    
+
     // CRUD on users
     readonly getById: (id: string) => Promise<UserDbModel>;
     readonly createUser: (user: UserDbModel) => Promise<[Error, UserDbModel]>;
     readonly updateUser: (id: string, user: UserDbModel) => Promise<[Error, UserDbModel]>;
     readonly deleteUser: (id: string) => Promise<[Error, number]>;
+
+    // CRUD on students
+    readonly createStudent: (user: UserDbModel) => Promise<[Error, UserDbModel]>;
+    readonly updateStudent: (id: string, user: UserDbModel) => Promise<[Error, UserDbModel]>;
+    readonly deleteStudent: (id: string) => Promise<[Error, number]>;
 
     // Authentication
     readonly authenticateUser: ({ username, password }: UserLoginRequest) => Promise<[Error, UserDbModel]>;

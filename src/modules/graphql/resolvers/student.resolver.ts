@@ -16,24 +16,24 @@ export class StudentResolver {
         return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
     }
 
-    // @Mutation('createStudent')
-    // public async createStudent(_, { user }) {
-    //     // TODO: Handle errors!!!!
-    //     const [__, response] = await this.usersPersistence.createUser(user);
-    //     return response;
-    // }
+    @Mutation('createStudent')
+    public async createStudent(_, { student }) {
+        // TODO: Handle errors!!!!
+        const [__, response] = await this.usersPersistence.createUser(student);
+        return response;
+    }
 
-    // @Mutation('updateStudent')
-    // public async updateStudent(_, { id, user }) {
-    //     // TODO: Handle errors!!!!
-    //     const [__, response] = await this.usersPersistence.updateUser(id, user);
-    //     return response;
-    // }
+    @Mutation('updateStudent')
+    public async updateStudent(_, { id, student }) {
+        // TODO: Handle errors!!!!
+        const [__, response] = await this.usersPersistence.updateUser(id, student);
+        return response;
+    }
 
-    // @Mutation('deleteStudent')
-    // public async deleteStudent(_, { id }) {
-    //     // TODO: Handle errors!!!!
-    //     const [__, response] = await this.usersPersistence.deleteUser(id);
-    //     return response;
-    // }
+    @Mutation('deleteStudent')
+    public async deleteStudent(_, { id }) {
+        // TODO: Handle errors!!!!
+        const [__, response] = await this.usersPersistence.deleteUser(id);
+        return response;
+    }
 }
