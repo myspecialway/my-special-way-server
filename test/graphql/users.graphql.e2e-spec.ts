@@ -43,17 +43,21 @@ describe('users graphql', () => {
             .post('/graphql')
             .send(createUserGraphqlMutation)
             .set('Authorization', `Bearer ${token}`)
-            .expect(`{"data":{"createUser":{"username":"mock-username","email":"mock-email"}}}`)
+            .expect(`{"data":{"createUser":{"username":"mock-username","email":"mock-email","firstname":"israel"}}}`)
             .expect(200);
     });
 });
 
 const createUserGraphqlMutation = {
-    query: 'mutation($user: InputUser!){\n  createUser(user: $user){\n    username\n    email\n  }\n}',
+    query: 'mutation($user: InputUser!){\n  createUser(user: $user){\n    username\n    email\n firstname  }\n}',
     variables: {
         user: {
             username: 'mock-username',
             email: 'mock-email',
+            firstname: 'israel',
+            lastname: 'israeli',
+            role: 'TEACHER',
+            gender: 'MALE',
         },
     },
 };
