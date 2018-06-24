@@ -59,17 +59,17 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     }
 
     public async updateUser(id: string, user: UserDbModel): Promise<[Error, UserDbModel]> {
-        const _dbId = new ObjectID(id);
+        const _id = new ObjectID(id);
         try {
-            this.log(`UsersPersistenceService::updateUser:: updating user ${_dbId}`);
-            await this.collection.replaceOne({ _id: _dbId }, user);
+            this.log(`UsersPersistenceService::updateUser:: updating user ${_id}`);
+            await this.collection.replaceOne({ _id }, user);
 
             const updatedDocument = await this.getById(id);
             this.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument)}`);
 
             return [null, updatedDocument];
         } catch (error) {
-            this.error(`UsersPersistenceService::updateUser:: error updating user ${_dbId}`, error.stack);
+            this.error(`UsersPersistenceService::updateUser:: error updating user ${_id}`, error.stack);
             return [error, null];
         }
     }
