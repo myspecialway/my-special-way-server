@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
-import { UserDbModel } from 'models/user.db.model';
+import { UserDbModel, UserRole } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 
@@ -9,8 +9,8 @@ import { IUsersPersistenceService } from './interfaces/users.persistence.service
 export class UsersPersistenceService extends Logger implements IUsersPersistenceService {
     private _collection: Collection<UserDbModel>;
 
-    constructor(private dbService: DbService/*, private _loggerPrefix: string*/) {
-        super(/*_loggerPrefix || */'UsersPersistenceService');
+    constructor(private dbService: DbService) {
+        super('UsersPersistenceService');
     }
 
     private _buildMongoFilterFromQuery(query: { [id: string]: any }, id?: string): { [id: string]: string } {
@@ -76,7 +76,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    public async createUser(user: UserDbModel): Promise<[Error, UserDbModel]> {
+    public async createUser(user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
         try {
             this.log(`UsersPersistenceService::createUser:: creates user`);
             const insertResponse = await this.collection.insertOne(user);
@@ -91,7 +91,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         }
     }
 
-    public async updateUser(id: string, user: UserDbModel): Promise<[Error, UserDbModel]> {
+    public async updateUser(id: string, user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
         const _id = new ObjectID(id);
         try {
             this.log(`UsersPersistenceService::updateUser:: updating user ${_id}`);

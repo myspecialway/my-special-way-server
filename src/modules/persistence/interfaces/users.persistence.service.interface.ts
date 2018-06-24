@@ -1,7 +1,7 @@
 'use strict';
 
 import { Collection } from 'mongodb';
-import { UserDbModel } from 'models/user.db.model';
+import { UserDbModel, UserRole } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
 
 export interface IUsersPersistenceService {
@@ -12,8 +12,8 @@ export interface IUsersPersistenceService {
 
     // CRUD on users
     readonly getById: (id: string) => Promise<UserDbModel>;
-    readonly createUser: (user: UserDbModel) => Promise<[Error, UserDbModel]>;
-    readonly updateUser: (id: string, user: UserDbModel) => Promise<[Error, UserDbModel]>;
+    readonly createUser: (user: UserDbModel, userRole?: UserRole) => Promise<[Error, UserDbModel]>;
+    readonly updateUser: (id: string, user: UserDbModel, userRole?: UserRole) => Promise<[Error, UserDbModel]>;
     readonly deleteUser: (id: string) => Promise<[Error, number]>;
 
     // Authentication

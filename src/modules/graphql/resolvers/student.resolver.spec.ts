@@ -1,5 +1,5 @@
 import { StudentResolver } from './student.resolver';
-import { UsersPersistenceService, StudentPersistenceService } from '../../persistence';
+import { UsersPersistenceService } from '../../persistence';
 import { UserRole } from '../../../models/user.db.model';
 
 describe('student resolver', () => {
@@ -11,7 +11,6 @@ describe('student resolver', () => {
         gender: 'MALE',
     };
     let studentResolver: StudentResolver;
-    let studentPersistence: Partial<StudentPersistenceService>;
     let usersPersistence: Partial<UsersPersistenceService>;
     beforeEach(() => {
         usersPersistence = {
@@ -24,14 +23,7 @@ describe('student resolver', () => {
             deleteUser: jest.fn(),
         };
 
-        studentPersistence = {
-            createStudent: jest.fn(),
-            updateStudent: jest.fn(),
-            deleteStudent: jest.fn(),
-        };
-
-        studentResolver = new StudentResolver(usersPersistence as UsersPersistenceService,
-                                                studentPersistence as StudentPersistenceService);
+        studentResolver = new StudentResolver(usersPersistence as UsersPersistenceService);
     });
 
     it('should call getUsersByFilters function and return students on getStudents', async () => {
@@ -47,31 +39,31 @@ describe('student resolver', () => {
 
         const response = await studentResolver.getStudentById(null, { id: 'someid' }, null, null);
         expect(response).toEqual({ username: 'test' });
-        expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({role: UserRole.STUDENT},'someid');
+        expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({role: UserRole.STUDENT}, 'someid');
     });
 
     it('should call createUser function and return the new student created', async () => {
-        (studentPersistence.createStudent as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
+        (usersPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
 
         const response = await studentResolver.createStudent(null, {student: MOCK_STUDENT});
         expect(response).toEqual(MOCK_STUDENT);
-        expect(studentPersistence.createStudent).toHaveBeenCalledWith(MOCK_STUDENT);
+        expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_STUDENT, UserRole.STUDENT);
     });
 
-    it('should call updateStudent function and return the student updated', async () => {
-        (studentPersistence.updateStudent as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
+    it('should call updateUser function and return the student updated', async () => {
+        (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
 
         const response = await studentResolver.updateStudent(null, { id: 'someid', student: MOCK_STUDENT});
         expect(response).toEqual(MOCK_STUDENT);
-        expect(studentPersistence.updateStudent).toHaveBeenCalledWith('someid', MOCK_STUDENT);
+        expect(usersPersistence.updateUser).toHaveBeenCalledWith('someid', MOCK_STUDENT, UserRole.STUDENT);
     });
 
-    it('should call deleteStudent function and return the number of students deleted', async () => {
+    it('should call deleteUser function and return the number of students deleted', async () => {
 
-        (studentPersistence.deleteStudent as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
+        (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
 
         const response = await studentResolver.deleteStudent(null, { id: 'someid' });
         expect(response).toEqual(1);
-        expect(studentPersistence.deleteStudent).toHaveBeenCalledWith('someid');
+        expect(usersPersistence.deleteUser).toHaveBeenCalledWith('someid');
     });
 });

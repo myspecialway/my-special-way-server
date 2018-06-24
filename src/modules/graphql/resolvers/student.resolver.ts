@@ -1,12 +1,10 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { StudentPersistenceService } from '../../persistence/student.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
 
 @Resolver('Student')
 export class StudentResolver {
-    constructor(private _usersPersistence: UsersPersistenceService,
-                private _studentsPersistence: StudentPersistenceService) { }
+    constructor(private _usersPersistence: UsersPersistenceService) { }
 
     @Query('students')
     public async getStudents() {
@@ -22,7 +20,7 @@ export class StudentResolver {
     public async createStudent(_, { student }) {
         // TODO perform permissions rights
         // TODO: Handle errors!!!!
-        const [__, response] = await this._studentsPersistence.createStudent(student);
+        const [__, response] = await this._usersPersistence.createUser(student, UserRole.STUDENT);
         return response;
     }
 
@@ -30,7 +28,7 @@ export class StudentResolver {
     public async updateStudent(_, { id, student }) {
         // TODO perform permissions rights
         // TODO: Handle errors!!!!
-        const [__, response] = await this._studentsPersistence.updateStudent(id, student);
+        const [__, response] = await this._usersPersistence.updateUser(id, student, UserRole.STUDENT);
         return response;
     }
 
@@ -38,7 +36,7 @@ export class StudentResolver {
     public async deleteStudent(_, { id }) {
         // TODO perform permissions rights
         // TODO: Handle errors!!!!
-        const [__, response] = await this._studentsPersistence.deleteStudent(id);
+        const [__, response] = await this._usersPersistence.deleteUser(id);
         return response;
     }
 }
