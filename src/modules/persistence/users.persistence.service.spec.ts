@@ -57,7 +57,7 @@ describe('users persistence', () => {
         const students = await usersPersistanceService.getUsersByFilters({role: UserRole.STUDENT});
         expect(students).toEqual([{ username: 'user1' }, { username: 'user2' }]);
     });
-    
+
     it('should throw an error on error through getUsersByFilters function', async () => {
         expect.assertions(1);
         (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
@@ -76,7 +76,7 @@ describe('users persistence', () => {
         const student = await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467');
         expect(student).toEqual({ username: 'student1' });
     });
-    
+
     it('should throw an error on error through getUserByFilters function', async () => {
         expect.assertions(1);
         (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
