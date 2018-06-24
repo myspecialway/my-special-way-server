@@ -2,9 +2,8 @@ type Query{
     people: [Person]
     person(id: ID!): Person
     
-    users:  [User]
-    students: [User]
-    user(id: ID!): User
+    getUsers:  [User]
+    getUser(id: ID!): User
 
     classes: [Class]!
     classById(id: ID!): Class
