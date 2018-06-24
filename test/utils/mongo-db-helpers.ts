@@ -1,5 +1,6 @@
 import MongodbMemoryServer from 'mongodb-memory-server';
 import { UserDbModel } from '../../src/models/user.db.model';
+import { ClassDbModel } from '../../src/models/class.db.model';
 import { MongoClient } from 'mongodb';
 
 let mongod;
@@ -19,6 +20,13 @@ export async function startMockMongodb() {
 
 export function stopMockMongodb() {
     mongod.stop();
+}
+
+export async function addMockClass(cl: ClassDbModel) {
+    const connectionString = await mongod.getConnectionString();
+    const connection = await MongoClient.connect(connectionString);
+    const classesCollection = connection.db().collection('classes');
+    await classesCollection.insertOne(cl);
 }
 
 export async function addMockUser(user: UserDbModel) {
