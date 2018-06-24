@@ -1,6 +1,7 @@
 type Student {
   _id: ID!
   username: String!
+  password: String!
   email: String
   firstname: String
   lastname: String

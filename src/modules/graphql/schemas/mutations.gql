@@ -10,6 +10,7 @@ input InputUser {
 
 input InputStudent {
     username: String
+    password: String
     email: String
     firstname: String
     lastname: String
