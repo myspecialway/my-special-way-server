@@ -1,11 +1,12 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
+import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { StudentPersistenceService } from '../../persistence/student.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
 
 @Resolver('Student')
 export class StudentResolver {
-    constructor(private _usersPersistence: StudentPersistenceService,
-        private _studentsPersistence: StudentPersistenceService) { }
+    constructor(private _usersPersistence: UsersPersistenceService,
+                private _studentsPersistence: StudentPersistenceService) { }
 
     @Query('students')
     public async getStudents() {

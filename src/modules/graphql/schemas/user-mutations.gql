@@ -13,7 +13,7 @@ input InputStudent {
     firstname: String
     lastname: String
     gender: Gender
-    class: Class
+    class_id: String
 }
 
 input InputClass {
