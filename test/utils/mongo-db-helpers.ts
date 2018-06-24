@@ -3,7 +3,7 @@ import { UserDbModel } from '../../src/models/user.db.model';
 import { MongoClient } from 'mongodb';
 
 let mongod;
-export function startMockMongodb() {
+export async function startMockMongodb() {
     mongod = new MongodbMemoryServer({
         instance: {
             port: 27018, // by default choose any free port
@@ -12,7 +12,9 @@ export function startMockMongodb() {
         binary: {
             downloadDir: './.mongodb-binaries', // by default %HOME/.mongodb-binaries
         },
+        autoStart: false,
     });
+    return mongod.start();
 }
 
 export function stopMockMongodb() {

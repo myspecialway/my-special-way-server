@@ -9,9 +9,8 @@ import { UserDbModel } from '../../src/models/user.db.model';
 describe('AppController (e2e)', async () => {
   let app: INestApplication;
   let token: string;
-  let mongod;
   beforeEach(async () => {
-    mongod = mongodbHelpers.startMockMongodb();
+    await mongodbHelpers.startMockMongodb();
 
     await mongodbHelpers.addMockUser({
       username: 'test-user',

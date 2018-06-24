@@ -9,10 +9,9 @@ import { UserDbModel } from '../../src/models/user.db.model';
 describe('users graphql', () => {
     let app: INestApplication;
     let token: string;
-    let mongod;
 
     beforeEach(async () => {
-        mongod = await mongodbHelpers.startMockMongodb();
+        await mongodbHelpers.startMockMongodb();
         await mongodbHelpers.addMockUser({
             username: 'test-user',
             password: 'password',
