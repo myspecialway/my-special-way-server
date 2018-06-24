@@ -11,9 +11,7 @@ describe('AppController (e2e)', async () => {
   let token: string;
   let mongod;
   beforeEach(async () => {
-    jest.setTimeout(60 * 1000);
     mongod = mongodbHelpers.startMockMongodb();
-    jest.setTimeout(5 * 1000);
 
     await mongodbHelpers.addMockUser({
       username: 'test-user',

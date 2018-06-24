@@ -45,8 +45,7 @@ describe('users graphql', () => {
             .send(createUserGraphqlMutation)
             .set('Authorization', `Bearer ${token}`)
             .expect(200)
-            // TODO: Fix below:
-            .expect(`{"data":{"addUser":null}}`);
+            .expect(`{"data":{"addUser":{"username":"mock-username","email":"mock-email"}}}`);
     });
 });
 
