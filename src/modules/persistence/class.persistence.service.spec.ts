@@ -1,4 +1,4 @@
-import { ClassPersistenceService } from '.';
+import { ClassPersistenceService } from './class.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 
