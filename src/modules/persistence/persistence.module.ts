@@ -1,4 +1,4 @@
-import { Module, LoggerService } from '@nestjs/common';
+import { Module, LoggerService, OnModuleInit } from '@nestjs/common';
 import { DbService } from './db.service';
 import { getConfig } from '../../config/config-loader';
 import { ClassPersistenceService } from './class.persistence.service';
@@ -18,9 +18,11 @@ import { LessonPersistenceService } from './lesson.persistence.service';
         LessonPersistenceService,
     ],
 })
-export class PersistenceModule {
-    constructor(private dbService: DbService) {
+export class PersistenceModule implements OnModuleInit {
+    constructor(private dbService: DbService) { }
+
+    async onModuleInit() {
         const config = getConfig();
-        dbService.initConnection(config.db.connectionString, config.db.dbName);
+        await this.dbService.initConnection(config.db.connectionString, config.db.dbName);
     }
 }

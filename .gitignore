@@ -3,3 +3,5 @@ dist
 yarn-error.log
 coverage
 .vscode
+.mongodb-binaries/
+*.orig
