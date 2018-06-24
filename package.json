@@ -12,7 +12,7 @@
     "format": "prettier --write \"**/*.ts\"",
     "git:push": "./scripts/git-push",
     "start": "cross-env NODE_ENV=dev ts-node -r tsconfig-paths/register src/main.ts",
-    "start:dev": "cross-env NODE_ENV=local nodemon",
+    "start:dev": "cross-env NODE_ENV=dev nodemon",
     "start:debug": "cross-env NODE_ENV=dev nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "node dist/main.js",
@@ -20,7 +20,7 @@
     "test:ut": "jest --coverage",
     "test:e2e": "cross-env NODE_ENV=e2e-tests jest --config ./jest-e2e.json --coverage ",
     "test:ci": "bash ./scripts/test",
-    "test": "jest && jest --config ./jest-e2e.json",
+    "test": "cross-env NODE_ENV=e2e-tests jest && jest --config ./jest-e2e.json",
     "test:watch": "jest --watch",
     "tslint": "tslint 'src/**/*.ts'",
     "webpack": "webpack --config webpack.config.js"
