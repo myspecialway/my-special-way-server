@@ -48,7 +48,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
             return await this.collection.find(mongoQuery).toArray();
         } catch (error) {
             this.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
-            throw  [error, null];
+            throw  error;
         }
     }
 
@@ -60,7 +60,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
             return await this.collection.findOne(mongoQuery);
         } catch (error) {
             this.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
-            throw  [error, null];
+            throw  error;
         }
     }
 
