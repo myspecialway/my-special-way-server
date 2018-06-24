@@ -25,7 +25,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     public async getAll(): Promise<UserDbModel[]> {
         try {
             this.log('UsersPersistenceService::getAll:: fetching users');
-            return this.collection.find({}).toArray();
+            return await this.collection.find({}).toArray();
         } catch (error) {
             this.error('UsersPersistenceService::getAll:: error fetching users', error.stack);
             throw error;
@@ -36,7 +36,7 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         try {
             const _id = new ObjectID(id);
             this.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
-            return this.collection.findOne({ _id });
+            return await this.collection.findOne({ _id });
         } catch (error) {
             this.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
             throw error;
@@ -59,17 +59,17 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     }
 
     public async updateUser(id: string, user: UserDbModel): Promise<[Error, UserDbModel]> {
-        const _dbId = new ObjectID(id);
+        const _id = new ObjectID(id);
         try {
-            this.log(`UsersPersistenceService::updateUser:: updating user ${_dbId}`);
-            await this.collection.replaceOne({ _id: _dbId }, user);
+            this.log(`UsersPersistenceService::updateUser:: updating user ${_id}`);
+            await this.collection.replaceOne({ _id }, user);
 
             const updatedDocument = await this.getById(id);
             this.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument)}`);
 
             return [null, updatedDocument];
         } catch (error) {
-            this.error(`UsersPersistenceService::updateUser:: error updating user ${_dbId}`, error.stack);
+            this.error(`UsersPersistenceService::updateUser:: error updating user ${_id}`, error.stack);
             return [error, null];
         }
     }
@@ -104,6 +104,16 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
         } catch (error) {
             this.error(`UsersPersistenceService::getAll:: error fetching user by username ${username}`, error.stack);
             return [error, null];
+        }
+    }
+
+    public async getStudentsByClassId(class_id: string): Promise<[Error, Array<UserDbModel>]> {
+        try {
+            this.log(`UsersPersistenceService::getStudentsByClassId:: fetching students by class id ${class_id}`);
+            return [null, await this.collection.find({ class_id, role: 'STUDENT' }).toArray()];
+        } catch (error) {
+            this.error(`UsersPersistenceService::getStudentsByClassId:: error fetching students by class id ${class_id}`, error.stack);
+            throw [error, null];
         }
     }
 }

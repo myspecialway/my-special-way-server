@@ -1,9 +1,10 @@
 'use strict';
 
-import { Controller, Post, Get, Request, Response, Next } from '@nestjs/common';
+import { Controller, Post, Get, Request, Response, Next, Res } from '@nestjs/common';
 import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
 import { GraphQlService } from '../schemas/graphql.service';
+import * as path from 'path';
 
 @Controller()
 export class GraphqlController {
@@ -11,6 +12,10 @@ export class GraphqlController {
 
     constructor(private graphqlService: GraphQlService) {
         this._schema = graphqlService.getSchema();
+    }
+    @Get('schema')
+    root(@Res() res) {
+        res.sendFile(path.join(__dirname, '../../../../dist/public/schema.html'));
     }
 
     @Post('graphql')

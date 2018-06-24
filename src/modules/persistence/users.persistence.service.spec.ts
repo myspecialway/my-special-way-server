@@ -217,4 +217,23 @@ describe('users persistence', () => {
         const [error, _] = await usersPersistanceService.createUser({});
         expect(error).toBeDefined();
     });
+
+    it('should return users with role student on getStudentsByClassId', async () => {
+        const expected = [{ username: 'student1', role: 'STUDENT' }, { username: 'student2', role: 'STUDENT' }];
+        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockReturnValueOnce({
+            toArray: jest.fn().mockReturnValueOnce(expected),
+        });
+
+        const [_, students] = await usersPersistanceService.getStudentsByClassId('507f1f77bcf86cd799439011');
+        expect(students).toEqual(expected);
+    });
+
+    it('should return error on getStudentsByClassId when error happend', async () => {
+        expect.assertions(1);
+        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        await usersPersistanceService.getStudentsByClassId('507f1f77bcf86cd799439011').catch((error) => expect(error).toBeDefined());
+    });
 });

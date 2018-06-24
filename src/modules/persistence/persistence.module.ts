@@ -1,15 +1,17 @@
 import { Module, LoggerService, OnModuleInit } from '@nestjs/common';
 import { DbService } from './db.service';
 import { getConfig } from '../../config/config-loader';
-import { UsersPersistenceService } from './users.persistence.service';
+import { UsersPersistenceService, ClassPersistenceService } from '.';
 
 @Module({
     providers: [
         DbService,
         UsersPersistenceService,
+        ClassPersistenceService,
     ],
     exports: [
         UsersPersistenceService,
+        ClassPersistenceService,
     ],
 })
 export class PersistenceModule implements OnModuleInit {

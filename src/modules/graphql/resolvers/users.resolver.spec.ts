@@ -1,5 +1,5 @@
 import { UsersResolver } from './users.resolver';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
+import { UsersPersistenceService } from '../../persistence';
 
 describe('user resolver', () => {
     let usersResolver: UsersResolver;
@@ -27,7 +27,7 @@ describe('user resolver', () => {
     it('should call getById function and return user on getUserById', async () => {
         (userPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
 
-        const response = await usersResolver.getUserById({ id: 'someid' });
+        const response = await usersResolver.getUserById(null, { id: 'someid' }, null, null);
         expect(response).toEqual({ username: 'test' });
         expect(userPersistence.getById).toHaveBeenCalledWith('someid');
     });
