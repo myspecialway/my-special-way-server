@@ -2,6 +2,7 @@ import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
+import { UserRole } from '../../models/user.db.model';
 
 describe('users persistence', () => {
     let usersPersistanceService: UsersPersistenceService;
@@ -38,6 +39,7 @@ describe('users persistence', () => {
         const users = await usersPersistanceService.getAll();
         expect(users).toEqual([{ username: 'user1' }, { username: 'user2' }]);
     });
+
     it('should throw an error on error through getAll function', async () => {
         expect.assertions(1);
         (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
@@ -45,6 +47,42 @@ describe('users persistence', () => {
         });
 
         await usersPersistanceService.getAll().catch((error) => expect(error).not.toBeUndefined());
+    });
+
+    it('should get all students successfuly on getUsersByFilters', async () => {
+        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockReturnValueOnce({
+            toArray: jest.fn().mockReturnValueOnce([{ username: 'user1' }, { username: 'user2' }]),
+        });
+
+        const students = await usersPersistanceService.getUsersByFilters({role: UserRole.STUDENT});
+        expect(students).toEqual([{ username: 'user1' }, { username: 'user2' }]);
+    });
+    
+    it('should throw an error on error through getUsersByFilters function', async () => {
+        expect.assertions(1);
+        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        await usersPersistanceService.getUsersByFilters({role: UserRole.STUDENT}).catch((error) => expect(error).not.toBeUndefined());
+    });
+
+    xit('should get one student successfuly on getUserByFilters', async () => {
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+            username: 'student1',
+        });
+
+        const student = await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467');
+        expect(student).toEqual({ username: 'student1' });
+    });
+    
+    it('should throw an error on error through getUserByFilters function', async () => {
+        expect.assertions(1);
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+
+        await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467').catch((error) => expect(error).not.toBeUndefined());
     });
 
     it('should get user successfully on getById', async () => {
