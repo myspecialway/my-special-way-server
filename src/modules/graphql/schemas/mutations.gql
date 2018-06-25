@@ -1,10 +1,11 @@
 input InputUser {
     username: String!
-    email: String
-    firstname: String
-    lastname: String
+    email: String!
+    firstname: String!
+    lastname: String!
     gender: Gender
-    role: UserType
+    role: UserType!
+    class_id: String
 }
 
 input InputStudent {
@@ -22,6 +23,11 @@ input InputClass {
     number: Int!
 }
 
+input InputLesson {
+    title: String!
+    icon: String!
+}
+
 type Mutation {
     createUser(user: InputUser!) : User
     updateUser(id: ID!, user: InputUser!) : User
@@ -30,8 +36,15 @@ type Mutation {
     createStudent(student: InputStudent!) : Student
     updateStudent(id: ID!, student: InputStudent!) : Student
     deleteStudent(id: ID!) : Int
-
+    
+    # Class
     createClass(class: InputClass!): Class
     updateClass(id: ID!, class: InputClass!): Class
     deleteClass(id: ID!): Int
+    
+    # Lesson
+    createLesson(lesson: InputLesson!): Lesson
+    updateLesson(id: ID!, lesson: InputLesson!): Lesson
+    deleteLesson(id: ID!): Int
 }
+

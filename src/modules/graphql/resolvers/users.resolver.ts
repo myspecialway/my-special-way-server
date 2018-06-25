@@ -1,4 +1,5 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
+import { UserRole } from '../../../models/user.db.model';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 
 @Resolver('User')
