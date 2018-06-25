@@ -79,6 +79,10 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     public async createUser(user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
         try {
             this.log(`UsersPersistenceService::createUser:: creates user`);
+            if (userRole) {
+                user.role = userRole;
+            }
+
             const insertResponse = await this.collection.insertOne(user);
 
             const newDocument = await this.getById(insertResponse.insertedId.toString());
@@ -92,6 +96,9 @@ export class UsersPersistenceService extends Logger implements IUsersPersistence
     }
 
     public async updateUser(id: string, user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
+        if (userRole) {
+            user.role = userRole;
+        }
         const _id = new ObjectID(id);
         try {
             this.log(`UsersPersistenceService::updateUser:: updating user ${_id}`);
