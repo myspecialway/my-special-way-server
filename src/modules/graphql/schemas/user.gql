@@ -6,7 +6,6 @@ type User {
   lastname: String
   role: UserType
   gender: Gender
-  
 }
 
 enum Gender {
