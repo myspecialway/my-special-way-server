@@ -45,9 +45,9 @@ describe('AppController (e2e)', async () => {
 
   it('should return query response when authenticated', () => {
     return request(app.getHttpServer())
-      .get('/graphql?query=%7BgetUsers%20%7Busername%7D%7D')
+      .get('/graphql?query=%7Busers%20%7Busername%7D%7D')
       .set('Authorization', `Bearer ${token}`)
       .expect(200)
-      .expect(`{"data":{"getUsers":[{"username":"test-user"}]}}`);
+      .expect(`{"data":{"users":[{"username":"test-user"}]}}`);
   });
 });
