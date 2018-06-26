@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/myspecialway/my-special-way-server.svg?branch=master)](https://travis-ci.org/myspecialway/my-special-way-server)
 [![codecov](https://codecov.io/gh/myspecialway/my-special-way-server/branch/master/graph/badge.svg)](https://codecov.io/gh/myspecialway/my-special-way-server)
+[![BCH compliance](https://bettercodehub.com/edge/badge/myspecialway/my-special-way-server?branch=master)](https://bettercodehub.com/)
 
 # my-special-way-server
 
