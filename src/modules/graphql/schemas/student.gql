@@ -1,12 +1,9 @@
 type Student {
   _id: ID!
-  username: String!
-  password: String!
-  email: String
-  firstname: String
-  lastname: String
-  gender: Gender
-  class: Class
+  class: Class!
+  gender: String!
+  lastname: String!
+  firstname: String!
   # schedule: Schedule
   # teacher: Teacher!
 }

@@ -12,6 +12,6 @@ export interface UserDbModel {
 
 export enum UserRole {
     PRINCIPLE = 'PRINCIPLE',
-    TEACHER   = 'TEACHER',
-    STUDENT   = 'STUDENT',
+    TEACHER = 'TEACHER',
+    STUDENT = 'STUDENT',
 }
