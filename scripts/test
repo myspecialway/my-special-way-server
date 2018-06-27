@@ -1,9 +1,8 @@
-#!/bin/bash
+# !/bin/bash
 
 npx jest --coverage && npx codecov || exit 1
-rm -rf coverage
 
-# echo "TODO:: BAD CODE:: removed e2e tests to not break coverage created separate task to me them work"
-npx cross-env NODE_ENV=e2e-tests jest --config ./jest-e2e.json --coverage && npx codecov || exit 1
-rm -rf coverage
+docker-compose up -d
+npx cross-env NODE_ENV=e2e-tests jest --config ./jest-e2e.json || exit 1
+docker rm -f $(docker ps -q)
 

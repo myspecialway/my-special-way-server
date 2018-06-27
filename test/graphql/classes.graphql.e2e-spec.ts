@@ -1,50 +1,27 @@
-import * as mongodbHelpers from '../utils/mongo-db-helpers';
 import * as request from 'supertest';
-import { INestApplication } from '@nestjs/common';
-import { UserDbModel } from '../../src/models/user.db.model';
-import { Test } from '@nestjs/testing';
-import { AppModule } from '../../src/app.module';
-import { AuthService } from '../../src/modules/auth/auth-service/auth.service';
+import * as helpers from '../utils/e2e-helper';
+
 import { ClassDbModel } from '../../src/models/class.db.model';
 
 describe('classes graphql', () => {
-  let app: INestApplication;
   let token: string;
 
   beforeEach(async () => {
-    await mongodbHelpers.startMockMongodb();
-    await mongodbHelpers.addMockUser({
-      username: 'test-user',
-      password: 'password',
-    } as UserDbModel);
-
-    // create test fixture with app and swap the real users persistance with mocked one
-    const moduleFixture = await Test.createTestingModule({
-      imports: [AppModule],
-    })
-      .compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
-
-    // get authService from the fixture and use it to get token for authentication middleware
-    const authService = moduleFixture.get<AuthService>(AuthService);
-    [, token] = await authService.createTokenFromCridentials({
-      username: 'test-user',
-      password: 'password',
+    await helpers.resetDB();
+    await helpers.addUser({
+        username: 'test-user',
+        password: 'Aa123456',
     });
-  });
 
-  afterEach(() => {
-    mongodbHelpers.stopMockMongodb();
+    token = await helpers.getToken('test-user', 'Aa123456');
   });
 
   it('should fetch classes successfully by query', async () => {
-    await mongodbHelpers.addMockClass({
+    await helpers.addClass({
       name: 'test-class',
-    } as ClassDbModel);
+    });
 
-    return request(app.getHttpServer())
+    return request('http://localhost:3000')
       .post('/graphql')
       .send(CLASSES_GET_QUERY)
       .set('Authorization', `Bearer ${token}`)
