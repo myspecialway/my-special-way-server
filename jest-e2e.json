@@ -1,6 +1,6 @@
 {
-  "rootDir": ".",
-  "testRegex": ".e2e-spec.ts$",
+  "rootDir": "./",
+  "testRegex": ".e2e.ts$",
   "coverageDirectory": "../coverage",
   "globalSetup": "./test/utils/startup.ts",
   "globals": {
