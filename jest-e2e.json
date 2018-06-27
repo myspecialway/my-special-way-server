@@ -1,5 +1,5 @@
 {
-  "rootDir": "./",
+  "rootDir": "./test",
   "testRegex": ".e2e.ts$",
   "coverageDirectory": "../coverage",
   "globals": {
