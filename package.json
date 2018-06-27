@@ -23,7 +23,8 @@
     "test": "cross-env NODE_ENV=e2e-tests jest && jest --config ./jest-e2e.json",
     "test:watch": "jest --watch",
     "tslint": "tslint 'src/**/*.ts'",
-    "webpack": "webpack --config webpack.config.js"
+    "webpack": "webpack --config webpack.config.js",
+    "stryker": "npx stryker run"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
@@ -69,6 +70,11 @@
     "mongodb-memory-server": "^1.8.0",
     "nodemon": "^1.14.1",
     "prettier": "^1.11.1",
+    "stryker": "^0.24.1",
+    "stryker-api": "^0.17.2",
+    "stryker-html-reporter": "^0.14.2",
+    "stryker-jest-runner": "^0.7.0",
+    "stryker-typescript": "^0.11.2",
     "supertest": "^3.0.0",
     "ts-jest": "22.4.4",
     "ts-loader": "^4.1.0",

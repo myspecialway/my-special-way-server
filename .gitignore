@@ -5,3 +5,5 @@ coverage
 .vscode
 .mongodb-binaries/
 *.orig
+reports
+.stryker-tmp
