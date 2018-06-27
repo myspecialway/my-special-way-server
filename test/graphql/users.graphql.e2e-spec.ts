@@ -1,5 +1,4 @@
 import * as helpers from '../utils/e2e-helper';
-import * as mongodbHelpers from '../utils/mongo-db-helpers';
 import * as request from 'supertest';
 
 describe('users graphql', () => {
