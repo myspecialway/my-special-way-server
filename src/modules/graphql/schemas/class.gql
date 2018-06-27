@@ -1,8 +1,9 @@
+# A type describing a single class
 type Class {
   _id: ID!
   name: String!
   level: String!
   number: Int!
-  schedule: Schedule!
+  schedule: [Cell]
   students: [Student]!
 }

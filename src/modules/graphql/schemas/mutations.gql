@@ -22,9 +22,19 @@ input InputClass {
     name: String!
     level: String!
     number: Int!
+    schedule: [InputCell]
+}
+
+input InputCell {
+    pos: String!
+    lesson: InputLesson
+    # need to change to InputRoom in future
+    room: String
 }
 
 input InputLesson {
+    # optional id when updating schedules
+    _id: ID
     title: String!
     icon: String!
 }

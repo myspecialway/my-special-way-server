@@ -1,4 +1,5 @@
 export default interface Point {
-    lat: number;
-    long: number;
+    latitude: number;
+    longitude: number;
+    floor?: number;
 }

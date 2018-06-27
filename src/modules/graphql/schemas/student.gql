@@ -7,6 +7,6 @@ type Student {
   lastname: String
   gender: Gender
   class: Class
-  # schedule: Schedule
+  schedule: [Cell]
   # teacher: Teacher!
 }
