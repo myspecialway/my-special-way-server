@@ -18,3 +18,13 @@ enum UserType {
   TEACHER
   STUDENT
 }
+
+input InputUser {
+    username: String!
+    email: String!
+    firstname: String!
+    lastname: String!
+    gender: Gender
+    role: UserType!
+    class_id: String
+}

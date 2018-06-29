@@ -4,6 +4,14 @@ type Class {
   name: String!
   level: String!
   number: Int!
-  schedule: [Cell]
+  schedule: [TimeSlot]
   students: [Student]!
+}
+
+input InputClass {
+    name: String!
+    level: String!
+    number: Int!
+    # list of new timeslots on schedule
+    schedule: [InputTimeSlot]
 }

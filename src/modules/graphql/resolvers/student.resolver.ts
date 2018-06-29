@@ -1,10 +1,17 @@
-import { Resolver, Query, Mutation } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
+import { ClassPersistenceService } from '../../persistence/class.persistence.service';
+import { SchedulePersistenceService } from '../../persistence/schedule.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
+
 
 @Resolver('Student')
 export class StudentResolver {
-    constructor(private _usersPersistence: UsersPersistenceService) { }
+    constructor(
+        private _usersPersistence: UsersPersistenceService,
+        private _classPersistence: ClassPersistenceService,
+        private _schedulePersistence: SchedulePersistenceService,
+    ) { }
 
     @Query('students')
     public async getStudents() {
@@ -14,6 +21,18 @@ export class StudentResolver {
     @Query('student')
     public async getStudentById(obj, args, context, info) {
         return this._usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
+    }
+
+    @ResolveProperty('class')
+    public async getStudentClass(obj) {
+        return this._classPersistence.getById(obj.class_id);
+    }
+
+    @ResolveProperty('schedule')
+    public async getStudentSchedule(obj) {
+        // tslint:disable-next-line:no-console
+        console.log(obj);
+        return this._schedulePersistence.getScheduleTimeSlots(obj.schedule);
     }
 
     @Mutation('createStudent')

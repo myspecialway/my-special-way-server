@@ -1,6 +1,0 @@
-# A type describing a single cell on the class/student schedule
-type Cell {
-    pos: String!
-    lesson: Lesson
-    room: Room
-}

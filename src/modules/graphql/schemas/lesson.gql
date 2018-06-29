@@ -4,3 +4,8 @@ type Lesson {
   title: String!
   icon: String
 }
+
+input InputLesson {
+    title: String!
+    icon: String!
+}

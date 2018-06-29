@@ -1,0 +1,13 @@
+# A type describing a single time slot on the class/student schedule
+type TimeSlot {
+    # The timeslot index identifier (A2,A3...)
+    index: String!
+    lesson: Lesson
+    room: Room
+}
+
+input InputTimeSlot {
+    index: String!
+    lesson_id: String
+    room_id: String
+}
