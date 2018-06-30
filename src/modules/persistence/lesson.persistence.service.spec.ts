@@ -14,7 +14,7 @@ describe('lesson persistence', () => {
                     find: jest.fn(),
                     findOne: jest.fn(),
                     deleteOne: jest.fn(),
-                    replaceOne: jest.fn(),
+                    findOneAndUpdate: jest.fn(),
                     insertOne: jest.fn(),
                 } as Partial<Collection>),
             } as Partial<Db>),
@@ -70,10 +70,12 @@ describe('lesson persistence', () => {
 
     it('should update lesson sucessfuly on updateLesson', async () => {
         expect.hasAssertions();
-        const expected = { title: 'mylesson', icon: 'myicon' };
-        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
+        const newLesson = { title: 'myUpdatedLesson' };
+        const currentLesson = {title: 'mylesson', icon: 'myicon'};
+        const expected = { title: 'myUpdatedLesson', icon: 'myicon'};
+        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(currentLesson);
 
-        const updatedLesson = await lessonPersistenceService.updateLesson('507f1f77bcf86cd799439011', expected);
+        const updatedLesson = await lessonPersistenceService.updateLesson('507f1f77bcf86cd799439011', newLesson);
 
         expect(updatedLesson).toEqual(expected);
     });
@@ -81,7 +83,7 @@ describe('lesson persistence', () => {
     it('should return error on updateLesson when error happened', async () => {
         expect.hasAssertions();
         const mock = { title: 'mylesson', icon: 'myicon' };
-        (dbServiceMock.getConnection().collection(collectioName).replaceOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 

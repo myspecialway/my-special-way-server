@@ -14,6 +14,7 @@ describe('class persistence', () => {
                     findOne: jest.fn(),
                     deleteOne: jest.fn(),
                     replaceOne: jest.fn(),
+                    findOneAndUpdate: jest.fn(),
                     insertOne: jest.fn(),
                 } as Partial<Collection>),
             } as Partial<Db>),
@@ -121,17 +122,17 @@ describe('class persistence', () => {
 
     it('should update class sucessfuly on updateClass', async () => {
         expect.hasAssertions();
-        const expected = { name: 'classname' };
-        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
+        const expected = {name: 'updated class name', number: 1};
+        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({ name: 'classname', number: 1 });
 
-        const updatedClass = await classPersistanceService.updateClass('507f1f77bcf86cd799439011', {});
+        const updatedClass = await classPersistanceService.updateClass('507f1f77bcf86cd799439011', {name: 'updated class name'});
 
         expect(updatedClass).toEqual(expected);
     });
 
     it('should return error on UpdateClass when error happened', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection(collectioName).replaceOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
