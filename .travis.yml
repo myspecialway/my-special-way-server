@@ -5,10 +5,6 @@ sudo: required
 services:
 - docker
 
-cache:
-  directories:
-    - .mongodb-binaries
-    
 before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - . ./scripts/prepare-repo
@@ -16,8 +12,8 @@ before_install:
 install:
 - yarn   
 - yarn tslint
-- yarn test:ci
 - yarn build
+- yarn test:ci
 
 script:
 - yarn docker

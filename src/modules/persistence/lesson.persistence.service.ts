@@ -44,10 +44,10 @@ export class LessonPersistenceService extends Logger {
         const _id = new ObjectID(id);
         try {
             this.log(`LessonsPersistenceService::updateLesson:: updating lesson ${_id}`);
-            await this.collection.replaceOne({ _id}, lesson);
-            const updatedDocument = await this.collection.findOne({ _id });
-            this.log(`LessonsPersistenceService::updateLesson:: updated DB :${JSON.stringify(updatedDocument)}`);
-            return updatedDocument;
+            const currentLesson = await this.collection.findOne({ _id });
+            const updatedDocument = await this.collection.findOneAndUpdate({ _id }, {...currentLesson, ...lesson}, {returnOriginal: true});
+            this.log(`LessonsPersistenceService::updateLesson:: updated DB :${JSON.stringify(updatedDocument.value)}`);
+            return updatedDocument.value;
         } catch (error) {
             this.error(`LessonsPersistenceService::updateLesson:: error updating lesson ${_id}`, error.stack);
             throw error;

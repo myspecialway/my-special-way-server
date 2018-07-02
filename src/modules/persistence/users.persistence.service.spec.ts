@@ -23,6 +23,7 @@ describe('users persistence', () => {
                     findOne: jest.fn(),
                     deleteOne: jest.fn(),
                     replaceOne: jest.fn(),
+                    findOneAndUpdate: jest.fn(),
                     insertOne: jest.fn(),
                 } as Partial<Collection>),
             } as Partial<Db>),
@@ -67,15 +68,15 @@ describe('users persistence', () => {
         await usersPersistanceService.getUsersByFilters({role: UserRole.STUDENT}).catch((error) => expect(error).not.toBeUndefined());
     });
 
-    // TODO fix it
-    xit('should get one student successfuly on getUserByFilters', async () => {
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
-            username: 'student1',
-        });
+    // TODO: fix it also Stryker does not recognize xit
+    // xit('should get one student successfuly on getUserByFilters', async () => {
+    //     (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+    //         username: 'student1',
+    //     });
 
-        const student = await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467');
-        expect(student).toEqual({ username: 'student1' });
-    });
+    //     const student = await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467');
+    //     expect(student).toEqual({ username: 'student1' });
+    // });
 
     it('should throw an error on error through getUserByFilters function', async () => {
         expect.assertions(1);
@@ -206,33 +207,29 @@ describe('users persistence', () => {
 
     it('should update user successfuly on updateUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
-            username: 'some updated user',
+        const expected = { username: 'newValue', someotherfied: 'somevalue' };
+        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockImplementation(() => {
+            return {value: {username: 'newValue', someotherfied: 'somevalue'}};
         });
 
-        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {});
+        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {username: 'newValue'});
 
-        expect(updatedUser).toEqual({
-            username: 'some updated user',
-        });
+        expect(updatedUser).toEqual({username: 'newValue', someotherfied: 'somevalue'});
     });
 
     it('should update student successfuly on updateUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
-            username: 'some updated student',
+        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+            value: {username: 'newValue', someotherfied: 'somevalue'},
         });
 
-        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', UserRole.STUDENT);
-
-        expect(updatedUser).toEqual({
-            username: 'some updated student',
-        });
+        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {username: 'newValue'}, UserRole.STUDENT);
+        expect(updatedUser).toEqual({username: 'newValue', someotherfied: 'somevalue'});
     });
 
     it('should return error on updateUser when error happened', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').replaceOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
