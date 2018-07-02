@@ -71,12 +71,11 @@ describe('lesson persistence', () => {
     it('should update lesson sucessfuly on updateLesson', async () => {
         expect.hasAssertions();
         const newLesson = { title: 'myUpdatedLesson' };
-        const currentLesson = {title: 'mylesson', icon: 'myicon'};
         const expected = { title: 'myUpdatedLesson', icon: 'myicon'};
-        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(currentLesson);
-
+        (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockReturnValueOnce(
+            {value: {title: 'myUpdatedLesson', icon: 'myicon'}},
+        );
         const updatedLesson = await lessonPersistenceService.updateLesson('507f1f77bcf86cd799439011', newLesson);
-
         expect(updatedLesson).toEqual(expected);
     });
 

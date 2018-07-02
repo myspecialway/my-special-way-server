@@ -123,7 +123,9 @@ describe('class persistence', () => {
     it('should update class sucessfuly on updateClass', async () => {
         expect.hasAssertions();
         const expected = {name: 'updated class name', number: 1};
-        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({ name: 'classname', number: 1 });
+        (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockReturnValueOnce(
+            {value: { name: 'updated class name', number: 1 }},
+        );
 
         const updatedClass = await classPersistanceService.updateClass('507f1f77bcf86cd799439011', {name: 'updated class name'});
 

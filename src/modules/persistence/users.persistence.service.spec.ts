@@ -207,28 +207,24 @@ describe('users persistence', () => {
 
     it('should update user successfuly on updateUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
-            username: 'username', someotherfied: 'somevalue',
+        const expected = { username: 'newValue', someotherfied: 'somevalue' };
+        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockImplementation(() => {
+            return {value: {username: 'newValue', someotherfied: 'somevalue'}};
         });
 
         const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {username: 'newValue'});
-        console.log(updatedUser);
-        expect(updatedUser).toEqual({
-            username: 'newValue', someotherfied: 'somevalue',
-        });
+
+        expect(updatedUser).toEqual({username: 'newValue', someotherfied: 'somevalue'});
     });
 
     it('should update student successfuly on updateUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
-            username: 'some updated student',
+        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+            value: {username: 'newValue', someotherfied: 'somevalue'},
         });
 
-        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', UserRole.STUDENT);
-
-        expect(updatedUser).toEqual({
-            username: 'some updated student',
-        });
+        const [error, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {username: 'newValue'}, UserRole.STUDENT);
+        expect(updatedUser).toEqual({username: 'newValue', someotherfied: 'somevalue'});
     });
 
     it('should return error on updateUser when error happened', async () => {
