@@ -66,10 +66,10 @@ export class ClassPersistenceService extends Logger {
         const _id = new ObjectID(id);
         try {
             this.log(`ClassPersistence::updateClass:: updating class ${_id}`);
-            await this.collection.replaceOne({ _id}, classObj);
-            const updatedDocument = await this.getById(id);
-            this.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument)}`);
-            return updatedDocument;
+            const currentClass = await this.getById(id);
+            const updatedDocument = await this.collection.findOneAndUpdate({_id}, {...currentClass, ...classObj}, { returnOriginal: false});
+            this.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument.value)}`);
+            return updatedDocument.value;
         } catch (error) {
             this.error(`ClassPersistence::updateClass:: error updating class ${_id}`, error.stack);
             throw error;
