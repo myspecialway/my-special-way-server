@@ -1,5 +1,6 @@
 import { StudentResolver } from './student.resolver';
 import { UsersPersistenceService } from '../../persistence';
+import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
 
 describe('student resolver', () => {
@@ -9,9 +10,11 @@ describe('student resolver', () => {
         firstname: 'avraham',
         lastname: 'hamu',
         gender: 'MALE',
+        class_id: 'someclassid',
     };
     let studentResolver: StudentResolver;
     let usersPersistence: Partial<UsersPersistenceService>;
+    let classPersistence: Partial<ClassPersistenceService>;
     beforeEach(() => {
         usersPersistence = {
             getAll: jest.fn(),
@@ -22,8 +25,11 @@ describe('student resolver', () => {
             updateUser: jest.fn(),
             deleteUser: jest.fn(),
         };
+        classPersistence = {
+            getById: jest.fn(),
+        };
 
-        studentResolver = new StudentResolver(usersPersistence as UsersPersistenceService);
+        studentResolver = new StudentResolver(usersPersistence as UsersPersistenceService, classPersistence as ClassPersistenceService);
     });
 
     it('should call getUsersByFilters function and return students on getStudents', async () => {
@@ -65,5 +71,12 @@ describe('student resolver', () => {
         const response = await studentResolver.deleteStudent(null, { id: 'someid' });
         expect(response).toEqual(1);
         expect(usersPersistence.deleteUser).toHaveBeenCalledWith('someid');
+    });
+
+    it('should call getStudentClass and return the class', async () => {
+        (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'someclass' }));
+        const response = await studentResolver.getStudentClass(MOCK_STUDENT);
+        expect(response).toEqual({name: 'someclass'});
+        expect(classPersistence.getById).toHaveBeenCalledWith('someclassid');
     });
 });

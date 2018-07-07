@@ -20,5 +20,5 @@ input InputStudent {
     lastname: String
     gender: Gender
     class_id: String
-    schedule: [InputTimeSlot]
+    schedule: [InputTimeSlot!]
 }

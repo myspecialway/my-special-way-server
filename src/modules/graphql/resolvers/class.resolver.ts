@@ -1,14 +1,12 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { SchedulePersistenceService } from '../../persistence/schedule.persistence.service';
 
 @Resolver('Class')
 export class ClassResolver {
     constructor(
         private classPersistence: ClassPersistenceService,
         private userPersistenceService: UsersPersistenceService,
-        private schedulePersistence: SchedulePersistenceService,
     ) {}
 
     @Query('classes')
@@ -29,11 +27,6 @@ export class ClassResolver {
     @ResolveProperty('students')
     async getStudentsByClassId(obj, args, context) {
         return this.userPersistenceService.getStudentsByClassId(obj._id.toString());
-    }
-
-    @ResolveProperty('schedule')
-    async getClassSchedule(obj) {
-        return this.schedulePersistence.getScheduleTimeSlots(obj.schedule);
     }
 
     @Mutation('createClass')

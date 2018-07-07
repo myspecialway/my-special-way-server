@@ -3,6 +3,7 @@ import * as path from 'path';
 import { GraphQLSchema } from 'graphql';
 import { Injectable, Logger } from '@nestjs/common';
 import { GraphQLFactory } from '@nestjs/graphql';
+import * as ConstraintDirective from 'graphql-constraint-directive';
 
 @Injectable()
 export class GraphQlService {
@@ -22,7 +23,7 @@ export class GraphQlService {
                 typeDefs += fs.readFileSync(path.join(__dirname, file)).toString('utf8');
             }
 
-            const schema = this.graphQlFactory.createSchema({ typeDefs });
+            const schema = this.graphQlFactory.createSchema({ typeDefs, schemaDirectives: { constraint: ConstraintDirective}});
             this.logger.log('GraphQlService::getSchema:: graphQl schema creation completed');
             return schema;
         } catch (error) {

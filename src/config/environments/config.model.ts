@@ -3,9 +3,4 @@ export interface Config {
         connectionString: string;
         dbName: string;
     };
-    schedule: {
-        columns: string[],
-        rows: number;
-        hours: object;
-    };
 }

@@ -6,6 +6,8 @@ type Lesson {
 }
 
 input InputLesson {
+    # optional id for when updating schedules
+    _id: ID
     title: String!
     icon: String!
 }
