@@ -10,5 +10,6 @@ then
     docker push myspecialway/msw-server:latest
 else
     echo info::docker-push:: branch is not \"master\" pushing custom branch docker tag
-    docker push myspecialway/msw-server:$(echo $BRANCH | sed 's/[\/#-]/_/g')
+    pwd
+    docker push myspecialway/msw-server:$(echo $BRANCH | ./scripts/helpers/version-fixer)
 fi  
