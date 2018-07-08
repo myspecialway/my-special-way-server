@@ -12,5 +12,5 @@ then
 else
     echo info::docker:: branch $BRANCH is not master, building without version increment
     docker pull node:carbon
-    docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/[\/#-]/_/g'')
+    docker build . -t myspecialway/msw-server:$(echo $BRANCH | sed 's/[\/#-]/_/g')
 fi
