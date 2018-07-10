@@ -62,7 +62,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         try {
             const mongoId = new ObjectID(id);
             this.logger.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
-            return await this.collection.findOne({ mongoId });
+            return await this.collection.findOne({ _id: mongoId });
         } catch (error) {
             this.logger.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
             throw error;
@@ -71,15 +71,14 @@ export class UsersPersistenceService implements IUsersPersistenceService {
 
     async createUser(user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
         try {
-            this.logger.log(`UsersPersistenceService::createUser:: creates user`);
+            this.logger.log(`UsersPersistenceService::createUser:: creates user with username ${user.username}`);
             if (userRole) {
                 user.role = userRole;
             }
 
             const insertResponse = await this.collection.insertOne(user);
-
             const newDocument = await this.getById(insertResponse.insertedId.toString());
-            this.logger.log(`UsersPersistenceService::createUser:: inserted to DB :${JSON.stringify(newDocument)}`);
+            this.logger.log(`UsersPersistenceService::createUser:: inserted user to DB with id: ${newDocument._id}`);
 
             return [null, newDocument];
         } catch (error) {
@@ -96,7 +95,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         try {
             this.logger.log(`UsersPersistenceService::updateUser:: updating user ${mongoId}`);
             const currentDoc = await this.getById(id);
-            const updatedDocument = await this.collection.findOneAndUpdate({ mongoId }, {...currentDoc, ...user}, { returnOriginal: false});
+            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, {...currentDoc, ...user}, { returnOriginal: false});
             this.logger.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return [null, updatedDocument.value];
         } catch (error) {
@@ -109,7 +108,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         try {
             const mongoId = new ObjectID(id);
             this.logger.log(`UsersPersistenceService::deleteUser:: deleting user by id ${id}`);
-            const deleteResponse = await this.collection.deleteOne({ mongoId });
+            const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
             this.logger.log(`UsersPersistenceService::deleteUser:: removed ${deleteResponse.deletedCount} documents`);
             return [null, deleteResponse.deletedCount];
         } catch (error) {

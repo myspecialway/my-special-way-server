@@ -26,7 +26,7 @@ export class ClassPersistenceService {
         try {
             const mongoId = new ObjectID(id);
             this.logger.log(`getAll:: fetching class by id ${id}`);
-            return await this.collection.findOne({ mongoId });
+            return await this.collection.findOne({ _id: mongoId });
         } catch (error) {
             this.logger.error(`getAll:: error fetching class by id ${id}`, error.stack);
             throw error;
@@ -60,7 +60,8 @@ export class ClassPersistenceService {
         try {
             this.logger.log(`ClassPersistence::updateClass:: updating class ${mongoId}`);
             const currentClass = await this.getById(id);
-            const updatedDocument = await this.collection.findOneAndUpdate({ mongoId }, { ...currentClass, ...classObj }, { returnOriginal: false });
+            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId },
+                { ...currentClass, ...classObj }, { returnOriginal: false });
             this.logger.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return updatedDocument.value;
         } catch (error) {
@@ -73,7 +74,7 @@ export class ClassPersistenceService {
         try {
             const mongoId = new ObjectID(id);
             this.logger.log(`ClassPersistence::deleteClass:: deleting class by id ${id}`);
-            const deleteResponse = await this.collection.deleteOne({ mongoId });
+            const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
             this.logger.log(`ClassPersistence::deleteClass:: removed ${deleteResponse.deletedCount} documents`);
             return deleteResponse.deletedCount;
         } catch (error) {
