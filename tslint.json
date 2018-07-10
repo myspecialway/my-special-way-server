@@ -7,12 +7,10 @@
     "no-unused-expression": true
   },
   "rules": {
-    "eofline": false,
     "quotemark": [
       true,
       "single"
     ],
-    "indent": false,
     "member-access": [
       true,
       "no-public"
