@@ -14,7 +14,8 @@
     ],
     "indent": false,
     "member-access": [
-      false
+      true,
+      "no-public"
     ],
     "ordered-imports": [
       false
@@ -26,30 +27,13 @@
     "member-ordering": [
       false
     ],
-    "curly": false,
-    "interface-name": [
-      false
-    ],
-    "array-type": [
-      false
-    ],
-    "no-empty-interface": false,
-    "no-empty": false,
-    "arrow-parens": false,
+    "interface-name": false,
     "object-literal-sort-keys": false,
-    "no-unused-expression": false,
-    "max-classes-per-file": [
-      false
-    ],
-    "variable-name": [
-      false
-    ],
-    "one-line": [
-      false
-    ],
+    "no-unused-expression": true,
+    "no-unused-variable": true,
+    "max-classes-per-file": true,
     "one-variable-per-declaration": [
       false
     ]
-  },
-  "rulesDirectory": []
+  }
 }

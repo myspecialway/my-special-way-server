@@ -1,34 +1,49 @@
 import { MongoClient, Db } from 'mongodb';
-import { LoggerService, Injectable, Logger as logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { FactoryProvider } from '@nestjs/common/interfaces';
 
 const MONGO_CONNECTION_ERROR_MESSAGE = 'no connection available please connect using db.initConnection function';
 
 @Injectable()
 export class DbService {
     private db: Db;
+    private logger = new Logger('DbService', true);
 
-    public async initConnection(connectionString: string, dbName: string) {
+    async initConnection(connectionString: string, dbName: string) {
+        this.logger.log(`initConnection:: initiating connection to ${connectionString}`);
         if (this.db) {
-            logger.warn('DbService::initConnection:: connection already established', 'db');
+            this.logger.warn('initConnection:: connection already established');
             return;
         }
         try {
             const connection = await MongoClient.connect(connectionString);
             this.db = connection.db(dbName);
-            logger.log('DbService::initConnection:: connection initiated', 'db');
+            this.logger.log('initConnection:: connection initiated');
         } catch (error) {
-            logger.error('DbService::initConnection:: error connecting to db', error.stack, 'db');
+            this.logger.error('initConnection:: error connecting to db', error.stack);
             throw error;
         }
     }
 
-    public getConnection(): Db {
+    getConnection(): Db {
         if (!this.db) {
             const connectionError = new Error(MONGO_CONNECTION_ERROR_MESSAGE);
-            logger.error(`DbService::initConnection:: ${MONGO_CONNECTION_ERROR_MESSAGE}`, connectionError.stack, 'db');
+            this.logger.error(`initConnection:: ${MONGO_CONNECTION_ERROR_MESSAGE}`, connectionError.stack);
             throw connectionError;
         }
 
         return this.db;
     }
+}
+
+export function getDbServiceProvider(connectionString: string, dbName: string): FactoryProvider {
+    return {
+        provide: DbService,
+        useFactory: async () => {
+            const dbService = new DbService();
+            await dbService.initConnection(connectionString, dbName);
+
+            return dbService;
+        },
+    };
 }

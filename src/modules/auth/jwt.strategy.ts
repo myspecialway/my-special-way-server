@@ -1,8 +1,7 @@
-import * as moment from 'moment';
 import { PassportStrategy } from '@nestjs/passport';
-import { Injectable, UnauthorizedException, HttpException, LoggerService, InternalServerErrorException, Logger } from '@nestjs/common';
+import { Injectable, UnauthorizedException, HttpException, InternalServerErrorException, Logger } from '@nestjs/common';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { JWT_SECRET, AuthService } from './auth-service/auth.service';
+import { JWT_SECRET } from './auth-service/auth.service';
 import { UserTokenProfile } from 'models/user-token-profile.model';
 import { UsersPersistenceService } from '../persistence/users.persistence.service';
 
@@ -26,7 +25,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
             return;
         }
 
-        // TODO: Do I need this?
         if (!user) {
             this.logger.warn(`validate:: usern ${payload.username} was not found`);
             done(new UnauthorizedException(), false);

@@ -8,10 +8,10 @@ import * as path from 'path';
 
 @Controller()
 export class GraphqlController {
-    private _schema: GraphQLSchema;
+    private schema: GraphQLSchema;
 
-    constructor(private graphqlService: GraphQlService) {
-        this._schema = graphqlService.getSchema();
+    constructor(graphqlService: GraphQlService) {
+        this.schema = graphqlService.getSchema();
     }
     @Get('schema')
     root(@Res() res) {
@@ -19,13 +19,13 @@ export class GraphqlController {
     }
 
     @Post('graphql')
-    public async postGraphql(@Request() req, @Response() res, @Next() next) {
+    async postGraphql(@Request() req, @Response() res, @Next() next) {
         // TODO: why do we need to return a new object ExpressHandler on each request?
-        return graphqlExpress({ schema: this._schema })(req, res, next);
+        return graphqlExpress({ schema: this.schema })(req, res, next);
     }
 
     @Get('graphql')
-    public async getGraphql(@Request() req, @Response() res, @Next() next) {
-        return graphqlExpress({ schema: this._schema })(req, res, next);
+    async getGraphql(@Request() req, @Response() res, @Next() next) {
+        return graphqlExpress({ schema: this.schema })(req, res, next);
     }
 }
