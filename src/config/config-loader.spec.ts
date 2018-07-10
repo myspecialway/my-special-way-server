@@ -1,29 +1,42 @@
-import * as configLoader from './config-loader';
 
 describe('config loader', () => {
     const NODE_ENV = process.env.NODE_ENV;
     const originalRequire = require;
 
-    it('should throw error if there is no NODE_ENV variable', () => {
+    afterEach(() => {
+        jest.resetModules();
+    });
+    it('should throw error if there is no NODE_ENV variable', async () => {
         expect.hasAssertions();
         process.env.NODE_ENV = '';
 
-        // initConfig();
-        expect(configLoader.initConfig).toThrow('NODE_ENV environment variable not found - you must define it!');
+        try {
+            await import('./config-loader');
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
     });
 
-    it('should load config file', () => {
+    it('should throw error if NODE_ENV is incorrect', async () => {
+        expect.hasAssertions();
+        process.env.NODE_ENV = 'some-non-existing-config';
+
+        try {
+            await import('./config-loader');
+        } catch (error) {
+            expect(error).toBeDefined();
+        }
+    });
+
+    it('should load config file', async () => {
+        jest.resetModules();
         expect.hasAssertions();
         process.env.NODE_ENV = 'dev';
 
-        configLoader.initConfig();
-        const config = configLoader.getConfig();
+        const configModule = await import('./config-loader');
+        const config = configModule.getConfig();
 
         expect(config).toBeDefined();
 
-    });
-
-    afterAll(() => {
-        process.env.NODE_ENV = NODE_ENV;
     });
 });
