@@ -7,7 +7,7 @@ type TimeSlot {
 }
 
 input InputTimeSlot {
-    index: String! @constraint(pattern: "^[0-9]{2,3}$")
+    index: String!
     lesson: InputLesson
     # room: InputRoom
 }
