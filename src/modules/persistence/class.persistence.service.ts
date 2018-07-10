@@ -71,9 +71,9 @@ export class ClassPersistenceService {
 
     async deleteClass(id: string): Promise<number> {
         try {
-            const mongoDd = new ObjectID(id);
+            const mongoId = new ObjectID(id);
             this.logger.log(`ClassPersistence::deleteClass:: deleting class by id ${id}`);
-            const deleteResponse = await this.collection.deleteOne({ mongoDd });
+            const deleteResponse = await this.collection.deleteOne({ mongoId });
             this.logger.log(`ClassPersistence::deleteClass:: removed ${deleteResponse.deletedCount} documents`);
             return deleteResponse.deletedCount;
         } catch (error) {

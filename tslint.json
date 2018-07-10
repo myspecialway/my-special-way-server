@@ -3,9 +3,6 @@
   "extends": [
     "tslint:recommended"
   ],
-  "jsRules": {
-    "no-unused-expression": true
-  },
   "rules": {
     "quotemark": [
       true,
@@ -30,8 +27,6 @@
     "no-unused-expression": true,
     "no-unused-variable": true,
     "max-classes-per-file": true,
-    "one-variable-per-declaration": [
-      false
-    ]
+    "one-variable-per-declaration": true
   }
 }
