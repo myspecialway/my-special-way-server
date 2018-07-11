@@ -1,3 +1,4 @@
+# add full schedule class + student
 type Student {
   _id: ID!
   username: String!
@@ -7,6 +8,17 @@ type Student {
   lastname: String
   gender: Gender
   class: Class
-  # schedule: Schedule
+  schedule: [TimeSlot]
   # teacher: Teacher!
+}
+
+input InputStudent {
+    username: String
+    password: String
+    email: String
+    firstname: String
+    lastname: String
+    gender: Gender
+    class_id: String
+    schedule: [InputTimeSlot!]
 }

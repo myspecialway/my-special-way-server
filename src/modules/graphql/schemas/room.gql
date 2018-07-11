@@ -1,13 +1,11 @@
 # A type that describes a room.
 type Room {
-  # The room number.
+  # The room number
   _id: ID!
-  # The name of the building in which the room is located.
-  building: String!
-  # The floor on which the room is located.
-  floor: String!
-  # The numeric part of the room number.
-  number: String!
+  # The room name
+  name: String
+  # flag indicating if room is disabled
+  disabled: Boolean!
   # The lat lan cordinates
-  cordinates: Point!
+  position: Point
 }

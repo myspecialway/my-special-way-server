@@ -1,6 +1,13 @@
-# A type describing a single lesson on a schedule.
+# A type describing a single lesson for the lessons screen
 type Lesson {
   _id: ID!
   title: String!
   icon: String
+}
+
+input InputLesson {
+    # optional id for when updating schedules
+    _id: ID
+    title: String!
+    icon: String!
 }

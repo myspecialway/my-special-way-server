@@ -4,7 +4,10 @@ import { ClassPersistenceService } from '../../persistence/class.persistence.ser
 
 @Resolver('Class')
 export class ClassResolver {
-    constructor(private classPersistence: ClassPersistenceService, private userPersistenceService: UsersPersistenceService) {}
+    constructor(
+        private classPersistence: ClassPersistenceService,
+        private userPersistenceService: UsersPersistenceService,
+    ) {}
 
     @Query('classes')
     async getClasses(obj, args, context, info) {
