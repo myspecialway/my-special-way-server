@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.45",
+  "version": "0.0.46",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -16,7 +16,7 @@
     "start:debug": "cross-env NODE_ENV=dev nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "node dist/main.js",
-    "start:hmr": "node dist/server",  
+    "start:hmr": "node dist/server",
     "test:ut": "jest --coverage",
     "test:e2e": "docker-compose up -d && cross-env NODE_ENV=e2e-tests jest --config ./jest-e2e.json && docker rm -f $(docker ps -q)",
     "test:ci": "bash ./scripts/test",
