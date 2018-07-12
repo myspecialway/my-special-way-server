@@ -25,7 +25,7 @@ import graphqlPlayground from 'graphql-playground-middleware-express';
     controllers: [GraphqlController],
 })
 export class GraphqlModule implements NestModule {
-    public configure(consumer: MiddlewareConsumer) {
+    configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(passport.initialize())
             .forRoutes('/graphql')

@@ -1,34 +1,3 @@
-input InputUser {
-    username: String!
-    email: String!
-    firstname: String!
-    lastname: String!
-    gender: Gender
-    role: UserType!
-    class_id: String
-}
-
-input InputStudent {
-    username: String
-    password: String
-    email: String
-    firstname: String
-    lastname: String
-    gender: Gender
-    class_id: String
-}
-
-input InputClass {
-    name: String!
-    level: String!
-    number: Int!
-}
-
-input InputLesson {
-    title: String!
-    icon: String!
-}
-
 type Mutation {
     createUser(user: InputUser!) : User
     updateUser(id: ID!, user: InputUser!) : User

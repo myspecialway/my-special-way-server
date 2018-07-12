@@ -1,11 +1,9 @@
 'use strict';
 
-import { Collection } from 'mongodb';
 import { UserDbModel, UserRole } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
 
 export interface IUsersPersistenceService {
-    readonly  collection: Collection<UserDbModel>;
     readonly getAll: () => Promise<UserDbModel[]>;
     readonly getUsersByFilters: (queyParams: { [id: string]: string }, id?: string ) => Promise<UserDbModel[]>;
     readonly getUserByFilters: (queyParams: { [id: string]: string }, id?: string ) => Promise<UserDbModel>;
@@ -21,5 +19,5 @@ export interface IUsersPersistenceService {
     readonly getByUsername: (username: string) => Promise<[Error, UserDbModel]>;
 
     // Class
-    readonly getStudentsByClassId: (class_id: string) => Promise<[Error, Array<UserDbModel>]>;
+    readonly getStudentsByClassId: (classId: string) => Promise<[Error, UserDbModel[]]>;
 }

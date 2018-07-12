@@ -1,3 +1,5 @@
+import { TimeSlotDbModel } from './timeslot.db.model';
+
 export interface UserDbModel {
     _id: string;
     username: string;
@@ -8,6 +10,7 @@ export interface UserDbModel {
     email: string;
     role: UserRole;
     class_id?: string;
+    schedule?: TimeSlotDbModel[];
 }
 
 export enum UserRole {

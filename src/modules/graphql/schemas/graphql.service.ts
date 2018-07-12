@@ -11,11 +11,12 @@ export class GraphQlService {
         this.logger = new Logger('GraphQlService');
     }
 
-    public getSchema(): GraphQLSchema {
+    getSchema(): GraphQLSchema {
         try {
+            // TODO: need to make this recursive when refactoring to child folders
             this.logger.log('GraphQlService::getSchema:: starting schema creation');
             let typeDefs = '';
-            const files = fs.readdirSync(__dirname).filter(file => file.includes('.gql'));
+            const files = fs.readdirSync(__dirname).filter((file) => file.includes('.gql'));
 
             for (const file of files) {
                 typeDefs += fs.readFileSync(path.join(__dirname, file)).toString('utf8');
