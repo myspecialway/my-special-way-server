@@ -1,4 +1,4 @@
-import { NestModule, Module, MiddlewareConsumer } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AuthService } from './auth-service/auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { AuthController } from './auth-controller/auth.controller';
