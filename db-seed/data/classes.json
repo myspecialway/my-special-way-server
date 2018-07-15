@@ -1,0 +1,19 @@
+{
+    "collection": "classes",
+    "data": [
+        {
+            "name": "צופית",
+            "level": "1ב",
+            "number": 2,
+            "schedule": [
+                {
+                    "index": "0_0",
+                    "lesson": {
+                        "title": "מדע",
+                        "icon": "http://sbcharter.org/wp-content/uploads/2013/09/science-icon.png"
+                    }
+                }
+            ]
+        }
+    ]
+}

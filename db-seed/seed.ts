@@ -3,7 +3,7 @@
 import * as winston from 'winston';
 import * as fs from 'fs';
 import * as path from 'path';
-import { MongoClient } from 'mongodb';
+import { MongoClient, Collection, ObjectID } from 'mongodb';
 import { ArgumentParser } from 'argparse';
 
 const logger = winston.createLogger({
@@ -50,6 +50,8 @@ parser.addArgument(
 const args = parser.parseArgs();
 init();
 
+const relationsToAdd: Array<{ collection: Collection, collectionContent: FileCollectionContent }> = [];
+
 async function init() {
     logger.info(`dbseed:: connecting to db on ${args.connectionString}`);
     const client = await MongoClient.connect(args.connectionString);
@@ -66,6 +68,25 @@ async function init() {
         logger.info(`dbseed:: filling collection ${collectionContent.collection} with ${collectionContent.data.length} rows`);
         const collection = db.collection(collectionContent.collection);
         await collection.insertMany(collectionContent.data);
+        if (collectionContent.add_relations) {
+            relationsToAdd.push({ collection, collectionContent });
+        }
+    }
+
+    for (const relation of relationsToAdd) {
+        const destinationDocuments = await relation.collection.find({}).toArray();
+
+        for (const collectionRelation of relation.collectionContent.add_relations) {
+            const sourceDocuments = await db.collection(collectionRelation.from_collection).find({}).toArray();
+
+            for (const destinationDocument of destinationDocuments) {
+                const randomIndex = Math.floor(Math.random() * sourceDocuments.length);
+                destinationDocument[collectionRelation.to_field] = sourceDocuments[randomIndex]._id;
+
+                await relation.collection.update({ _id: new ObjectID(destinationDocument._id) }, destinationDocument);
+            }
+        }
+
     }
     logger.info(`dbseed:: seed complete, closing db connection`);
     await client.close();
@@ -91,4 +112,9 @@ function getFilesJSONContent(relativeFolderPath: string): FileCollectionContent[
 interface FileCollectionContent {
     collection: string;
     data: object[];
+    add_relations: [{
+        from_collection: string;
+        to_field: string;
+        by: 'random'
+    }];
 }
