@@ -1,0 +1,26 @@
+{
+    "collection": "users",
+    "data": [
+        {
+            "username": "teacher",
+            "email": "msw-teacher@gmail.com",
+            "firstname": "Msw",
+            "lastname": "Teacher",
+            "role": "TEACHER"
+        },
+        {
+            "username": "principle",
+            "email": "msw-principle@gmail.com",
+            "firstname": "Msw",
+            "lastname": "Principle",
+            "role": "PRINCIPLE"
+        },
+        {
+            "username": "student",
+            "email": "msw-student@gmail.com",
+            "firstname": "Msw",
+            "lastname": "Student",
+            "role": "STUDENT"
+        }
+    ]
+}

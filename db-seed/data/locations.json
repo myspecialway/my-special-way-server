@@ -1,0 +1,437 @@
+{
+    "collection": "locations",
+    "data": [
+        {
+            "name": "פטל כיתת",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת סחלב",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת דקל",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת תמר",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת ניצן",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת נרקיס",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת שקד",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת תאנה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת סברס/ספריה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת הדר",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת ברוש",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת גפן",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "כיתת רימון",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר מוסיקה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר סנוזלן",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "אולם ספורט",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "פינת בעלי חיים",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר קלינאיות תקשורת",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר הכנה לחיים",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר הבעה ביצירה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר אומנות",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "מקלט צפוני- מרכז למידה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "מקלט דרומי- ג'ימבורי",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר מנהלת",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר מורים",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר סגנית",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "מזכירות",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חדר יועצת",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "אב בית",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "שיכפול",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חצר גדולה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חצר קטנה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חצר לימודית",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "חממה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "גינה חקלאית",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "שירותים אולם ספורט",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "שירותי תלמידים קומה 0",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "שירותי תלמידים קומה 1",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 1
+            }
+        },
+        {
+            "name": "שירותי תלמידים קומה 2",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 2
+            }
+        },
+        {
+            "name": "ברזיה אולם ספורט",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "ברזיה קומה 0",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "-מעלית קומה 1",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": -1
+            }
+        },
+        {
+            "name": "0 מעלית קומה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "1 מעלית קומה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 1
+            }
+        },
+        {
+            "name": "2 מעלית קומה",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 2
+            }
+        },
+        {
+            "name": "שער יציאה להסעות",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "דלת כניסה/יציאה ראשית",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        },
+        {
+            "name": "דלת פלדלת",
+            "enabled": true,
+            "position": {
+                "latitude": 0,
+                "longitude": 0,
+                "floor": 0
+            }
+        }
+    ]
+}
