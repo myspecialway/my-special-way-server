@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+const {ArgumentParser } = require('argparse');
+const { exec } = require('child_process');
+
+var parser = new ArgumentParser({
+  version: '0.0.1',
+  addHelp:true,
+  description: 'cross-env executer'
+});
+
+parser.addArgument(
+  [ 'command' ],
+  {help: 'set NODE_ENV value'}
+);
+
+parser.addArgument(
+  [ '-e', '--env' ],
+  {help: 'set NODE_ENV value'}
+);
+
+var args = parser.parseArgs();
+const command = `npx cross-env NODE_ENV=${args.env ? args.env : 'dev'} ${args.command}`;
+const execProcess = exec(command);
+
+execProcess.stdout.pipe(process.stdout);
+execProcess.stderr.pipe(process.stderr);
