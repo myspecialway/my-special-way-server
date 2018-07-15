@@ -21,8 +21,11 @@ export class AuthService implements AuthServiceInterface {
         }
 
         const userCridentials: UserTokenProfile = {
+            id: user._id,
             username: user.username,
             role: user.role,
+            firstname: user.firstname,
+            lastname: user.lastname,
         };
 
         return [null, jwt.sign(userCridentials, JWT_SECRET, {
