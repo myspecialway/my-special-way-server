@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import * as winston from 'winston';
 import * as fs from 'fs';
 import * as path from 'path';
