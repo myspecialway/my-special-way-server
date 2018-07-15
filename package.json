@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "@playlyfe/gql": "^2.6.0",
+    "@types/argparse": "^1.0.34",
     "@types/dotenv": "^4.0.3",
     "@types/express": "^4.0.39",
     "@types/graphql": "^0.13.1",
@@ -64,6 +65,7 @@
     "@types/passport": "^0.4.5",
     "@types/passport-jwt": "^3.0.1",
     "@types/supertest": "^2.0.4",
+    "argparse": "^1.0.10",
     "codecov": "^3.0.2",
     "cpy-cli": "^2.0.0",
     "cross-env": "^5.2.0",
@@ -83,7 +85,8 @@
     "tslint": "5.10.0",
     "webpack": "^4.2.0",
     "webpack-cli": "^2.0.13",
-    "webpack-node-externals": "^1.6.0"
+    "webpack-node-externals": "^1.6.0",
+    "winston": "^3.0.0"
   },
   "jest": {
     "automock": false,
