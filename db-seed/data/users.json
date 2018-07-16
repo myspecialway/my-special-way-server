@@ -3,6 +3,7 @@
     "data": [
         {
             "username": "teacher",
+            "password": "Aa123456",
             "email": "msw-teacher@gmail.com",
             "firstname": "Msw",
             "lastname": "Teacher",
@@ -10,6 +11,7 @@
         },
         {
             "username": "principle",
+            "password": "Aa123456",
             "email": "msw-principle@gmail.com",
             "firstname": "Msw",
             "lastname": "Principle",
@@ -17,10 +19,19 @@
         },
         {
             "username": "student",
+            "password": "Aa123456",
             "email": "msw-student@gmail.com",
             "firstname": "Msw",
             "lastname": "Student",
-            "role": "STUDENT"
+            "role": "STUDENT",
+            "class": ""
+        }
+    ],
+    "add_relations":[
+        {
+            "from_collection": "classes",
+            "to_field": "class_id",
+            "by": "random"
         }
     ]
 }
