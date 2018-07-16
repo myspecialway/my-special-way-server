@@ -5,42 +5,48 @@
 # my-special-way-server
 
 Server part of the My special way project enabling indoor navigation for schools
-Demo master version running at https://msw-server.azurewebsites.net/
+
+Demo master version running at _(link to be added here)_
+
+## Table of Content
+1. [Getting Started](#getting-started)
+1. Contribution Guide
+1. API Documentation
+1. CI/CD
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See CI/CD for notes on how to deploy the project on a live system.
 
 ### Prerequisites
+In this project we use various tools and technologies for development and deployment, to be able to work you will have to install the following: 
 
-Do we have those?
- 
+* [Nodejs](http://nodejs.org)
+* [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* yarn `npm i -g yarn`
+* typescript `npm i -g typescript`
 
+### First Thing First
+Run the following commmands in your terminal to get your code running on your local machine:
+
+Get the code
 ```
-Nodejs
-npm
-git
-typescript
-yarn
-```
-
-### Starting
-
-Getting the code
-```
-git clone https://github.com/myspecialway/my-special-way-server.git my-special-way-server
+git clone https://github.com/myspecialway/my-special-way-server.git
 cd my-special-way-server
+```
+
+Install dependencies
+```
 yarn
 ```
 
-
-## Starting the server
+### Starting the server
 
 ```
 yarn start
 ```
 
-## Running the tests
+### Running the tests
 
 The below will run both the Unit and the E2E tests
 
@@ -48,7 +54,11 @@ The below will run both the Unit and the E2E tests
 yarn test
 
 ```
-The test will run also on CI once you do your first commit also generating 
+You can also run unittests and e2e tests separately with
+* `yarn test:ut`
+* `yarn test:e2e`
+
+The test will run also on CI once you do your first commit.
 
 ### Coding style tests
 
