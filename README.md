@@ -9,10 +9,24 @@ Server part of the My special way project enabling indoor navigation for schools
 Demo master version running at _(link to be added here)_
 
 ## Table of Content
+1. Genesis
 1. [Getting Started](#getting-started)
 1. Contribution Guide
 1. API Documentation
 1. CI/CD
+
+## Genesis
+"In the beginning God created the heavens and the earth" _(Genesis 1)_
+
+Welcome to __My Special Way__ documentation. Below you will find all what you need to start contributing to this awesome project, but, first thing first. Everything should begin with slack, please join slack [here](https://myspecialway.slack.com/).
+We could not empasice enough how important it is to stay connected. Once joined please find the relevand channels to be a member of. We would like to recommend for this bare minimum:
+
+* `broadcasts` - all important notifincations are there (please checked pinned messages for more awesome links)
+* `msw-portal` - for portal dev discussions
+* `msw-server` - for server dev discussions
+* `tech-discussions` - all important tech decisions happenning there
+
+The links below are
 
 ## Getting Started
 
