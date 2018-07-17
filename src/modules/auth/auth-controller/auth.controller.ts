@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { Controller, Body, Res, Post, Logger } from '@nestjs/common';
+import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestjs/common';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 
@@ -11,6 +11,12 @@ export class AuthController {
 
     @Post('/login')
     async login(@Res() res: Response, @Body() body: UserLoginRequest): Promise<void> {
+        if (!body) {
+            this.logger.warn('login:: request body is empty');
+            res.status(400).send(new BadRequestException({ message: 'must pass login request' }));
+            return;
+        }
+
         this.logger.log(`login:: login request for ${body.username}`);
         const [error, token] = await this.authService.createTokenFromCridentials(body);
 
