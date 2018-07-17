@@ -29,8 +29,8 @@ export class GraphqlModule implements NestModule {
         consumer
             .apply(passport.initialize())
             .forRoutes('/graphql')
-            // .apply(passport.authenticate('jwt', { session: false }))
-            // .forRoutes('/graphql')
+            .apply(passport.authenticate('jwt', { session: false }))
+            .forRoutes('/graphql')
             .apply(graphqlPlayground({endpoint: '/graphql'}))
             .forRoutes('/play');
     }
