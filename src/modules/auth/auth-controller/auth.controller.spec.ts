@@ -15,17 +15,27 @@ describe('auth controller', () => {
 
         responseMock = {
             status: jest.fn().mockReturnThis(),
+            send: jest.fn(),
             json: jest.fn(),
         };
 
         authController = new AuthController(authServiceMock as AuthService);
     });
 
+    it('should return 400 if no body was passed', async () => {
+        const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+        createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+        await authController.login(responseMock, null);
+
+        expect(responseMock.status).toHaveBeenCalledWith(400);
+    });
+
     it('should return 500 server error if error happened', async () => {
         const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
         createTokenFn.mockReturnValueOnce([new Error('mock error'), null]);
 
-        await authController.login(responseMock, {username: 'mock-user', password: 'mock-password'});
+        await authController.login(responseMock, { username: 'mock-user', password: 'mock-password' });
 
         expect(responseMock.status).toHaveBeenCalledWith(500);
         expect(responseMock.json).toHaveBeenCalledWith({
@@ -40,7 +50,7 @@ describe('auth controller', () => {
         const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
         createTokenFn.mockReturnValueOnce([null, null]);
 
-        await authController.login(responseMock, {username: 'mock-user', password: 'mock-password'});
+        await authController.login(responseMock, { username: 'mock-user', password: 'mock-password' });
 
         expect(responseMock.status).toHaveBeenCalledWith(401);
         expect(responseMock.json).toHaveBeenCalledWith({
@@ -55,7 +65,7 @@ describe('auth controller', () => {
         const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
         createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
 
-        await authController.login(responseMock, {username: 'mock-user', password: 'mock-password'});
+        await authController.login(responseMock, { username: 'mock-user', password: 'mock-password' });
 
         expect(responseMock.json).toHaveBeenCalledWith({
             accessToken: 'some-very-secret-token',
