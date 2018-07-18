@@ -1,7 +1,7 @@
 jest.mock('mongodb');
 
 import * as common from '@nestjs/common';
-import { DbService } from './db.service';
+import { DbService, getDbServiceProvider } from './db.service';
 import { MongoClient } from 'mongodb';
 
 describe('db service', () => {
@@ -43,7 +43,7 @@ describe('db service', () => {
             }),
         }));
 
-        dbService.initConnection('url', 'db').catch(error => expect(error).toBeDefined());
+        dbService.initConnection('url', 'db').catch((error) => expect(error).toBeDefined());
     });
 
     it('should return connection from getConnection', async () => {
@@ -55,5 +55,16 @@ describe('db service', () => {
 
         const db = dbService.getConnection();
         expect(db).toBeDefined();
+    });
+
+    it('should provide service instance when calling factory function', async () => {
+        (MongoClient.connect as jest.Mock).mockReturnValueOnce(Promise.resolve({
+            db: jest.fn().mockReturnValue('dbmock'),
+        }));
+
+        const factory = getDbServiceProvider('mock_connection_string', 'mock_db');
+        const dbServiceInstance = await factory.useFactory();
+
+        expect(dbServiceInstance).toBeDefined();
     });
 });
