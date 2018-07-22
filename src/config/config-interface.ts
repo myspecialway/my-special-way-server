@@ -11,5 +11,5 @@ export function getEnvalidValidations(): { [K in keyof ProcessEnvConfig]: envali
         NODE_ENV: envalid.str({ default: 'prod' }),
         DB_CONNECTION_STRING: envalid.str(),
         DB_NAME: envalid.str(),
-    }
+    };
 }
