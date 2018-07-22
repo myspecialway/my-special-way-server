@@ -1,4 +1,4 @@
-import { Point } from './point.db.model';
+import Point from './point.db.model';
 export default interface LocationDbModel {
     _id: string;
     name: string;

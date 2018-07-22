@@ -1,10 +1,10 @@
 # A type that describes a room.
-type Room {
-  # The room number
+type Location {
+  # The location number
   _id: ID!
-  # The room name
+  # The location name
   name: String
-  # flag indicating if room is disabled
+  # flag indicating if location is disabled
   disabled: Boolean!
   # The lat lan cordinates
   position: Point

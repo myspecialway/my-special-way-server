@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { getDbServiceProvider } from './db.service';
-import { getConfig } from 'config/config-loader';
+import { getConfig } from '../../config/config-loader';
 import { ClassPersistenceService } from './class.persistence.service';
 import { UsersPersistenceService } from './users.persistence.service';
 import { LessonPersistenceService } from './lesson.persistence.service';

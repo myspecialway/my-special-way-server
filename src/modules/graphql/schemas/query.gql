@@ -10,4 +10,6 @@ type Query{
     classByName(name: String): Class
 
     lessons: [Lesson]!
+
+    locations:[Location]
 }
