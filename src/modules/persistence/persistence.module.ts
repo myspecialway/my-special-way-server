@@ -14,14 +14,14 @@ import {LocationsPersistenceService } from './locations.persistence.service';
         ClassPersistenceService,
         LessonPersistenceService,
         SchedulePersistenceService,
-        LocationsPersistenceService
+        LocationsPersistenceService,
     ],
     exports: [
         UsersPersistenceService,
         ClassPersistenceService,
         LessonPersistenceService,
         SchedulePersistenceService,
-        LocationsPersistenceService
+        LocationsPersistenceService,
     ],
 })
 export class PersistenceModule { }

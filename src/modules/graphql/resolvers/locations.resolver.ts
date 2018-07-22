@@ -3,7 +3,7 @@ import { LocationsPersistenceService } from '../../persistence/locations.persist
 
 @Resolver('Locations')
 export class LocationsResolver {
-    constructor(private locationsPersistence:LocationsPersistenceService) { }
+    constructor(private locationsPersistence: LocationsPersistenceService) { }
 
     @Query('locations')
     async getLocations() {
