@@ -1,17 +1,22 @@
 import * as path from 'path';
-import { Config } from './environments/config.model';
+import * as fs from 'fs';
+import * as envalid from 'envalid';
+import { Logger } from '@nestjs/common';
+import { ProcessEnvConfig } from './config-interface';
 
-let config: Config;
-const env = process.env.NODE_ENV;
-
-if (!process.env.NODE_ENV) {
-    throw new Error('NODE_ENV environment variable not found - you must define it!');
+const logger = new Logger('Boostrap');
+function validateEnvPresense() {
+    const envFilepath = path.resolve(__dirname, '../../../.env');
+    if (!fs.existsSync(envFilepath)) {
+        logger.error('parseEnvFile:: .env not found, please create .env file with needed configurations');
+        throw new Error('.env not found, please create .env file with needed configurations');
+    }
 }
-try {
-    // tslint:disable-next-line:no-var-requires
-    config = require(path.join(__dirname, `./environments/${env}`)).config;
-} catch (e) {
-    throw Error(`Error loading configuration file, ${e.message}`);
-}
 
-export function getConfig() { return config; }
+export function getConfig() {
+    return envalid.cleanEnv<ProcessEnvConfig>(process.env, {
+        NODE_ENV: envalid.str({ default: 'local' }),
+        DB_CONNECTION_STRING: envalid.str(),
+        DB_NAME: envalid.str(),
+    });
+}
