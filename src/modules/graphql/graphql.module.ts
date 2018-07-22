@@ -9,6 +9,7 @@ import { LessonResolver } from './resolvers/lesson.resolver';
 import { StudentResolver } from './resolvers/student.resolver';
 import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
+import { getConfig } from '../../config/config-loader';
 
 @Module({
     imports: [
@@ -26,12 +27,15 @@ import graphqlPlayground from 'graphql-playground-middleware-express';
 })
 export class GraphqlModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
+        if (!getConfig().isDev) {
+            consumer
+                .apply(passport.initialize())
+                .forRoutes('/graphql')
+                .apply(passport.authenticate('jwt', { session: false }))
+                .forRoutes('/graphql')
+        }
         consumer
-            .apply(passport.initialize())
-            .forRoutes('/graphql')
-            .apply(passport.authenticate('jwt', { session: false }))
-            .forRoutes('/graphql')
-            .apply(graphqlPlayground({endpoint: '/graphql'}))
+            .apply(graphqlPlayground({ endpoint: '/graphql' }))
             .forRoutes('/play');
     }
 }
