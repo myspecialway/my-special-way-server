@@ -4,7 +4,7 @@ type Class {
   name: String!
   level: String!
   number: Int!
-  schedule: [TimeSlot]
+  schedule: [TimeSlot]!
   students: [Student]!
 }
 

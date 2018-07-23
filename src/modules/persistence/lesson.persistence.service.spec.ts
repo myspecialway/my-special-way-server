@@ -26,7 +26,9 @@ describe('lesson persistence', () => {
     it('should get all lessons successfuly on getAll', async () => {
         const expected = [{ title: 'lesson1' }, { title: 'lesson2' }];
         (dbServiceMock.getConnection().collection(collectioName).find as jest.Mock).mockReturnValueOnce({
-            toArray: jest.fn().mockReturnValueOnce(expected),
+            sort: jest.fn().mockReturnValueOnce({
+                toArray: jest.fn().mockReturnValueOnce(expected),
+            }),
         });
 
         const result = await lessonPersistenceService.getAll();
