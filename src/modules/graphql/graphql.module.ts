@@ -7,6 +7,7 @@ import { UsersResolver } from './resolvers/users.resolver';
 import { ClassResolver } from './resolvers/class.resolver';
 import { LessonResolver } from './resolvers/lesson.resolver';
 import { StudentResolver } from './resolvers/student.resolver';
+import { LocationsResolver } from './resolvers/locations.resolver';
 import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
@@ -22,6 +23,7 @@ import { getConfig } from '../../config/config-loader';
         ClassResolver,
         StudentResolver,
         LessonResolver,
+        LocationsResolver,
     ],
     controllers: [GraphqlController],
 })

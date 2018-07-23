@@ -1,5 +1,5 @@
 import Point from './point.db.model';
-export default interface RoomDbModel {
+export default interface LocationDbModel {
     _id: string;
     name: string;
     disabled: boolean;
