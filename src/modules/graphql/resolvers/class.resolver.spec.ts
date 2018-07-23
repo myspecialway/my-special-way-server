@@ -1,5 +1,6 @@
 import { ClassResolver } from './class.resolver';
-import { ClassPersistenceService, UsersPersistenceService } from '../../persistence';
+import { ClassPersistenceService } from '../../persistence/class.persistence.service';
+import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 
 describe('class resolver', () => {
     let classResolver: ClassResolver;
@@ -10,7 +11,6 @@ describe('class resolver', () => {
             getAll: jest.fn(),
             getById: jest.fn(),
             getByName: jest.fn(),
-            getClassSchedule: jest.fn(),
             createClass: jest.fn(),
             updateClass: jest.fn(),
             deleteClass: jest.fn(),
