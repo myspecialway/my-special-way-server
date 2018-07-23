@@ -14,14 +14,5 @@
     "target": "esnext",
     "sourceMap": true,
     "allowJs": true,
-    "outDir": "./dist",
-    "baseUrl": "./src"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
 }

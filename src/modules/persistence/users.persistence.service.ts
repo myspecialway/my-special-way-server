@@ -25,10 +25,10 @@ export class UsersPersistenceService implements IUsersPersistenceService {
 
     async getAll(): Promise<UserDbModel[]> {
         try {
-            this.logger.log('UsersPersistenceService::getAll:: fetching users');
+            this.logger.log('getAll:: fetching users');
             return await this.collection.find({}).toArray();
         } catch (error) {
-            this.logger.error('UsersPersistenceService::getAll:: error fetching users', error.stack);
+            this.logger.error('getAll:: error fetching users', error.stack);
             throw error;
         }
     }
@@ -37,23 +37,23 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         try {
             const mongoQuery = this.buildMongoFilterFromQuery(queyParams);
 
-            this.logger.log(`UsersPersistenceService::getUsersByFilters:: fetching users by parameters `);
+            this.logger.log(`getUsersByFilters:: fetching users by parameters `);
             return await this.collection.find(mongoQuery).toArray();
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
-            throw  error;
+            this.logger.error(`getUsersByFilters:: error fetching user by parameters`, error.stack);
+            throw error;
         }
     }
 
-    async getUserByFilters(queyParams: { [id: string]: string }, id?: string ): Promise<UserDbModel> {
+    async getUserByFilters(queyParams: { [id: string]: string }, id?: string): Promise<UserDbModel> {
         try {
             const mongoQuery = this.buildMongoFilterFromQuery(queyParams, id);
 
-            this.logger.log(`UsersPersistenceService::getUsersByFilters:: fetching users by parameters `);
+            this.logger.log(`getUsersByFilters:: fetching users by parameters `);
             return await this.collection.findOne(mongoQuery);
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::getUsersByFilters:: error fetching user by parameters`, error.stack);
-            throw  error;
+            this.logger.error(`getUsersByFilters:: error fetching user by parameters`, error.stack);
+            throw error;
         }
     }
 
@@ -61,28 +61,28 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     async getById(id: string): Promise<UserDbModel> {
         try {
             const mongoId = new ObjectID(id);
-            this.logger.log(`UsersPersistenceService::getAll:: fetching user by id ${id}`);
+            this.logger.log(`getAll:: fetching user by id ${id}`);
             return await this.collection.findOne({ _id: mongoId });
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::getAll:: error fetching user by id ${id}`, error.stack);
+            this.logger.error(`getAll:: error fetching user by id ${id}`, error.stack);
             throw error;
         }
     }
 
     async createUser(user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
         try {
-            this.logger.log(`UsersPersistenceService::createUser:: creates user with username ${user.username}`);
+            this.logger.log(`createUser:: creates user with username ${user.username}`);
             if (userRole) {
                 user.role = userRole;
             }
 
             const insertResponse = await this.collection.insertOne(user);
             const newDocument = await this.getById(insertResponse.insertedId.toString());
-            this.logger.log(`UsersPersistenceService::createUser:: inserted user to DB with id: ${newDocument._id}`);
+            this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
 
             return [null, newDocument];
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::createUser:: error adding user `, error.stack);
+            this.logger.error(`createUser:: error adding user `, error.stack);
             return [error, null];
         }
     }
@@ -93,13 +93,13 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         }
         const mongoId = new ObjectID(id);
         try {
-            this.logger.log(`UsersPersistenceService::updateUser:: updating user ${mongoId}`);
+            this.logger.log(`updateUser:: updating user ${mongoId}`);
             const currentDoc = await this.getById(id);
-            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, {...currentDoc, ...user}, { returnOriginal: false});
-            this.logger.log(`UsersPersistenceService::updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
+            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, { ...currentDoc, ...user }, { returnOriginal: false });
+            this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return [null, updatedDocument.value];
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::updateUser:: error updating user ${mongoId}`, error.stack);
+            this.logger.error(`updateUser:: error updating user ${mongoId}`, error.stack);
             return [error, null];
         }
     }
@@ -107,12 +107,12 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     async deleteUser(id: string): Promise<[Error, number]> {
         try {
             const mongoId = new ObjectID(id);
-            this.logger.log(`UsersPersistenceService::deleteUser:: deleting user by id ${id}`);
+            this.logger.log(`deleteUser:: deleting user by id ${id}`);
             const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
-            this.logger.log(`UsersPersistenceService::deleteUser:: removed ${deleteResponse.deletedCount} documents`);
+            this.logger.log(`deleteUser:: removed ${deleteResponse.deletedCount} documents`);
             return [null, deleteResponse.deletedCount];
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::deleteUser:: error deleting user by id ${id}`, error.stack);
+            this.logger.error(`deleteUser:: error deleting user by id ${id}`, error.stack);
             return [error, null];
         }
     }
@@ -121,20 +121,25 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     // TODO move into a specific service
     async authenticateUser({ username, password }: UserLoginRequest): Promise<[Error, UserDbModel]> {
         try {
-            this.logger.log(`UsersPersistenceService::authenticateUser:: authenticating user ${username}`);
-            return [null, await this.collection.findOne({ username, password })];
+            this.logger.log(`authenticateUser:: authenticating user ${username}`);
+            const user = await this.collection.findOne({ username, password });
+            if (!user) {
+                this.logger.warn(`authenticateUser:: user ${username} not found in db`);
+            }
+
+            return [null, user];
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::authenticateUser:: error authenticating user ${username}`, error.stack);
+            this.logger.error(`authenticateUser:: error authenticating user ${username}`, error.stack);
             return [error, null];
         }
     }
 
     async getByUsername(username: string): Promise<[Error, UserDbModel]> {
         try {
-            this.logger.log(`UsersPersistenceService::getByUsername:: fetching user by username ${username}`);
+            this.logger.log(`getByUsername:: fetching user by username ${username}`);
             return [null, await this.collection.findOne({ username })];
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::getAll:: error fetching user by username ${username}`, error.stack);
+            this.logger.error(`getAll:: error fetching user by username ${username}`, error.stack);
             return [error, null];
         }
     }
@@ -143,10 +148,10 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     // TODO move into class service
     async getStudentsByClassId(classId: string): Promise<[Error, UserDbModel[]]> {
         try {
-            this.logger.log(`UsersPersistenceService::getStudentsByClassId:: fetching students by class id ${classId}`);
+            this.logger.log(`getStudentsByClassId:: fetching students by class id ${classId}`);
             return [null, await this.collection.find({ classId, role: 'STUDENT' }).toArray()];
         } catch (error) {
-            this.logger.error(`UsersPersistenceService::getStudentsByClassId:: error fetching students by class id ${classId}`, error.stack);
+            this.logger.error(`getStudentsByClassId:: error fetching students by class id ${classId}`, error.stack);
             throw [error, null];
         }
     }

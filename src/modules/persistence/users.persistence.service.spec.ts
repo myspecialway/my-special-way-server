@@ -1,3 +1,4 @@
+jest.mock('mongodb');
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
 import { DbService } from './db.service';
@@ -68,15 +69,14 @@ describe('users persistence', () => {
         await usersPersistanceService.getUsersByFilters({role: UserRole.STUDENT}).catch((error) => expect(error).not.toBeUndefined());
     });
 
-    // TODO: fix it also Stryker does not recognize xit
-    // xit('should get one student successfuly on getUserByFilters', async () => {
-    //     (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
-    //         username: 'student1',
-    //     });
+    it('should get one student successfuly on getUserByFilters', async () => {
+        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+            username: 'student1',
+        });
 
-    //     const student = await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467');
-    //     expect(student).toEqual({ username: 'student1' });
-    // });
+        const student = await usersPersistanceService.getUserByFilters({role: UserRole.STUDENT}, '123467');
+        expect(student).toEqual({ username: 'student1' });
+    });
 
     it('should throw an error on error through getUserByFilters function', async () => {
         expect.assertions(1);
