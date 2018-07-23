@@ -10,6 +10,7 @@ Demo master version running at _(link to be added here)_
 
 ## Table of Content
 1. Genesis
+1. Oath
 1. [Getting Started](#getting-started)
 1. Contribution Guide
 1. API Documentation
@@ -26,7 +27,28 @@ We could not empasice enough how important it is to stay connected. Once joined 
 * `msw-server` - for server dev discussions
 * `tech-discussions` - all important tech decisions happenning there
 
-The links below are
+The links below are __must__ visit links:
+
+* TBD
+
+## Oath
+__I hereby solemnly declare to follow the oath below__
+
+1. I will not produce harmful code.
+    - I will not intentionally write code with bugs.
+    - This means: Do your best.
+2. I will not produce code that's not my best.
+3. I will provide with each release a quick, testable & repeatable proof that the code works.
+4. I will not avoid release that will impede progress.
+    - Short term rapid releases
+5. I will fearlessly and relentlessly improve the quality of code.
+    - I will never make the code worse.
+6. I will keep productivity high.
+    - I won't do anything that decreases productivity.
+7. I will continuously ensure others can cover for me and I can cover for them.
+8. I will produce estimates without certainty, and I will not make promises without certainty.
+9. I will never stop learning and improving my craft.
+_by Uncle Bob_
 
 ## Getting Started
 
