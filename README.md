@@ -12,12 +12,12 @@ Demo master version running at _(link to be added here)_
 1. [Genesis](#Genesis)
 1. [Oath](#Oath)
 1. [Getting Started](#getting-started)
-    1. [Prerequisites](#Prerequisites)
-    1. [Configurations](#Configurations)
-    1. [First Thing First](#First-Thing-First)
-    1. [Running the tests](#Running-the-tests)
-    1. [Coding style tests](#Coding-style-tests)
-1. [Contribution Guide](#Contribution Guide)
+    1. [Prerequisites](#prerequisites)
+    1. [Configurations](#configurations)
+    1. [First Thing First](#first-thing-first)
+    1. [Running the tests](#running-the-tests)
+    1. [Coding style tests](#coding-style-tests)
+1. [Contribution Guide](#contribution-guide)
 1. API Documentation
 1. CI/CD
 
@@ -72,7 +72,8 @@ Configurations are declared within the `.env` file. In the repository, `.env-exa
 
 These variables can be either declared in `.env` file as described above or passed as environments variables. Server support validation for env variables and will fail to load if some of them are missing or in wrong format.
 
-__NOTE:__ if you are adding new env variables please make sure to add them into `.env-example` file with explanation.
+_NOTE: if you are adding new env variables please make sure to add them into `.env-example` file with explanation._
+
 __NEVER COMMIT `.env` FILE TO REPOSITORY__
 
 ### First Thing First
