@@ -24,6 +24,11 @@ export class ClassResolver {
         return this.classPersistence.getByName(args.name);
     }
 
+    @ResolveProperty('schedule')
+    getClassSchedule(obj) {
+        return obj.schedule || [];
+    }
+
     @ResolveProperty('students')
     async getStudentsByClassId(obj, args, context) {
         return this.userPersistenceService.getStudentsByClassId(obj._id.toString());

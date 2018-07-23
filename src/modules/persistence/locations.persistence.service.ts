@@ -17,7 +17,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
     async getAll(): Promise<LocationDbModel[]> {
         try {
             this.logger.log('getAll:: fetching locations');
-            return await this.collection.find({}).toArray();
+            return await this.collection.find({}).sort({ name: 1 }).toArray();
         } catch (error) {
             this.logger.error('getAll:: error fetching locations', error.stack);
             throw error;

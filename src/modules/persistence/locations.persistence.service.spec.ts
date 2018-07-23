@@ -54,7 +54,9 @@ describe('locations persistence', () => {
 
     it('should get all locations successfuly on getAll', async () => {
         (dbServiceMock.getConnection().collection('locations').find as jest.Mock).mockReturnValueOnce({
-            toArray: jest.fn().mockReturnValueOnce(locationsMockArray),
+            sort: jest.fn().mockReturnValueOnce({
+                toArray: jest.fn().mockReturnValueOnce(locationsMockArray),
+            }),
         });
 
         const users = await locationsPersistanceService.getAll();

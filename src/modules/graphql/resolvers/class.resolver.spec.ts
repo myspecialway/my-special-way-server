@@ -10,6 +10,7 @@ describe('class resolver', () => {
             getAll: jest.fn(),
             getById: jest.fn(),
             getByName: jest.fn(),
+            getClassSchedule: jest.fn(),
             createClass: jest.fn(),
             updateClass: jest.fn(),
             deleteClass: jest.fn(),
@@ -73,6 +74,16 @@ describe('class resolver', () => {
         const result = await classResolver.deleteClass(null, {id: '5b217b030825622c97d3757f'});
         expect(result).toEqual(1);
         expect(classPersistence.deleteClass).toHaveBeenCalledWith('5b217b030825622c97d3757f');
+    });
+
+    it('should call getClassSchedule and return the obj schedule', () => {
+        const schedule = classResolver.getClassSchedule({name: 'someclass', schedule: [{index: '00'}]});
+        expect(schedule[0]).toEqual({index: '00'});
+    });
+
+    it('should call getClassSchedule and return empty array when there\'s no schedule', () => {
+        const schedule = classResolver.getClassSchedule({name: 'someclass' });
+        expect(schedule).toHaveLength(0);
     });
 
 });
