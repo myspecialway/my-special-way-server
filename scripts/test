@@ -1,6 +1,6 @@
 # !/bin/bash
 
-#npx jest --coverage && npx codecov || exit 1
+npx jest --coverage && npx codecov || exit 1
 
 docker-compose up -d
 
