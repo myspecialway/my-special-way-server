@@ -1,10 +1,8 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
+import * as express from 'express';
+import * as path from 'path';
+import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import * as path from 'path';
 
 const instance = express();
 /* Express middleware. */

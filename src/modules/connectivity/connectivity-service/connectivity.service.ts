@@ -7,7 +7,7 @@ import { getConfig } from '../../../config/config-loader';
 export class ConnectivityService {
 
     private logger = new Logger('ConnectivityService');
-    private readonly connectionString = getConfig().db.connectionString;
+    private readonly connectionString = getConfig().DB_CONNECTION_STRING;
 
     async validateDBConnection() {
         this.logger.log(`validateDBConnection:: test connection to ${this.connectionString}`);

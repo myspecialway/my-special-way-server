@@ -13,4 +13,5 @@ services:
     links:
       - mongodb
     environment:
-      - NODE_ENV=e2e-tests
+      - DB_CONNECTION_STRING=mongodb://mongodb:27017/msw-test
+      - DB_NAME=msw-test

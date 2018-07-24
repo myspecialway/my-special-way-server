@@ -9,10 +9,15 @@ Server part of the My special way project enabling indoor navigation for schools
 Demo master version running at _(link to be added here)_
 
 ## Table of Content
-1. Genesis
-1. Oath
+1. [Genesis](#Genesis)
+1. [Oath](#Oath)
 1. [Getting Started](#getting-started)
-1. Contribution Guide
+    1. [Prerequisites](#prerequisites)
+    1. [Configurations](#configurations)
+    1. [First Thing First](#first-thing-first)
+    1. [Running the tests](#running-the-tests)
+    1. [Coding style tests](#coding-style-tests)
+1. [Contribution Guide](#contribution-guide)
 1. API Documentation
 1. CI/CD
 
@@ -62,6 +67,15 @@ In this project we use various tools and technologies for development and deploy
 * yarn `npm i -g yarn`
 * typescript `npm i -g typescript`
 
+### Configurations
+Configurations are declared within the `.env` file. In the repository, `.env-example` file is available with the full list of variable available. 
+
+These variables can be either declared in `.env` file as described above or passed as environments variables. Server support validation for env variables and will fail to load if some of them are missing or in wrong format.
+
+_NOTE: if you are adding new env variables please make sure to add them into `.env-example` file with explanation._
+
+__NEVER COMMIT `.env` FILE TO REPOSITORY__
+
 ### First Thing First
 Run the following commmands in your terminal to get your code running on your local machine:
 
@@ -76,7 +90,7 @@ Install dependencies
 yarn
 ```
 
-### Starting the server
+Start the server
 
 ```
 yarn start
