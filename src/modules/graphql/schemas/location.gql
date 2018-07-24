@@ -9,3 +9,11 @@ type Location {
   # The lat lan cordinates
   position: Point
 }
+
+input InputLocation {
+  # optional id for when updating schedules
+  _id: ID
+  name: String!
+  disabled: Boolean!
+  position: InputPoint!
+}
