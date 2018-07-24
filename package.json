@@ -116,7 +116,7 @@
       "!**/*.module.ts",
       "!**/*.temp.ts",
       "!**/*.model.ts",
-      "!config/environments/**/*"
+      "!config/**/*.ts"
     ]
   }
 }
