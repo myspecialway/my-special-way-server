@@ -9,6 +9,7 @@
     "bump": "yarn version --new-version patch",
     "docker": "bash ./scripts/docker",
     "docker:push": "bash ./scripts/docker-push",
+    "docker:deploy": "bash ./scripts/k8s/deploy",
     "format": "prettier --write \"**/*.ts\"",
     "git:push": "./scripts/git-push",
     "start": "ts-node -r tsconfig-paths/register src/main.ts",
