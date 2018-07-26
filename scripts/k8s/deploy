@@ -1,5 +1,10 @@
 #!/bin/sh
 
-# update image
-kubectl set image deployment/msw-server-deployment msw-server=myspecialway/msw-server:$(./scripts/echo-version package.json)
-# kubectl rolling-update msw-server --image=myspecialway/msw-sever:latest
+if [ "$BRANCH" = 'master' ]
+then
+    echo info::deploy:: branch is master, deploying new version to k8s
+    # update image
+    kubectl set image deployment/msw-server-deployment msw-server=myspecialway/msw-server:$(./scripts/echo-version package.json)
+else
+     echo info::deploy:: branch is not master, skipping deployment
+fi
