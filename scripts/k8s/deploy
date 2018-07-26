@@ -1,5 +1,5 @@
 #!/bin/sh
 
 # update image
-kubectl set image deployment/msw-server-deployment msw-server-deployment=myspecialway/msw-server:$(./scripts/echo-version package.json)
+kubectl set image deployment/msw-server-deployment msw-server=myspecialway/msw-server:$(./scripts/echo-version package.json)
 # kubectl rolling-update msw-server --image=myspecialway/msw-sever:latest
