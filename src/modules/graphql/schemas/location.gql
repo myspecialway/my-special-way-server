@@ -1,0 +1,19 @@
+# A type that describes a room.
+type Location {
+  # The location number
+  _id: ID!
+  # The location name
+  name: String
+  # flag indicating if location is disabled
+  disabled: Boolean!
+  # The lat lan cordinates
+  position: Point
+}
+
+input InputLocation {
+  # optional id for when updating schedules
+  _id: ID
+  name: String!
+  disabled: Boolean!
+  position: InputPoint!
+}

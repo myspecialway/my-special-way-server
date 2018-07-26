@@ -15,7 +15,7 @@ export class LessonPersistenceService {
     async getAll() {
         try {
             this.logger.log('getAll:: fetching lessons');
-            return await this.collection.find({}).toArray();
+            return await this.collection.find({}).sort({title: 1}).toArray();
         } catch (error) {
             this.logger.error('getAll:: error fetching lessons', error.stack);
             throw error;

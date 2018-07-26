@@ -5,42 +5,98 @@
 # my-special-way-server
 
 Server part of the My special way project enabling indoor navigation for schools
-Demo master version running at https://msw-server.azurewebsites.net/
+
+Demo master version running at _(link to be added here)_
+
+## Table of Content
+1. [Genesis](#Genesis)
+1. [Oath](#Oath)
+1. [Getting Started](#getting-started)
+    1. [Prerequisites](#prerequisites)
+    1. [Configurations](#configurations)
+    1. [First Thing First](#first-thing-first)
+    1. [Running the tests](#running-the-tests)
+    1. [Coding style tests](#coding-style-tests)
+1. [Contribution Guide](#contribution-guide)
+1. API Documentation
+1. CI/CD
+
+## Genesis
+"In the beginning God created the heavens and the earth" _(Genesis 1)_
+
+Welcome to __My Special Way__ documentation. Below you will find all what you need to start contributing to this awesome project, but, first thing first. Everything should begin with slack, please join slack [here](https://myspecialway.slack.com/).
+We could not empasice enough how important it is to stay connected. Once joined please find the relevand channels to be a member of. We would like to recommend for this bare minimum:
+
+* `broadcasts` - all important notifincations are there (please checked pinned messages for more awesome links)
+* `msw-portal` - for portal dev discussions
+* `msw-server` - for server dev discussions
+* `tech-discussions` - all important tech decisions happenning there
+
+The links below are __must__ visit links:
+
+* TBD
+
+## Oath
+__I hereby solemnly declare to follow the oath below__
+
+1. I will not produce harmful code.
+    - I will not intentionally write code with bugs.
+    - This means: Do your best.
+2. I will not produce code that's not my best.
+3. I will provide with each release a quick, testable & repeatable proof that the code works.
+4. I will not avoid release that will impede progress.
+    - Short term rapid releases
+5. I will fearlessly and relentlessly improve the quality of code.
+    - I will never make the code worse.
+6. I will keep productivity high.
+    - I won't do anything that decreases productivity.
+7. I will continuously ensure others can cover for me and I can cover for them.
+8. I will produce estimates without certainty, and I will not make promises without certainty.
+9. I will never stop learning and improving my craft.
+_by Uncle Bob_
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See CI/CD for notes on how to deploy the project on a live system.
 
 ### Prerequisites
+In this project we use various tools and technologies for development and deployment, to be able to work you will have to install the following: 
 
-Do we have those?
- 
+* [Nodejs](http://nodejs.org)
+* [Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
+* yarn `npm i -g yarn`
+* typescript `npm i -g typescript`
 
+### Configurations
+Configurations are declared within the `.env` file. In the repository, `.env-example` file is available with the full list of variable available. 
+
+These variables can be either declared in `.env` file as described above or passed as environments variables. Server support validation for env variables and will fail to load if some of them are missing or in wrong format.
+
+_NOTE: if you are adding new env variables please make sure to add them into `.env-example` file with explanation._
+
+__NEVER COMMIT `.env` FILE TO REPOSITORY__
+
+### First Thing First
+Run the following commmands in your terminal to get your code running on your local machine:
+
+Get the code
 ```
-Nodejs
-npm
-git
-typescript
-yarn
-```
-
-### Starting
-
-Getting the code
-```
-git clone https://github.com/myspecialway/my-special-way-server.git my-special-way-server
+git clone https://github.com/myspecialway/my-special-way-server.git
 cd my-special-way-server
+```
+
+Install dependencies
+```
 yarn
 ```
 
-
-## Starting the server
+Start the server
 
 ```
 yarn start
 ```
 
-## Running the tests
+### Running the tests
 
 The below will run both the Unit and the E2E tests
 
@@ -48,7 +104,11 @@ The below will run both the Unit and the E2E tests
 yarn test
 
 ```
-The test will run also on CI once you do your first commit also generating 
+You can also run unittests and e2e tests separately with
+* `yarn test:ut`
+* `yarn test:e2e`
+
+The test will run also on CI once you do your first commit.
 
 ### Coding style tests
 

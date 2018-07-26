@@ -29,7 +29,7 @@ describe('grapql service', () => {
     });
 
     it('should rethrow an error and write to log if error has been thrown throughout the execution', () => {
-        (fs.readdirSync as jest.Mock).mockImplementation(() => { throw new Error(); });
+        (fs.readdirSync as jest.Mock).mockImplementation(() => { throw new Error('mock error'); });
 
         expect(graphqlService.getSchema.bind(graphqlService)).toThrow();
     });

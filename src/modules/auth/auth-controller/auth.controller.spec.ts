@@ -1,4 +1,3 @@
-import { Response } from 'express';
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';

@@ -3,11 +3,11 @@ type TimeSlot {
     # 2 numeric chars (00, 01...) represents the [hour, day] of timeslot 
     index: String!
     lesson: Lesson
-    #room: Room
+    location: Location
 }
 
 input InputTimeSlot {
     index: String!
-    lesson: InputLesson
-    # room: InputRoom
+    lesson: InputLesson!
+    location: InputLocation!
 }
