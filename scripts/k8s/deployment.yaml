@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: msw-server-deployment
+  labels:
+    app: server    
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: msw        
+    spec:
+      containers:
+      - name: msw-server
+        image: "myspecialway/msw-server:latest"
+        imagePullPolicy: IfNotPresent
+        envFrom:
+        - configMapRef:
+            name: msw-server-dev
+        ports:
+        - name: http
+          containerPort: 3000
