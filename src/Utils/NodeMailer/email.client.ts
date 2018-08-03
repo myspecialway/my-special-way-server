@@ -3,7 +3,7 @@ import { CONFIG } from './smtp.config';
 
 
 export function sendemail (emailFrom: string, emailTo: string, 
-    emailSubject: string, emailBodyHTML: string, emailBodyText?: string){
+    emailSubject: string, emailBodyHTML: string, emailBodyText?: string): string {
 
     let transporter = nodemailer.createTransport({
         host: CONFIG.host,
@@ -33,9 +33,9 @@ export function sendemail (emailFrom: string, emailTo: string,
             return console.log(error);
         }
         console.log('Message sent: %s', info.messageId);
-    
     });
     
+    return "";
 }    
 
 
