@@ -33,6 +33,7 @@ export function sendemail (emailFrom: string, emailTo: string,
             return console.log(error);
         }
         console.log('Message sent: %s', info.messageId);
+        return "";
     });
     
     return "";
