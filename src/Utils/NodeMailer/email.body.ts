@@ -4,6 +4,6 @@ export interface EmailBody {
   }
   
 export const msg: EmailBody ={
-    text: 'Hello world (text version)',           
-    html: '<P>Hello ✔ (HTML version)<P>',   
+    text: 'Hello world (text version)',
+    html: '<P>Hello ✔ (HTML version)<P>'
 };

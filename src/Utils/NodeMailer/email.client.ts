@@ -1,17 +1,16 @@
 import * as nodemailer from 'nodemailer';
 import { CONFIG } from './smtp.config';
 
-
 export function sendemail (emailFrom: string, emailTo: string, 
     emailSubject: string, emailBodyHTML: string, emailBodyText?: string): string {
 
-    let transporter = nodemailer.createTransport({
+    const transporter = nodemailer.createTransport({
         host: CONFIG.host,
         port: CONFIG.port,
         secure: CONFIG.secure,      // true for 465, false for other ports
         auth: {
             user: CONFIG.username,  
-            pass: CONFIG.password 
+            pass: CONFIG.password,
         },
         tls:{
           rejectUnauthorized:false
@@ -19,7 +18,7 @@ export function sendemail (emailFrom: string, emailTo: string,
     });
     
     // setup email data with unicode symbols
-    let mailOptions = {
+    const mailOptions = {
         from: emailFrom,    
         to: emailTo,        
         subject: emailSubject,  
@@ -30,13 +29,12 @@ export function sendemail (emailFrom: string, emailTo: string,
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
-            return console.log(error);
+//            return console.log(error);
+            return error;
         }
-        console.log('Message sent: %s', info.messageId);
-        return "";
+//        console.log('Message sent: %s', info.messageId);
+        return '';
     });
     
-    return "";
-}    
-
-
+    return '';
+}
