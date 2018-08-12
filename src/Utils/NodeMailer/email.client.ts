@@ -27,12 +27,10 @@ export function sendemail(emailFrom: string, emailTo: string, emailSubject: stri
 
     // send mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
+        /* istanbul ignore next */
         if (error) {
-//            return console.log(error);
             return error;
         }
-//        console.log('Message sent: %s', info.messageId);
-        return '';
     });
 
     return '';
