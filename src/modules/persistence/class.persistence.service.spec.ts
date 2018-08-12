@@ -1,10 +1,12 @@
 import { ClassPersistenceService } from './class.persistence.service';
+import { SchedulePersistenceService } from './schedule.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 
 describe('class persistence', () => {
     const collectioName = 'classes';
     let classPersistanceService: ClassPersistenceService;
+    let schedulePersistenceService: SchedulePersistenceService;
     let dbServiceMock: Partial<DbService>;
     beforeEach(() => {
         dbServiceMock = {
@@ -19,8 +21,14 @@ describe('class persistence', () => {
                 } as Partial<Collection>),
             } as Partial<Db>),
         };
-
-        classPersistanceService = new ClassPersistenceService(dbServiceMock as DbService);
+        schedulePersistenceService = {
+            mergeSchedule: jest.fn().mockReturnValue([
+                {index: '00', lesson: {_id: 'someid', title: 'updatedlesson', icon: 'updatedicon'}},
+                {index: '02', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+                {index: '01', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+            ]),
+        };
+        classPersistanceService = new ClassPersistenceService(dbServiceMock as DbService, schedulePersistenceService);
     });
 
     it('should get all classes successfuly on getAll', async () => {
@@ -123,6 +131,10 @@ describe('class persistence', () => {
     it('should update class sucessfuly on updateClass', async () => {
         expect.hasAssertions();
         const expected = {name: 'updated class name', number: 1};
+        (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(
+            {name: 'class name', number: 1, schedule: [{index: '00', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+            {index: '01', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}}],
+        });
         (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockReturnValueOnce(
             {value: { name: 'updated class name', number: 1 }},
         );
