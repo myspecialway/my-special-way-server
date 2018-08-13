@@ -44,4 +44,9 @@ export class AuthService implements AuthServiceInterface {
     async validateUserByCridentials(userLogin: UserLoginRequest): Promise<[Error, UserDbModel]> {
         return await this.userPersistanceService.authenticateUser(userLogin);
     }
+
+    public static extractUserFromToken(token: string) : null | { [key: string]: any } | string {
+        let user = jwt.decode(token.replace("Bearer ", ""), {json: true, complete: true});
+        return user['payload'];
+    }
 }

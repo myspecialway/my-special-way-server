@@ -8,22 +8,22 @@ export class StudentResolver {
     constructor(private usersPersistence: UsersPersistenceService, private classPersistence: ClassPersistenceService) { }
 
     @Query('students')
-    async getStudents() {
+    async getStudents(_, {}, context) {
         return this.usersPersistence.getUsersByFilters({role: UserRole.STUDENT});
     }
 
     @Query('student')
-    async getStudentById(_, args) {
+    async getStudentById(_, args, context) {
         return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
     }
 
     @ResolveProperty('class')
-    async getStudentClass(obj) {
+    async getStudentClass(obj, {}, context) {
         return this.classPersistence.getById(obj.class_id);
     }
 
     @Mutation('createStudent')
-    async createStudent(_, { student }) {
+    async createStudent(_, { student }, context) {
         // TODO perform permissions rights
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.createUser(student, UserRole.STUDENT);
@@ -31,7 +31,7 @@ export class StudentResolver {
     }
 
     @Mutation('updateStudent')
-    async updateStudent(_, { id, student }) {
+    async updateStudent(_, { id, student }, context) {
         // TODO perform permissions rights
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
@@ -39,7 +39,7 @@ export class StudentResolver {
     }
 
     @Mutation('deleteStudent')
-    async deleteStudent(_, { id }) {
+    async deleteStudent(_, { id }, context) {
         // TODO perform permissions rights
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.deleteUser(id);

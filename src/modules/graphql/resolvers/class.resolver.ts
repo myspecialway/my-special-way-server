@@ -25,7 +25,7 @@ export class ClassResolver {
     }
 
     @ResolveProperty('schedule')
-    getClassSchedule(obj) {
+    getClassSchedule(obj, {} , context) {
         return obj.schedule || [];
     }
 
@@ -35,17 +35,17 @@ export class ClassResolver {
     }
 
     @Mutation('createClass')
-    async createClass(obj, { class: newClass }) {
+    async createClass(obj, { class: newClass }, context) {
         return this.classPersistence.createClass(newClass);
     }
 
     @Mutation('updateClass')
-    async updateClass(obj, {id, class: classObj}) {
+    async updateClass(obj, {id, class: classObj}, context) {
         return this.classPersistence.updateClass(id, classObj);
     }
 
     @Mutation('deleteClass')
-    async deleteClass(obj, {id}) {
+    async deleteClass(obj, {id}, context) {
         return this.classPersistence.deleteClass(id);
     }
 }

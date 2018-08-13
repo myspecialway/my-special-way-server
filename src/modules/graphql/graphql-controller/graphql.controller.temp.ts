@@ -5,10 +5,13 @@ import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
 import { GraphQlService } from '../schemas/graphql.service';
 import * as path from 'path';
+import { UserTokenProfile } from "../../../models/user-token-profile.model";
+import { AuthService } from "../../auth/auth-service/auth.service";
 
 @Controller()
 export class GraphqlController {
     private schema: GraphQLSchema;
+    private authService: AuthService;
 
     constructor(graphqlService: GraphQlService) {
         this.schema = graphqlService.getSchema();
@@ -21,11 +24,13 @@ export class GraphqlController {
     @Post('graphql')
     async postGraphql(@Request() req, @Response() res, @Next() next) {
         // TODO: why do we need to return a new object ExpressHandler on each request?
-        return graphqlExpress({ schema: this.schema })(req, res, next);
+        let user = AuthService.extractUserFromToken(req.headers.authorization);
+        return graphqlExpress({ schema: this.schema, context: { user: user } })(req, res, next);
     }
 
     @Get('graphql')
     async getGraphql(@Request() req, @Response() res, @Next() next) {
-        return graphqlExpress({ schema: this.schema })(req, res, next);
+        let user = AuthService.extractUserFromToken(req.headers.authorization);
+        return graphqlExpress({ schema: this.schema, context: { user: user } })(req, res, next);
     }
 }

@@ -6,7 +6,7 @@ export class LocationsResolver {
     constructor(private locationsPersistence: LocationsPersistenceService) { }
 
     @Query('locations')
-    async getLocations() {
+    async getLocations(_, {}, context) {
         return this.locationsPersistence.getAll();
     }
 }
