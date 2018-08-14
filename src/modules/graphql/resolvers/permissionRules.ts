@@ -63,11 +63,11 @@ export class Permissions {
         }
     }
 
-    static checkAndGetBasePermission(user: UserTokenProfile, op: DBOperation, asset: Asset): Permission {
+    static checkAndGetBasePermission(user: object | UserTokenProfile | undefined, op: DBOperation, asset: Asset): Permission {
         if (!user) {
             return Permission.FORBID;
         }
-        return Permissions.getPermission(asset, op, user);
+        return Permissions.getPermission(asset, op, user as UserTokenProfile);
     }
 
 }

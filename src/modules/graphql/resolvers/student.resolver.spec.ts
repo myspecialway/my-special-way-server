@@ -38,7 +38,7 @@ describe('student resolver', () => {
     it('should call getUsersByFilters function and return students on getStudents', async () => {
         (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
 
-        const response = await studentResolver.getStudents(null, {}, null);
+        const response = await studentResolver.getStudents(null, {}, MOCK_CONTEXT);
         expect(response).toEqual([{ username: 'test' }]);
         expect(usersPersistence.getUsersByFilters).toHaveBeenCalled();
     });
@@ -46,7 +46,7 @@ describe('student resolver', () => {
     it('should call getUserByFilters function and return student on getStudentById', async () => {
         (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
 
-        const response = await studentResolver.getStudentById(null, { id: 'someid' }, null);
+        const response = await studentResolver.getStudentById(null, { id: 'someid' }, MOCK_CONTEXT);
         expect(response).toEqual({ username: 'test' });
         expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({role: UserRole.STUDENT}, 'someid');
     });

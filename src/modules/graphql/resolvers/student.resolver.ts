@@ -3,6 +3,7 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UserDbModel, UserRole} from '../../../models/user.db.model';
 import { Asset, DBOperation, NO_PERMISSION, Permission, Permissions} from './permissionRules';
+import { Get } from '../../../utils/get';
 
 @Resolver('Student')
 export class StudentResolver {
@@ -10,7 +11,7 @@ export class StudentResolver {
 
     @Query('students')
     async getStudents(_, {}, context) {
-        const permission = Permissions.checkAndGetBasePermission(context.user, DBOperation.READ, Asset.STUDENT);
+        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -25,7 +26,7 @@ export class StudentResolver {
 
     @Query('student')
     async getStudentById(_, args, context) {
-        const permission = Permissions.checkAndGetBasePermission(context.user, DBOperation.READ, Asset.STUDENT);
+        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -45,7 +46,7 @@ export class StudentResolver {
 
     @Mutation('createStudent')
     async createStudent(_, { student }, context) {
-        const permission = Permissions.checkAndGetBasePermission(context.user, DBOperation.CREATE, Asset.STUDENT);
+        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -56,7 +57,7 @@ export class StudentResolver {
 
     @Mutation('updateStudent')
     async updateStudent(_, { id, student }, context) {
-        const permission = Permissions.checkAndGetBasePermission(context.user, DBOperation.UPDATE, Asset.STUDENT);
+        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -76,7 +77,7 @@ export class StudentResolver {
 
     @Mutation('deleteStudent')
     async deleteStudent(_, { id }, context) {
-        const permission = Permissions.checkAndGetBasePermission(context.user, DBOperation.DELETE, Asset.STUDENT);
+        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.STUDENT);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
