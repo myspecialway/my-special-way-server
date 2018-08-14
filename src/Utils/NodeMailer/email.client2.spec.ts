@@ -22,23 +22,22 @@ describe('EmailClient', () => {
         expect(bResult).toBeDefined();
     });
 
-    /*
+    // Testing the mailing options
+    test('Email From assignment', () => { expect( instance.SetMailOptionsFrom( '"Special Way" <testmyspecialway@gmail.com>' ) ).toBeUndefined();   });
+    test('Email To assignment', () => { expect( instance.SetMailOptionsTo( '"Special Way" <testmyspecialway@gmail.com>' ) ).toBeUndefined();       });
+    test('Email Subject assignment', () => { expect( instance.SetMailOptionsSubject( '"Hello World"') ).toBeUndefined();                           });
+    test('Text body assignment', () => { expect( instance.SetMailOptionsBodyText( '"Hello World"') ).toBeUndefined();                              });
+    test('HTML body assignment', () => { expect( instance.SetMailOptionsBodyHTML( '"Hello World"') ).toBeUndefined();                              });
 
     // Testing the mailing options
-    test('Email From assignment', () => { expect( instance.SetMailOptionsFrom( '"Special Way" <testmyspecialway@gmail.com>' ) ).toBeCalled();   });
-    test('Email To assignment', () => { expect( instance.SetMailOptionsTo( '"Special Way" <testmyspecialway@gmail.com>' ) ).toBeCalled();       });
-    test('Email Subject assignment', () => { expect( instance.SetMailOptionsSubject( '"Hello World"') ).toBeCalled();                           });
-    test('Text body assignment', () => { expect( instance.SetMailOptionsBodyText( '"Hello World"') ).toBeCalled();                              });
-    test('HTML body assignment', () => { expect( instance.SetMailOptionsBodyHTML( '"Hello World"') ).toBeCalled();                              });
+    test('Transporter, host', () => { expect( instance.SetTransporterHost( '"abc' ) ).toBeUndefined();         });
+    test('Transporter, port', () => { expect( instance.SetTransporterPort( 123 ) ).toBeUndefined();            });
+    test('Transporter, comm', () => { expect( instance.SetTransporterSecure( true ) ).toBeUndefined();         });
+    test('Transporter, username', () => { expect( instance.SetTransporterUsername( '123' ) ).toBeUndefined();  });
+    test('Transporter, password', () => { expect( instance.SetTransporterPassword( '123' ) ).toBeUndefined();  });
 
-    // Testing the mailing options
-    test('Transporter, host', () => { expect( instance.SetTransporterHost( '"abc' ) ).toBeCalled();         });
-    test('Transporter, port', () => { expect( instance.SetTransporterPort( 123 ) ).toBeCalled();            });
-    test('Transporter, comm', () => { expect( instance.SetTransporterSecure( true ) ).toBeCalled();         });
-    test('Transporter, username', () => { expect( instance.SetTransporterUsername( '123' ) ).toBeCalled();  });
-    test('Transporter, password', () => { expect( instance.SetTransporterPassword( '123' ) ).toBeCalled();  });
-*/
-    test('Get last error', () => { expect( instance.GetLastError() ).toBeCalled(); });
+    test('Get last error', () => { expect( instance.GetLastError() ).toBe(''); });
 
-    test('Building Transporter', () => { expect( instance.SetTransporter( 'strHost', 123, true, 'user', 'password') ).toBeCalled(); });
+    test('Building Transporter', () => { expect( instance.SetTransporter( 'strHost', 123, true, 'user', 'password') ).toBeUndefined(); });
+
 });

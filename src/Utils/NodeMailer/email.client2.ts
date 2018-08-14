@@ -21,15 +21,10 @@ export class EmailClient {
         });
     }
 
-     /* istanbul ignore next */
     SetTransporterHost( strHost: string ) { this.transporter.host = strHost;        }
-     /* istanbul ignore next */
     SetTransporterPort( nPort: number ) {this.transporter.port = nPort;             }
-     /* istanbul ignore next */
     SetTransporterSecure( bSecure: boolean ) {this.transporter.secure = bSecure;    }
-     /* istanbul ignore next */
     SetTransporterUsername( strUser: string) {this.transporter.user = strUser;      }
-     /* istanbul ignore next */
     SetTransporterPassword( strPass: string) {this.transporter.pass = strPass;      }
 
     SetTransporter(strHost: string, nPort: number, bSecure: boolean, strUser: string, strPass: string) {
@@ -46,15 +41,11 @@ export class EmailClient {
             },
         });
     }
-     /* istanbul ignore next */
+
     SetMailOptionsFrom( strFrom: string ) { this.mailoptionair.from = strFrom; }
-     /* istanbul ignore next */
     SetMailOptionsTo( strTo: string ) { this.mailoptionair.To = strTo; }
-     /* istanbul ignore next */
     SetMailOptionsSubject( strSubject: string ) { this.mailoptionair.subject = strSubject; }
-     /* istanbul ignore next */
     SetMailOptionsBodyText( strBodyText: string ) { this.mailoptionair.text = strBodyText; }
-     /* istanbul ignore next */
     SetMailOptionsBodyHTML( strBodyHTML: string ) { this.mailoptionair.html = strBodyHTML; }
 
     SetMailOptions(strFrom: string, strTo: string, strSubject: string, strBodyHTML: string, strBodyText = '') {
@@ -87,7 +78,6 @@ export class EmailClient {
         return bResult;
     }
 
-    /* istanbul ignore next */
     GetLastError() {
         return this.strLastError;
     }
