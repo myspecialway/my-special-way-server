@@ -1,6 +1,6 @@
 'use strict';
 
-import { Controller, Post, Get, Request, Response, Next, Res } from '@nestjs/common';
+import {Controller, Post, Get, Request, Response, Next, Res, Logger} from '@nestjs/common';
 import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
 import { GraphQlService } from '../schemas/graphql.service';
@@ -12,10 +12,12 @@ import { AuthService } from "../../auth/auth-service/auth.service";
 export class GraphqlController {
     private schema: GraphQLSchema;
     private authService: AuthService;
+    private logger = new Logger('GraphqlController');
 
     constructor(graphqlService: GraphQlService) {
         this.schema = graphqlService.getSchema();
     }
+
     @Get('schema')
     root(@Res() res) {
         res.sendFile(path.join(__dirname, '../../../../dist/public/schema.html'));
@@ -24,13 +26,13 @@ export class GraphqlController {
     @Post('graphql')
     async postGraphql(@Request() req, @Response() res, @Next() next) {
         // TODO: why do we need to return a new object ExpressHandler on each request?
-        let user = AuthService.extractUserFromToken(req.headers.authorization);
-        return graphqlExpress({ schema: this.schema, context: { user: user } })(req, res, next);
+        const userProfile: UserTokenProfile = AuthService.getUserProfileFromToken(req.headers.authorization);
+        return graphqlExpress({schema: this.schema, context: {user: userProfile}})(req, res, next);
     }
 
     @Get('graphql')
     async getGraphql(@Request() req, @Response() res, @Next() next) {
-        let user = AuthService.extractUserFromToken(req.headers.authorization);
-        return graphqlExpress({ schema: this.schema, context: { user: user } })(req, res, next);
+        const userProfile: UserTokenProfile = AuthService.getUserProfileFromToken(req.headers.authorization);
+        return graphqlExpress({schema: this.schema, context: {user: userProfile}})(req, res, next);
     }
 }
