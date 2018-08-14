@@ -3,8 +3,6 @@ import * as path from 'path';
 import { GraphQLSchema } from 'graphql';
 import { Injectable, Logger } from '@nestjs/common';
 import { GraphQLFactory } from '@nestjs/graphql';
-import { HasRoleDirective } from "./HasRoleDirective";
-
 
 @Injectable()
 export class GraphQlService {
@@ -27,7 +25,7 @@ export class GraphQlService {
                 typeDefs += fs.readFileSync(path.join(__dirname, file)).toString('utf8');
             }
 
-            const schema = this.graphQlFactory.createSchema({ typeDefs, schemaDirectives: { hasRole: HasRoleDirective } });
+            const schema = this.graphQlFactory.createSchema({ typeDefs });
             this.logger.log('GraphQlService::getSchema:: graphQl schema creation completed');
             return schema;
         } catch (error) {

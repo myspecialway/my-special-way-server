@@ -27,7 +27,7 @@ describe('lesson resolver', () => {
     it('should call createLesson and return new created lesson', async () => {
         const expected = [{ title: 'mylesson', icon: 'myicon' }];
         (lessonPersistence.createLesson as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const result = await lessonResolver.createLesson(null, {lesson: expected});
+        const result = await lessonResolver.createLesson(null, {lesson: expected}, null);
         expect(result).toEqual(expected);
         expect(lessonPersistence.createLesson).toHaveBeenCalledWith(expected);
     });
@@ -35,14 +35,14 @@ describe('lesson resolver', () => {
     it('should call updateLesson and return updated lesson', async () => {
         const expected = [{ title: 'mylesson', icon: 'myicon' }];
         (lessonPersistence.updateLesson as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const result = await lessonResolver.updateLesson(null, {id: '5b217b030825622c97d3757f', lesson: expected});
+        const result = await lessonResolver.updateLesson(null, {id: '5b217b030825622c97d3757f', lesson: expected}, null);
         expect(result).toEqual(expected);
         expect(lessonPersistence.updateLesson).toHaveBeenLastCalledWith('5b217b030825622c97d3757f', expected);
     });
 
     it('should call deleteLesson and return the number of lessons deleted', async () => {
         (lessonPersistence.deleteLesson as jest.Mock).mockReturnValue(Promise.resolve(1));
-        const result = await lessonResolver.deleteLesson(null, {id: '5b217b030825622c97d3757f'});
+        const result = await lessonResolver.deleteLesson(null, {id: '5b217b030825622c97d3757f'}, null);
         expect(result).toEqual(1);
         expect(lessonPersistence.deleteLesson).toHaveBeenCalledWith('5b217b030825622c97d3757f');
     });

@@ -56,7 +56,7 @@ describe('class resolver', () => {
     it('should call createClass and return new created class', async () => {
         const expected = { name: 'טיטאן', level : 'א', number : 1 };
         (classPersistence.createClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const result = await classResolver.createClass(null, {class: expected});
+        const result = await classResolver.createClass(null, {class: expected}, null);
         expect(result).toEqual(expected);
         expect(classPersistence.createClass).toHaveBeenCalledWith(expected);
     });
@@ -64,25 +64,25 @@ describe('class resolver', () => {
     it('should call updateClass and return updated class', async () => {
         const expected = { name: 'טיטאן', level : 'א', number : 1 };
         (classPersistence.updateClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const result = await classResolver.updateClass(null, {id: '5b217b030825622c97d3757f', class: expected});
+        const result = await classResolver.updateClass(null, {id: '5b217b030825622c97d3757f', class: expected}, null);
         expect(result).toEqual(expected);
         expect(classPersistence.updateClass).toHaveBeenLastCalledWith('5b217b030825622c97d3757f', expected);
     });
 
     it('should call deleteClass and return the number of class deleted', async () => {
         (classPersistence.deleteClass as jest.Mock).mockReturnValue(Promise.resolve(1));
-        const result = await classResolver.deleteClass(null, {id: '5b217b030825622c97d3757f'});
+        const result = await classResolver.deleteClass(null, {id: '5b217b030825622c97d3757f'}, null);
         expect(result).toEqual(1);
         expect(classPersistence.deleteClass).toHaveBeenCalledWith('5b217b030825622c97d3757f');
     });
 
     it('should call getClassSchedule and return the obj schedule', () => {
-        const schedule = classResolver.getClassSchedule({name: 'someclass', schedule: [{index: '00'}]});
+        const schedule = classResolver.getClassSchedule({name: 'someclass', schedule: [{index: '00'}]}, {}, null);
         expect(schedule[0]).toEqual({index: '00'});
     });
 
     it('should call getClassSchedule and return empty array when there\'s no schedule', () => {
-        const schedule = classResolver.getClassSchedule({name: 'someclass' });
+        const schedule = classResolver.getClassSchedule({name: 'someclass' }, {}, null);
         expect(schedule).toHaveLength(0);
     });
 

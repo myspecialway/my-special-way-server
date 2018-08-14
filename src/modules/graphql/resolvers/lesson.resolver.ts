@@ -16,7 +16,7 @@ export class LessonResolver {
   }
 
   @Mutation('updateLesson')
-  async updateLesson(_, {id, lesson, context}) {
+  async updateLesson(_, {id, lesson}, context) {
       return this.lessonPersistence.updateLesson(id, lesson);
   }
 
