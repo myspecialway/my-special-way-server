@@ -10,8 +10,7 @@ export class UsersResolver {
 
     @Query('users')
     async getUsers(_, {  }, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.usersPersistence.getAll();
@@ -19,8 +18,7 @@ export class UsersResolver {
 
     @Query('user')
     async getUserById(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.usersPersistence.getById(args.id);
@@ -28,8 +26,7 @@ export class UsersResolver {
 
     @Mutation('createUser')
     async createUser(_, { user }, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         // TODO: Handle errors!!!!
@@ -39,8 +36,7 @@ export class UsersResolver {
 
     @Mutation('updateUser')
     async updateUser(_, { id, user }, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         // TODO: Handle errors!!!!
@@ -50,8 +46,7 @@ export class UsersResolver {
 
     @Mutation('deleteUser')
     async deleteUser(_, { id }, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         // TODO: Handle errors!!!!

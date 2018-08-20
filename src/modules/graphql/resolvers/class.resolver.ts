@@ -13,8 +13,7 @@ export class ClassResolver {
 
     @Query('classes')
     async getClasses(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.getAll();
@@ -22,8 +21,7 @@ export class ClassResolver {
 
     @Query('classById')
     async getClassById(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.getById(args.id);
@@ -31,8 +29,7 @@ export class ClassResolver {
 
     @Query('classByName')
     async getClassByName(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.getByName(args.name);
@@ -40,8 +37,7 @@ export class ClassResolver {
 
     @ResolveProperty('schedule')
     getClassSchedule(obj, {} , context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return obj.schedule || [];
@@ -49,8 +45,7 @@ export class ClassResolver {
 
     @ResolveProperty('students')
     async getStudentsByClassId(obj, args, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.userPersistenceService.getStudentsByClassId(obj._id.toString());
@@ -58,8 +53,7 @@ export class ClassResolver {
 
     @Mutation('createClass')
     async createClass(obj, { class: newClass }, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.createClass(newClass);
@@ -67,8 +61,7 @@ export class ClassResolver {
 
     @Mutation('updateClass')
     async updateClass(obj, {id, class: classObj}, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.updateClass(id, classObj);
@@ -76,8 +69,7 @@ export class ClassResolver {
 
     @Mutation('deleteClass')
     async deleteClass(obj, {id}, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.CLASS);
-        if (permission === Permission.FORBID) {
+        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.deleteClass(id);

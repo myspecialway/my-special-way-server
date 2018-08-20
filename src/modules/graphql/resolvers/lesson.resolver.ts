@@ -9,8 +9,7 @@ export class LessonResolver {
 
   @Query('lessons')
   async getLessons(_, {}, context) {
-      const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.LESSON);
-      if (permission === Permission.FORBID) {
+      if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.LESSON) === Permission.FORBID) {
           throw new Error(NO_PERMISSION);
       }
       return this.lessonPersistence.getAll();
@@ -18,8 +17,7 @@ export class LessonResolver {
 
   @Mutation('createLesson')
   async createLesson(_, { lesson }, context) {
-      const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.LESSON);
-      if (permission === Permission.FORBID) {
+      if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.LESSON) === Permission.FORBID) {
           throw new Error(NO_PERMISSION);
       }
       return this.lessonPersistence.createLesson(lesson);
@@ -27,8 +25,7 @@ export class LessonResolver {
 
   @Mutation('updateLesson')
   async updateLesson(_, {id, lesson}, context) {
-      const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.LESSON);
-      if (permission === Permission.FORBID) {
+      if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.LESSON) === Permission.FORBID) {
           throw new Error(NO_PERMISSION);
       }
       return this.lessonPersistence.updateLesson(id, lesson);
@@ -36,8 +33,7 @@ export class LessonResolver {
 
   @Mutation('deleteLesson')
   async deleteLesson(_, {id}, context) {
-      const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.LESSON);
-      if (permission === Permission.FORBID) {
+      if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.LESSON) === Permission.FORBID) {
           throw new Error(NO_PERMISSION);
       }
       return this.lessonPersistence.deleteLesson(id);

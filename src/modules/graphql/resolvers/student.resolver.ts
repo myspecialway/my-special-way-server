@@ -46,7 +46,7 @@ export class StudentResolver {
 
     @Mutation('createStudent')
     async createStudent(_, { student }, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
+        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
