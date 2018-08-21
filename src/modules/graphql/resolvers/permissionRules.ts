@@ -34,14 +34,21 @@ export interface PermissionRule {
 }
 
 export const TEACHER_PERMISSION_RULES: PermissionRule[] = [
+    // Asset.STUDENT
     {operation: DBOperation.CREATE, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.FORBID},
     {operation: DBOperation.READ, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.OWN},
     {operation: DBOperation.UPDATE, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.OWN},
     {operation: DBOperation.DELETE, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.FORBID},
+    // Asset.LESSON
     {operation: DBOperation.CREATE, asset: Asset.LESSON, role: UserRole.TEACHER, permission: Permission.FORBID},
     {operation: DBOperation.READ, asset: Asset.LESSON, role: UserRole.TEACHER, permission: Permission.OWN},
     {operation: DBOperation.UPDATE, asset: Asset.LESSON, role: UserRole.TEACHER, permission: Permission.OWN},
     {operation: DBOperation.DELETE, asset: Asset.LESSON, role: UserRole.TEACHER, permission: Permission.FORBID},
+    // Asset.CLASS
+    {operation: DBOperation.CREATE, asset: Asset.CLASS, role: UserRole.TEACHER, permission: Permission.FORBID},
+    {operation: DBOperation.READ, asset: Asset.CLASS, role: UserRole.TEACHER, permission: Permission.OWN},
+    {operation: DBOperation.UPDATE, asset: Asset.CLASS, role: UserRole.TEACHER, permission: Permission.OWN},
+    {operation: DBOperation.DELETE, asset: Asset.CLASS, role: UserRole.TEACHER, permission: Permission.FORBID},
 ];
 
 export class Permissions {

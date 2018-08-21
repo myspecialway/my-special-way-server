@@ -3,10 +3,10 @@ import { UsersPersistenceService } from '../../persistence';
 
 describe('user resolver', () => {
     const MOCK_USER = {
-        username: 'ah584d',
+        username: 'test_username',
         email: 'email@test.co.il',
-        firstname: 'avraham',
-        lastname: 'hamu',
+        firstname: 'test_firstname',
+        lastname: 'test_lastname',
         role: 'PRINCIPLE',
     };
     const MOCK_CONTEXT = {
@@ -30,7 +30,7 @@ describe('user resolver', () => {
 
         (userPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
 
-        const response = await usersResolver.getUsers(null, {}, null);
+        const response = await usersResolver.getUsers(null, {}, MOCK_CONTEXT);
         expect(response).toEqual([{ username: 'test' }]);
         expect(userPersistence.getAll).toHaveBeenCalled();
     });
@@ -38,7 +38,7 @@ describe('user resolver', () => {
     it('should call getById function and return user on getUserById', async () => {
         (userPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
 
-        const response = await usersResolver.getUserById(null, { id: 'someid' }, null, null);
+        const response = await usersResolver.getUserById(null, { id: 'someid' }, MOCK_CONTEXT, null);
         expect(response).toEqual({ username: 'test' });
         expect(userPersistence.getById).toHaveBeenCalledWith('someid');
     });
