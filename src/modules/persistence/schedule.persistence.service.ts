@@ -5,7 +5,7 @@ import { TimeSlotDbModel } from '../../models/timeslot.db.model';
 @Injectable()
 export class SchedulePersistenceService {
 
-    mergeSchedule(current: TimeSlotDbModel[], newCells: TimeSlotDbModel[], key: string): TimeSlotDbModel[] {
+    mergeSchedule(current: TimeSlotDbModel[], newCells: TimeSlotDbModel[], key: string = 'index'): TimeSlotDbModel[] {
         return uniqBy([...newCells, ...current], key);
     }
 }

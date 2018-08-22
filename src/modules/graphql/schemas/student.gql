@@ -8,7 +8,7 @@ type Student {
   lastname: String
   gender: Gender
   class: Class
-  schedule: [TimeSlot]
+  schedule: [TimeSlot!]
   # teacher: Teacher!
 }
 

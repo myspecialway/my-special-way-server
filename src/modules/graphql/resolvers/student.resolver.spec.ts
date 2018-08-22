@@ -1,7 +1,8 @@
 import { StudentResolver } from './student.resolver';
-import { UsersPersistenceService } from '../../persistence';
+import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
+import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 
 describe('student resolver', () => {
     const MOCK_STUDENT = {
@@ -24,6 +25,7 @@ describe('student resolver', () => {
             createUser: jest.fn(),
             updateUser: jest.fn(),
             deleteUser: jest.fn(),
+            getStudentSchedule: jest.fn(),
         };
         classPersistence = {
             getById: jest.fn(),
@@ -43,7 +45,7 @@ describe('student resolver', () => {
     it('should call getUserByFilters function and return student on getStudentById', async () => {
         (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
 
-        const response = await studentResolver.getStudentById(null, { id: 'someid' }, null, null);
+        const response = await studentResolver.getStudentById(null, { id: 'someid' });
         expect(response).toEqual({ username: 'test' });
         expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({role: UserRole.STUDENT}, 'someid');
     });
@@ -78,5 +80,16 @@ describe('student resolver', () => {
         const response = await studentResolver.getStudentClass(MOCK_STUDENT);
         expect(response).toEqual({name: 'someclass'});
         expect(classPersistence.getById).toHaveBeenCalledWith('someclassid');
+    });
+
+    it('should call getStudentSchedule and return the merged schedule', async () => {
+        const expected: TimeSlotDbModel[] = [
+            {index: '00', lesson: {_id: 'someid', title: 'updatedlesson', icon: 'updatedicon'}},
+            {index: '02', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+            {index: '01', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+        ];
+        (usersPersistence.getStudentSchedule as jest.Mock).mockReturnValue(Promise.resolve([null, expected]));
+        const response = await studentResolver.getStudentSchedule(MOCK_STUDENT);
+        expect(response).toEqual(expected);
     });
 });
