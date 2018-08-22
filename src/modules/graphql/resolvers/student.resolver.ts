@@ -33,10 +33,7 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const [err, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
-            if (err) {
-                return null;
-            }
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
             return students.find((obj) => obj._id === args);
         }
         return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
@@ -67,7 +64,7 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const [err, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
             const studentInClass = students.find((obj) => obj._id === id);
             if (!studentInClass) {
                 throw new Error(NO_PERMISSION);
@@ -87,10 +84,7 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const [err, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
-            if (err) {
-                return null;
-            }
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
             const studentInClass = students.find((obj) => obj._id === id);
             if (!studentInClass) {
                 throw new Error(NO_PERMISSION);
