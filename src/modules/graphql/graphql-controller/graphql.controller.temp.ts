@@ -5,14 +5,14 @@ import { GraphQLSchema } from 'graphql';
 import { graphqlExpress } from 'apollo-server-express';
 import { GraphQlService } from '../schemas/graphql.service';
 import * as path from 'path';
-import { UserTokenProfile } from "../../../models/user-token-profile.model";
-import { AuthService } from "../../auth/auth-service/auth.service";
+import { UserTokenProfile } from '../../../models/user-token-profile.model';
+import { AuthService } from '../../auth/auth-service/auth.service';
 
 @Controller()
 export class GraphqlController {
     private schema: GraphQLSchema;
-    private authService: AuthService;
-    private logger = new Logger('GraphqlController');
+    // private authService: AuthService;
+    // private logger = new Logger('GraphqlController');
 
     constructor(graphqlService: GraphQlService) {
         this.schema = graphqlService.getSchema();

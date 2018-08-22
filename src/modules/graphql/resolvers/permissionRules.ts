@@ -17,7 +17,7 @@ export enum Asset {
     LESSON = 'LESSON',
     MAP = 'MAP',
     USER = 'USER',
-    ANY = 'ANY'
+    ANY = 'ANY',
 }
 
 export enum Permission {
