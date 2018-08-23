@@ -132,6 +132,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             const user = await this.collection.findOne({ username, password });
             if (!user) {
                 this.logger.warn(`authenticateUser:: user ${username} not found in db`);
+                throw new Error(`authenticateUser:: user ${username} not found in db`);
             }
 
             return [null, user];

@@ -217,6 +217,13 @@ describe('users persistence', () => {
         expect(user).toBeNull();
     });
 
+    it('should return an error on authenticateUser when no user found in db', async () => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(null);
+        const [error, user] = await usersPersistanceService.authenticateUser('someUsername');
+        expect(error).toBeDefined();
+        expect(user).toBeNull();
+    });
+
     it('should remove user successfuly on deleteUser', async () => {
         expect.hasAssertions();
         (dbServiceMock.getConnection().collection(collectionName).deleteOne as jest.Mock).mockReturnValueOnce({
