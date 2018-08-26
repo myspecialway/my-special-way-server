@@ -1,8 +1,9 @@
-import {UserDbModel, UserRole} from '../../../models/user.db.model';
-import {UserTokenProfile} from '../../../models/user-token-profile.model';
-import {UserLoginRequest} from '../../../models/user-login-request.model';
+import {UserDbModel, UserRole} from '../../models/user.db.model';
+import {UserTokenProfile} from '../../models/user-token-profile.model';
+import {UserLoginRequest} from '../../models/user-login-request.model';
 import {Injectable} from '@nestjs/common';
-import {AuthServiceInterface} from '../../auth/auth-service/auth.service.interface';
+import {AuthServiceInterface} from '../auth/auth-service/auth.service.interface';
+import {PermissionFactory} from './permission_factory';
 
 export const NO_PERMISSION = 'not permissions to execute command';
 
@@ -58,67 +59,9 @@ export interface Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission;
 }
 
-export class PermissionFactory {
-    get(user: UserTokenProfile) : Permissions {
-        switch (user.role) {
-            case UserRole.PRINCIPLE:
-                return new PrinciplePermission();
-            case UserRole.TEACHER:
-                return new TeacherPermission();
-            case UserRole.STUDENT:
-                return new StudentPermission();
-        }
-    }
-}
-
-@Injectable()
-export class PrinciplePermission implements Permissions {
-    getPermission(asset: Asset, op: DBOperation): Permission {
-        return Permission.ALLOW;
-    }
-}
-
-@Injectable()
-export class TeacherPermission implements Permissions {
-    getPermission(asset: Asset, op: DBOperation): Permission {
-        const rule = TEACHER_PERMISSION_RULES.find((obj) => obj.operation === op && obj.asset === asset);
-        if (!rule) {
-            return Permission.ALLOW;
-        } else {
-            return rule.permission;
-        }
-    }
-}
-
-@Injectable()
-export class StudentPermission implements Permissions {
-    getPermission(asset: Asset, op: DBOperation): Permission {
-        return Permission.FORBID;
-    }
-
-}
-
-export function getPermission(asset: Asset, op: DBOperation, user: UserTokenProfile): Permission {
-    if (user.role === UserRole.PRINCIPLE) {
-        return Permission.ALLOW;
-    }
-    if (user.role === UserRole.STUDENT) {
-        return Permission.FORBID;
-    }
-    if (user.role === UserRole.TEACHER) {
-        const rule = TEACHER_PERMISSION_RULES.find((obj) => obj.operation === op && obj.asset === asset);
-        if (!rule) {
-            return Permission.ALLOW;
-        } else {
-            return rule.permission;
-        }
-    }
-}
-
 export function checkAndGetBasePermission(user: object | UserTokenProfile | undefined, op: DBOperation, asset: Asset): Permission {
     if (!user) {
         return Permission.FORBID;
     }
-    PermissionFactory.get(user)
-    return getPermission(asset, op, user as UserTokenProfile);
+    return PermissionFactory.get(user).getPermission(asset, op);
 }

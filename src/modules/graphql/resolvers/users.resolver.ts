@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import {Asset, DBOperation, NO_PERMISSION, Permission, Permissions} from './permissionRules';
+import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission, Permissions} from '../../permissions/permission.interface';
 import {Get} from '../../../utils/get';
 
 @Resolver('User')
@@ -9,7 +9,7 @@ export class UsersResolver {
 
     @Query('users')
     async getUsers(_, {  }, context) {
-        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
+        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.usersPersistence.getAll();
@@ -17,7 +17,7 @@ export class UsersResolver {
 
     @Query('user')
     async getUserById(obj, args, context, info) {
-        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
+        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.usersPersistence.getById(args.id);
@@ -25,7 +25,7 @@ export class UsersResolver {
 
     @Mutation('createUser')
     async createUser(_, { user }, context) {
-        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER) === Permission.FORBID) {
+        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         // TODO: Handle errors!!!!
@@ -35,7 +35,7 @@ export class UsersResolver {
 
     @Mutation('updateUser')
     async updateUser(_, { id, user }, context) {
-        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER) === Permission.FORBID) {
+        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         // TODO: Handle errors!!!!
@@ -45,7 +45,7 @@ export class UsersResolver {
 
     @Mutation('deleteUser')
     async deleteUser(_, { id }, context) {
-        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER) === Permission.FORBID) {
+        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         // TODO: Handle errors!!!!

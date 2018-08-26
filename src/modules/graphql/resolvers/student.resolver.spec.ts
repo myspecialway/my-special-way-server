@@ -11,6 +11,7 @@ describe('student resolver', () => {
         lastname: 'hamu',
         gender: 'MALE',
         class_id: 'someclassid',
+        role: UserRole.TEACHER,
     };
     const MOCK_CONTEXT = {
         user:  MOCK_STUDENT,

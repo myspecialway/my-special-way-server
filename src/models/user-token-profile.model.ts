@@ -1,13 +1,6 @@
 import { UserRole } from './user.db.model';
 
-export const defaultUserTokenProfile = {
-    id: null,
-    username: null,
-    role: null,
-    firstname: null,
-    lastname: null,
-    __typename: 'UserTokenProfile',
-};
+
 
 export interface JWTTokenPayload {
     id: string;

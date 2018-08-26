@@ -1,7 +1,7 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { Asset, DBOperation, NO_PERMISSION, Permission, Permissions } from './permissionRules';
+import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission, Permissions} from '../../permissions/permission.interface';
 import { Get} from '../../../utils/get';
 import {UserDbModel} from '../../../models/user.db.model';
 
@@ -14,7 +14,7 @@ export class ClassResolver {
 
     @Query('classes')
     async getClasses(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
+        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -32,7 +32,7 @@ export class ClassResolver {
 
     @Query('classById')
     async getClassById(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
+        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
         if ( permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -47,7 +47,7 @@ export class ClassResolver {
 
     @Query('classByName')
     async getClassByName(obj, args, context, info) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
+        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -71,7 +71,7 @@ export class ClassResolver {
 
     @Mutation('createClass')
     async createClass(obj, { class: newClass }, context) {
-        if (Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.CLASS) === Permission.FORBID) {
+        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.CLASS) === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
         return this.classPersistence.createClass(newClass);
@@ -79,7 +79,7 @@ export class ClassResolver {
 
     @Mutation('updateClass')
     async updateClass(obj, {id, class: classObj}, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.CLASS);
+        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.CLASS);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }
@@ -94,7 +94,7 @@ export class ClassResolver {
 
     @Mutation('deleteClass')
     async deleteClass(obj, {id}, context) {
-        const permission = Permissions.checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.CLASS);
+        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.CLASS);
         if (permission === Permission.FORBID) {
             throw new Error(NO_PERMISSION);
         }

@@ -1,6 +1,6 @@
 import * as jwt from 'jsonwebtoken';
 import { Injectable, Logger } from '@nestjs/common';
-import { defaultUserTokenProfile, UserTokenProfile} from '../../../models/user-token-profile.model';
+import { UserTokenProfile} from '../../../models/user-token-profile.model';
 import { AuthServiceInterface } from './auth.service.interface';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { UserDbModel } from 'models/user.db.model';
@@ -48,7 +48,13 @@ export class AuthService implements AuthServiceInterface {
 
     /* istanbul ignore next */
     static getUserProfileFromToken(token: string): UserTokenProfile {
-        let user: UserTokenProfile = defaultUserTokenProfile;
+        let user: UserTokenProfile = {
+            id: null,
+            username: null,
+            role: null,
+            firstname: null,
+            lastname: null,
+        };
         if (token) {
             const jwttoken = jwt.decode(token.replace('Bearer ', ''), {json: true, complete: true}) ;
             user = jwttoken[JWT_PAYLOAD] as UserTokenProfile;
