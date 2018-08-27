@@ -177,7 +177,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             if (!studentClass || !studentClass.schedule) {
                 return [null, student.schedule];
             }
-            return [null, this.schedulePersistenceService.mergeSchedule(studentClass.schedule, student.schedule)];
+            return [null, this.schedulePersistenceService.mergeSchedule(studentClass.schedule, student.schedule, 'index')];
         } catch (error) {
             this.logger.error(`getStudentSchedule:: error fetching student schedule`, error.stack);
             throw [error, null];
