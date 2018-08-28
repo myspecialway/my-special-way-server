@@ -1,14 +1,33 @@
 jest.mock('mongodb');
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
+import { ClassPersistenceService } from './class.persistence.service';
+import { SchedulePersistenceService } from './schedule.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
-import { UserRole } from '../../models/user.db.model';
+import { UserRole, UserDbModel, Gender } from '../../models/user.db.model';
+import { TimeSlotDbModel } from '../../models/timeslot.db.model';
 
 describe('users persistence', () => {
+    const collectionName = 'users';
+    const mockedStudentSchedule: TimeSlotDbModel[] = [
+        {index: '10', lesson: {_id: '123', title: 'english', icon: 'english'}},
+    ];
+    const MOCK_STUDENT: UserDbModel = {
+        _id: '5b6c3a58568e78312c9e722a',
+        username: 'student',
+        password: 'Aa123456',
+        passwordSalt: 'salt',
+        email: 'msw-student@gmail.com',
+        firstname: 'Msw',
+        lastname: 'Student',
+        role: UserRole.STUDENT,
+        gender: Gender.MALE,
+    };
     let usersPersistanceService: UsersPersistenceService;
     let dbServiceMock: Partial<DbService>;
-
+    let schedulePersistenceService: SchedulePersistenceService;
+    let classPersistanceService: Partial<ClassPersistenceService>;
     beforeAll(() => {
         const errorFunc = common.Logger.error.bind(common.Logger);
         common.Logger.error = (message, trace, context) => {
@@ -30,11 +49,26 @@ describe('users persistence', () => {
             } as Partial<Db>),
         };
 
-        usersPersistanceService = new UsersPersistenceService(dbServiceMock as DbService);
+        schedulePersistenceService = {
+            mergeSchedule: jest.fn().mockReturnValue([
+                {index: '00', lesson: {_id: '111', title: 'reception', icon: 'reception'}},
+                {index: '10', lesson: {_id: '123', title: 'english', icon: 'english'}},
+            ]),
+        };
+
+        classPersistanceService = {
+            getById: jest.fn(),
+        };
+
+        usersPersistanceService = new UsersPersistenceService(
+            dbServiceMock as DbService,
+            classPersistanceService as ClassPersistenceService,
+            schedulePersistenceService,
+        );
     });
 
     it('should get all users successfuly on getAll', async () => {
-        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockReturnValueOnce({
             toArray: jest.fn().mockReturnValueOnce([{ username: 'user1' }, { username: 'user2' }]),
         });
 
@@ -44,7 +78,7 @@ describe('users persistence', () => {
 
     it('should throw an error on error through getAll function', async () => {
         expect.assertions(1);
-        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -52,7 +86,7 @@ describe('users persistence', () => {
     });
 
     it('should get all students successfuly on getUsersByFilters', async () => {
-        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockReturnValueOnce({
             toArray: jest.fn().mockReturnValueOnce([{ username: 'user1' }, { username: 'user2' }]),
         });
 
@@ -62,7 +96,7 @@ describe('users persistence', () => {
 
     it('should throw an error on error through getUsersByFilters function', async () => {
         expect.assertions(1);
-        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -70,7 +104,7 @@ describe('users persistence', () => {
     });
 
     it('should get one student successfuly on getUserByFilters', async () => {
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'student1',
         });
 
@@ -80,7 +114,7 @@ describe('users persistence', () => {
 
     it('should throw an error on error through getUserByFilters function', async () => {
         expect.assertions(1);
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -88,7 +122,7 @@ describe('users persistence', () => {
     });
 
     it('should get user successfully on getById', async () => {
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'user1',
         });
 
@@ -98,7 +132,7 @@ describe('users persistence', () => {
 
     it('should throw an error on error through getById function', async () => {
         expect.assertions(1);
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -109,7 +143,7 @@ describe('users persistence', () => {
     it('should call db.getConnection only once', async () => {
         expect.assertions(1);
 
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'user1',
         });
 
@@ -125,7 +159,7 @@ describe('users persistence', () => {
     });
 
     it('should return user from getByUsername on success', async () => {
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'user1',
         });
 
@@ -138,7 +172,7 @@ describe('users persistence', () => {
     it('should return an error on persistance error', async () => {
         expect.hasAssertions();
 
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -149,7 +183,7 @@ describe('users persistence', () => {
 
     it(`should return user and error nulls if user hasn't been found`, async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce(null);
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(null);
 
         const [error, user] = await usersPersistanceService.getByUsername('someUsername');
 
@@ -160,7 +194,7 @@ describe('users persistence', () => {
     it('should return user from authenticateUser on success', async () => {
         expect.hasAssertions();
 
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'user1',
         });
 
@@ -173,7 +207,7 @@ describe('users persistence', () => {
     it('should return an error on authenticateUser error', async () => {
         expect.hasAssertions();
 
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -183,9 +217,16 @@ describe('users persistence', () => {
         expect(user).toBeNull();
     });
 
+    it('should return an error on authenticateUser when no user found in db', async () => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(null);
+        const [error, user] = await usersPersistanceService.authenticateUser('someUsername');
+        expect(error).toBeDefined();
+        expect(user).toBeNull();
+    });
+
     it('should remove user successfuly on deleteUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').deleteOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).deleteOne as jest.Mock).mockReturnValueOnce({
             deletedCount: 1,
         });
 
@@ -196,7 +237,7 @@ describe('users persistence', () => {
 
     it('should return error on deleteUser when error happened', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').deleteOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).deleteOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -208,7 +249,7 @@ describe('users persistence', () => {
     it('should update user successfuly on updateUser', async () => {
         expect.hasAssertions();
         const expected = { username: 'newValue', someotherfied: 'somevalue' };
-        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockImplementation(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockImplementation(() => {
             return {value: {username: 'newValue', someotherfied: 'somevalue'}};
         });
 
@@ -219,7 +260,7 @@ describe('users persistence', () => {
 
     it('should update student successfuly on updateUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce({
             value: {username: 'newValue', someotherfied: 'somevalue'},
         });
 
@@ -229,7 +270,7 @@ describe('users persistence', () => {
 
     it('should return error on updateUser when error happened', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOneAndUpdate as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -239,11 +280,11 @@ describe('users persistence', () => {
 
     it('should create user successfuly on createUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'some created user',
         });
 
-        (dbServiceMock.getConnection().collection('users').insertOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
             insertedId: '507f1f77bcf86cd799439011',
         });
 
@@ -256,11 +297,11 @@ describe('users persistence', () => {
 
     it('should create student successfuly on createUser', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
             username: 'some created student',
         });
 
-        (dbServiceMock.getConnection().collection('users').insertOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
             insertedId: '507f1f77bcf86cd799439011',
         });
 
@@ -273,10 +314,10 @@ describe('users persistence', () => {
 
     it('should return error on createUser when error happened', async () => {
         expect.hasAssertions();
-        (dbServiceMock.getConnection().collection('users').insertOne as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
             insertedId: '507f1f77bcf86cd799439011',
         });
-        (dbServiceMock.getConnection().collection('users').findOne as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
@@ -286,7 +327,7 @@ describe('users persistence', () => {
 
     it('should return users with role student on getStudentsByClassId', async () => {
         const expected = [{ username: 'student1', role: 'STUDENT' }, { username: 'student2', role: 'STUDENT' }];
-        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockReturnValueOnce({
+        (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockReturnValueOnce({
             toArray: jest.fn().mockReturnValueOnce(expected),
         });
 
@@ -296,10 +337,64 @@ describe('users persistence', () => {
 
     it('should return error on getStudentsByClassId when error happend', async () => {
         expect.assertions(1);
-        (dbServiceMock.getConnection().collection('users').find as jest.Mock).mockImplementationOnce(() => {
+        (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
         });
 
         await usersPersistanceService.getStudentsByClassId('507f1f77bcf86cd799439011').catch((error) => expect(error).toBeDefined());
+    });
+
+    it('should return empty schedule on getStudentSchedule when no student schedule and no class', async () => {
+        const [error, studentSchedule] = await usersPersistanceService.getStudentSchedule(MOCK_STUDENT);
+        expect(studentSchedule).toEqual([]);
+    });
+
+    it('should return the student schedule on getStudentSchedule when student has no class_id', async () => {
+        const mockedStudent: UserDbModel = {...MOCK_STUDENT, schedule: mockedStudentSchedule};
+        const [error, studentSchedule] = await usersPersistanceService.getStudentSchedule(mockedStudent);
+        expect(studentSchedule).toEqual(mockedStudentSchedule);
+    });
+
+    it('should return the student schedule on getStudentSchedule when no class has been found in db', async () => {
+        (classPersistanceService.getById as jest.Mock).mockReturnValueOnce(null);
+        const mockedStudent: UserDbModel = {...MOCK_STUDENT, schedule: mockedStudentSchedule, class_id: 'someclassid'};
+        const [error, studentSchedule] = await usersPersistanceService.getStudentSchedule(mockedStudent);
+        expect(studentSchedule).toEqual(mockedStudentSchedule);
+    });
+
+    it('should return the student schedule on getStudentSchedule when user has class but there\'s no schedule', async () => {
+        (classPersistanceService.getById as jest.Mock).mockReturnValueOnce({_id: 'someclassid'});
+        const mockedStudent: UserDbModel = {...MOCK_STUDENT, schedule: mockedStudentSchedule, class_id: 'someclassid'};
+        const [error, studentSchedule] = await usersPersistanceService.getStudentSchedule(mockedStudent);
+        expect(studentSchedule).toEqual(mockedStudentSchedule);
+    });
+
+    it('should return merged schedule on getStudentSchedule when there\'s student + class schedules', async () => {
+        const mockedStudent: UserDbModel = {...MOCK_STUDENT, schedule: mockedStudentSchedule, class_id: 'someclassid'};
+        (classPersistanceService.getById as jest.Mock).mockReturnValueOnce(
+            {
+                _id: 'someclassid',
+                schedule: [
+                    {index: '00', lesson: {_id: '111', title: 'reception', icon: 'reception'}},
+                    {index: '10', lesson: {_id: '456', title: 'art', icon: 'art'}},
+                ],
+            });
+        const expected = [
+            {index: '00', lesson: {_id: '111', title: 'reception', icon: 'reception'}},
+            {index: '10', lesson: {_id: '123', title: 'english', icon: 'english'}},
+        ];
+        const [error, studentSchedule] = await usersPersistanceService.getStudentSchedule(mockedStudent);
+        expect(studentSchedule).toEqual(expected);
+    });
+
+    it('should return error on getStudentSchedule when error happens', async () => {
+        expect.assertions(1);
+        const mockedStudent: UserDbModel = {...MOCK_STUDENT, schedule: mockedStudentSchedule, class_id: 'someclassid'};
+        (classPersistanceService.getById as jest.Mock).mockImplementationOnce(() => {
+            throw new Error('mock error');
+        });
+        await usersPersistanceService.getStudentSchedule(mockedStudent).catch((error) => {
+            expect(error).toBeDefined();
+        });
     });
 });
