@@ -9,5 +9,5 @@ type TimeSlot {
 input InputTimeSlot {
     index: String!
     lesson: InputLesson!
-    location: InputLocation!
+    location: InputLocation
 }
