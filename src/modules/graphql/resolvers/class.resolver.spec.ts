@@ -3,16 +3,32 @@ import { ClassPersistenceService } from '../../persistence/class.persistence.ser
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 
 describe('class resolver', () => {
-    const MOCK_USER = {
+    const MOCK_PRINCIPLE = {
+        id: 'test_principle_id',
         username: 'test_username',
         email: 'email@test.co.il',
         firstname: 'test_firstname',
         lastname: 'test_lastname',
+        class_id: 'test_classid',
         role: 'PRINCIPLE',
     };
-    const MOCK_CONTEXT = {
-        user:  MOCK_USER,
+    const MOCK_PRINCIPLE_CONTEXT = {
+        user:  MOCK_PRINCIPLE,
     };
+
+    const MOCK_TEACHER = {
+        id: 'test_teahcer_id',
+        username: 'test_username',
+        email: 'email@test.co.il',
+        firstname: 'test_firstname',
+        lastname: 'test_lastname',
+        class_id: 'test_classid',
+        role: 'TEACHER',
+    };
+    const MOCK_TEACHER_CONTEXT = {
+        user:  MOCK_TEACHER,
+    };
+
     let classResolver: ClassResolver;
     let classPersistence: Partial<ClassPersistenceService>;
     let usersPersistence: Partial<UsersPersistenceService>;
@@ -27,6 +43,7 @@ describe('class resolver', () => {
         };
         usersPersistence = {
             getStudentsByClassId: jest.fn(),
+            getById: jest.fn(),
         };
 
         classResolver = new ClassResolver(classPersistence as ClassPersistenceService, usersPersistence as UsersPersistenceService);
@@ -35,22 +52,32 @@ describe('class resolver', () => {
     it('should call getAll function and return classes for on classes', async () => {
         (classPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ name: 'test' }]));
 
-        const response = await classResolver.getClasses(null, null, MOCK_CONTEXT, null);
+        const response = await classResolver.getClasses(null, null, MOCK_PRINCIPLE_CONTEXT, null);
         expect(response).toEqual([{ name: 'test' }]);
+        expect(classPersistence.getAll).toHaveBeenCalled();
+    });
+
+    it('should call getAll and getById function and return classes for on classes', async () => {
+        (classPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ name: 'test_class_name', id: 'test_classid' }]));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', id: 'someid', class_id: 'test_classid' }));
+
+        const response = await classResolver.getClasses(null, null, MOCK_TEACHER_CONTEXT, null);
+        expect(response).toEqual([{ name: 'test_class_name', id: 'test_classid' }]);
+        expect(usersPersistence.getById).toHaveBeenCalled();
         expect(classPersistence.getAll).toHaveBeenCalled();
     });
 
     it('should call getById function and return class on getClassById', async () => {
         (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test' }));
 
-        const response = await classResolver.getClassById(null, { id: 'someid' }, MOCK_CONTEXT, null);
+        const response = await classResolver.getClassById(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT, null);
         expect(response).toEqual({ name: 'test' });
         expect(classPersistence.getById).toHaveBeenCalledWith('someid');
     });
 
     it('should call getByName function and return class on getClassByName', async () => {
         (classPersistence.getByName as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test' }));
-        const response = await classResolver.getClassByName(null, { name: 'somename' }, MOCK_CONTEXT, null);
+        const response = await classResolver.getClassByName(null, { name: 'somename' }, MOCK_PRINCIPLE_CONTEXT, null);
         expect(response).toEqual({ name: 'test'});
         expect(classPersistence.getByName).toHaveBeenCalledWith('somename');
     });
@@ -58,7 +85,7 @@ describe('class resolver', () => {
     it('should call getStudentsByClassId and return students users', async () => {
         const expected = [{ username: 'student1', role: 'STUDENT' }, { username: 'student2', role: 'STUDENT' }];
         (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const response = await classResolver.getStudentsByClassId({_id: 'someid'}, null, MOCK_CONTEXT);
+        const response = await classResolver.getStudentsByClassId({_id: 'someid'}, null, MOCK_PRINCIPLE_CONTEXT);
         expect(response).toEqual(expected);
         expect(usersPersistence.getStudentsByClassId).toHaveBeenCalledWith('someid');
     });
@@ -66,7 +93,7 @@ describe('class resolver', () => {
     it('should call createClass and return new created class', async () => {
         const expected = { name: 'טיטאן', level : 'א', number : 1 };
         (classPersistence.createClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const result = await classResolver.createClass(null, {class: expected}, MOCK_CONTEXT);
+        const result = await classResolver.createClass(null, {class: expected}, MOCK_PRINCIPLE_CONTEXT);
         expect(result).toEqual(expected);
         expect(classPersistence.createClass).toHaveBeenCalledWith(expected);
     });
@@ -74,25 +101,25 @@ describe('class resolver', () => {
     it('should call updateClass and return updated class', async () => {
         const expected = { name: 'טיטאן', level : 'א', number : 1 };
         (classPersistence.updateClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const result = await classResolver.updateClass(null, {id: '5b217b030825622c97d3757f', class: expected}, MOCK_CONTEXT);
+        const result = await classResolver.updateClass(null, {id: '5b217b030825622c97d3757f', class: expected}, MOCK_PRINCIPLE_CONTEXT);
         expect(result).toEqual(expected);
         expect(classPersistence.updateClass).toHaveBeenLastCalledWith('5b217b030825622c97d3757f', expected);
     });
 
     it('should call deleteClass and return the number of class deleted', async () => {
         (classPersistence.deleteClass as jest.Mock).mockReturnValue(Promise.resolve(1));
-        const result = await classResolver.deleteClass(null, {id: '5b217b030825622c97d3757f'}, MOCK_CONTEXT);
+        const result = await classResolver.deleteClass(null, {id: '5b217b030825622c97d3757f'}, MOCK_PRINCIPLE_CONTEXT);
         expect(result).toEqual(1);
         expect(classPersistence.deleteClass).toHaveBeenCalledWith('5b217b030825622c97d3757f');
     });
 
     it('should call getClassSchedule and return the obj schedule', () => {
-        const schedule = classResolver.getClassSchedule({name: 'someclass', schedule: [{index: '00'}]}, {}, MOCK_CONTEXT );
+        const schedule = classResolver.getClassSchedule({name: 'someclass', schedule: [{index: '00'}]}, {}, MOCK_PRINCIPLE_CONTEXT );
         expect(schedule[0]).toEqual({index: '00'});
     });
 
     it('should call getClassSchedule and return empty array when there\'s no schedule', () => {
-        const schedule = classResolver.getClassSchedule({name: 'someclass' }, {}, MOCK_CONTEXT);
+        const schedule = classResolver.getClassSchedule({name: 'someclass' }, {}, MOCK_PRINCIPLE_CONTEXT);
         expect(schedule).toHaveLength(0);
     });
 

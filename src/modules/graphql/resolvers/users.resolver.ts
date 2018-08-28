@@ -9,25 +9,19 @@ export class UsersResolver {
 
     @Query('users')
     async getUsers(_, {  }, context) {
-        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER);
         return this.usersPersistence.getAll();
     }
 
     @Query('user')
     async getUserById(obj, args, context, info) {
-        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER) === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER);
         return this.usersPersistence.getById(args.id);
     }
 
     @Mutation('createUser')
     async createUser(_, { user }, context) {
-        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER) === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER);
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.createUser(user);
         return response;
@@ -35,9 +29,7 @@ export class UsersResolver {
 
     @Mutation('updateUser')
     async updateUser(_, { id, user }, context) {
-        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER) === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER);
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.updateUser(id, user);
         return response;
@@ -45,9 +37,7 @@ export class UsersResolver {
 
     @Mutation('deleteUser')
     async deleteUser(_, { id }, context) {
-        if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER) === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER);
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.deleteUser(id);
         return response;

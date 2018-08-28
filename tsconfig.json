@@ -4,7 +4,8 @@
     "lib": [
       "esnext.asynciterable",
       "esnext",
-      "dom"
+      "dom",
+      "ES2015"
     ],
     "declaration": false,
     "noImplicitAny": false,

@@ -1,8 +1,5 @@
-import {UserDbModel, UserRole} from '../../models/user.db.model';
+import {UserRole} from '../../models/user.db.model';
 import {UserTokenProfile} from '../../models/user-token-profile.model';
-import {UserLoginRequest} from '../../models/user-login-request.model';
-import {Injectable} from '@nestjs/common';
-import {AuthServiceInterface} from '../auth/auth-service/auth.service.interface';
 import {PermissionFactory} from './permission_factory';
 
 export const NO_PERMISSION = 'not permissions to execute command';
@@ -37,7 +34,7 @@ export interface PermissionRule {
     permission: Permission;
 }
 
-export const TEACHER_PERMISSION_RULES: PermissionRule[] = [
+export const  TEACHER_PERMISSION_RULES: PermissionRule[] = [
     // Asset.STUDENT
     {operation: DBOperation.CREATE, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.FORBID},
     {operation: DBOperation.READ, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.OWN},
@@ -60,8 +57,12 @@ export interface Permissions {
 }
 
 export function checkAndGetBasePermission(user: object | UserTokenProfile | undefined, op: DBOperation, asset: Asset): Permission {
-    if (!user) {
-        return Permission.FORBID;
+    let permission: Permission = Permission.FORBID;
+    if (user) {
+        permission = PermissionFactory.get(user).getPermission(asset, op);
     }
-    return PermissionFactory.get(user).getPermission(asset, op);
+    if (permission === Permission.FORBID) {
+        throw new Error(NO_PERMISSION);
+    }
+    return permission;
 }

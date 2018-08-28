@@ -1,26 +1,30 @@
 import {PermissionFactory} from './permission_factory';
 import {UserRole} from '../../models/user.db.model';
-import {NoPermission, PrinciplePermission, StudentPermission, TeacherPermission} from './permission.strategy';
+import {Asset, DBOperation, Permission} from './permission.interface';
 
-describe('student resolver', () => {
+describe('permission factory and strategies', () => {
 
-    it('should create principle strategy', () => {
-        const permission = PermissionFactory.get({role: UserRole.PRINCIPLE});
-        expect(permission).toEqual(PrinciplePermission);
+    it('should create principle strategy and return allow permission', () => {
+        const permission = PermissionFactory.get({role: UserRole.PRINCIPLE}).getPermission(null, null);
+        expect(permission).toEqual(Permission.ALLOW);
     });
 
-    it('should create teacher strategy', () => {
-        const permission = PermissionFactory.get({role: UserRole.TEACHER});
-        expect(permission).toEqual(TeacherPermission);
+    it('should create teacher strategy and return own, allow and forbid permission', () => {
+        const permissionStrategy = PermissionFactory.get({role: UserRole.TEACHER});
+        let permission = permissionStrategy.getPermission(Asset.STUDENT, DBOperation.READ);
+        expect(permission).toEqual(Permission.OWN);
+
+        permission = permissionStrategy.getPermission(Asset.STUDENT, DBOperation.CREATE);
+        expect(permission).toEqual(Permission.FORBID);
     });
 
-    it('should create student strategy', () => {
-        const permission = PermissionFactory.get({role: UserRole.STUDENT});
-        expect(permission).toEqual(StudentPermission);
+    it('should create student strategy and return forbid permission', () => {
+        const permission = PermissionFactory.get({role: UserRole.STUDENT}).getPermission(null, null);
+        expect(permission).toEqual(Permission.FORBID);
     });
 
-    it('should create no strategy', () => {
-        const permission = PermissionFactory.get({});
-        expect(permission).toEqual(NoPermission);
+    it('should create no strategy and return forbid permission\'', () => {
+        const permission = PermissionFactory.get({}).getPermission(null, null);
+        expect(permission).toEqual(Permission.FORBID);
     });
 }

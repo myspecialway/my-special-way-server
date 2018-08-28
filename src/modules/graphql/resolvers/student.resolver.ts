@@ -4,6 +4,7 @@ import { ClassPersistenceService } from '../../persistence/class.persistence.ser
 import { UserDbModel, UserRole} from '../../../models/user.db.model';
 import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission, Permissions} from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
+import {StudentPermission} from '../../permissions/permission.strategy';
 
 @Resolver('Student')
 export class StudentResolver {
@@ -12,9 +13,6 @@ export class StudentResolver {
     @Query('students')
     async getStudents(_, {}, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT);
-        if (permission === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
         if (permission === Permission.OWN) {
             // find students in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
@@ -27,14 +25,11 @@ export class StudentResolver {
     @Query('student')
     async getStudentById(_, args, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT);
-        if (permission === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
             const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
-            return students.find((obj) => obj._id === args);
+            return students.find((obj) => obj._id === args.id);
         }
         return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
     }
@@ -46,10 +41,7 @@ export class StudentResolver {
 
     @Mutation('createStudent')
     async createStudent(_, { student }, context) {
-        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
-        if (permission === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.createUser(student, UserRole.STUDENT);
         return response;
@@ -58,9 +50,6 @@ export class StudentResolver {
     @Mutation('updateStudent')
     async updateStudent(_, { id, student }, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
-        if (permission === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
@@ -78,9 +67,6 @@ export class StudentResolver {
     @Mutation('deleteStudent')
     async deleteStudent(_, { id }, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.STUDENT);
-        if (permission === Permission.FORBID) {
-            throw new Error(NO_PERMISSION);
-        }
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);

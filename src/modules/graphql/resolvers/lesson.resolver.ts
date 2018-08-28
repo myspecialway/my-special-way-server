@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { LessonPersistenceService } from '../../persistence/lesson.persistence.service';
-import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission, Permissions} from '../../permissions/permission.interface';
+import {Asset, checkAndGetBasePermission, DBOperation} from '../../permissions/permission.interface';
 import {Get} from '../../../utils/get';
 
 @Resolver('Lesson')
@@ -9,33 +9,25 @@ export class LessonResolver {
 
   @Query('lessons')
   async getLessons(_, {}, context) {
-      if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.LESSON) === Permission.FORBID) {
-          throw new Error(NO_PERMISSION);
-      }
+      checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.LESSON);
       return this.lessonPersistence.getAll();
   }
 
   @Mutation('createLesson')
   async createLesson(_, { lesson }, context) {
-      if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.LESSON) === Permission.FORBID) {
-          throw new Error(NO_PERMISSION);
-      }
+      checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.LESSON);
       return this.lessonPersistence.createLesson(lesson);
   }
 
   @Mutation('updateLesson')
   async updateLesson(_, {id, lesson}, context) {
-      if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.LESSON) === Permission.FORBID) {
-          throw new Error(NO_PERMISSION);
-      }
+      checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.LESSON);
       return this.lessonPersistence.updateLesson(id, lesson);
   }
 
   @Mutation('deleteLesson')
   async deleteLesson(_, {id}, context) {
-      if (checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.LESSON) === Permission.FORBID) {
-          throw new Error(NO_PERMISSION);
-      }
+      checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.LESSON);
       return this.lessonPersistence.deleteLesson(id);
   }
 }

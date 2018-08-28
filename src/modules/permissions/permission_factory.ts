@@ -5,17 +5,22 @@ import {Permissions} from './permission.interface';
 import {NoPermission, PrinciplePermission, StudentPermission, TeacherPermission} from './permission.strategy';
 
 export class PermissionFactory {
+    private static principlePermission: PrinciplePermission = new PrinciplePermission();
+    private static teacherPermission: TeacherPermission = new TeacherPermission();
+    private static studentPermission: StudentPermission = new StudentPermission();
+    private static noPermission: NoPermission = new NoPermission();
+
     static get(user: object | UserTokenProfile): Permissions {
         const role: UserRole | undefined = Get.getValue<UserRole>(user, 'role');
         switch (role) {
             case UserRole.PRINCIPLE:
-                return new PrinciplePermission();
+                return PermissionFactory.principlePermission;
             case UserRole.TEACHER:
-                return new TeacherPermission();
+                return PermissionFactory.teacherPermission;
             case UserRole.STUDENT:
-                return new StudentPermission();
+                return PermissionFactory.studentPermission;
             default:
-                return new NoPermission();
+                return  PermissionFactory.noPermission;
         }
     }
 }
