@@ -11,6 +11,7 @@ describe('classes graphql', () => {
     await helpers.addUser({
         username: 'test-user',
         password: 'Aa123456',
+        role: 'PRINCIPLE',
     });
 
     token = await helpers.getToken('test-user', 'Aa123456');
