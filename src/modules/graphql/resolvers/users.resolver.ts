@@ -1,6 +1,6 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission, Permissions} from '../../permissions/permission.interface';
+import {Asset, checkAndGetBasePermission, DBOperation} from '../../permissions/permission.interface';
 import {Get} from '../../../utils/get';
 
 @Resolver('User')

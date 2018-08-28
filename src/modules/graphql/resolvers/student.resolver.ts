@@ -2,9 +2,8 @@ import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UserDbModel, UserRole} from '../../../models/user.db.model';
-import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission, Permissions} from '../../permissions/permission.interface';
+import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission} from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
-import {StudentPermission} from '../../permissions/permission.strategy';
 
 @Resolver('Student')
 export class StudentResolver {

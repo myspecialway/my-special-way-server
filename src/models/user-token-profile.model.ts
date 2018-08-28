@@ -1,7 +1,5 @@
 import { UserRole } from './user.db.model';
 
-
-
 export interface JWTTokenPayload {
     id: string;
     username: string;
