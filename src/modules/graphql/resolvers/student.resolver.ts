@@ -22,6 +22,12 @@ export class StudentResolver {
         return this.classPersistence.getById(obj.class_id);
     }
 
+    @ResolveProperty('schedule')
+    async getStudentSchedule(obj) {
+        const [, response] = await this.usersPersistence.getStudentSchedule(obj);
+        return response;
+    }
+
     @Mutation('createStudent')
     async createStudent(_, { student }) {
         // TODO perform permissions rights
