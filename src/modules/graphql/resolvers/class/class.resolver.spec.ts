@@ -71,7 +71,7 @@ describe('class resolver', () => {
         expect(classPersistence.createClass).toHaveBeenCalledWith(expected);
     });
 
-    fit('should return error if wrong grade was received', async () => {
+    it('should return error if wrong grade was received', async () => {
         const classLogicMock = classLogic.buildDefaultSchedule as jest.Mock;
         classLogicMock.mockReset();
         classLogicMock.mockReturnValue([new Error(), []]);
