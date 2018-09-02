@@ -23,8 +23,8 @@ export class ClassLogic {
 
     private calculateEducationStage(grade: string) {
         const VALID_GRADES = /[a-f]/;
-        const ELEMENTRY = /a-c/;
-        const JUNIOR_HIGH = /d-f/;
+        const ELEMENTRY = /[a-c]/;
+        const JUNIOR_HIGH = /[d-f]/;
 
         if (!VALID_GRADES.test(grade)) {
             return null;

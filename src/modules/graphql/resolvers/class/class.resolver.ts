@@ -39,7 +39,12 @@ export class ClassResolver {
 
     @Mutation('createClass')
     async createClass(obj, { class: newClass }: { class: ClassDbModel }) {
-        // newClass.schedule = this.classLogic.buildDefaultSchedule(newClass.educationStage);
+        const [error, schedule] = this.classLogic.buildDefaultSchedule(newClass.grade);
+        if (error) {
+            return error;
+        }
+
+        newClass.schedule = schedule;
         return this.classPersistence.createClass(newClass);
     }
 
