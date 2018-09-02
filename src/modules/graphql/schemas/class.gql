@@ -2,8 +2,7 @@
 type Class {
   _id: ID!
   name: String!
-  level: String!
-  number: Int!
+  educationStage: EducationStage!
   schedule: [TimeSlot]!
   students: [Student]!
 }
@@ -14,4 +13,9 @@ input InputClass {
     number: Int!
     # list of new timeslots on schedule
     schedule: [InputTimeSlot]
+}
+
+enum EducationStage{
+  ELEMENTRY
+  JUNIOR_HIGH
 }

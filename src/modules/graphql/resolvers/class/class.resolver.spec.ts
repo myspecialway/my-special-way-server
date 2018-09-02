@@ -1,6 +1,6 @@
 import { ClassResolver } from './class.resolver';
-import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
+import { ClassPersistenceService } from '../../../persistence/class.persistence.service';
+import { UsersPersistenceService } from '../../../persistence/users.persistence.service';
 
 describe('class resolver', () => {
     let classResolver: ClassResolver;
