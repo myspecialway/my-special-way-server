@@ -20,7 +20,7 @@ export class ClassResolver {
         if (permission === Permission.OWN) {
             // find classes of teacher only
             const teacher: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            return classes.filter((cls) => cls.id === teacher.class_id);
+            return classes.filter((cls) => cls._id === teacher.class_id);
         }
 
         return classes;

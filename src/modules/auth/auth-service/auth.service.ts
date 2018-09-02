@@ -34,6 +34,7 @@ export class AuthService implements AuthServiceInterface {
             role: user.role,
             firstname: user.firstname,
             lastname: user.lastname,
+            class_id: user.class_id,
         };
 
         return [null, jwt.sign(userCridentials, JWT_SECRET, {
@@ -54,6 +55,7 @@ export class AuthService implements AuthServiceInterface {
             role: null,
             firstname: null,
             lastname: null,
+            class_id: null,
         };
         if (token) {
             const jwttoken = jwt.decode(token.replace('Bearer ', ''), {json: true, complete: true}) ;

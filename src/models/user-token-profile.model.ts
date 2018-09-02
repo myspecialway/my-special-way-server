@@ -7,6 +7,7 @@ export interface JWTTokenPayload {
     firstname: string;
     lastname: string;
     exp: number;
+    class_id?: string;
 }
 
 export interface UserTokenProfile {
@@ -15,4 +16,5 @@ export interface UserTokenProfile {
     role: UserRole;
     firstname: string;
     lastname: string;
+    class_id?: string;
 }
