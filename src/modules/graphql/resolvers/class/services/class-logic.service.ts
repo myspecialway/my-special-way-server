@@ -5,13 +5,37 @@ import * as defaultSchedules from './default-class-schedules';
 
 @Injectable()
 export class ClassLogic {
-    buildDefaultSchedule(educationStage: EducationStage): TimeSlotDbModel[] {
+    buildDefaultSchedule(grade: string): [Error | null, TimeSlotDbModel[]] {
+
+        const educationStage = this.calculateEducationStage(grade);
+        if (!educationStage) {
+            return [new Error('invalid grade received'), []];
+        }
+
         switch (educationStage) {
             case EducationStage.ELEMENTRY:
-                return defaultSchedules.ELMENTARY_SCHEDULE;
+                return [null, defaultSchedules.ELMENTARY_SCHEDULE];
 
             case EducationStage.JUNIOR_HIGH:
-                return defaultSchedules.JUNIOR_HIGH;
+                return [null, defaultSchedules.JUNIOR_HIGH];
+        }
+    }
+
+    private calculateEducationStage(grade: string) {
+        const VALID_GRADES = /[a-f]/;
+        const ELEMENTRY = /a-c/;
+        const JUNIOR_HIGH = /d-f/;
+
+        if (!VALID_GRADES.test(grade)) {
+            return null;
+        }
+
+        if (ELEMENTRY.test(grade)) {
+            return EducationStage.ELEMENTRY;
+        }
+
+        if (JUNIOR_HIGH.test(grade)) {
+            return EducationStage.JUNIOR_HIGH;
         }
     }
 }
