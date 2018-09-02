@@ -1,13 +1,16 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { ClassPersistenceService } from '../../persistence/class.persistence.service';
+import { UsersPersistenceService } from '../../../persistence/users.persistence.service';
+import { ClassPersistenceService } from '../../../persistence/class.persistence.service';
+import { ClassDbModel } from '../../../../models/class.db.model';
+import { ClassLogic } from './services/class-logic.service';
 
 @Resolver('Class')
 export class ClassResolver {
     constructor(
         private classPersistence: ClassPersistenceService,
         private userPersistenceService: UsersPersistenceService,
-    ) {}
+        private classLogic: ClassLogic,
+    ) { }
 
     @Query('classes')
     async getClasses(obj, args, context, info) {
@@ -35,17 +38,23 @@ export class ClassResolver {
     }
 
     @Mutation('createClass')
-    async createClass(obj, { class: newClass }) {
+    async createClass(obj, { class: newClass }: { class: ClassDbModel }) {
+        const [error, schedule] = this.classLogic.buildDefaultSchedule(newClass.grade);
+        if (error) {
+            return error;
+        }
+
+        newClass.schedule = schedule;
         return this.classPersistence.createClass(newClass);
     }
 
     @Mutation('updateClass')
-    async updateClass(obj, {id, class: classObj}) {
+    async updateClass(obj, { id, class: classObj }) {
         return this.classPersistence.updateClass(id, classObj);
     }
 
     @Mutation('deleteClass')
-    async deleteClass(obj, {id}) {
+    async deleteClass(obj, { id }) {
         return this.classPersistence.deleteClass(id);
     }
 }

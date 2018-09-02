@@ -2,8 +2,7 @@
 type Class {
   _id: ID!
   name: String!
-  level: String!
-  number: Int!
+  grade: String!
   schedule: [TimeSlot]!
   students: [Student]!
 }
@@ -11,7 +10,9 @@ type Class {
 input InputClass {
     name: String!
     level: String!
-    number: Int!
+    # grade of class /[a-f]/
+    grade: String!
     # list of new timeslots on schedule
     schedule: [InputTimeSlot]
 }
+
