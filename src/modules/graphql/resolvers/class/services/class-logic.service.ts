@@ -21,14 +21,9 @@ export class ClassLogic {
         }
     }
 
-    private calculateEducationStage(grade: string) {
-        const VALID_GRADES = /[a-f]/;
-        const ELEMENTRY = /[a-c]/;
-        const JUNIOR_HIGH = /[d-f]/;
-
-        if (!VALID_GRADES.test(grade)) {
-            return null;
-        }
+    private calculateEducationStage(grade: string): EducationStage {
+        const ELEMENTRY = /^[a-c]$/;
+        const JUNIOR_HIGH = /^[d-f]$/;
 
         if (ELEMENTRY.test(grade)) {
             return EducationStage.ELEMENTRY;
@@ -37,5 +32,7 @@ export class ClassLogic {
         if (JUNIOR_HIGH.test(grade)) {
             return EducationStage.JUNIOR_HIGH;
         }
+
+        return null;
     }
 }
