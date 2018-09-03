@@ -9,7 +9,6 @@ type Class {
 
 input InputClass {
     name: String!
-    level: String!
     # grade of class /[a-f]/
     grade: String!
     # list of new timeslots on schedule
