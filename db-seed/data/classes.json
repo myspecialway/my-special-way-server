@@ -3,8 +3,7 @@
     "data": [
         {
             "name": "טיטאן",
-            "level": "א",
-            "number": 1,
+            "grade": "a",
             "schedule": [
                 {
                     "index": "0_0",
