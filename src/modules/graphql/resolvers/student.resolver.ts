@@ -15,7 +15,10 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find students in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            return this.usersPersistence.getStudentsByClassId(teacher.class_id);
+            const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacherClassId);
+            // console.log(students);
+            return students;
         }
 
         return this.usersPersistence.getUsersByFilters({role: UserRole.STUDENT});
@@ -27,15 +30,17 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
-            return students.find((obj) => obj._id === args.id);
+            const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacherClassId);
+            return students.find((obj) => obj._id.toString() === args.id.toString());
         }
         return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
     }
 
     @ResolveProperty('class')
     async getStudentClass(obj, {}, context) {
-        return this.classPersistence.getById(obj.class_id);
+        const objClassId = obj.class_id ? obj.class_id.toString() : '';
+        return this.classPersistence.getById(objClassId);
     }
 
     @Mutation('createStudent')
@@ -52,8 +57,9 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
-            const studentInClass = students.find((obj) => obj._id === id);
+            const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacherClassId);
+            const studentInClass = students.find((obj) => obj._id.toString() === id.toString());
             if (!studentInClass) {
                 throw new Error(NO_PERMISSION);
             }
@@ -69,8 +75,9 @@ export class StudentResolver {
         if (permission === Permission.OWN) {
             // find student in teacher's class
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const [, students] = await this.usersPersistence.getStudentsByClassId(teacher.class_id);
-            const studentInClass = students.find((obj) => obj._id === id);
+            const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
+            const [, students] = await this.usersPersistence.getStudentsByClassId(teacherClassId);
+            const studentInClass = students.find((obj) => obj._id.toString() === id.toString());
             if (!studentInClass) {
                 throw new Error(NO_PERMISSION);
             }

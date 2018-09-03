@@ -20,7 +20,8 @@ export class ClassResolver {
         if (permission === Permission.OWN) {
             // find classes of teacher only
             const teacher: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            return classes.filter((cls) => cls._id === teacher.class_id);
+            const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
+            return classes.filter((cls) => cls._id.toString() === teacherClassId);
         }
 
         return classes;
@@ -32,7 +33,8 @@ export class ClassResolver {
         const cls =  await this.classPersistence.getById(args.id);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            return (cls._id === user.class_id) ? cls : null;
+            const userClassId = user.class_id ? user.class_id.toString() : '';
+            return (cls._id.toString() === userClassId) ? cls : null;
         }
 
         return cls;
@@ -44,7 +46,8 @@ export class ClassResolver {
         const cls = await this.classPersistence.getByName(args.name);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            return (cls._id === user.class_id) ? cls : null;
+            const userClassId = user.class_id ? user.class_id.toString() : '';
+            return (cls._id.toString() === userClassId) ? cls : null;
         }
         return cls;
     }
@@ -70,7 +73,8 @@ export class ClassResolver {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.CLASS);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            if (user.class_id !== id) {
+            const userClassId = user.class_id ? user.class_id.toString() : '';
+            if (userClassId !== id.toString()) {
                 throw new Error(NO_PERMISSION);
             }
         }
@@ -82,7 +86,8 @@ export class ClassResolver {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.CLASS);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            if (user.class_id !== id) {
+            const userClassId = user.class_id ? user.class_id.toString() : '';
+            if (userClassId !== id) {
                 throw new Error(NO_PERMISSION);
             }
         }
