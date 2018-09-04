@@ -1,5 +1,4 @@
 import * as admin from 'firebase-admin';
-import { DATA } from './FCM.data';
 import { FCMData } from './FCM.data';
 import { Injectable, Logger } from '@nestjs/common';
 import { getConfig } from '../../config/config-loader';
@@ -8,7 +7,6 @@ import { getConfig } from '../../config/config-loader';
 export class FCMSender {
 //  private serviceAccount = require('./my-special-way-android-firebase-adminsdk.json');
   private logger: Logger;
-  private firebaseServiceAccount: admin.ServiceAccount;
 
   constructor() {
     admin.initializeApp({
