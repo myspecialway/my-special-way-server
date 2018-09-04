@@ -1,6 +1,8 @@
 import { ClassResolver } from './class.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
+import * as permInt from '../../permissions/permission.interface';
+import {Permission} from '../../permissions/permission.interface';
 
 describe('class resolver', () => {
     const MOCK_PRINCIPLE = {
@@ -165,6 +167,16 @@ describe('class resolver', () => {
             err = true;
         }
         expect(err).toBeTruthy();
+    });
+
+    it('should call deleteClass and return the number of class deleted for teacher"', async () => {
+        (classPersistence.deleteClass as jest.Mock).mockReturnValue(Promise.resolve(1));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', _id: 'someid', class_id: 'test_classid' }));
+        permInt.checkAndGetBasePermission = jest.fn(() => Permission.OWN); // tslint:disable-line
+
+        const result = await classResolver.deleteClass(null, {id: 'test_classid'}, MOCK_TEACHER_CONTEXT);
+        expect(result).toEqual(1);
+        expect(classPersistence.deleteClass).toHaveBeenCalledWith('test_classid');
     });
 
     it('should call getClassSchedule and return the obj schedule', () => {

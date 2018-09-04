@@ -1,8 +1,9 @@
 import { StudentResolver } from './student.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import {UserDbModel, UserRole} from '../../../models/user.db.model';
+import { UserRole} from '../../../models/user.db.model';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import {NO_PERMISSION} from '../../permissions/permission.interface';
+import * as permInt from '../../permissions/permission.interface';
+import {Permission} from '../../permissions/permission.interface';
 
 describe('student resolver', () => {
     const MOCK_PRINCIPLE = {
@@ -133,13 +134,24 @@ describe('student resolver', () => {
     });
 
     it('should call deleteUser function as principle and return the number of students deleted', async () => {
-
         (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
 
         const response = await studentResolver.deleteStudent(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
         expect(response).toEqual(1);
         expect(usersPersistence.deleteUser).toHaveBeenCalledWith('someid');
     });
+
+    it('should call deleteUser function as teacher and return the number of students deleted', async () => {
+        (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test_teacher', _id: 'someid', class_id: 'test_classid' }));
+        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([, [{ username: 'test_student', _id: 'studentid', class_id: 'test_classid' }]]));
+        permInt.checkAndGetBasePermission = jest.fn(() => Permission.OWN); // tslint:disable-line
+
+        const response = await studentResolver.deleteStudent(null, { id: 'studentid' }, MOCK_TEACHER_CONTEXT);
+        expect(response).toEqual(1);
+        expect(usersPersistence.deleteUser).toHaveBeenCalledWith('studentid');
+    });
+
 
     it('should call getStudentClass and return the class', async () => {
         (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'someclass' }));
