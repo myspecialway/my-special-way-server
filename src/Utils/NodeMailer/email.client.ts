@@ -1,7 +1,12 @@
 import * as nodemailer from 'nodemailer';
 import { CONFIG } from './smtp.config';
+import { Logger } from '@nestjs/common';
 
-export function sendemail(emailFrom: string, emailTo: string, emailSubject: string, emailBodyHTML: string, emailBodyText?: string): string {
+export async function sendemail(
+        emailFrom: string, emailTo: string, emailSubject: string, emailBodyHTML: string, emailBodyText?: string): Promise <boolean> {
+
+    const logger = new Logger('email-client');
+    logger.log('EmailClient:: Calling sendmail');
 
     const transporter = nodemailer.createTransport({
         host: CONFIG.host,
@@ -29,9 +34,10 @@ export function sendemail(emailFrom: string, emailTo: string, emailSubject: stri
     transporter.sendMail(mailOptions, (error, info) => {
         /* istanbul ignore next */
         if (error) {
-            return error;
+            logger.log('EmailClient:: Failed. Error: ' && error.name && ' - ' && error.message);
+            return false;
         }
     });
 
-    return '';
+    return true;
 }

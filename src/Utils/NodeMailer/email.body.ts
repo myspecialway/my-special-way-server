@@ -3,6 +3,7 @@ export interface EmailBody {
     text: string;
   }
 
+/* istanbul ignore next */
 export const msg: EmailBody = {
     text: 'Hello world (text version)',
     html: '<P>Hello ✔ (HTML version)<P>',

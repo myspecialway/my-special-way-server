@@ -1,25 +1,25 @@
-import * as mailClient from './email.client';
+jest.mock('nodemailer');
 import { sendemail } from './email.client';
+import * as nodemailer from 'nodemailer';
 
 describe('email.client', () => {
-    let nodemailer: any;
-
-    test ('testing the return value', async () => {
-        expect(sendemail('kfir@kfir.com', 'dk080e@intl.att.com', 'sdfsdf', 'asdasda')).toBe('');
-    });
+    let transportMock;
 
     beforeEach(() => {
-        nodemailer = {
-            createTransport: jest.fn(),
+        const createTransportMock = nodemailer.createTransport as jest.Mock;
+        transportMock = {
             sendMail: jest.fn(),
-
         };
 
+        transportMock.sendMail.mockReturnValue = '';
+        createTransportMock.mockReturnValue(transportMock);
     });
 
-    it ('test successful send email', async () => {
-        const success = await sendemail('kfir@kfir.com', 'dk080e@intl.att.com', 'sdfsdf', 'asdasda');
-        expect(success).toBe('');
+    it ('test send email', async () => {
+        const result = await sendemail('from@addr', 'to@addr', 'subject', 'body');
+        expect(transportMock.sendMail).toHaveBeenCalledWith(
+            {from: 'from@addr', html: 'body', subject: 'subject', text: undefined, to: 'to@addr'},
+            expect.any(Function));
     });
 
 });
