@@ -3,14 +3,17 @@ import { DbService } from './db.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { Collection, ObjectID } from 'mongodb';
 import { ClassDbModel } from 'models/class.db.model';
+import {UserDbModel} from '../../models/user.db.model';
 
 @Injectable()
 export class ClassPersistenceService {
     private collection: Collection<ClassDbModel>;
+    private userCollection: Collection<UserDbModel>;
     private logger = new Logger('ClassPersistenceService');
     constructor(private dbService: DbService, private schedulePersistenceService: SchedulePersistenceService) {
         const db = this.dbService.getConnection();
         this.collection = db.collection<ClassDbModel>('classes');
+        this.userCollection = db.collection<UserDbModel>('users');
     }
 
     async getAll() {
@@ -76,11 +79,29 @@ export class ClassPersistenceService {
         try {
             const mongoId = new ObjectID(id);
             this.logger.log(`ClassPersistence::deleteClass:: deleting class by id ${id}`);
-            const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
-            this.logger.log(`ClassPersistence::deleteClass:: removed ${deleteResponse.deletedCount} documents`);
-            return deleteResponse.deletedCount;
+            const studentsInTheClass = await this.getStudentsByClassId(id);
+            this.logger.log(`ClassPersistence::deleteClass:: number of students in the class: ${studentsInTheClass.length}`);
+            if (studentsInTheClass.length === 0) {
+                const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
+                this.logger.log(`ClassPersistence::deleteClass:: removed ${deleteResponse.deletedCount} documents`);
+                return deleteResponse.deletedCount;
+            } else {
+                this.logger.log(`ClassPersistence::deleteClass:: cannot remove the class when it contains students`);
+                return 0;
+            }
         } catch (error) {
             this.logger.error(`ClassPersistence::deleteClass:: error deleting class by id ${id}`, error.stack);
+            throw error;
+        }
+    }
+
+    async getStudentsByClassId(classId: string): Promise<UserDbModel[]> {
+        try {
+            this.logger.log(`ClassPersistence::getStudentsByClassId:: fetching students by class id ${classId}`);
+            const res = await this.userCollection.find({ class_id: classId, role: 'STUDENT' }).toArray();
+            return res;
+        } catch (error) {
+            this.logger.error(`ClassPersistence::getStudentsByClassId:: error fetching students by class id ${classId}`, error.stack);
             throw error;
         }
     }

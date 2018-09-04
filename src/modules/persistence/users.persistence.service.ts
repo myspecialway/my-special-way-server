@@ -157,7 +157,8 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     async getStudentsByClassId(classId: string): Promise<[Error, UserDbModel[]]> {
         try {
             this.logger.log(`getStudentsByClassId:: fetching students by class id ${classId}`);
-            return [null, await this.collection.find({ classId, role: 'STUDENT' }).toArray()];
+            const res = await this.collection.find({ class_id: classId, role: 'STUDENT' }).toArray();
+            return [null, res];
         } catch (error) {
             this.logger.error(`getStudentsByClassId:: error fetching students by class id ${classId}`, error.stack);
             throw [error, null];
