@@ -35,20 +35,16 @@ describe('FCMSender', () => {
 
         // instance = new FCMSender();
         // expect(instance).toBeInstanceOf(FCMSender);
-        bResult = instance.SendTxtMsgToAndroid('sToken');
+        bResult = await instance.sendTxtMsgToAndroid('sToken', 'sBody', 'sSbj');
         expect(bResult).toBe(false);
     });
 
     // Testing an attempt to send a message using mock functions
     it('should succeed when sending Android push text message', async () => {
         expect(instance).toBeInstanceOf(FCMSender);
-        instance.BuildTxtMsg('msg', 'sbj', 'ico');
-        bResult = await instance.SendTxtMsgToAndroid('sToken');
+        bResult = await instance.sendTxtMsgToAndroid('sToken', 'sBody', 'sSbj');
         //        expect(messageMock.send).toHaveBeenCalled();
         expect(messageMock.send).toBe( true );
     });
 
-    // Testing the mailing options
-    test('Building message', () => { expect(instance.BuildTxtMsg('msg', 'sbj', 'ico')).toBeUndefined(); });
-    test('Get last error', () => { expect(instance.GetLastError()).toBe(''); });
 });

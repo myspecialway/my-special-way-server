@@ -1,5 +1,4 @@
 import * as envalid from 'envalid';
-import { Address } from 'nodemailer/lib/mailer';
 
 export interface ProcessEnvConfig {
     NODE_ENV: string;
