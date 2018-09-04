@@ -58,11 +58,11 @@ describe('class resolver', () => {
     });
 
     it('should call getAll and getById function and return classes for on classes', async () => {
-        (classPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ name: 'test_class_name', id: 'test_classid' }]));
-        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', id: 'someid', class_id: 'test_classid' }));
+        (classPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ name: 'test_class_name', _id: 'test_classid' }]));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', _id: 'someid', class_id: 'test_classid' }));
 
         const response = await classResolver.getClasses(null, null, MOCK_TEACHER_CONTEXT, null);
-        expect(response).toEqual([{ name: 'test_class_name', id: 'test_classid' }]);
+        expect(response).toEqual([{ name: 'test_class_name', _id: 'test_classid' }]);
         expect(usersPersistence.getById).toHaveBeenCalled();
         expect(classPersistence.getAll).toHaveBeenCalled();
     });
@@ -75,11 +75,31 @@ describe('class resolver', () => {
         expect(classPersistence.getById).toHaveBeenCalledWith('someid');
     });
 
+    it('should call getById function and return class on getClassById for teacher', async () => {
+        (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ _id: 'test_classid', name: 'test' }));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', _id: 'someid', class_id: 'test_classid' }));
+
+        const response = await classResolver.getClassById(null, { id: 'someid' }, MOCK_TEACHER_CONTEXT, null);
+        expect(response).toEqual({ _id: 'test_classid', name: 'test' });
+        expect(classPersistence.getById).toHaveBeenCalledWith('someid');
+        expect(usersPersistence.getById).toHaveBeenCalled();
+    });
+
     it('should call getByName function and return class on getClassByName', async () => {
         (classPersistence.getByName as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test' }));
         const response = await classResolver.getClassByName(null, { name: 'somename' }, MOCK_PRINCIPLE_CONTEXT, null);
         expect(response).toEqual({ name: 'test'});
         expect(classPersistence.getByName).toHaveBeenCalledWith('somename');
+    });
+
+    it('should call getByName function and return class on getClassByName for teacher', async () => {
+        (classPersistence.getByName as jest.Mock).mockReturnValue(Promise.resolve({ _id: 'test_classid', name: 'test' }));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', _id: 'someid', class_id: 'test_classid' }));
+
+        const response = await classResolver.getClassByName(null, { name: 'somename' }, MOCK_TEACHER_CONTEXT, null);
+        expect(response).toEqual({ _id: 'test_classid', name: 'test' });
+        expect(classPersistence.getByName).toHaveBeenCalledWith('somename');
+        expect(usersPersistence.getById).toHaveBeenCalled();
     });
 
     it('should call getStudentsByClassId and return students users', async () => {
@@ -106,11 +126,45 @@ describe('class resolver', () => {
         expect(classPersistence.updateClass).toHaveBeenLastCalledWith('5b217b030825622c97d3757f', expected);
     });
 
+    it('should call updateClass and return updated class for teacer', async () => {
+        const expected = { name: 'טיטאן', level : 'א', number : 1 };
+        (classPersistence.updateClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', _id: 'someid', class_id: 'test_classid' }));
+
+        const result = await classResolver.updateClass(null, {id: 'test_classid', class: expected}, MOCK_TEACHER_CONTEXT);
+        expect(result).toEqual(expected);
+        expect(classPersistence.updateClass).toHaveBeenLastCalledWith('test_classid', expected);
+        expect(usersPersistence.getById).toHaveBeenCalled();
+    });
+
+    it('should call updateClass to throw exception', async () => {
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test', _id: 'someid', class_id: 'test_classid' }));
+        // Async / Await expect().toThrow() does not work - so implemented with try/catch
+        let err = false;
+        try {
+            await classResolver.updateClass(null, {id: 'othe_classid', class: {}}, MOCK_TEACHER_CONTEXT);
+        } catch (e) {
+            err = true;
+        }
+        expect(err).toBeTruthy();
+    });
+
     it('should call deleteClass and return the number of class deleted', async () => {
         (classPersistence.deleteClass as jest.Mock).mockReturnValue(Promise.resolve(1));
         const result = await classResolver.deleteClass(null, {id: '5b217b030825622c97d3757f'}, MOCK_PRINCIPLE_CONTEXT);
         expect(result).toEqual(1);
         expect(classPersistence.deleteClass).toHaveBeenCalledWith('5b217b030825622c97d3757f');
+    });
+
+    it('should call deleteClass and raise exception for "no permission for teacher"', async () => {
+        // Async / Await expect().toThrow() does not work - so implemented with try/catch
+        let err = false;
+        try {
+            await classResolver.deleteClass(null, {id: 'test_classid'}, MOCK_TEACHER_CONTEXT);
+        } catch (e) {
+            err = true;
+        }
+        expect(err).toBeTruthy();
     });
 
     it('should call getClassSchedule and return the obj schedule', () => {

@@ -2,6 +2,7 @@ import * as request from 'supertest';
 import * as helpers from '../utils/e2e-helper';
 
 import { ClassDbModel } from '../../src/models/class.db.model';
+import {UserRole} from '../../src/models/user.db.model';
 
 describe('classes graphql', () => {
   let token: string;
@@ -14,7 +15,7 @@ describe('classes graphql', () => {
         role: 'PRINCIPLE',
     });
 
-    token = await helpers.getToken('test-user', 'Aa123456');
+    token = await helpers.getToken('test-user', 'Aa123456', UserRole.PRINCIPLE);
   });
 
   it('should fetch classes successfully by query', async () => {

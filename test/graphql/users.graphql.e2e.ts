@@ -1,5 +1,6 @@
 import * as helpers from '../utils/e2e-helper';
 import * as request from 'supertest';
+import {UserRole} from '../../src/models/user.db.model';
 
 describe('users graphql', () => {
     let token: string;
@@ -9,10 +10,10 @@ describe('users graphql', () => {
         await helpers.addUser({
             username: 'test-user',
             password: 'Aa123456',
-            role: 'PRINCIPLE',
+            role: UserRole.PRINCIPLE,
         });
 
-        token = await helpers.getToken('test-user', 'Aa123456');
+        token = await helpers.getToken('test-user', 'Aa123456', UserRole.PRINCIPLE);
     });
 
     it('should create user successfully', () => {

@@ -1,13 +1,14 @@
 import axios, { AxiosError } from 'axios';
-import { UserDbModel } from '../../src/models/user.db.model';
+import {UserDbModel, UserRole} from '../../src/models/user.db.model';
 import { MongoClient } from 'mongodb';
 import { ClassDbModel } from '../../src/models/class.db.model';
 
-export async function getToken(username: string, password: string) {
+export async function getToken(username: string, password: string, role: UserRole) {
     try {
         const response = await axios.post<{ accessToken: string }>('http://localhost:3000/login', {
             username,
             password,
+            role
         });
         return response.data.accessToken;
     } catch (error) {

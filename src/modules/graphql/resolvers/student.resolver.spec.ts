@@ -79,7 +79,7 @@ describe('student resolver', () => {
     it('should call getStudentsByClassId function and return students on getStudents', async () => {
         (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test-1' }]));
         (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({class_id: '123'}));
-        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
+        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([, [{ username: 'test' }]]));
 
         const response = await studentResolver.getStudents(null, {}, MOCK_TEACHER_CONTEXT);
         expect(response).toEqual([{ username: 'test' }]);
