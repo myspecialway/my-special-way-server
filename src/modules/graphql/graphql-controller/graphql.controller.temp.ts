@@ -11,8 +11,6 @@ import { AuthService } from '../../auth/auth-service/auth.service';
 @Controller()
 export class GraphqlController {
     private schema: GraphQLSchema;
-    // private authService: AuthService;
-    // private logger = new Logger('GraphqlController');
 
     constructor(graphqlService: GraphQlService) {
         this.schema = graphqlService.getSchema();

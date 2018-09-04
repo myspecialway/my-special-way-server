@@ -1,4 +1,4 @@
-import {PermissionFactory} from './permission_factory';
+import {PermissionFactory} from './permission-factory';
 import {UserRole} from '../../models/user.db.model';
 import {Asset, DBOperation, Permission} from './permission.interface';
 

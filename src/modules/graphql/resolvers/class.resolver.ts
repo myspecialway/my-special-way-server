@@ -87,7 +87,7 @@ export class ClassResolver {
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
             const userClassId = user.class_id ? user.class_id.toString() : '';
-            if (userClassId !== id) {
+            if (userClassId !== id.toString()) {
                 throw new Error(NO_PERMISSION);
             }
         }

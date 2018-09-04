@@ -49,14 +49,7 @@ export class AuthService implements AuthServiceInterface {
 
     /* istanbul ignore next */
     static getUserProfileFromToken(token: string): UserTokenProfile {
-        let user: UserTokenProfile = {
-            id: null,
-            username: null,
-            role: null,
-            firstname: null,
-            lastname: null,
-            class_id: null,
-        };
+        let user = new UserTokenProfile();
         if (token) {
             const jwttoken = jwt.decode(token.replace('Bearer ', ''), {json: true, complete: true}) ;
             user = jwttoken[JWT_PAYLOAD] as UserTokenProfile;

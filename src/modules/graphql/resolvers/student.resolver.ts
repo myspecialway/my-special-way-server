@@ -17,7 +17,6 @@ export class StudentResolver {
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
             const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
             const [, students] = await this.usersPersistence.getStudentsByClassId(teacherClassId);
-            // console.log(students);
             return students;
         }
 
