@@ -6,5 +6,4 @@ coverage
 *.orig
 reports
 .stryker-tmp
-.env
 .idea/**

@@ -5,3 +5,4 @@ rm -rf dist
 tsc
 cpy src/modules/graphql/schemas/*.gql dist/modules/graphql/schemas
 cp -r public dist/public
+cp .env ./dist
