@@ -34,7 +34,7 @@ export class ClassResolver {
 
     @ResolveProperty('students')
     async getStudentsByClassId(obj, args, context) {
-        const [err, students] = await this.userPersistenceService.getStudentsByClassId(obj._id.toString());
+        const [err, students] = await this.classPersistence.getStudentsByClassId(obj._id.toString());
         if (err) {
             return err;
         }

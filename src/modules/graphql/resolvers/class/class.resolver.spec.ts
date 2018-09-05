@@ -16,6 +16,7 @@ describe('class resolver', () => {
             createClass: jest.fn(),
             updateClass: jest.fn(),
             deleteClass: jest.fn(),
+            getStudentsByClassId: jest.fn(),
         };
         usersPersistence = {
             getStudentsByClassId: jest.fn(),
@@ -57,10 +58,10 @@ describe('class resolver', () => {
 
     it('should call getStudentsByClassId and return students users', async () => {
         const expected = [{ username: 'student1', role: 'STUDENT' }, { username: 'student2', role: 'STUDENT' }];
-        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve(expected));
-        const response = await classResolver.getStudentsByClassId({ _id: 'someid' }, null, null);
+        (classPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve(expected));
+        const response = await classResolver.getStudentsByClassId( { _id: 'someid' }, null, null);
         expect(response).toEqual(expected);
-        expect(usersPersistence.getStudentsByClassId).toHaveBeenCalledWith('someid');
+        expect(classPersistence.getStudentsByClassId).toHaveBeenCalledWith('someid');
     });
 
     it('should call createClass and return new created class', async () => {
