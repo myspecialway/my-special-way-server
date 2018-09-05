@@ -5,6 +5,7 @@ import { Collection, Db } from 'mongodb';
 
 describe('class persistence', () => {
     const collectioName = 'classes';
+    const userCollectionName = 'users';
     let classPersistanceService: ClassPersistenceService;
     let schedulePersistenceService: SchedulePersistenceService;
     let dbServiceMock: Partial<DbService>;
@@ -12,7 +13,9 @@ describe('class persistence', () => {
         dbServiceMock = {
             getConnection: jest.fn().mockReturnValue({
                 collection: jest.fn().mockReturnValue({
-                    find: jest.fn(),
+                    find: jest.fn().mockReturnValue({
+                        toArray: jest.fn(),
+                        }),
                     findOne: jest.fn(),
                     deleteOne: jest.fn(),
                     replaceOne: jest.fn(),
@@ -153,10 +156,14 @@ describe('class persistence', () => {
         await classPersistanceService.updateClass('507f1f77bcf86cd799439011', {}).catch((error) => expect(error).toBeDefined());
     });
 
-    it('should delete class successfully on deleteClass', async () => {
+    it('should delete class successfully on deleteClass when no student assigned', async () => {
         expect.hasAssertions();
         (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockReturnValueOnce({
             deletedCount: 1,
+        });
+
+        (dbServiceMock.getConnection().collection(userCollectionName).find as jest.Mock).mockReturnValueOnce({
+            toArray: jest.fn().mockReturnValueOnce([]),
         });
 
         const removedCount = await classPersistanceService.deleteClass('507f1f77bcf86cd799439011');
@@ -164,10 +171,32 @@ describe('class persistence', () => {
         expect(removedCount).toBe(1);
     });
 
+    it('should not delete class successfully on deleteClass when student are assigned to it', async () => {
+        expect.hasAssertions();
+        (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockReturnValueOnce({
+            deletedCount: 0,
+        });
+
+        (dbServiceMock.getConnection().collection(userCollectionName).find as jest.Mock).mockReturnValueOnce({
+            toArray: jest.fn().mockReturnValueOnce([{
+                _id: '5b8d1573f8e3d91adcd9e290',
+                firstname: 'celine',
+            }]),
+        });
+
+        const removedCount = await classPersistanceService.deleteClass('507f1f77bcf86cd799439011');
+
+        expect(removedCount).toBe(0);
+    });
+
     it('should return error on deleteClass when error happened', async () => {
         expect.hasAssertions();
         (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockImplementationOnce(() => {
             throw new Error('mock error');
+        });
+
+        (dbServiceMock.getConnection().collection(userCollectionName).find as jest.Mock).mockReturnValueOnce({
+            toArray: jest.fn().mockReturnValueOnce([]),
         });
 
         await classPersistanceService.deleteClass('507f1f77bcf86cd799439011').catch((error) => expect(error).toBeDefined());
