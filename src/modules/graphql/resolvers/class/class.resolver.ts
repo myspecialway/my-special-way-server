@@ -1,11 +1,11 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
 import { ClassDbModel } from '../../../../models/class.db.model';
 import { ClassLogic } from './services/class-logic.service';
-import {ClassPersistenceService} from '../../../persistence/class.persistence.service';
-import {UsersPersistenceService} from '../../../persistence/users.persistence.service';
-import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission} from '../../../permissions/permission.interface';
-import {UserDbModel} from '../../../../models/user.db.model';
-import {Get} from '../../../../utils/get';
+import { ClassPersistenceService } from '../../../persistence/class.persistence.service';
+import { UsersPersistenceService } from '../../../persistence/users.persistence.service';
+import { Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission } from '../../../permissions/permission.interface';
+import { UserDbModel } from '../../../../models/user.db.model';
+import { Get } from '../../../../utils/get';
 
 @Resolver('Class')
 export class ClassResolver {
@@ -33,7 +33,7 @@ export class ClassResolver {
     @Query('classById')
     async getClassById(obj, args, context, info) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.CLASS);
-        const cls =  await this.classPersistence.getById(args.id);
+        const cls = await this.classPersistence.getById(args.id);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
             const userClassId = user.class_id ? user.class_id.toString() : '';
@@ -56,13 +56,19 @@ export class ClassResolver {
     }
 
     @ResolveProperty('schedule')
-    getClassSchedule(obj, {} , context) {
+    getClassSchedule(obj, { }, context) {
         return obj.schedule || [];
     }
 
     @ResolveProperty('students')
     async getStudentsByClassId(obj, args, context) {
-        return this.userPersistenceService.getStudentsByClassId(obj._id.toString());
+        const [error, students] = await this.userPersistenceService.getStudentsByClassId(obj._id.toString());
+
+        if (error) {
+            throw error;
+        }
+
+        return students;
     }
 
     @Mutation('createClass')
@@ -78,7 +84,7 @@ export class ClassResolver {
     }
 
     @Mutation('updateClass')
-    async updateClass(obj, {id, class: classObj}, context) {
+    async updateClass(obj, { id, class: classObj }, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.CLASS);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
@@ -91,7 +97,7 @@ export class ClassResolver {
     }
 
     @Mutation('deleteClass')
-    async deleteClass(obj, {id}, context) {
+    async deleteClass(obj, { id }, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.CLASS);
         if (permission === Permission.OWN) {
             const user: UserDbModel = await this.userPersistenceService.getById(context.user.id);
