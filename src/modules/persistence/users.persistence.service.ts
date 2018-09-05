@@ -3,14 +3,21 @@ import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
 import { UserDbModel, UserRole } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
+import { ClassPersistenceService } from './class.persistence.service';
+import { SchedulePersistenceService } from './schedule.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
+import { TimeSlotDbModel } from 'models/timeslot.db.model';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
     private collection: Collection<UserDbModel>;
     private logger = new Logger('UsersPersistenceService');
 
-    constructor(private dbService: DbService) {
+    constructor(
+        private dbService: DbService,
+        private classPersistenceService: ClassPersistenceService,
+        private schedulePersistenceService: SchedulePersistenceService,
+    ) {
         const db = this.dbService.getConnection();
         this.collection = db.collection<UserDbModel>('users');
     }
@@ -125,6 +132,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             const user = await this.collection.findOne({ username, password });
             if (!user) {
                 this.logger.warn(`authenticateUser:: user ${username} not found in db`);
+                throw new Error(`authenticateUser:: user ${username} not found in db`);
             }
 
             return [null, user];
@@ -153,6 +161,26 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             return [null, res];
         } catch (error) {
             this.logger.error(`getStudentsByClassId:: error fetching students by class id ${classId}`, error.stack);
+            throw [error, null];
+        }
+    }
+
+    async getStudentSchedule(student: UserDbModel): Promise<[Error, TimeSlotDbModel[]]> {
+        try {
+            if (!student.schedule) {
+                student.schedule = [];
+            }
+            if (!student.class_id) {
+                return [null, student.schedule];
+            }
+            this.logger.log(`getStudentSchedule:: fetching student-${student.schedule} class schedule`);
+            const studentClass = await this.classPersistenceService.getById(student.class_id);
+            if (!studentClass || !studentClass.schedule) {
+                return [null, student.schedule];
+            }
+            return [null, this.schedulePersistenceService.mergeSchedule(studentClass.schedule, student.schedule, 'index')];
+        } catch (error) {
+            this.logger.error(`getStudentSchedule:: error fetching student schedule`, error.stack);
             throw [error, null];
         }
     }

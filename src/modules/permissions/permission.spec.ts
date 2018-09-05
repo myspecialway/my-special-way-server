@@ -16,6 +16,9 @@ describe('permission factory and strategies', () => {
 
         permission = permissionStrategy.getPermission(Asset.STUDENT, DBOperation.CREATE);
         expect(permission).toEqual(Permission.FORBID);
+
+        permission = permissionStrategy.getPermission(Asset.USER, DBOperation.CREATE);
+        expect(permission).toEqual(Permission.ALLOW);
     });
 
     it('should create student strategy and return forbid permission', () => {

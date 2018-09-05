@@ -42,6 +42,12 @@ export class StudentResolver {
         return this.classPersistence.getById(objClassId);
     }
 
+    @ResolveProperty('schedule')
+    async getStudentSchedule(obj) {
+        const [, response] = await this.usersPersistence.getStudentSchedule(obj);
+        return response;
+    }
+
     @Mutation('createStudent')
     async createStudent(_, { student }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);

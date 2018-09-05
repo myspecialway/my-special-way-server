@@ -3,7 +3,8 @@ import { ClassPersistenceService } from '../../persistence/class.persistence.ser
 import { UserRole} from '../../../models/user.db.model';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import * as permInt from '../../permissions/permission.interface';
-import {Permission} from '../../permissions/permission.interface';
+import { Permission } from '../../permissions/permission.interface';
+import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 
 describe('student resolver', () => {
     const MOCK_PRINCIPLE = {
@@ -61,6 +62,7 @@ describe('student resolver', () => {
             createUser: jest.fn(),
             updateUser: jest.fn(),
             deleteUser: jest.fn(),
+            getStudentSchedule: jest.fn(),
         };
         classPersistence = {
             getById: jest.fn(),
@@ -133,6 +135,20 @@ describe('student resolver', () => {
         expect(usersPersistence.updateUser).toHaveBeenCalledWith('studentid', MOCK_STUDENT, UserRole.STUDENT);
     });
 
+    it('should call updateUser function as teacher and raise expcetion as the student no in the teachers class', async () => {
+        (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({class_id: '123'}));
+        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([, [{ username: 'test', _id: 'another_studentid' }]]));
+
+        let err = false;
+        try {
+            const response = await studentResolver.updateStudent(null, { id: 'studentid', student: MOCK_STUDENT}, MOCK_TEACHER_CONTEXT);
+        } catch (e) {
+            err = true;
+        }
+        expect(err).toBeTruthy();
+    });
+
     it('should call deleteUser function as principle and return the number of students deleted', async () => {
         (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
 
@@ -152,11 +168,35 @@ describe('student resolver', () => {
         expect(usersPersistence.deleteUser).toHaveBeenCalledWith('studentid');
     });
 
+    it('should call deleteUser function as teacher and raise excpetion as its not the teachers user', async () => {
+        (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'test_teacher', _id: 'someid', class_id: 'test_classid' }));
+        (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([, [{ username: 'test_student', _id: 'another_studentid', class_id: 'test_classid' }]]));
+        permInt.checkAndGetBasePermission = jest.fn(() => Permission.OWN); // tslint:disable-line
+
+        let err = false;
+        try {
+            const response = await studentResolver.deleteStudent(null, {id: 'studentid'}, MOCK_TEACHER_CONTEXT);
+        } catch (e) {
+            err = true;
+        }
+        expect(err).toBeTruthy();
+    });
 
     it('should call getStudentClass and return the class', async () => {
         (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'someclass' }));
         const response = await studentResolver.getStudentClass(MOCK_PRINCIPLE, {}, MOCK_PRINCIPLE_CONTEXT);
         expect(response).toEqual({name: 'someclass'});
         expect(classPersistence.getById).toHaveBeenCalledWith('someclassid');
+    });
+
+    it('should call getStudentSchedule and return the merged schedule', async () => {
+        const expected: TimeSlotDbModel[] = [
+            {index: '00', lesson: {_id: 'someid', title: 'updatedlesson', icon: 'updatedicon'}},
+            {index: '02', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+            {index: '01', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
+        ];
+        (usersPersistence.getStudentSchedule as jest.Mock).mockReturnValue(Promise.resolve([null, expected]));
+        const response = await studentResolver.getStudentSchedule(MOCK_STUDENT);
+        expect(response).toEqual(expected);
     });
 });

@@ -3,293 +3,256 @@
     "data": [
         {
             "name": "טיטאן",
-            "level": "א",
-            "number": 1,
+            "grade": "a",
             "schedule": [
                 {
-                    "index": "00",
+                    "index": "0_0",
                     "lesson": {
-                        "_id": "5b2abc74572e7619a628c11c",
                         "title": "קבלת תלמידים",
                         "icon": "no-icon"
                     }
                 },
                 {
-                    "index": "01",
+                    "index": "0_1",
                     "lesson": {
-                        "_id": "5b2abc74572e7619a628c11c",
                         "title": "קבלת תלמידים",
                         "icon": "no-icon"
                     }
                 },
                 {
-                    "index": "02",
+                    "index": "0_2",
                     "lesson": {
-                        "_id": "5b2abc74572e7619a628c11c",
                         "title": "קבלת תלמידים",
                         "icon": "no-icon"
                     }
                 },
                 {
-                    "index": "03",
+                    "index": "0_3",
                     "lesson": {
-                        "_id": "5b2abc74572e7619a628c11c",
                         "title": "קבלת תלמידים",
                         "icon": "no-icon"
                     }
                 },
                 {
-                    "index": "04",
+                    "index": "0_4",
                     "lesson": {
-                        "_id": "5b2abc74572e7619a628c11c",
                         "title": "קבלת תלמידים",
                         "icon": "no-icon"
                     }
                 },
                 {
-                    "index": "05",
+                    "index": "0_5",
                     "lesson": {
-                        "_id": "5b2abc74572e7619a628c11c",
                         "title": "קבלת תלמידים",
                         "icon": "no-icon"
                     }
                 },
                 {
-                    "index": "30",
+                    "index": "3_0",
                     "lesson": {
-                        "_id": "5b41e59a7946d50fa99085e9",
                         "title": "ארוחת בוקר",
                         "icon": "breakfest-icon"
                     }
                 },
                 {
-                    "index": "31",
+                    "index": "3_1",
                     "lesson": {
-                        "_id": "5b41e59a7946d50fa99085e9",
                         "title": "ארוחת בוקר",
                         "icon": "breakfest-icon"
                     }
                 },
                 {
-                    "index": "32",
+                    "index": "3_2",
                     "lesson": {
-                        "_id": "5b41e59a7946d50fa99085e9",
                         "title": "ארוחת בוקר",
                         "icon": "breakfest-icon"
                     }
                 },
                 {
-                    "index": "33",
+                    "index": "3_3",
                     "lesson": {
-                        "_id": "5b41e59a7946d50fa99085e9",
                         "title": "ארוחת בוקר",
                         "icon": "breakfest-icon"
                     }
                 },
                 {
-                    "index": "34",
+                    "index": "3_4",
                     "lesson": {
-                        "_id": "5b41e59a7946d50fa99085e9",
                         "title": "ארוחת בוקר",
                         "icon": "breakfest-icon"
                     }
                 },
                 {
-                    "index": "35",
+                    "index": "3_5",
                     "lesson": {
-                        "_id": "5b41e59a7946d50fa99085e9",
                         "title": "ארוחת בוקר",
                         "icon": "breakfest-icon"
                     }
                 },
                 {
-                    "index": "40",
+                    "index": "4_0",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "41",
+                    "index": "4_1",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "42",
+                    "index": "4_2",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "43",
+                    "index": "4_3",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "44",
+                    "index": "4_4",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "45",
+                    "index": "4_5",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "80",
+                    "index": "8_0",
                     "lesson": {
-                        "_id": "5b41e5aa7946d50fa99085ea",
                         "title": "ארוחת צהריים",
                         "icon": "lunch-icon"
                     }
                 },
                 {
-                    "index": "81",
+                    "index": "8_1",
                     "lesson": {
-                        "_id": "5b41e5aa7946d50fa99085ea",
                         "title": "ארוחת צהריים",
                         "icon": "lunch-icon"
                     }
                 },
                 {
-                    "index": "82",
+                    "index": "8_2",
                     "lesson": {
-                        "_id": "5b41e5aa7946d50fa99085ea",
                         "title": "ארוחת צהריים",
                         "icon": "lunch-icon"
                     }
                 },
                 {
-                    "index": "83",
+                    "index": "8_3",
                     "lesson": {
-                        "_id": "5b41e5aa7946d50fa99085ea",
                         "title": "ארוחת צהריים",
                         "icon": "lunch-icon"
                     }
                 },
                 {
-                    "index": "84",
+                    "index": "8_4",
                     "lesson": {
-                        "_id": "5b41e5aa7946d50fa99085ea",
                         "title": "ארוחת צהריים",
                         "icon": "lunch-icon"
                     }
                 },
                 {
-                    "index": "85",
+                    "index": "8_5",
                     "lesson": {
-                        "_id": "5b41e5aa7946d50fa99085ea",
                         "title": "ארוחת צהריים",
                         "icon": "lunch-icon"
                     }
                 },
                 {
-                    "index": "90",
+                    "index": "9_0",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "91",
+                    "index": "9_1",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "92",
+                    "index": "9_2",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "93",
+                    "index": "9_3",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "94",
+                    "index": "9_4",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "95",
+                    "index": "9_5",
                     "lesson": {
-                        "_id": "5b41e5597946d50fa99085e8",
                         "title": "הפסקה",
                         "icon": "break-icon"
                     }
                 },
                 {
-                    "index": "140",
+                    "index": "14_0",
                     "lesson": {
-                        "_id": "5b41e5c37946d50fa99085eb",
                         "title": "פיזור תלמידים",
                         "icon": "dismiss-icon"
                     }
                 },
                 {
-                    "index": "141",
+                    "index": "14_1",
                     "lesson": {
-                        "_id": "5b41e5c37946d50fa99085eb",
                         "title": "פיזור תלמידים",
                         "icon": "dismiss-icon"
                     }
                 },
                 {
-                    "index": "142",
+                    "index": "14_2",
                     "lesson": {
-                        "_id": "5b41e5c37946d50fa99085eb",
                         "title": "פיזור תלמידים",
                         "icon": "dismiss-icon"
                     }
                 },
                 {
-                    "index": "143",
+                    "index": "14_3",
                     "lesson": {
-                        "_id": "5b41e5c37946d50fa99085eb",
                         "title": "פיזור תלמידים",
                         "icon": "dismiss-icon"
                     }
                 },
                 {
-                    "index": "144",
+                    "index": "14_4",
                     "lesson": {
-                        "_id": "5b41e5c37946d50fa99085eb",
                         "title": "פיזור תלמידים",
                         "icon": "dismiss-icon"
                     }
                 },
                 {
-                    "index": "145",
+                    "index": "14_5",
                     "lesson": {
-                        "_id": "5b41e5c37946d50fa99085eb",
                         "title": "פיזור תלמידים",
                         "icon": "dismiss-icon"
                     }

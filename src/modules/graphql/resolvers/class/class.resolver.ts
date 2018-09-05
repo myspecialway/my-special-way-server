@@ -1,16 +1,19 @@
 import { Resolver, Query, ResolveProperty, Mutation } from '@nestjs/graphql';
-import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission} from '../../permissions/permission.interface';
-import { Get} from '../../../utils/get';
-import {UserDbModel} from '../../../models/user.db.model';
+import { ClassDbModel } from '../../../../models/class.db.model';
+import { ClassLogic } from './services/class-logic.service';
+import {ClassPersistenceService} from '../../../persistence/class.persistence.service';
+import {UsersPersistenceService} from '../../../persistence/users.persistence.service';
+import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission} from '../../../permissions/permission.interface';
+import {UserDbModel} from '../../../../models/user.db.model';
+import {Get} from '../../../../utils/get';
 
 @Resolver('Class')
 export class ClassResolver {
     constructor(
         private classPersistence: ClassPersistenceService,
         private userPersistenceService: UsersPersistenceService,
-    ) {}
+        private classLogic: ClassLogic,
+    ) { }
 
     @Query('classes')
     async getClasses(obj, args, context, info) {
@@ -63,8 +66,14 @@ export class ClassResolver {
     }
 
     @Mutation('createClass')
-    async createClass(obj, { class: newClass }, context) {
+    async createClass(obj, { class: newClass }: { class: ClassDbModel }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.CLASS);
+        const [error, schedule] = this.classLogic.buildDefaultSchedule(newClass.grade);
+        if (error) {
+            return error;
+        }
+
+        newClass.schedule = schedule;
         return this.classPersistence.createClass(newClass);
     }
 
