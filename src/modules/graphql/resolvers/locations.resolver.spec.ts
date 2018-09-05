@@ -34,7 +34,7 @@ describe('locations resolver', () => {
     it('should call getAll function and return locations on getStudents', async () => {
         (locationsPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve(MOCK_LOCATIONS));
 
-        const response = await locationsResolver.getLocations();
+        const response = await locationsResolver.getLocations(null, {}, null);
         expect(response).toEqual(MOCK_LOCATIONS);
         expect(locationsPersistence.getAll).toHaveBeenCalled();
     });

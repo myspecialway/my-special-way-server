@@ -7,6 +7,7 @@ import { GraphQLFactory } from '@nestjs/graphql';
 @Injectable()
 export class GraphQlService {
     logger: Logger;
+
     constructor(private graphQlFactory: GraphQLFactory) {
         this.logger = new Logger('GraphQlService');
     }
@@ -15,7 +16,9 @@ export class GraphQlService {
         try {
             // TODO: need to make this recursive when refactoring to child folders
             this.logger.log('GraphQlService::getSchema:: starting schema creation');
-            let typeDefs = '';
+
+            let typeDefs = 'directive @hasRole(role: String) on FIELD | FIELD_DEFINITION';
+
             const files = fs.readdirSync(__dirname).filter((file) => file.includes('.gql'));
 
             for (const file of files) {
