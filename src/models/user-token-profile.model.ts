@@ -6,5 +6,5 @@ export class UserTokenProfile {
     role: UserRole;
     firstname: string;
     lastname: string;
-    class_id?: string; // tslint:disable-line: variable name must be in lowerCamelCase, PascalCase or UPPER_CASE
+    class_id?: string; // tslint:disable-line
 }
