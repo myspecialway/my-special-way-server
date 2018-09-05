@@ -18,7 +18,7 @@
     "prestart:prod": "rm -rf dist && tsc",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
-    "test:ut": "jest --coverage",
+    "test:ut": "jest --coverage --detectOpenHandles",
     "test:e2e": "docker-compose up -d && cross-env NODE_ENV=e2e-tests jest --config ./jest-e2e.json && docker rm -f $(docker ps -q)",
     "test:ci": "bash ./scripts/test",
     "test:watch": "jest --watch",
