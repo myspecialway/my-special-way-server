@@ -21,10 +21,10 @@ describe('permission factory and strategies', () => {
         expect(permission).toEqual(Permission.ALLOW);
     });
 
-    it('should create student strategy and return forbid permission', () => {
-        const permission = PermissionFactory.get({role: UserRole.STUDENT}).getPermission(null, null);
-        expect(permission).toEqual(Permission.FORBID);
-    });
+    // it('should create student strategy and return forbid permission', () => {
+    //     const permission = PermissionFactory.get({role: UserRole.STUDENT}).getPermission(null, null);
+    //     expect(permission).toEqual(Permission.FORBID);
+    // });
 
     it('should create no strategy and return forbid permission\'', () => {
         const permission = PermissionFactory.get({}).getPermission(null, null);

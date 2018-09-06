@@ -1,7 +1,8 @@
+import { ObjectID } from 'mongodb';
 import { TimeSlotDbModel } from './timeslot.db.model';
 
 export interface UserDbModel {
-    _id: string;
+    _id: string | ObjectID;
     username: string;
     password: string;
     passwordSalt: string;
@@ -21,6 +22,6 @@ export enum Gender {
 
 export enum UserRole {
     PRINCIPLE = 'PRINCIPLE',
-    TEACHER   = 'TEACHER',
-    STUDENT   = 'STUDENT',
+    TEACHER = 'TEACHER',
+    STUDENT = 'STUDENT',
 }

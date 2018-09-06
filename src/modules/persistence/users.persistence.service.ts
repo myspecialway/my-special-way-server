@@ -69,7 +69,8 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         try {
             const mongoId = new ObjectID(id);
             this.logger.log(`getAll:: fetching user by id ${id}`);
-            return await this.collection.findOne({ _id: mongoId });
+            const student = await this.collection.findOne({ _id: mongoId });
+            return student;
         } catch (error) {
             this.logger.error(`getAll:: error fetching user by id ${id}`, error.stack);
             throw error;

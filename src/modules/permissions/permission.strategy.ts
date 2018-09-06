@@ -19,7 +19,7 @@ export class TeacherPermission implements Permissions {
 
 export class StudentPermission implements Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission {
-        return Permission.FORBID;
+        return Permission.OWN;
     }
 }
 

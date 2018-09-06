@@ -1,8 +1,8 @@
 import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { UserDbModel, UserRole} from '../../../models/user.db.model';
-import {Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission} from '../../permissions/permission.interface';
+import { UserDbModel, UserRole } from '../../../models/user.db.model';
+import { Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 
 @Resolver('Student')
@@ -10,7 +10,7 @@ export class StudentResolver {
     constructor(private usersPersistence: UsersPersistenceService, private classPersistence: ClassPersistenceService) { }
 
     @Query('students')
-    async getStudents(_, {}, context) {
+    async getStudents(_, { }, context) {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.STUDENT);
         if (permission === Permission.OWN) {
             // find students in teacher's class
@@ -20,7 +20,7 @@ export class StudentResolver {
             return students;
         }
 
-        return this.usersPersistence.getUsersByFilters({role: UserRole.STUDENT});
+        return this.usersPersistence.getUsersByFilters({ role: UserRole.STUDENT });
     }
 
     @Query('student')
@@ -31,13 +31,16 @@ export class StudentResolver {
             const teacher: UserDbModel = await this.usersPersistence.getById(context.user.id);
             const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
             const [, students] = await this.usersPersistence.getStudentsByClassId(teacherClassId);
-            return students.find((obj) => obj._id.toString() === args.id.toString());
+            return students.find((obj) => {
+                return obj._id.toString() === args.id.toString();
+            });
         }
-        return this.usersPersistence.getUserByFilters({role: UserRole.STUDENT}, args.id);
+        const users = await this.usersPersistence.getUserByFilters({ role: UserRole.STUDENT }, args.id);
+        return users;
     }
 
     @ResolveProperty('class')
-    async getStudentClass(obj, {}, context) {
+    async getStudentClass(obj, { }, context) {
         const objClassId = obj.class_id ? obj.class_id.toString() : '';
         return this.classPersistence.getById(objClassId);
     }
