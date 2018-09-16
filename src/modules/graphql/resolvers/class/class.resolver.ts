@@ -80,7 +80,7 @@ export class ClassResolver {
         }
 
         newClass.schedule = schedule;
-        return this.classPersistence.createClass(newClass);
+        return this.classPersistence.create(newClass);
     }
 
     @Mutation('updateClass')
