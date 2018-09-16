@@ -16,7 +16,7 @@ export class DbService {
             return;
         }
         try {
-            const connection = await MongoClient.connect(connectionString);
+            const connection = await MongoClient.connect(connectionString, { useNewUrlParser: true });
             this.db = connection.db(dbName);
             this.logger.log('initConnection:: connection initiated');
         } catch (error) {

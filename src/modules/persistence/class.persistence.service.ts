@@ -3,35 +3,12 @@ import { DbService } from './db.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { Collection, ObjectID } from 'mongodb';
 import { ClassDbModel } from 'models/class.db.model';
+import { CRUDPersistance } from './crud-persistance.service';
 
 @Injectable()
-export class ClassPersistenceService {
-    private collection: Collection<ClassDbModel>;
-    private logger = new Logger('ClassPersistenceService');
-    constructor(private dbService: DbService, private schedulePersistenceService: SchedulePersistenceService) {
-        const db = this.dbService.getConnection();
-        this.collection = db.collection<ClassDbModel>('classes');
-    }
-
-    async getAll() {
-        try {
-            this.logger.log('getAll:: fetching classes');
-            return await this.collection.find({}).toArray();
-        } catch (error) {
-            this.logger.error('getAll:: error fetching classes', error.stack);
-            throw error;
-        }
-    }
-
-    async getById(id: string) {
-        try {
-            const mongoId = new ObjectID(id);
-            this.logger.log(`getAll:: fetching class by id ${id}`);
-            return await this.collection.findOne({ _id: mongoId });
-        } catch (error) {
-            this.logger.error(`getAll:: error fetching class by id ${id}`, error.stack);
-            throw error;
-        }
+export class ClassPersistenceService extends CRUDPersistance<ClassDbModel> {
+    constructor(dbService: DbService, private schedulePersistenceService: SchedulePersistenceService) {
+        super('classes', dbService);
     }
 
     async getByName(name: string) {
@@ -41,17 +18,6 @@ export class ClassPersistenceService {
             return await this.collection.findOne({ name });
         } catch (error) {
             this.logger.error(msg, error.stack);
-            throw error;
-        }
-    }
-
-    async createClass(newClass: ClassDbModel): Promise<ClassDbModel> {
-        try {
-            this.logger.log(`ClassPersistenceService::createClass:: create class`);
-            const insertResponse = await this.collection.insertOne(newClass);
-            return await this.getById(insertResponse.insertedId.toString());
-        } catch (error) {
-            this.logger.error('ClassPersistenceService::createClass:: error creating class', error.stack);
             throw error;
         }
     }
