@@ -5,6 +5,7 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 import * as permInt from '../../permissions/permission.interface';
 import { Permission } from '../../permissions/permission.interface';
 import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
+import { StudentPermissionService } from '../../permissions/student.premission.service';
 
 describe('student resolver', () => {
     const MOCK_PRINCIPLE = {
@@ -52,6 +53,7 @@ describe('student resolver', () => {
     let studentResolver: StudentResolver;
     let usersPersistence: Partial<UsersPersistenceService>;
     let classPersistence: Partial<ClassPersistenceService>;
+    let studentPermission: Partial<StudentPermissionService>;
     beforeEach(() => {
         usersPersistence = {
             getAll: jest.fn(),
@@ -67,8 +69,13 @@ describe('student resolver', () => {
         classPersistence = {
             getById: jest.fn(),
         };
+        studentPermission = {
+            validateObjClassMatchRequester: jest.fn(),
+            validateStudentsInRequesterClass: jest.fn(),
 
-        studentResolver = new StudentResolver(usersPersistence as UsersPersistenceService, classPersistence as ClassPersistenceService);
+        }
+
+        studentResolver = new StudentResolver(usersPersistence as UsersPersistenceService, classPersistence as ClassPersistenceService, studentPermission as StudentPermissionService);
     });
 
     it('should call getUsersByFilters function and return students on getStudents', async () => {

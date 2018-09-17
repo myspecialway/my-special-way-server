@@ -21,10 +21,10 @@ export class ClassResolver {
         const classes = await this.classPersistence.getAll();
 
         if (permission === Permission.OWN) {
-            // find classes of teacher only
-            const teacher: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-            const teacherClassId = teacher.class_id ? teacher.class_id.toString() : '';
-            return classes.filter((cls) => cls._id.toString() === teacherClassId);
+            // find classes of requester only
+            const requester: UserDbModel = await this.userPersistenceService.getById(context.user.id);
+            const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
+            return classes.filter((cls) => cls._id.toString() === requesterClassId);
         }
 
         return classes;
