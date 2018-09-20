@@ -1,5 +1,5 @@
 import { UsersPersistenceService } from '../persistence/users.persistence.service';
-import { DBOperation, Permission } from './permission.interface';
+import { DBOperation } from './permission.interface';
 import { ClassPermissionService } from './class.permission.service';
 
 describe('class permission service', () => {

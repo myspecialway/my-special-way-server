@@ -1,6 +1,6 @@
-import {UserRole} from '../../models/user.db.model';
-import {UserTokenProfile} from '../../models/user-token-profile.model';
-import {PermissionFactory} from './permission-factory';
+import { UserRole } from '../../models/user.db.model';
+import { UserTokenProfile } from '../../models/user-token-profile.model';
+import { PermissionFactory } from './permission-factory';
 
 export const NO_PERMISSION = 'not permissions to execute command';
 
