@@ -101,8 +101,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         const mongoId = new ObjectID(id);
         try {
             this.logger.log(`updateUser:: updating user ${mongoId}`);
-            const currentDoc = await this.getById(id);
-            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, { ...currentDoc, ...user }, { returnOriginal: false });
+            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, { $set: user }, { returnOriginal: false });
             this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return [null, updatedDocument.value];
         } catch (error) {
