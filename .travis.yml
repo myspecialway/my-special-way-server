@@ -19,7 +19,7 @@ install:
 script:
 - yarn docker
 - yarn docker:push
-# - yarn docker:deploy
+# - yarn docker:deploy 
 - yarn git:push
 
 notifications:
