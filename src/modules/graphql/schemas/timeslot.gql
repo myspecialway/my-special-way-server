@@ -1,6 +1,6 @@
 # A type describing a single time slot on the class/student schedule
 type TimeSlot {
-    # 2 numeric chars (00, 01...) represents the [hour, day] of timeslot
+    # 2 numeric chars (0_0, 0_1...) represents the [hour, day] of timeslot
     index: String!
     lesson: Lesson
     location: Location
