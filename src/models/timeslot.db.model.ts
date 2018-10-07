@@ -6,4 +6,5 @@ export interface TimeSlotDbModel {
     index: string;
     lesson?: LessonDbModel;
     room?: LocationDbModel;
+    customized?: boolean;
 }
