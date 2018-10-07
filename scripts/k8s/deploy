@@ -2,7 +2,7 @@
 
 CUR_VER=$(./scripts/echo-version package.json)
 
-if [ "$BRANCH" == 'master' ] || [ "$BRANCH" == 'new-k8s-deployment' ]
+if [ "$BRANCH" == 'master' ] 
 then
     echo info::deploy:: branch is ${BRANCH}, deploying new version [${CUR_VER}] to k8s
     # update image

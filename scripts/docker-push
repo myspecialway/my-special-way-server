@@ -3,7 +3,7 @@
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     echo info::docker-push:: branch is a pull request skipping push to hub
-elif [ "$BRANCH" == 'master' ] || [ "$BRANCH" == 'new-k8s-deployment' ]
+elif [ "$BRANCH" == 'master' ] 
 then
     echo info::docker-push:: branch is \"${BRANCH}\" pushing new version and latest docker tags
     docker push myspecialway/msw-server:$(./scripts/echo-version package.json)

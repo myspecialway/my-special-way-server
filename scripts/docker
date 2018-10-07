@@ -5,7 +5,7 @@ CUR_VER=$(./scripts/echo-version package.json)
 if [ "$TRAVIS_PULL_REQUEST" != "false" ]
 then
     echo info::docker:: branch is a pull request, skipping docker 
-elif [ "$BRANCH" = 'master' ] || [ "$BRANCH" == 'new-k8s-deployment' ]
+elif [ "$BRANCH" = 'master' ] 
 then
    echo info::docker:: build is on \"${BRANCH}\" branch incrementing version and building
    docker pull node:carbon
