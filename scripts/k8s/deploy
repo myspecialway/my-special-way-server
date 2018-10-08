@@ -1,10 +1,12 @@
-#!/bin/sh
+#!/bin/bash
 
-if [ "$BRANCH" = 'master' ]
+CUR_VER=$(./scripts/echo-version package.json)
+
+if [ "$BRANCH" == 'master' ] 
 then
-    echo info::deploy:: branch is master, deploying new version to k8s
+    echo info::deploy:: branch is ${BRANCH}, deploying new version [${CUR_VER}] to k8s
     # update image
-    kubectl set image deployment/msw-server-deployment msw-server=myspecialway/msw-server:$(./scripts/echo-version package.json)
+    kubectl set image deployment/msw-server-deployment msw-server=myspecialway/msw-server:${CUR_VER}
 else
-     echo info::deploy:: branch is not master, skipping deployment
+    echo info::deploy:: branch is not master, skipping deployment
 fi
