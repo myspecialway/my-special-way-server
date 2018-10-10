@@ -82,7 +82,10 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             if (userRole) {
                 user.role = userRole;
             }
-            // TODO: default password is temporary until we implement initial login user story
+            this.logger.error(
+              '***********************Temporary fix - default password Aa123456 is temporary until we implement ' +
+              'initial login user story ****************************************',
+            );
             user.password = 'Aa123456';
             const insertResponse = await this.collection.insertOne(user);
             const newDocument = await this.getById(insertResponse.insertedId.toString());
