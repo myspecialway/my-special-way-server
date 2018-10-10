@@ -1,4 +1,7 @@
 import {Asset, DBOperation, Permission, Permissions, TEACHER_PERMISSION_RULES} from './permission.interface';
+import { Logger } from '@nestjs/common';
+
+const logger = new Logger('PermissionStrategy');
 
 export class PrinciplePermission implements Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission {
@@ -19,7 +22,11 @@ export class TeacherPermission implements Permissions {
 
 export class StudentPermission implements Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission {
-        return Permission.FORBID;
+      logger.error(
+        '***********************Temporary fix - allowing student to get schedule.' +
+        'implement student permissions!!! this is for demo only. ****************************************',
+      );
+      return Permission.ALLOW;
     }
 }
 
