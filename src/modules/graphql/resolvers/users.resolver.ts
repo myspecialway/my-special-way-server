@@ -2,6 +2,7 @@ import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import {Asset, checkAndGetBasePermission, DBOperation} from '../../permissions/permission.interface';
 import {Get} from '../../../utils/get';
+import { ObjectID } from 'mongodb';
 
 @Resolver('User')
 export class UsersResolver {
@@ -23,6 +24,9 @@ export class UsersResolver {
     async createUser(_, { user }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER);
         // TODO: Handle errors!!!!
+        if (ObjectID.isValid(user.class_id)) {
+          user.class_id = new ObjectID(user.class_id);
+        }
         const [, response] = await this.usersPersistence.createUser(user);
         return response;
     }
