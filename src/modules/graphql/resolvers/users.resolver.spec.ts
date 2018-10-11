@@ -25,7 +25,7 @@ describe('user resolver', () => {
       deleteUser: jest.fn(),
     };
 
-      classPersistenceService = {
+    classPersistenceService = {
       getAll: jest.fn(),
       getById: jest.fn(),
       getByName: jest.fn(),
@@ -116,10 +116,10 @@ describe('user resolver', () => {
     const mockClass = { name: 'myClassName' };
 
     (classPersistenceService.getById as jest.Mock).mockReturnValueOnce(
-      mockClass,
+        Promise.resolve(mockClass),
     );
 
-    const response = await usersResolver.getUserClass(mockObj, null, null);
+    const response = await usersResolver.getUserClass(mockObj, {}, MOCK_CONTEXT);
     expect(response).toEqual(mockClass);
     expect(classPersistenceService.getById).toHaveBeenCalledWith(classId);
   });
