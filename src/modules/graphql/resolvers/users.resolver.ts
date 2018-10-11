@@ -43,7 +43,6 @@ export class UsersResolver {
       DBOperation.CREATE,
       Asset.USER,
     );
-    // TODO: Handle errors!!!!
     if (ObjectID.isValid(user.class_id)) {
       user.class_id = new ObjectID(user.class_id);
     }
