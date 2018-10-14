@@ -8,6 +8,7 @@ describe('locations persistence', () => {
   let locationsPersistanceService: LocationsPersistenceService;
   let dbServiceMock: Partial<DbService>;
   const locationsMockArray = [{
+    id: '1',
     name: 'פטל כיתת',
     disabled: true,
     location_id: 'A',
@@ -18,6 +19,7 @@ describe('locations persistence', () => {
     },
   },
     {
+      id: '2',
       name: 'כיתת סחלב',
       disabled: false,
       location_id: 'A_0',
@@ -59,8 +61,8 @@ describe('locations persistence', () => {
       }),
     });
 
-    const users = await locationsPersistanceService.getAll();
-    expect(users).toEqual(locationsMockArray);
+    const locations = await locationsPersistanceService.getAll();
+    expect(locations).toEqual(locationsMockArray);
   });
 
   it('should throw an error on error through getAll function', async () => {
@@ -70,5 +72,97 @@ describe('locations persistence', () => {
     });
 
     await locationsPersistanceService.getAll().catch((error) => expect(error).not.toBeUndefined());
+  });
+
+  it('should get location successfully on getById', async () => {
+    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockReturnValueOnce({
+      name: 'פטל כיתת',
+    });
+
+    const location = await locationsPersistanceService.getById('507f1f77bcf86cd799439011');
+    expect(location).toEqual({ name: 'פטל כיתת' });
+  });
+
+  it('should create a new location successfully on createLocation', async () => {
+    expect.hasAssertions();
+    const expected = { name: 'locationName' };
+    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockReturnValueOnce(expected);
+    (dbServiceMock.getConnection().collection('locations').insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+
+    const createdLocation = await locationsPersistanceService.createLocation({
+      _id: '1',
+      name: 'כיתת ניצן',
+      disabled: false,
+      location_id: 'B_0',
+      position: {
+        latitude: 31.986487941086967,
+        longitude: 34.91072729229928,
+        floor: 1,
+      }});
+
+    expect(createdLocation).toEqual(expected);
+  });
+
+  it('should update location successful on updateLocation', async () => {
+    expect.hasAssertions();
+    const expected = {
+      name: 'כיתת ניצן',
+      disabled: false,
+      location_id: 'B_0',
+      position: {
+        latitude: 31.986487941086967,
+        longitude: 34.91072729229928,
+        floor: 1,
+      }};
+    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockReturnValueOnce(
+      {
+        id: '1',
+        name: 'פטל כיתת',
+        disabled: true,
+        location_id: 'A',
+        position: {
+          latitude: 31.986417758011342,
+          longitude: 34.91077744955874,
+          floor: 0,
+        },
+      });
+    (dbServiceMock.getConnection().collection('locations').findOneAndUpdate as jest.Mock).mockReturnValueOnce(
+      {value: {
+          name: 'כיתת ניצן',
+          disabled: false,
+          location_id: 'B_0',
+          position: {
+            latitude: 31.986487941086967,
+            longitude: 34.91072729229928,
+            floor: 1,
+          }}},
+    );
+
+    const updatedLocation = await locationsPersistanceService.updateLocation('1', {
+      _id: '1',
+      name: 'כיתת ניצן',
+      disabled: false,
+      location_id: 'B_0',
+      position: {
+        latitude: 31.986487941086967,
+        longitude: 34.91072729229928,
+        floor: 1,
+      },
+    });
+
+    expect(updatedLocation).toEqual(expected);
+  });
+
+  it('should delete location successfully on deleteClass', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection('locations').deleteOne as jest.Mock).mockReturnValueOnce({
+      deletedCount: 1,
+    });
+
+    const removedCount = await locationsPersistanceService.deleteLocation('507f1f77bcf86cd799439011');
+
+    expect(removedCount).toBe(1);
   });
 });
