@@ -7,26 +7,26 @@ import { Collection, Db } from 'mongodb';
 describe('locations persistence', () => {
     let locationsPersistanceService: LocationsPersistenceService;
     let dbServiceMock: Partial<DbService>;
-    let locationsMockArray = [{
-        "id" : "123",
-        "name": "פטל כיתת",
-        "disabled": true,
-        "position": {
-            "latitude": 31.986417758011342,
-            "longitude": 34.91077744955874,
-            "floor": 0
-        }
+    const locationsMockArray = [{
+      name: 'פטל כיתת',
+      disabled: true,
+      location_id: 'A',
+      position: {
+        latitude: 31.986417758011342,
+        longitude: 34.91077744955874,
+        floor: 0,
+      },
     },
-    {
-        "id" : "456",
-        "name": "כיתת סחלב",
-        "disabled": false,
-        "position": {
-            "latitude": 31.986419691740092,
-            "longitude": 34.91078563034535,
-            "floor": 1
-        }
-    }];
+      {
+        name: 'כיתת סחלב',
+        disabled: false,
+        location_id: 'A_0',
+        position: {
+          latitude: 31.986419691740092,
+          longitude: 34.91078563034535,
+          floor: 1,
+        },
+      }];
 
     beforeAll(() => {
         const errorFunc = common.Logger.error.bind(common.Logger);
