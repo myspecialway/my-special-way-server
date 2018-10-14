@@ -72,7 +72,7 @@ describe('locations resolver', () => {
   });
 
   it('should call deleteLocation and return the number of locations deleted', async () => {
-    (locationsResolver.deleteLocation as jest.Mock).mockReturnValue(Promise.resolve(1));
+    (locationsPersistence.deleteLocation as jest.Mock).mockReturnValue(Promise.resolve(1));
     const result = await locationsResolver.deleteLocation(null, { id: '5b217b030825622c97d3757f' }, MOCK_LOCATIONS);
     expect(result).toEqual(1);
     expect(locationsPersistence.deleteLocation).toHaveBeenCalledWith('5b217b030825622c97d3757f');
