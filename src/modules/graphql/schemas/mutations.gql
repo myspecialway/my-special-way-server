@@ -16,5 +16,10 @@ type Mutation {
     createLesson(lesson: InputLesson!): Lesson
     updateLesson(id: ID!, lesson: InputLesson!): Lesson
     deleteLesson(id: ID!): Int
+
+    # Location
+    createLocation(location: InputLocation!): Location
+    updateLocation(id: ID!, location: InputLocation!): Location
+    deleteLocation(id: ID!): Int
 }
 
