@@ -1,10 +1,5 @@
 import { Resolver, Query, Mutation } from '@nestjs/graphql';
 import { LocationsPersistenceService } from '../../persistence/locations.persistence.service';
-import { Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission } from '../../permissions/permission.interface';
-import { Get } from '../../../utils/get';
-import { UserDbModel } from '../../../models/user.db.model';
-import { ClassDbModel } from '../../../models/class.db.model';
-import LocationDbModel from '../../../models/location.db.model';
 
 @Resolver('Locations')
 export class LocationsResolver {
