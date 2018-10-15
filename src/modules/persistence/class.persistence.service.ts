@@ -63,7 +63,7 @@ export class ClassPersistenceService {
             const currentClass = await this.getById(id);
             classObj.schedule = this.schedulePersistenceService.mergeSchedule(currentClass.schedule || [], classObj.schedule, 'index');
             const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId },
-                { ...currentClass, ...classObj }, { returnOriginal: false });
+                { $set: {...classObj} }, { returnOriginal: false });
             this.logger.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return updatedDocument.value;
         } catch (error) {

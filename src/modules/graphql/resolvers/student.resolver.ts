@@ -1,3 +1,4 @@
+import { ObjectID } from 'mongodb';
 import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
@@ -54,6 +55,9 @@ export class StudentResolver {
     async createStudent(_, { student }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
         // TODO: Handle errors!!!!
+        if (ObjectID.isValid(student.class_id)) {
+            student.class_id = new ObjectID(student.class_id);
+        }
         const [, response] = await this.usersPersistence.createUser(student, UserRole.STUDENT);
         return response;
     }

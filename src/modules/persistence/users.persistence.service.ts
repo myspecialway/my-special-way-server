@@ -82,7 +82,13 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             if (userRole) {
                 user.role = userRole;
             }
-
+            if (!user.password) {
+              this.logger.error(
+                '***********************Temporary fix - default password Aa123456 is temporary until we implement ' +
+                'initial login user story ****************************************',
+              );
+              user.password = 'Aa123456';
+            }
             const insertResponse = await this.collection.insertOne(user);
             const newDocument = await this.getById(insertResponse.insertedId.toString());
             this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
@@ -98,11 +104,12 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         if (userRole) {
             user.role = userRole;
         }
+
         const mongoId = new ObjectID(id);
         try {
             this.logger.log(`updateUser:: updating user ${mongoId}`);
-            const currentDoc = await this.getById(id);
-            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, { ...currentDoc, ...user }, { returnOriginal: false });
+
+            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId }, { $set: user }, { returnOriginal: false });
             this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return [null, updatedDocument.value];
         } catch (error) {
