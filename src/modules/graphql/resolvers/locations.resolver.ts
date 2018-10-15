@@ -6,27 +6,27 @@ export class LocationsResolver {
     constructor(private locationsPersistence: LocationsPersistenceService) { }
 
     @Query('locations')
-    async getLocations(_, {}, context) {
+    async getLocations() {
         return this.locationsPersistence.getAll();
     }
 
   @Query('locationById')
-  async getLocationById(obj, args, context, info) {
+  async getLocationById(args) {
     return await this.locationsPersistence.getById(args.id);
   }
 
   @Mutation('createLocation')
-  async createLocation(_, { location }, context) {
+  async createLocation({ location }) {
     return this.locationsPersistence.createLocation(location);
   }
 
   @Mutation('updateLocation')
-  async updateLocation(_, {id, location}, context) {
+  async updateLocation({id, location}) {
     return this.locationsPersistence.updateLocation(id, location);
   }
 
   @Mutation('deleteLocation')
-  async deleteLocation(_, {id}, context) {
+  async deleteLocation({id}) {
     return this.locationsPersistence.deleteLocation(id);
   }
 }

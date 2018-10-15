@@ -42,7 +42,7 @@ describe('locations resolver', () => {
   it('should call getAll function and return locations on getStudents', async () => {
     (locationsPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve(MOCK_LOCATIONS));
 
-    const response = await locationsResolver.getLocations(null, {}, null);
+    const response = await locationsResolver.getLocations();
     expect(response).toEqual(MOCK_LOCATIONS);
     expect(locationsPersistence.getAll).toHaveBeenCalled();
   });
@@ -50,7 +50,7 @@ describe('locations resolver', () => {
   it('should call getById function and return location', async () => {
     (locationsPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ id: '1', name: 'פטל כיתת'}));
 
-    const response = await locationsResolver.getLocationById(null, { id: '1' }, MOCK_LOCATIONS, null);
+    const response = await locationsResolver.getLocationById({ id: '1' });
     expect(response).toEqual({ id: '1', name: 'פטל כיתת'});
     expect(locationsPersistence.getById).toHaveBeenCalledWith('1');
   });
@@ -58,7 +58,7 @@ describe('locations resolver', () => {
   it('should call createLocation and return new created location', async () => {
     const expected = { name: 'כיתת דקל', id: '3' };
     (locationsPersistence.createLocation as jest.Mock).mockReturnValue(Promise.resolve(expected));
-    const result = await locationsResolver.createLocation(null, { location: expected }, MOCK_LOCATIONS);
+    const result = await locationsResolver.createLocation({ location: expected });
     expect(result).toEqual(expected);
     expect(locationsPersistence.createLocation).toHaveBeenCalledWith(expected);
   });
@@ -66,14 +66,14 @@ describe('locations resolver', () => {
   it('should call updateLocation and return updated location', async () => {
     const expected = { name: 'כיתת דקל', id: '1' };
     (locationsPersistence.updateLocation as jest.Mock).mockReturnValue(Promise.resolve(expected));
-    const result = await locationsResolver.updateLocation(null, { id: '5b217b030825622c97d3757f', location: expected }, MOCK_LOCATIONS);
+    const result = await locationsResolver.updateLocation({ id: '5b217b030825622c97d3757f', location: expected });
     expect(result).toEqual(expected);
     expect(locationsPersistence.updateLocation).toHaveBeenLastCalledWith('5b217b030825622c97d3757f', expected);
   });
 
   it('should call deleteLocation and return the number of locations deleted', async () => {
     (locationsPersistence.deleteLocation as jest.Mock).mockReturnValue(Promise.resolve(1));
-    const result = await locationsResolver.deleteLocation(null, { id: '5b217b030825622c97d3757f' }, MOCK_LOCATIONS);
+    const result = await locationsResolver.deleteLocation({ id: '5b217b030825622c97d3757f' });
     expect(result).toEqual(1);
     expect(locationsPersistence.deleteLocation).toHaveBeenCalledWith('5b217b030825622c97d3757f');
   });
