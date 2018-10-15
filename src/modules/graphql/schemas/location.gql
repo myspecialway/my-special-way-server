@@ -15,8 +15,8 @@ type Location {
 input InputLocation {
   # optional id for when updating schedules
   _id: ID
-  name: String!
-  disabled: Boolean!
-  location_id: String!
-  position: InputPoint!
+  name: String
+  disabled: Boolean
+  location_id: String
+  position: InputPoint
 }
