@@ -25,7 +25,7 @@ export class ClassPersistenceService {
 
     async getById(id: string) {
         try {
-            const mongoId = new ObjectID(id);
+            const mongoId = ObjectID.isValid(id) ? new ObjectID(id) : id;
             this.logger.log(`getAll:: fetching class by id ${id}`);
             return await this.collection.findOne({ _id: mongoId });
         } catch (error) {
