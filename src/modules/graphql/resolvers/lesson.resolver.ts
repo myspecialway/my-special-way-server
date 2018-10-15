@@ -8,25 +8,25 @@ export class LessonResolver {
   constructor(private lessonPersistence: LessonPersistenceService) {}
 
   @Query('lessons')
-  async getLessons(context) {
+  async getLessons(_, {}, context) {
       checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.LESSON);
       return this.lessonPersistence.getAll();
   }
 
   @Mutation('createLesson')
-  async createLesson({ lesson }, context) {
+  async createLesson(_, { lesson }, context) {
       checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.LESSON);
       return this.lessonPersistence.createLesson(lesson);
   }
 
   @Mutation('updateLesson')
-  async updateLesson({id, lesson}, context) {
+  async updateLesson(_, {id, lesson}, context) {
       checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.LESSON);
       return this.lessonPersistence.updateLesson(id, lesson);
   }
 
   @Mutation('deleteLesson')
-  async deleteLesson({id}, context) {
+  async deleteLesson(_, {id}, context) {
       checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.LESSON);
       return this.lessonPersistence.deleteLesson(id);
   }
