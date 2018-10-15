@@ -1,3 +1,5 @@
+import { ObjectID } from 'mongodb';
+import { ClassDbModel } from 'models/class.db.model';
 import { UsersPersistenceService } from './../../persistence/users.persistence.service';
 import { UsersResolver } from './users.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
@@ -79,6 +81,28 @@ describe('user resolver', () => {
     expect(userPersistence.createUser).toHaveBeenCalledWith(MOCK_USER);
   });
 
+  it.only('should call createUser with class and get the new user with class_id', async () => {
+    const testClass: ClassDbModel = {
+      _id: '5b9e6ef0312c81ddc4325b89',
+      name: 'classname',
+      grade: 'somegrade',
+    };
+
+    const userWithClass = { ...MOCK_USER, class_id: testClass._id };
+    const userWithClassId = { ...MOCK_USER, class_id: new ObjectID(testClass._id) };
+
+    userPersistence.createUser = jest.fn((user) => Promise.resolve([null, user]));
+
+    const response = await usersResolver.createUser(
+      null,
+      { user: userWithClass },
+      MOCK_CONTEXT,
+    );
+    // expect(response).toEqual(userWithClass);
+    // expect(userPersistence.createUser).toHaveBeenCalledWith(userWithClass);
+    expect(response).toEqual(userWithClassId);
+  });
+
   it('should call updateUser function and return the user updated', async () => {
     (userPersistence.updateUser as jest.Mock).mockReturnValue(
       Promise.resolve([null, MOCK_USER]),
@@ -116,10 +140,14 @@ describe('user resolver', () => {
     const mockClass = { name: 'myClassName' };
 
     (classPersistenceService.getById as jest.Mock).mockReturnValueOnce(
-        Promise.resolve(mockClass),
+      Promise.resolve(mockClass),
     );
 
-    const response = await usersResolver.getUserClass(mockObj, {}, MOCK_CONTEXT);
+    const response = await usersResolver.getUserClass(
+      mockObj,
+      {},
+      MOCK_CONTEXT,
+    );
     expect(response).toEqual(mockClass);
     expect(classPersistenceService.getById).toHaveBeenCalledWith(classId);
   });
