@@ -83,6 +83,16 @@ describe('locations persistence', () => {
     expect(location).toEqual({ name: 'פטל כיתת' });
   });
 
+  it('should throw an error on error through getById function', async () => {
+    expect.assertions(1);
+    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('mock error');
+    });
+
+    await locationsPersistanceService.getById('507f1f77bcf86cd799439011')
+      .catch((error) => expect(error).not.toBeUndefined());
+  });
+
   it('should create a new location successfully on createLocation', async () => {
     expect.hasAssertions();
     const expected = { name: 'locationName' };
@@ -103,6 +113,18 @@ describe('locations persistence', () => {
       }});
 
     expect(createdLocation).toEqual(expected);
+  });
+
+  it('should return error on createLocation when error happened', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection('locations').insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('mock error');
+    });
+
+    await locationsPersistanceService.createLocation({}).catch((error) => expect(error).not.toBeUndefined());
   });
 
   it('should update location successful on updateLocation', async () => {
@@ -155,6 +177,15 @@ describe('locations persistence', () => {
     expect(updatedLocation).toEqual(expected);
   });
 
+  it('should return error on UpdateLocation when error happened', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection('locations').findOneAndUpdate as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('mock error');
+    });
+
+    await locationsPersistanceService.updateLocation('507f1f77bcf86cd799439011', {}).catch((error) => expect(error).toBeDefined());
+  });
+
   it('should delete location successfully on deleteClass', async () => {
     expect.hasAssertions();
     (dbServiceMock.getConnection().collection('locations').deleteOne as jest.Mock).mockReturnValueOnce({
@@ -164,5 +195,14 @@ describe('locations persistence', () => {
     const removedCount = await locationsPersistanceService.deleteLocation('507f1f77bcf86cd799439011');
 
     expect(removedCount).toBe(1);
+  });
+
+  it('should return error on deleteLocation when error happened', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection('locations').deleteOne as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('mock error');
+    });
+
+    await locationsPersistanceService.deleteLocation('507f1f77bcf86cd799439011').catch((error) => expect(error).toBeDefined());
   });
 });
