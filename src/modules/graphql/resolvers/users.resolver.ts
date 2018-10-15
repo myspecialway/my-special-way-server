@@ -9,19 +9,19 @@ export class UsersResolver {
     constructor(private usersPersistence: UsersPersistenceService) { }
 
     @Query('users')
-    async getUsers(_, {  }, context) {
+    async getUsers(context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER);
         return this.usersPersistence.getAll();
     }
 
     @Query('user')
-    async getUserById(obj, args, context, info) {
+    async getUserById(args, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.READ, Asset.USER);
         return this.usersPersistence.getById(args.id);
     }
 
     @Mutation('createUser')
-    async createUser(_, { user }, context) {
+    async createUser({ user }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.USER);
         // TODO: Handle errors!!!!
         if (ObjectID.isValid(user.class_id)) {
@@ -32,7 +32,7 @@ export class UsersResolver {
     }
 
     @Mutation('updateUser')
-    async updateUser(_, { id, user }, context) {
+    async updateUser({ id, user }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER);
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.updateUser(id, user);
@@ -40,7 +40,7 @@ export class UsersResolver {
     }
 
     @Mutation('deleteUser')
-    async deleteUser(_, { id }, context) {
+    async deleteUser({ id }, context) {
         checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.USER);
         // TODO: Handle errors!!!!
         const [, response] = await this.usersPersistence.deleteUser(id);
