@@ -111,7 +111,7 @@ describe('class persistence', () => {
             insertedId: '507f1f77bcf86cd799439011',
         });
 
-        const createdClass = await classPersistanceService.createClass({});
+        const createdClass = await classPersistanceService.create({});
 
         expect(createdClass).toEqual(expected);
     });
@@ -125,7 +125,7 @@ describe('class persistence', () => {
             throw new Error('mock error');
         });
 
-        await classPersistanceService.createClass({}).catch((error) => expect(error).not.toBeUndefined());
+        await classPersistanceService.create({}).catch((error) => expect(error).not.toBeUndefined());
     });
 
     it('should update class sucessfuly on updateClass', async () => {
