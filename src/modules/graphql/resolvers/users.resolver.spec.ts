@@ -1,5 +1,5 @@
 import { UsersResolver } from './users.resolver';
-import { UsersPersistenceService } from '../../persistence';
+import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 
 describe('user resolver', () => {
     const MOCK_USER = {
@@ -30,7 +30,7 @@ describe('user resolver', () => {
 
         (userPersistence.getAll as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
 
-        const response = await usersResolver.getUsers(null, {}, MOCK_CONTEXT);
+        const response = await usersResolver.getUsers(MOCK_CONTEXT);
         expect(response).toEqual([{ username: 'test' }]);
         expect(userPersistence.getAll).toHaveBeenCalled();
     });
@@ -38,7 +38,7 @@ describe('user resolver', () => {
     it('should call getById function and return user on getUserById', async () => {
         (userPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
 
-        const response = await usersResolver.getUserById(null, { id: 'someid' }, MOCK_CONTEXT, null);
+        const response = await usersResolver.getUserById( { id: 'someid' }, MOCK_CONTEXT);
         expect(response).toEqual({ username: 'test' });
         expect(userPersistence.getById).toHaveBeenCalledWith('someid');
     });
@@ -47,7 +47,7 @@ describe('user resolver', () => {
 
         (userPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
 
-        const response = await usersResolver.createUser(null, {user: MOCK_USER}, MOCK_CONTEXT);
+        const response = await usersResolver.createUser({user: MOCK_USER}, MOCK_CONTEXT);
         expect(response).toEqual(MOCK_USER);
         expect(userPersistence.createUser).toHaveBeenCalledWith(MOCK_USER);
     });
@@ -56,7 +56,7 @@ describe('user resolver', () => {
 
         (userPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
 
-        const response = await usersResolver.updateUser(null, {id: 'someid', user: MOCK_USER}, MOCK_CONTEXT);
+        const response = await usersResolver.updateUser({id: 'someid', user: MOCK_USER}, MOCK_CONTEXT);
         expect(response).toEqual(MOCK_USER);
         expect(userPersistence.updateUser).toHaveBeenCalledWith('someid', MOCK_USER);
     });
@@ -65,7 +65,7 @@ describe('user resolver', () => {
 
         (userPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
 
-        const response = await usersResolver.deleteUser(null, { id: 'someid' }, MOCK_CONTEXT);
+        const response = await usersResolver.deleteUser({ id: 'someid' }, MOCK_CONTEXT);
         expect(response).toEqual(1);
         expect(userPersistence.deleteUser).toHaveBeenCalledWith('someid');
     });
