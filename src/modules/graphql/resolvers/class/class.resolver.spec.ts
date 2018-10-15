@@ -41,7 +41,7 @@ describe('class resolver', () => {
             getAll: jest.fn(),
             getById: jest.fn(),
             getByName: jest.fn(),
-            createClass: jest.fn(),
+            create: jest.fn(),
             updateClass: jest.fn(),
             deleteClass: jest.fn(),
         };
@@ -123,10 +123,10 @@ describe('class resolver', () => {
 
     it('should call createClass and return new created class', async () => {
         const expected = { name: 'טיטאן', level: 'א', number: 1, grade: 'a' };
-        (classPersistence.createClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
+        (classPersistence.create as jest.Mock).mockReturnValue(Promise.resolve(expected));
         const result = await classResolver.createClass(null, { class: expected }, MOCK_PRINCIPLE_CONTEXT);
         expect(result).toEqual(expected);
-        expect(classPersistence.createClass).toHaveBeenCalledWith(expected);
+        expect(classPersistence.create).toHaveBeenCalledWith(expected);
     });
 
     it('should return error if wrong grade was received', async () => {
