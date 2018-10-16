@@ -12,4 +12,6 @@ type Query{
     lessons: [Lesson]!
 
     locations:[Location]!
+    locationById(id: ID!): Location
+
 }

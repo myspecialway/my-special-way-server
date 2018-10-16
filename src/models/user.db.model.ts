@@ -9,8 +9,14 @@ export interface UserDbModel {
     lastname: string;
     email: string;
     role: UserRole;
+    gender: Gender;
     class_id?: string;
     schedule?: TimeSlotDbModel[];
+}
+
+export enum Gender {
+    MALE = 'MALE',
+    FEMALE = 'FEMALE',
 }
 
 export enum UserRole {

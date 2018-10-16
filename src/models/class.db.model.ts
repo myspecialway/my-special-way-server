@@ -1,9 +1,8 @@
 import { TimeSlotDbModel } from './timeslot.db.model';
 
 export interface ClassDbModel {
-  _id: string;
+  _id?: string;
   name: string;
-  level: number;
-  number: number;
+  grade: string;
   schedule?: TimeSlotDbModel[];
 }

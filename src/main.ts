@@ -13,7 +13,7 @@ instance.use(bodyParser.urlencoded({ extended: false }));
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, instance);
   app.enableCors();
-  app.useStaticAssets(path.join(__dirname, '../public'));
+  app.useStaticAssets(path.join(__dirname, './public'));
   await app.listen(3000);
 }
 bootstrap().then(() => 'Application is listening on port 3000.');
