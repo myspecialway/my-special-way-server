@@ -11,10 +11,10 @@ export class PaperTrailLogger extends Logger implements LoggerService {
         //     this.transportList.push(this.winstonPapertrail);
          }
 
-        winstonPapertrail = new Papertrail({
-            host: 'logs7.papertrailapp.com',
-            port: 32979,
-        });
+        // winstonPapertrail = new Papertrail({
+        //     host: 'logs7.papertrailapp.com',
+        //     port: 32979,
+        // });
         logger = winston.createLogger({
             level: 'info',
             format: winston.format.prettyPrint(),
