@@ -3,7 +3,7 @@ import * as path from 'path';
 import * as bodyParser from 'body-parser';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { PaperTrailLogger } from './utils/papertrail.logger';
+// import { PaperTrailLogger } from './utils/papertrail.logger';
 
 const instance = express();
 /* Express middleware.  */
