@@ -53,7 +53,7 @@ export class StudentResolver {
 
     @Mutation('createStudent')
     async createStudent(_, { student }, context) {
-        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.STUDENT);
+        checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
         // TODO: Handle errors!!!!
         if (ObjectID.isValid(student.class_id)) {
             student.class_id = new ObjectID(student.class_id);
