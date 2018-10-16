@@ -1,6 +1,6 @@
 import { LoggerService, Logger } from '@nestjs/common';
 import * as winston from 'winston';
-import { Papertrail } from 'winston-papertrail';
+// import { Papertrail } from 'winston-papertrail';
 // import { getConfig } from '../config/config-loader';
 
 export class PaperTrailLogger extends Logger implements LoggerService {
