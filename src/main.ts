@@ -5,7 +5,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 
 const instance = express();
-/* Express middleware. */
+/* Express middleware.  */
 instance.use(bodyParser.json());
 instance.use(bodyParser.urlencoded({ extended: false }));
 /* End of express middleware. */
