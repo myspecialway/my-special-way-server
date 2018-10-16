@@ -12,9 +12,7 @@ instance.use(bodyParser.urlencoded({ extended: false }));
 /* End of express middleware. */
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, instance, {
-    logger: new PaperTrailLogger(),
-  });
+  const app = await NestFactory.create(AppModule, instance);
   app.enableCors();
   app.useStaticAssets(path.join(__dirname, './public'));
   await app.listen(3000);
