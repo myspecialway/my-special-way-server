@@ -52,7 +52,7 @@ export class FCMSender {
   }
 
   /* https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android-specific_fields */
-  async SendDataMsgToAndroid(clientToken: string, messageData: FCMData): Promise <boolean> {
+  async sendDataMsgToAndroid(clientToken: string, messageData: FCMData): Promise <boolean> {
     this.logger.log('FCMSender:: Calling SendDataMsgToAndroid');
     const fcmRequest = {
       data: messageData.data,
