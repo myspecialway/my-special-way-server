@@ -19,6 +19,7 @@ export class PaperTrailLogger implements LoggerService {
             format: winston.format.simple(),
             transports: [
                 new winston.transports.Console(),
+                this.winstonPapertrail,
             ],
         });
         log(message: string) {
