@@ -8,8 +8,8 @@ export class PaperTrailLogger implements LoggerService {
     constructor() {
         if (getConfig().isProd) {
             const winstonPapertrail = new Papertrail({
-                host: 'logs7.papertrailapp.com',
-                port: 32979,
+                host: getConfig().PAPERTRAIL_HOST_PORT.split(':')[0],
+                port:  getConfig().PAPERTRAIL_HOST_PORT.split(':')[1],
             });
             this.transportList.push(winstonPapertrail);
          }}
@@ -23,7 +23,7 @@ export class PaperTrailLogger implements LoggerService {
             this.logger.info(message);
         }
         error(message: string, trace: string) {
-            this.logger.error(message);
+            this.logger.error(message, trace);
         }
         warn(message: string) {
             this.logger.warn(message);
