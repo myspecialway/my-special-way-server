@@ -1,26 +1,23 @@
 import { LoggerService } from '@nestjs/common';
 import * as winston from 'winston';
 import { Papertrail } from 'winston-papertrail';
-// import { getConfig } from '../config/config-loader';
+import { getConfig } from '../config/config-loader';
 
 export class PaperTrailLogger implements LoggerService {
-
+    transportList = [new winston.transports.Console()];
     constructor() {
-        // if (getConfig().isProd) {
-        //     this.transportList.push(this.winstonPapertrail);
-         }
+        if (getConfig().isProd) {
+            const winstonPapertrail = new Papertrail({
+                host: 'logs7.papertrailapp.com',
+                port: 32979,
+            });
+            this.transportList.push(winstonPapertrail);
+         }}
 
-        winstonPapertrail = new Papertrail({
-            host: 'logs7.papertrailapp.com',
-            port: 32979,
-        });
         logger = winston.createLogger({
             level: 'info',
             format: winston.format.simple(),
-            transports: [
-                new winston.transports.Console(),
-                this.winstonPapertrail,
-            ],
+            transports: this.transportList,
         });
         log(message: string) {
             this.logger.info(message);
