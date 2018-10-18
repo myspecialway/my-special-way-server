@@ -2,12 +2,11 @@ import { LoggerService } from '@nestjs/common';
 import * as winston from 'winston';
 import * as Transport from 'winston-transport';
 import { Papertrail } from 'winston-papertrail';
-import { getConfig } from '../config/config-loader';
 
 export class MSWLogger implements LoggerService {
-
+    /* istanbul ignore next */
     constructor(connectPaperTrail: boolean, paperTrailUrl: string) {
-        if (connectPaperTrail && getConfig().PAPERTRAIL_HOST_PORT) {
+        if (connectPaperTrail) {
             const winstonPapertrail = new Papertrail({
                 host: paperTrailUrl.split(':')[0],
                 port: paperTrailUrl.split(':')[1],
