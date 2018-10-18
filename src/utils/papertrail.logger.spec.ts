@@ -1,5 +1,4 @@
 import { MSWLogger } from './papertrail.logger';
-import { ProcessEnvConfig } from '../config/config-interface';
 
 describe('paper trail logger', () => {
 
