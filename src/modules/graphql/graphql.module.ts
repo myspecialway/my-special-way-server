@@ -12,6 +12,7 @@ import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
 import { ClassLogic } from './resolvers/class/services/class-logic.service';
+import { LabelsResolver } from './resolvers/label.resolver';
 
 @Module({
     imports: [
@@ -25,6 +26,7 @@ import { ClassLogic } from './resolvers/class/services/class-logic.service';
         StudentResolver,
         LessonResolver,
         LocationsResolver,
+        LabelsResolver,
         ClassLogic,
     ],
     controllers: [GraphqlController],

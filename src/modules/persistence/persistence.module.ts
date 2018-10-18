@@ -1,3 +1,4 @@
+import { LabelsPersistenceService } from './labels.persistence.service';
 import { Module } from '@nestjs/common';
 import { getDbServiceProvider } from './db.service';
 import { ClassPersistenceService } from './class.persistence.service';
@@ -15,6 +16,7 @@ import { getConfig } from '../../config/config-loader';
         LessonPersistenceService,
         SchedulePersistenceService,
         LocationsPersistenceService,
+        LabelsPersistenceService,
     ],
     exports: [
         UsersPersistenceService,
@@ -22,6 +24,7 @@ import { getConfig } from '../../config/config-loader';
         LessonPersistenceService,
         SchedulePersistenceService,
         LocationsPersistenceService,
+        LabelsPersistenceService,
     ],
 })
 export class PersistenceModule { }

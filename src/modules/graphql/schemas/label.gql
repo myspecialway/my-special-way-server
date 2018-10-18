@@ -1,0 +1,11 @@
+# A type describing a label list for GUI usage
+type Label {
+  _id: ID!
+  index: Int
+  type: LabelType!
+  text: String!
+}
+
+enum LabelType{
+  CLASS_HOURS
+}

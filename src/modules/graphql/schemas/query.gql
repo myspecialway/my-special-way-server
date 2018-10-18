@@ -1,7 +1,7 @@
 type Query{
     students: [Student]
     student(id: ID!): Student
-    
+
     users:  [User]
     user(id: ID!): User
 
@@ -14,4 +14,6 @@ type Query{
     locations:[Location]!
     locationById(id: ID!): Location
 
+    labels: [Label]!
+    labelsByType(type: LabelType!): [Label]!
 }

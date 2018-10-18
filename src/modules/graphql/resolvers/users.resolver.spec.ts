@@ -1,5 +1,5 @@
+import { ClassDbModel } from './../../../models/class.db.model';
 import { ObjectID } from 'mongodb';
-import { ClassDbModel } from 'models/class.db.model';
 import { UsersPersistenceService } from './../../persistence/users.persistence.service';
 import { UsersResolver } from './users.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';

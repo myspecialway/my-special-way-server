@@ -1,0 +1,20 @@
+{
+  "collection": "labels",
+  "data": [
+    {"type": "CLASS_HOURS", "index":0, "text":"07:30 - 08:00"},
+    {"type": "CLASS_HOURS", "index":1, "text":"08:00 - 08:50"},
+    {"type": "CLASS_HOURS", "index":2, "text":"08:50 - 09:35"},
+    {"type": "CLASS_HOURS", "index":3, "text":"09:35 - 10:00"},
+    {"type": "CLASS_HOURS", "index":4, "text":"10:00 - 10:30"},
+    {"type": "CLASS_HOURS", "index":5, "text":"10:30 - 11:15"},
+    {"type": "CLASS_HOURS", "index":6, "text":"11:15 - 12:00"},
+    {"type": "CLASS_HOURS", "index":7, "text":"12:00 - 12:45"},
+    {"type": "CLASS_HOURS", "index":8, "text":"12:45 - 13:15"},
+    {"type": "CLASS_HOURS", "index":9, "text":"13:15 - 13:45"},
+    {"type": "CLASS_HOURS", "index":10, "text":"13:45 - 14:30"},
+    {"type": "CLASS_HOURS", "index":11, "text":"14:30 - 15:15"},
+    {"type": "CLASS_HOURS", "index":12, "text":"15:15 - 16:00"},
+    {"type": "CLASS_HOURS", "index":13, "text":"16:00 - 16:30"},
+    {"type": "CLASS_HOURS", "index":14, "text":"16:30 - 16:45"}
+  ]
+}
