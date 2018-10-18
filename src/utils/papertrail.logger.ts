@@ -7,7 +7,7 @@ import { getConfig } from '../config/config-loader';
 export class MSWLogger implements LoggerService {
 
     constructor(connectPaperTrail: boolean) {
-        if (connectPaperTrail) {
+        if (connectPaperTrail && getConfig().PAPERTRAIL_HOST_PORT) {
             const winstonPapertrail = new Papertrail({
                 host: getConfig().PAPERTRAIL_HOST_PORT.split(':')[0],
                 port: getConfig().PAPERTRAIL_HOST_PORT.split(':')[1],
