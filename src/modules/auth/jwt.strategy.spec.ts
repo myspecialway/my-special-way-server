@@ -1,9 +1,6 @@
 import * as common from '@nestjs/common';
 import { JwtStrategy } from './jwt.strategy';
-import { AuthServiceInterface } from './auth-service/auth.service.interface';
-import { UserDbModel } from '../../models/user.db.model';
 import { UsersPersistenceService } from '../persistence/users.persistence.service';
-import { InternalServerErrorException } from '@nestjs/common';
 
 describe('jwt strategy', () => {
     let jwt: JwtStrategy;

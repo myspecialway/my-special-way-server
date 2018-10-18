@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
-import { ClassDbModel } from 'models/class.db.model';
+import { ClassDbModel } from '../../../models/class.db.model';
 import { UsersPersistenceService } from './../../persistence/users.persistence.service';
 import { UsersResolver } from './users.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
@@ -42,7 +42,7 @@ describe('user resolver', () => {
     );
   });
 
-  it('should call getAll function and resutn users for on getUsers', async () => {
+  it('should call getAll function and return users for on getUsers', async () => {
     (userPersistence.getAll as jest.Mock).mockReturnValue(
       Promise.resolve([{ username: 'test' }]),
     );
@@ -81,7 +81,7 @@ describe('user resolver', () => {
     expect(userPersistence.createUser).toHaveBeenCalledWith(MOCK_USER);
   });
 
-  it.only('should call createUser with class and get the new user with class_id', async () => {
+  it('should call createUser with class and get the new user with class_id', async () => {
     const testClass: ClassDbModel = {
       _id: '5b9e6ef0312c81ddc4325b89',
       name: 'classname',
