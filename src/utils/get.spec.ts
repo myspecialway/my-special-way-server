@@ -135,7 +135,7 @@ describe('Get',  () => {
     it('should get the children array correctly', () => {
         const value = get_1.Get.getValue(data, 'children', 'array');
         if (value) {
-            expect(value.length).toBe(3);
+            expect((value as string[]).length).toBe(3);
         }
     });
     it('should get the name string correctly without giving type', () => {

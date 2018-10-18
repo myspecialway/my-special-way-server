@@ -1,32 +1,53 @@
 import { LoggerService } from '@nestjs/common';
 import * as winston from 'winston';
+import * as Transport from 'winston-transport';
 import { Papertrail } from 'winston-papertrail';
 import { getConfig } from '../config/config-loader';
 
-export class PaperTrailLogger implements LoggerService {
-    transportList = [new winston.transports.Console()];
-    constructor() {
-        if (getConfig().isProd) {
+export class MSWLogger implements LoggerService {
+
+    constructor(connectPaperTrail: boolean) {
+        if (connectPaperTrail) {
             const winstonPapertrail = new Papertrail({
                 host: getConfig().PAPERTRAIL_HOST_PORT.split(':')[0],
-                port:  getConfig().PAPERTRAIL_HOST_PORT.split(':')[1],
+                port: getConfig().PAPERTRAIL_HOST_PORT.split(':')[1],
             });
-            this.transportList.push(winstonPapertrail);
-         }}
-
-        logger = winston.createLogger({
+            this.pushToTransportList(winstonPapertrail);
+            this.pushToTransportList(new winston.transports.Console());
+        } else {
+            this.pushToTransportList(new winston.transports.Console());
+        }
+        this.setLogger(winston.createLogger({
             level: 'info',
             format: winston.format.simple(),
             transports: this.transportList,
-        });
-        log(message: string) {
-            this.logger.info(message);
-        }
-        error(message: string, trace: string) {
-            this.logger.error(message, trace);
-        }
-        warn(message: string) {
-            this.logger.warn(message);
-        }
-
+        }));
     }
+
+    private transportList: Transport[] = [];
+    private logger;
+    private setLogger(logger: winston.Logger) {
+        this.logger = logger;
+    }
+    /* istanbul ignore next */
+    log(message: string) {
+        this.logger.info(message);
+    }
+    /* istanbul ignore next */
+    error(message: string, trace: string) {
+        this.logger.error(message, trace);
+    }
+    /* istanbul ignore next */
+    warn(message: string) {
+        this.logger.warn(message);
+    }
+    /* istanbul ignore next */
+    pushToTransportList(transport: Transport) {
+        this.transportList.push(transport);
+    }
+    /* istanbul ignore next */
+    getTransportList() {
+        return this.transportList;
+    }
+
+}

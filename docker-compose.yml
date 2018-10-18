@@ -16,3 +16,4 @@ services:
       - DB_CONNECTION_STRING=mongodb://mongodb:27017/msw-test
       - DB_NAME=msw-test
       - PAPERTRAIL_HOST_PORT=logs7.papertrailapp.com:32979
+      - NODE_ENV=e2e-tests
