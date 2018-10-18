@@ -9,7 +9,7 @@ export interface ProcessEnvConfig {
 
 export function getEnvalidValidations(): { [K in keyof ProcessEnvConfig]: envalid.ValidatorSpec<ProcessEnvConfig[K]> } {
     return {
-        NODE_ENV: envalid.str({ default: 'prod' }),
+        NODE_ENV: envalid.str({ default: 'production' }),
         DB_CONNECTION_STRING: envalid.str(),
         DB_NAME: envalid.str({ default: 'msw-dev' }),
         PAPERTRAIL_HOST_PORT: envalid.str({ default: 'logs7.papertrailapp.com:32979' }),
