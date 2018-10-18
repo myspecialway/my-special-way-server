@@ -7,7 +7,7 @@ import { MSWLogger } from './utils/papertrail.logger';
 import { getConfig } from './config/config-loader';
 
 const instance = express();
-/* Express middleware.  */
+/* Express middleware. */
 instance.use(bodyParser.json());
 instance.use(bodyParser.urlencoded({ extended: false }));
 /* End of express middleware. */
