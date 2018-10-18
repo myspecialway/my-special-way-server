@@ -6,11 +6,11 @@ import { getConfig } from '../config/config-loader';
 
 export class MSWLogger implements LoggerService {
 
-    constructor(connectPaperTrail: boolean) {
+    constructor(connectPaperTrail: boolean, paperTrailUrl: string) {
         if (connectPaperTrail && getConfig().PAPERTRAIL_HOST_PORT) {
             const winstonPapertrail = new Papertrail({
-                host: getConfig().PAPERTRAIL_HOST_PORT.split(':')[0],
-                port: getConfig().PAPERTRAIL_HOST_PORT.split(':')[1],
+                host: paperTrailUrl.split(':')[0],
+                port: paperTrailUrl.split(':')[1],
             });
             this.pushToTransportList(winstonPapertrail);
             this.pushToTransportList(new winston.transports.Console());

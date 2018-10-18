@@ -16,7 +16,7 @@ async function bootstrap() {
   const app = await NestFactory.create(
                                         AppModule,
                                         instance,
-                                        {logger: new MSWLogger(getConfig().isProd)},
+                                        {logger: new MSWLogger(getConfig().isProd, getConfig().PAPERTRAIL_HOST_PORT)},
                                       );
   app.enableCors();
   app.useStaticAssets(path.join(__dirname, './public'));
