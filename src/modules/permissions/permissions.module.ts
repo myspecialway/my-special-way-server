@@ -4,7 +4,7 @@ import {StudentPermissionService} from './student.premission.service';
 import {PersistenceModule} from '../persistence/persistence.module';
 
 @Module({
-    imports:[
+    imports: [
         PersistenceModule,
     ],
     providers: [

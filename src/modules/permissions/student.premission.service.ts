@@ -23,7 +23,7 @@ export class StudentPermissionService {
         return permission;
     }
 
-    async getAndValidateStudentsInRequesterClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel[]]>{
+    async getAndValidateStudentsInRequesterClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel[]]> {
         const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
         if (permission === Permission.OWN) {
             // find student in requester's class

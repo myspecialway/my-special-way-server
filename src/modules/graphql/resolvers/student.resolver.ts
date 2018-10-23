@@ -64,7 +64,7 @@ export class StudentResolver {
 
     @Mutation('updateStudent')
     async updateStudent(_, { id, student }, context) {
-        const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(DBOperation.UPDATE, id, context);
+        const [, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(DBOperation.UPDATE, id, context);
         if (!students) {
             this.logger.error(`updateUser:: error updating user ${id} - user not found`);
             return null;
@@ -76,7 +76,7 @@ export class StudentResolver {
 
     @Mutation('deleteStudent')
     async deleteStudent(_, { id }, context) {
-        const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(DBOperation.DELETE, id, context);
+        const [, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(DBOperation.DELETE, id, context);
         if (!students) {
             this.logger.error(`deleteStudent:: error deleting user ${id} - user not found`);
             return null;
