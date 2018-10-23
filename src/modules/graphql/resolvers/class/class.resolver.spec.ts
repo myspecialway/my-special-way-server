@@ -58,7 +58,7 @@ describe('class resolver', () => {
 
         classLogic = {
             buildDefaultSchedule: jest.fn().mockReturnValue([null, []]),
-        }
+        };
 
         classResolver = new ClassResolver(
             classPersistence as ClassPersistenceService,
