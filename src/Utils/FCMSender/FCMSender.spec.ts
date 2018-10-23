@@ -1,6 +1,9 @@
 jest.mock('firebase-admin');
+jest.mock('../../config/config-loader');
+
 import { FCMSender } from './FCMSender';
 import * as mockAdmin from 'firebase-admin';
+import { getConfig } from '../../config/config-loader';
 
 describe('FCMSender', () => {
   let instance: FCMSender;
@@ -8,18 +11,21 @@ describe('FCMSender', () => {
   let sendSuccessMock;
   let sendFailureMock;
   beforeEach(() => {
-    instance = new FCMSender();
+    (getConfig as jest.Mock).mockReturnValue({});
+
     sendSuccessMock = {
       send: jest.fn(async () => true),
     };
     sendFailureMock = {
-      send: jest.fn(async () => {throw new Error('failed to send message'); }),
+      send: jest.fn(async () => { throw new Error('failed to send message'); }),
     };
+
+    instance = new FCMSender();
   });
   it('should return true when text message sent successfully', async () => {
     // given
     const messagingMock = jest.fn<mockAdmin.messaging.Messaging>(() => (sendSuccessMock));
-    Object.defineProperty(mockAdmin, 'messaging', {value: messagingMock, configurable: true});
+    Object.defineProperty(mockAdmin, 'messaging', { value: messagingMock, configurable: true });
     // when
     expect(mockAdmin.initializeApp).toHaveBeenCalled();
     bResult = await instance.sendTxtMsgToAndroid('sToken', 'sBody', 'sSbj');
@@ -31,7 +37,7 @@ describe('FCMSender', () => {
   it('should return false when text message failed to be sent', async () => {
     // given
     const messagingMock = jest.fn<mockAdmin.messaging.Messaging>(() => (sendFailureMock));
-    Object.defineProperty(mockAdmin, 'messaging', {value: messagingMock, configurable: true});
+    Object.defineProperty(mockAdmin, 'messaging', { value: messagingMock, configurable: true });
     // when
     bResult = await instance.sendTxtMsgToAndroid('sToken', 'sBody', 'sSbj');
     // then
@@ -42,7 +48,7 @@ describe('FCMSender', () => {
   it('should return true when data message sent successfully', async () => {
     // given
     const messagingMock = jest.fn<mockAdmin.messaging.Messaging>(() => (sendSuccessMock));
-    Object.defineProperty(mockAdmin, 'messaging', {value: messagingMock, configurable: true});
+    Object.defineProperty(mockAdmin, 'messaging', { value: messagingMock, configurable: true });
     // when
     expect(mockAdmin.initializeApp).toHaveBeenCalled();
     bResult = await instance.sendDataMsgToAndroid('sToken', {});
@@ -54,7 +60,7 @@ describe('FCMSender', () => {
   it('should return false when data message failed to be sent', async () => {
     // given
     const messagingMock = jest.fn<mockAdmin.messaging.Messaging>(() => (sendFailureMock));
-    Object.defineProperty(mockAdmin, 'messaging', {value: messagingMock, configurable: true});
+    Object.defineProperty(mockAdmin, 'messaging', { value: messagingMock, configurable: true });
     // when
     bResult = await instance.sendDataMsgToAndroid('sToken', {});
     // then
