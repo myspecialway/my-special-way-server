@@ -8,9 +8,13 @@ import { ClassDbModel } from 'models/class.db.model';
 export class ClassPersistenceService {
     private collection: Collection<ClassDbModel>;
     private logger = new Logger('ClassPersistenceService');
-    constructor(private dbService: DbService, private schedulePersistenceService: SchedulePersistenceService) {
+    constructor(
+        private dbService: DbService,
+        private schedulePersistenceService: SchedulePersistenceService
+    ) {
         const db = this.dbService.getConnection();
         this.collection = db.collection<ClassDbModel>('classes');
+        this.collection.createIndex( { name: 1 }, {unique:true} )
     }
 
     async getAll() {
