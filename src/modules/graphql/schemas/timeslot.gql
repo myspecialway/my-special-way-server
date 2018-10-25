@@ -9,6 +9,7 @@ type TimeSlot {
 
 input InputTimeSlot {
     index: String!
+    hours: String
     lesson: InputLesson!
     location: InputLocation
     customized: Boolean
