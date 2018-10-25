@@ -11,7 +11,7 @@ export class LabelsResolver {
   }
 
   @Query('labelsByType')
-  async getLabelsByType(obj, args, context, info) {
+  async getLabelsByType(obj, args, context) {
     return await this.labelsPersistence.getByType(args.type);
   }
 
