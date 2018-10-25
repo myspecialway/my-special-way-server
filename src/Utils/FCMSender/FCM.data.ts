@@ -7,10 +7,6 @@ export interface FCMData {
 export const DATA: FCMData = {
     data : {
         TYPE : 'Update',
-        PERSONAL_DETAILS : '10:45',
-        SCHEDULE : '10:45',
-        REMINDERS : '10:45',
-        ROUTES : '10:45',
-        GENERAL_SETTINGS : '10:45',
+        DATA : 'PERSONAL_DETAILS', // PERSONAL_DETAILS, SCHEDULE, REMINDERS, ROUTES, GENERAL_SETTINGS
     },
 };
