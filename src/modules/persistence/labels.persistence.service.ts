@@ -1,7 +1,7 @@
 import { LabelDbModel } from 'models/label.db.model';
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
-import { Collection, ObjectID } from 'mongodb';
+import { Collection } from 'mongodb';
 import { LabelType } from 'models/label.db.model';
 
 @Injectable()
