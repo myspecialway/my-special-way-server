@@ -1,28 +1,10 @@
-const studentAcceptanceLesson = {
-  title: 'קבלת תלמידים',
-  icon: 'no-icon',
-};
-
-const breakfastLesson = {
-  title: 'ארוחת בוקר',
-  icon: 'breakfest-icon',
-};
-
-const recessLesson = {
-  title: 'הפסקה',
-  icon: 'break-icon',
-};
-
-const lunchLesson = {
-  title: 'ארוחת צהריים',
-  icon: 'lunch-icon',
-};
-
-const dismissLesson = {
-  title: 'פיזור תלמידים',
-  icon: 'dismiss-icon',
-};
-
+import {
+  studentAcceptanceLesson,
+  breakfastLesson,
+  recessLesson,
+  lunchLesson,
+  dismissLesson,
+} from './default-schedule-lessons';
 export const ELMENTARY_SCHEDULE = [
   {
     index: '0_0',
