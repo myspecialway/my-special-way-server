@@ -9,13 +9,14 @@ before_install:
 - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 - . ./scripts/prepare-repo
 - . ./scripts/k8s/init
+# - yarn
 
 jobs:
   include:
-    - stage: install-dependencies
-      script: yarn
-    - stahe: static-code-analysis
+    - stage: quality-gates
       script: yarn tslint
+    - stage: test
+      script: yarn test:ci
     - stage: build
       script: yarn build
 
