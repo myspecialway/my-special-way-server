@@ -14,13 +14,15 @@ before_install:
 jobs:
   include:
     - stage: "Quality Gates"
-      name: "tslint"
+      name: "TsLint static code analysis"
       script: yarn tslint
     - script: yarn test:ci
-      name: "Tests"
+      name: "Unit Tests"
     - stage: build
+      name: "Typescript build"
       script: yarn build
     - stage: docker-build
+      name: "Docker image build"
       script: yarn docker
 
 # install:
