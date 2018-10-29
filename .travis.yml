@@ -10,17 +10,26 @@ before_install:
 - . ./scripts/prepare-repo
 - . ./scripts/k8s/init
 
-install:
-- yarn   
-- yarn tslint
-- yarn build
-- yarn test:ci
+jobs:
+  include:
+    - stage: install-dependencies
+      script: yarn
+    - stahe: static-code-analysis
+      script: yarn tslint
+    - stage: build
+      script: yarn build
 
-script:
-- yarn docker
-- yarn docker:push
-- yarn docker:deploy 
-- yarn git:push
+# install:
+# - yarn   
+# - yarn tslint
+# - yarn build
+# - yarn test:ci
+
+# script:
+# - yarn docker
+# - yarn docker:push
+# - yarn docker:deploy 
+# - yarn git:push
 
 notifications:
   slack:
