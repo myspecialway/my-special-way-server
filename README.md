@@ -76,6 +76,26 @@ _NOTE: if you are adding new env variables please make sure to add them into `.e
 
 __NEVER COMMIT `.env` FILE TO REPOSITORY__
 
+
+### Database Seed  
+
+To seed initial data please cd in db-seed run:
+
+    yarn install
+    
+
+Then to run seed script (mac):
+    
+    ./seed -n msw-dev mongodb://localhost:27017
+
+The following users will be created: 
+
+* `principle`
+* `teacher`
+* `student`
+
+The initial password for all users: **Aa123456**
+
 ### First Thing First
 Run the following commmands in your terminal to get your code running on your local machine:
 

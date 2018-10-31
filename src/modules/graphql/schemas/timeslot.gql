@@ -2,6 +2,7 @@
 type TimeSlot {
     # 2 numeric chars (0_0, 0_1...) represents the dayIndex_hourIndex of timeslot grid cell
     index: String!
+    hours: String
     lesson: Lesson
     location: Location
     customized: Boolean
