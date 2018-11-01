@@ -1,3 +1,4 @@
+import { TimeSlotDbModel } from 'models/timeslot.db.model';
 import {
   studentAcceptanceLesson,
   breakfastLesson,
@@ -5,7 +6,7 @@ import {
   lunchLesson,
   dismissLesson,
 } from './default-schedule-lessons';
-export const ELMENTARY_SCHEDULE = [
+export const ELMENTARY_SCHEDULE: TimeSlotDbModel[] = [
   {
     index: '0_0',
     hours: '07:30 - 08:00',
@@ -188,7 +189,7 @@ export const ELMENTARY_SCHEDULE = [
   },
 ];
 
-export const JUNIOR_HIGH = [
+export const JUNIOR_HIGH: TimeSlotDbModel[] = [
   {
     index: '0_0',
     hours: '07:30 - 08:00',
