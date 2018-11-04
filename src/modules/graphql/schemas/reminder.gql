@@ -1,0 +1,14 @@
+type Reminder {
+  type: ReminderType
+  schedule: [TimeSlot!]
+}
+
+input InputReminder {
+  type: ReminderType
+  schedule: [InputTimeSlot!]
+}
+
+enum ReminderType {
+  MEDICINE
+  REHAB
+}
