@@ -1,25 +1,25 @@
 type Mutation {
-    createUser(user: InputUser!) : User
-    updateUser(id: ID!, user: InputUser!) : User
-    deleteUser(id: ID!) : Int
+  createUser(user: InputUser!): User
+  updateUser(id: ID!, user: InputUser!): User
+  updateUserPassword(id: ID!, password: String!): User
+  deleteUser(id: ID!): Int
 
-    createStudent(student: InputStudent!) : Student
-    updateStudent(id: ID!, student: InputStudent!) : Student
-    deleteStudent(id: ID!) : Int
-    
-    # Class
-    createClass(class: InputClass!): Class
-    updateClass(id: ID!, class: InputClass!): Class
-    deleteClass(id: ID!): Int
-    
-    # Lesson
-    createLesson(lesson: InputLesson!): Lesson
-    updateLesson(id: ID!, lesson: InputLesson!): Lesson
-    deleteLesson(id: ID!): Int
+  createStudent(student: InputStudent!): Student
+  updateStudent(id: ID!, student: InputStudent!): Student
+  deleteStudent(id: ID!): Int
 
-    # Location
-    createLocation(location: InputLocation!): Location
-    updateLocation(id: ID!, location: InputLocation!): Location
-    deleteLocation(id: ID!): Int
+  # Class
+  createClass(class: InputClass!): Class
+  updateClass(id: ID!, class: InputClass!): Class
+  deleteClass(id: ID!): Int
+
+  # Lesson
+  createLesson(lesson: InputLesson!): Lesson
+  updateLesson(id: ID!, lesson: InputLesson!): Lesson
+  deleteLesson(id: ID!): Int
+
+  # Location
+  createLocation(location: InputLocation!): Location
+  updateLocation(id: ID!, location: InputLocation!): Location
+  deleteLocation(id: ID!): Int
 }
-

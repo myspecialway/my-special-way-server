@@ -14,6 +14,7 @@ export interface UserDbModel {
   class_id?: string;
   schedule?: TimeSlotDbModel[];
   reminders?: Reminders;
+  passwordNotReady: boolean;
 }
 
 export enum Gender {
