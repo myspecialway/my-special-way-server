@@ -7,87 +7,87 @@ import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
 
 describe('student resolver', () => {
-    const MOCK_PRINCIPLE = {
-        id: 'principle_1234',
-        username: 'principle_ah584d',
-        email: 'principle_email@test.co.il',
-        firstname: 'principle_avraham',
-        lastname: 'principle_hamu',
-        gender: 'MALE',
-        class_id: 'someclassid',
-        role: 'PRINCIPLE',
-    };
-    const MOCK_PRINCIPLE_CONTEXT = {
-        user:  MOCK_PRINCIPLE,
-    };
+  const MOCK_PRINCIPLE = {
+    id: 'principle_1234',
+    username: 'principle_ah584d',
+    email: 'principle_email@test.co.il',
+    firstname: 'principle_avraham',
+    lastname: 'principle_hamu',
+    gender: 'MALE',
+    class_id: 'someclassid',
+    role: 'PRINCIPLE',
+  };
+  const MOCK_PRINCIPLE_CONTEXT = {
+    user: MOCK_PRINCIPLE,
+  };
 
-    const MOCK_TEACHER = {
-        id: 'teacher_1234',
-        username: 'teacher_ah584d',
-        email: 'teacher_email@test.co.il',
-        firstname: 'teacher_avraham',
-        lastname: 'teacher_hamu',
-        gender: 'MALE',
-        class_id: 'someclassid',
-        role: 'TEACHER',
-    };
-    const MOCK_TEACHER_CONTEXT = {
-        user:  MOCK_TEACHER,
-    };
+  const MOCK_TEACHER = {
+    id: 'teacher_1234',
+    username: 'teacher_ah584d',
+    email: 'teacher_email@test.co.il',
+    firstname: 'teacher_avraham',
+    lastname: 'teacher_hamu',
+    gender: 'MALE',
+    class_id: 'someclassid',
+    role: 'TEACHER',
+  };
+  const MOCK_TEACHER_CONTEXT = {
+    user: MOCK_TEACHER,
+  };
 
-    const MOCK_STUDENT = {
-        id: 'student_1234',
-        username: 'student_ah584d',
-        email: 'student_email@test.co.il',
-        firstname: 'student_avraham',
-        lastname: 'student_hamu',
-        gender: 'MALE',
-        class_id: 'someclassid',
-        role: 'STUDNET',
-    };
-    const MOCK_STUDNET_CONTEXT = {
-        user: MOCK_STUDENT,
-    };
+  const MOCK_STUDENT = {
+    id: 'student_1234',
+    username: 'student_ah584d',
+    email: 'student_email@test.co.il',
+    firstname: 'student_avraham',
+    lastname: 'student_hamu',
+    gender: 'MALE',
+    class_id: 'someclassid',
+    role: 'STUDNET',
+  };
+  const MOCK_STUDENT_CONTEXT = {
+    user: MOCK_STUDENT,
+  };
 
-    let studentResolver: StudentResolver;
-    let usersPersistence: Partial<UsersPersistenceService>;
-    let classPersistence: Partial<ClassPersistenceService>;
+  let studentResolver: StudentResolver;
+  let usersPersistence: Partial<UsersPersistenceService>;
+  let classPersistence: Partial<ClassPersistenceService>;
     let studentPermission: Partial<StudentPermissionService>;
-    beforeEach(() => {
-        usersPersistence = {
-            getAll: jest.fn(),
-            getById: jest.fn(),
-            getUsersByFilters: jest.fn(),
-            getUserByFilters: jest.fn(),
-            getStudentsByClassId: jest.fn(),
-            createUser: jest.fn(),
-            updateUser: jest.fn(),
-            deleteUser: jest.fn(),
-            getStudentSchedule: jest.fn(),
-        };
-        classPersistence = {
-            getById: jest.fn(),
-        };
+  beforeEach(() => {
+    usersPersistence = {
+      getAll: jest.fn(),
+      getById: jest.fn(),
+      getUsersByFilters: jest.fn(),
+      getUserByFilters: jest.fn(),
+      getStudentsByClassId: jest.fn(),
+      createUser: jest.fn(),
+      updateUser: jest.fn(),
+      deleteUser: jest.fn(),
+      getStudentSchedule: jest.fn(),
+    };
+    classPersistence = {
+      getById: jest.fn(),
+    };
         studentPermission = {
             validateObjClassMatchRequester: jest.fn(),
             getAndValidateStudentsInRequesterClass: jest.fn(),
         };
 
-        studentResolver = new StudentResolver(
-            usersPersistence as UsersPersistenceService,
-            classPersistence as ClassPersistenceService,
+    studentResolver = new StudentResolver(
+      usersPersistence as UsersPersistenceService,
+      classPersistence as ClassPersistenceService,
             studentPermission as StudentPermissionService);
-    });
+  });
 
-    it('should call getUsersByFilters function and return students on getStudents', async () => {
+  it('should call getUsersByFilters function and return students on getStudents', async () => {
         (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
         (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
             Promise.resolve([Permission.ALLOW, null]));
 
         const result = await studentResolver.getStudents(null, {}, MOCK_TEACHER_CONTEXT);
         expect(result).toEqual([{ username: 'test' }]);
-        expect(usersPersistence.getUsersByFilters).toHaveBeenCalled();
-    });
+    expect(usersPersistence.getUsersByFilters).toHaveBeenCalled();
+  });
 
     it('should not call getUsersByFilters function and return students on getStudents', async () => {
         (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test-1' }]));
@@ -96,11 +96,11 @@ describe('student resolver', () => {
 
         const response = await studentResolver.getStudents(null, {}, MOCK_PRINCIPLE_CONTEXT);
         expect(response).toEqual([{ username: 'test-user' }]);
-        expect(usersPersistence.getUsersByFilters).not.toHaveBeenCalled();
+    expect(usersPersistence.getUsersByFilters).not.toHaveBeenCalled();
         expect(studentPermission.getAndValidateStudentsInRequesterClass ).toHaveBeenCalled();
-    });
+  });
 
-    it('should call getUserByFilters function and return student on getStudentById', async () => {
+  it('should call getUserByFilters function and return student on getStudentById', async () => {
         (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
         (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
             Promise.resolve([Permission.ALLOW, null]));
@@ -108,7 +108,7 @@ describe('student resolver', () => {
         const response = await studentResolver.getStudentById(null, {id: 'someid'}, MOCK_TEACHER_CONTEXT);
         expect(response).toEqual([{ username: 'test' }]);
         expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({role: UserRole.STUDENT}, 'someid');
-    });
+  });
 
     it('should not getUserByFilters function and return student on getStudentById', async () => {
         (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
@@ -117,8 +117,8 @@ describe('student resolver', () => {
 
         const response = await studentResolver.getStudentById(null, { id: 'someid' }, MOCK_TEACHER_CONTEXT);
         expect(response).toEqual({ username: 'test-user' });
-        expect(usersPersistence.getUserByFilters).not.toHaveBeenCalled();
-    });
+    expect(usersPersistence.getUserByFilters).not.toHaveBeenCalled();
+  });
 
     it('should call getById function and return class on getStudentClass', async () => {
         (studentPermission.validateObjClassMatchRequester as jest.Mock).mockReturnValue(Promise.resolve(Permission.ALLOW));
@@ -127,7 +127,7 @@ describe('student resolver', () => {
         const response = await studentResolver.getStudentClass({ class_id: 'someid' }, {}, MOCK_TEACHER_CONTEXT);
         expect(response).toEqual({ _id: '123' });
         expect(classPersistence.getById).toHaveBeenCalledWith('someid');
-    });
+  });
 
     it('should call getStudentSchedule and return the merged schedule', async () => {
         const expected: TimeSlotDbModel[] = [
@@ -147,19 +147,19 @@ describe('student resolver', () => {
         const response = await studentResolver.createStudent(null, {student: MOCK_PRINCIPLE}, MOCK_PRINCIPLE_CONTEXT);
         expect(response).toEqual(MOCK_PRINCIPLE);
         expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_PRINCIPLE, UserRole.STUDENT);
-    });
+  });
 
-    it('should call updateUser function as principle and return the student updated', async () => {
+  it('should call updateUser function as principle and return the student updated', async () => {
         (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_PRINCIPLE]));
         (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
             Promise.resolve([Permission.ALLOW, {username: 'test-user'}]));
 
         const response = await studentResolver.updateStudent(null, { id: 'someid', student: MOCK_PRINCIPLE}, MOCK_PRINCIPLE_CONTEXT);
-        expect(response).toEqual(MOCK_PRINCIPLE);
+    expect(response).toEqual(MOCK_PRINCIPLE);
         expect(usersPersistence.updateUser).toHaveBeenCalledWith('someid', MOCK_PRINCIPLE, UserRole.STUDENT);
-    });
+  });
 
-    it('should call updateUser function as teacher and return the student was not updated', async () => {
+  it('should call updateUser function as teacher and return the student was not updated', async () => {
         (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
         (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
             Promise.resolve([Permission.ALLOW, null]));
@@ -167,16 +167,16 @@ describe('student resolver', () => {
         const response = await studentResolver.updateStudent(null, { id: 'studentid', student: MOCK_STUDENT}, MOCK_TEACHER_CONTEXT);
         expect(response).toBeNull();
         expect(usersPersistence.updateUser).not.toHaveBeenCalled();
-    });
+  });
 
-    it('should call deleteUser function as principle and return the number of students deleted', async () => {
+  it('should call deleteUser function as principle and return the number of students deleted', async () => {
         (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
         (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
             Promise.resolve([Permission.ALLOW, {username: 'test-user'}]));
 
         const response = await studentResolver.deleteStudent(null, { id: 'someid'}, MOCK_PRINCIPLE_CONTEXT);
-        expect(response).toEqual(1);
-    });
+    expect(response).toEqual(1);
+  });
 
     it('should call deleteUser function as teacher and return none deleted', async () => {
         (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, null]));
@@ -185,6 +185,9 @@ describe('student resolver', () => {
 
         const response = await studentResolver.deleteStudent(null, { id: 'someid'}, MOCK_PRINCIPLE_CONTEXT);
         expect(response).toBeNull();
-    });
+  });
 
+        hours: '07:30 - 08:00',
+        hours: '07:30 - 08:00',
+        hours: '07:30 - 08:00',
 });
