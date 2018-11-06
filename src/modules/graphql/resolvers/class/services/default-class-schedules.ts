@@ -253,6 +253,12 @@ export const ELMENTARY_SCHEDULE: TimeSlotDbModel[] = [
   indx27,
   indx28,
   indx29,
+  indx30,
+  indx31,
+  indx32,
+  indx33,
+  indx34,
+  indx35,
 ];
 
 const jn1: TimeSlotDbModel = {
