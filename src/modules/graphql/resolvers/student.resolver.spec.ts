@@ -1,11 +1,10 @@
-import { ObjectID } from 'mongodb';
 import { StudentResolver } from './student.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import * as permInt from '../../permissions/permission.interface';
 import { Permission } from '../../permissions/permission.interface';
 import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
+import { StudentPermissionService } from '../../permissions/student.premission.service';
 
 describe('student resolver', () => {
   const MOCK_PRINCIPLE = {
@@ -53,6 +52,7 @@ describe('student resolver', () => {
   let studentResolver: StudentResolver;
   let usersPersistence: Partial<UsersPersistenceService>;
   let classPersistence: Partial<ClassPersistenceService>;
+  let studentPermission: Partial<StudentPermissionService>;
   beforeEach(() => {
     usersPersistence = {
       getAll: jest.fn(),
@@ -68,52 +68,82 @@ describe('student resolver', () => {
     classPersistence = {
       getById: jest.fn(),
     };
+    studentPermission = {
+      validateObjClassMatchRequester: jest.fn(),
+      getAndValidateStudentsInRequesterClass: jest.fn(),
+    };
 
     studentResolver = new StudentResolver(
       usersPersistence as UsersPersistenceService,
       classPersistence as ClassPersistenceService,
+      studentPermission as StudentPermissionService,
     );
   });
 
   it('should call getUsersByFilters function and return students on getStudents', async () => {
     (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, null]),
+    );
 
-    const response = await studentResolver.getStudents(null, {}, MOCK_PRINCIPLE_CONTEXT);
-    expect(response).toEqual([{ username: 'test' }]);
+    const result = await studentResolver.getStudents(null, {}, MOCK_TEACHER_CONTEXT);
+    expect(result).toEqual([{ username: 'test' }]);
     expect(usersPersistence.getUsersByFilters).toHaveBeenCalled();
   });
 
-  it('should call getStudentsByClassId function and return students on getStudents', async () => {
+  it('should not call getUsersByFilters function and return students on getStudents', async () => {
     (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test-1' }]));
-    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '123' }));
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([, [{ username: 'test' }]]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, [{ username: 'test-user' }]]),
+    );
 
-    const response = await studentResolver.getStudents(null, {}, MOCK_TEACHER_CONTEXT);
-    expect(response).toEqual([{ username: 'test' }]);
+    const response = await studentResolver.getStudents(null, {}, MOCK_PRINCIPLE_CONTEXT);
+    expect(response).toEqual([{ username: 'test-user' }]);
     expect(usersPersistence.getUsersByFilters).not.toHaveBeenCalled();
-    expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
+    expect(studentPermission.getAndValidateStudentsInRequesterClass).toHaveBeenCalled();
   });
 
   it('should call getUserByFilters function and return student on getStudentById', async () => {
-    (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test' }));
-
-    const response = await studentResolver.getStudentById(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
-    expect(response).toEqual({ username: 'test' });
-    expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({ role: UserRole.STUDENT }, 'someid');
-  });
-
-  it('should call getStudentsByClassId function and return student on getStudentById', async () => {
-    (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve({ username: 'test-1' }));
-    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '123' }));
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
-      Promise.resolve([, [{ username: 'test', _id: 'someid' }]]),
+    (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, null]),
     );
 
     const response = await studentResolver.getStudentById(null, { id: 'someid' }, MOCK_TEACHER_CONTEXT);
-    expect(response).toEqual({ username: 'test', _id: 'someid' });
-    expect(usersPersistence.getUsersByFilters).not.toHaveBeenCalled();
-    expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
+    expect(response).toEqual([{ username: 'test' }]);
+    expect(usersPersistence.getUserByFilters).toHaveBeenCalledWith({ role: UserRole.STUDENT }, 'someid');
+  });
+
+  it('should not getUserByFilters function and return student on getStudentById', async () => {
+    (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
+    );
+
+    const response = await studentResolver.getStudentById(null, { id: 'someid' }, MOCK_TEACHER_CONTEXT);
+    expect(response).toEqual({ username: 'test-user' });
     expect(usersPersistence.getUserByFilters).not.toHaveBeenCalled();
+  });
+
+  it('should call getById function and return class on getStudentClass', async () => {
+    (studentPermission.validateObjClassMatchRequester as jest.Mock).mockReturnValue(Promise.resolve(Permission.ALLOW));
+    (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ _id: '123' }));
+
+    const response = await studentResolver.getStudentClass({ class_id: 'someid' }, {}, MOCK_TEACHER_CONTEXT);
+    expect(response).toEqual({ _id: '123' });
+    expect(classPersistence.getById).toHaveBeenCalledWith('someid');
+  });
+
+  it('should call getStudentSchedule and return the merged schedule', async () => {
+    const expected: TimeSlotDbModel[] = [
+      { index: '00', lesson: { _id: 'someid', title: 'updatedlesson', icon: 'updatedicon' } },
+      { index: '02', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
+      { index: '01', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
+    ];
+    (usersPersistence.getStudentSchedule as jest.Mock).mockReturnValue(Promise.resolve([null, expected]));
+    (studentPermission.validateObjClassMatchRequester as jest.Mock).mockReturnValue(Promise.resolve(Permission.ALLOW));
+    const response = await studentResolver.getStudentSchedule({ class_id: 'someid' }, {}, MOCK_STUDENT);
+    expect(response).toEqual(expected);
   });
 
   it('should call createUser function and return the new student created', async () => {
@@ -124,29 +154,11 @@ describe('student resolver', () => {
     expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_PRINCIPLE, UserRole.STUDENT);
   });
 
-  it('should call createUser function and student class id as objectID ', async () => {
-    const studentData = { ...MOCK_STUDENT, class_id: '5b9e6ef0312c81ddc4325b1b' };
-    expect(typeof studentData.class_id).toBe('string');
-
-    expect(() => new ObjectID('someinvalidId')).toThrow();
-
-    const fixedStudent = {
-      ...studentData,
-      class_id: new ObjectID(studentData.class_id),
-    };
-
-    expect(fixedStudent.class_id).toBeInstanceOf(ObjectID);
-
-    (usersPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve([null, fixedStudent]));
-    permInt.checkAndGetBasePermission = jest.fn().mockImplementationOnce(() => Permission.OWN); // tslint:disable-line
-
-    const response = await studentResolver.createStudent(null, { student: studentData }, MOCK_STUDENT_CONTEXT);
-    expect(response).toEqual(fixedStudent);
-    expect(usersPersistence.createUser).toHaveBeenCalledWith(fixedStudent, UserRole.STUDENT);
-  });
-
-  it('should call updateUser function as principle and return the student updated', async () => {
+  it('should call updatqeUser function as principle and return the student updated', async () => {
     (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_PRINCIPLE]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
+    );
 
     const response = await studentResolver.updateStudent(
       null,
@@ -159,9 +171,8 @@ describe('student resolver', () => {
 
   it('should call updateUser function as teacher and return the student was not updated', async () => {
     (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
-    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '123' }));
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
-      Promise.resolve([, [{ username: 'test', _id: 'studentid' }]]),
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, null]),
     );
 
     const response = await studentResolver.updateStudent(
@@ -169,125 +180,27 @@ describe('student resolver', () => {
       { id: 'studentid', student: MOCK_STUDENT },
       MOCK_TEACHER_CONTEXT,
     );
-    expect(usersPersistence.updateUser).toHaveBeenCalledWith('studentid', MOCK_STUDENT, UserRole.STUDENT);
-  });
-
-  it('should call updateUser function as teacher and raise expcetion as the student no in the teachers class', async () => {
-    (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
-    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '123' }));
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
-      Promise.resolve([, [{ username: 'test', _id: 'another_studentid' }]]),
-    );
-
-    permInt.checkAndGetBasePermission = jest.fn().mockImplementationOnce(() => Permission.OWN); // tslint:disable-line
-
-    let err = false;
-    try {
-      const response = await studentResolver.updateStudent(
-        null,
-        { id: 'studentid', student: MOCK_STUDENT },
-        MOCK_TEACHER_CONTEXT,
-      );
-    } catch (e) {
-      err = true;
-    }
-    expect(err).toBeTruthy();
+    expect(response).toBeNull();
+    expect(usersPersistence.updateUser).not.toHaveBeenCalled();
   });
 
   it('should call deleteUser function as principle and return the number of students deleted', async () => {
     (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
+    );
 
     const response = await studentResolver.deleteStudent(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
     expect(response).toEqual(1);
-    expect(usersPersistence.deleteUser).toHaveBeenCalledWith('someid');
   });
 
-  it('should call deleteUser function as teacher and return the number of students deleted', async () => {
-    (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
-    (usersPersistence.getById as jest.Mock).mockReturnValue(
-      Promise.resolve({
-        name: 'test_teacher',
-        _id: 'someid',
-        class_id: 'test_classid',
-      }),
+  it('should call deleteUser function as teacher and return none deleted', async () => {
+    (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, null]));
+    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.ALLOW, null]),
     );
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
-      Promise.resolve([
-        ,
-        [
-          {
-            username: 'test_student',
-            _id: 'studentid',
-            class_id: 'test_classid',
-          },
-        ],
-      ]),
-    );
-    permInt.checkAndGetBasePermission = jest.fn().mockImplementationOnce(() => Permission.OWN); // tslint:disable-line
 
-    const response = await studentResolver.deleteStudent(null, { id: 'studentid' }, MOCK_TEACHER_CONTEXT);
-    expect(response).toEqual(1);
-    expect(usersPersistence.deleteUser).toHaveBeenCalledWith('studentid');
-  });
-
-  it('should call deleteUser function as teacher and raise excpetion as its not the teachers user', async () => {
-    (usersPersistence.getById as jest.Mock).mockReturnValue(
-      Promise.resolve({
-        name: 'test_teacher',
-        _id: 'someid',
-        class_id: 'test_classid',
-      }),
-    );
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
-      Promise.resolve([
-        ,
-        [
-          {
-            username: 'test_student',
-            _id: 'another_studentid',
-            class_id: 'test_classid',
-          },
-        ],
-      ]),
-    );
-    permInt.checkAndGetBasePermission = jest.fn().mockImplementationOnce(() => Permission.OWN); // tslint:disable-line
-
-    let err = false;
-    try {
-      const response = await studentResolver.deleteStudent(null, { id: 'studentid' }, MOCK_TEACHER_CONTEXT);
-    } catch (e) {
-      err = true;
-    }
-    expect(err).toBeTruthy();
-  });
-
-  it('should call getStudentClass and return the class', async () => {
-    (classPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ name: 'someclass' }));
-    const response = await studentResolver.getStudentClass(MOCK_PRINCIPLE, {}, MOCK_PRINCIPLE_CONTEXT);
-    expect(response).toEqual({ name: 'someclass' });
-    expect(classPersistence.getById).toHaveBeenCalledWith('someclassid');
-  });
-
-  it('should call getStudentSchedule and return the merged schedule', async () => {
-    const expected: TimeSlotDbModel[] = [
-      {
-        index: '00',
-        hours: '07:30 - 08:00',
-        lesson: { _id: 'someid', title: 'updatedlesson', icon: 'updatedicon' },
-      },
-      {
-        index: '02',
-        hours: '07:30 - 08:00',
-        lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' },
-      },
-      {
-        index: '01',
-        hours: '07:30 - 08:00',
-        lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' },
-      },
-    ];
-    (usersPersistence.getStudentSchedule as jest.Mock).mockReturnValue(Promise.resolve([null, expected]));
-    const response = await studentResolver.getStudentSchedule(MOCK_STUDENT);
-    expect(response).toEqual(expected);
+    const response = await studentResolver.deleteStudent(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
+    expect(response).toBeNull();
   });
 });
