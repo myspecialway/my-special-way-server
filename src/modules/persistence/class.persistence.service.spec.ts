@@ -18,6 +18,7 @@ describe('class persistence', () => {
                     replaceOne: jest.fn(),
                     findOneAndUpdate: jest.fn(),
                     insertOne: jest.fn(),
+                    createIndex: jest.fn(),
                 } as Partial<Collection>),
             } as Partial<Db>),
         };
