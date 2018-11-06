@@ -31,15 +31,18 @@ export class StudentPermissionService {
             const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
             const [, students] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
             if (id) {
-                const studentInClass = students.filter((obj) => obj._id.toString() === id.toString());
-                if (!studentInClass || studentInClass.length === 0) {
-                    throw new Error(NO_PERMISSION);
-                }
-                return  [Permission.OWN, studentInClass];
+                return this.getStudentsByClass(students, id);
             }
             return [Permission.OWN, students];
         }
         return [permission, null];
     }
 
+    private getStudentsByClass(students: UserDbModel[], classId: string): [Permission, UserDbModel[]] {
+        const studentsInClass = students.filter((obj) => obj._id.toString() === classId.toString());
+        if (!studentsInClass || studentsInClass.length === 0) {
+            throw new Error(NO_PERMISSION);
+        }
+        return [Permission.OWN, studentsInClass];
+    }
 }
