@@ -12,11 +12,13 @@ import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
 import { ClassLogic } from './resolvers/class/services/class-logic.service';
+import {PermissionsModule} from '../permissions/permissions.module';
 
 @Module({
     imports: [
         GraphQLModule,
         PersistenceModule,
+        PermissionsModule,
     ],
     providers: [
         GraphQlService,

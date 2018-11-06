@@ -1,7 +1,4 @@
-import {Asset, DBOperation, Permission, Permissions, TEACHER_PERMISSION_RULES} from './permission.interface';
-import { Logger } from '@nestjs/common';
-
-const logger = new Logger('PermissionStrategy');
+import {Asset, DBOperation, Permission, Permissions, TEACHER_PERMISSION_RULES, STUDENT_PERMISSION_RULES} from './permission.interface';
 
 export class PrinciplePermission implements Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission {
@@ -13,7 +10,7 @@ export class TeacherPermission implements Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission {
         const rule = TEACHER_PERMISSION_RULES.find((obj) => obj.operation === op && obj.asset === asset);
         if (!rule) {
-            return Permission.ALLOW;
+            return Permission.FORBID;
         } else {
             return rule.permission;
         }
@@ -22,11 +19,12 @@ export class TeacherPermission implements Permissions {
 
 export class StudentPermission implements Permissions {
     getPermission(asset: Asset, op: DBOperation): Permission {
-      logger.error(
-        '***********************Temporary fix - allowing student to get schedule.' +
-        'implement student permissions!!! this is for demo only. ****************************************',
-      );
-      return Permission.ALLOW;
+        const rule = STUDENT_PERMISSION_RULES.find((obj) => obj.operation === op && obj.asset === asset);
+        if (!rule) {
+            return Permission.FORBID;
+        } else {
+            return rule.permission;
+        }
     }
 }
 
