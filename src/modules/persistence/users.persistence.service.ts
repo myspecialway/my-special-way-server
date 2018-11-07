@@ -1,12 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
-import { UserDbModel, UserRole } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
 import { ClassPersistenceService } from './class.persistence.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
+import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -82,7 +82,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       if (userRole) {
         user.role = userRole;
       }
-      user.passwordNotReady = true;
+      user.passwordStatus = PasswordStatus.NOT_SET;
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
@@ -119,7 +119,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     try {
       const user = await this.collection.findOne({ _id: mongoId });
       this.logger.log(`updateUser:: updating user ${mongoId}`);
-      user.passwordNotReady = false;
+      user.passwordStatus = PasswordStatus.VALID;
       user.password = password;
       const updatedDocument = await this.collection.findOneAndUpdate(
         { _id: mongoId },

@@ -14,7 +14,7 @@ export interface UserDbModel {
   class_id?: string;
   schedule?: TimeSlotDbModel[];
   reminders?: Reminders;
-  passwordNotReady: boolean;
+  passwordStatus: PasswordStatus;
 }
 
 export enum Gender {
@@ -26,4 +26,10 @@ export enum UserRole {
   PRINCIPLE = 'PRINCIPLE',
   TEACHER = 'TEACHER',
   STUDENT = 'STUDENT',
+}
+
+export enum PasswordStatus {
+  NOT_SET = 'NOT_SET',
+  VALID = 'VALID',
+  FORGOT = 'FORGOT',
 }
