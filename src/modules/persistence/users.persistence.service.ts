@@ -90,16 +90,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         );
         user.password = 'Aa123456';
       }
-      const [error, isUnique] = await this.validateUserNameUnique({
-        username: user.username,
-      } as UserUniqueValidationRequest);
-      if (error) {
-        throw error;
-      }
-      if (!isUnique) {
-        this.logger.error(`createUser:: error adding user - username ${user.username} is taken`);
-        return [new Error(`createUser:: error adding user - username ${user.username} is taken`), null];
-      }
+      await this.uniqueUserNameValidation(user.username, undefined);
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
@@ -118,17 +109,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
 
     const mongoId = new ObjectID(id);
     try {
-      const [error, isUnique] = await this.validateUserNameUnique({
-        username: user.username,
-        id,
-      } as UserUniqueValidationRequest);
-      if (error) {
-        throw error;
-      }
-      if (!isUnique) {
-        this.logger.error(`updateUser:: error update user - username ${user.username} is taken`);
-        return [new Error(`updateUser:: error update user - username ${user.username} is taken`), null];
-      }
+      await this.uniqueUserNameValidation(user.username, id);
       this.logger.log(`updateUser:: updating user ${mongoId}`);
 
       const updatedDocument = await this.collection.findOneAndUpdate(
@@ -242,6 +223,19 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       // Validate the 'create user' form
     } else {
       return [null, false];
+    }
+  }
+
+  private async uniqueUserNameValidation(username: string, id: string) {
+    const [error, isUnique] = await this.validateUserNameUnique({
+      username,
+      id,
+    } as UserUniqueValidationRequest);
+    if (error) {
+      throw error;
+    }
+    if (!isUnique) {
+      throw new Error(`validateUserNameUnique:: username ${username} is taken`);
     }
   }
 }
