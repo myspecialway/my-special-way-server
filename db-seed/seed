@@ -48,6 +48,20 @@ async function init() {
     for (const collectionContent of collectionContents) {
         logger.info(`dbseed:: filling collection ${collectionContent.collection} with ${collectionContent.data.length} rows`);
         const collection = db.collection(collectionContent.collection);
+        if (collectionContent.collection === 'classes') {
+            // since collection list is sorted, we know that the database
+            // contains lessons with generated ids, so we can use these id's in the class schedule
+            for (const cls of collectionContent.data) {
+                // get all schedule items which has lesson and udate the lesson object from,
+                // lesson collection in the database.
+                const scheduleItems = cls.schedule.filter((item) => item.lesson);
+                for (const scheduleItem of scheduleItems) {
+                    // find the lesson by title 
+                    const cor = await db.collection('lessons').findOne({ title: scheduleItem.lesson.title });
+                    scheduleItem.lesson = cor;
+                }
+            }
+        }
         await collection.insertMany(collectionContent.data);
         if (collectionContent.add_relations) {
             relationsToAdd.push({ collection, collectionContent });
@@ -74,10 +88,33 @@ function getFilesJSONContent(relativeFolderPath) {
         .filter((filename) => filename.endsWith('.json'))
         .map((filename) => path.resolve(__dirname, relativeFolderPath, filename));
     logger.info(`dbseed:: reading files complete for ${JSON.stringify(filesPaths, null, 2)}`);
-    const jsonContent = [];
+    // currently we have 4 collections, we need to insert them by the given order,
+    // so we can use the lessons created ids when inserting class with schedule
+    const jsonContent = [null, null, null, null];
     for (const filePath of filesPaths) {
         const fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
-        jsonContent.push(JSON.parse(fileContent));
+        let collectionIndex = -1;
+        const collection = JSON.parse(fileContent);
+        // this is the actual sorting. TODO: move this somewhere else (maybeein as field in each data file)
+        switch (collection.collection) {
+            case 'classes':
+                collectionIndex = 2;
+                break;
+            case 'lessons':
+                collectionIndex = 0;
+                break;
+            case 'locations':
+                collectionIndex = 1;
+                break;
+            case 'users':
+                collectionIndex = 3;
+                break;
+            default:
+                break;
+        }
+        if (collectionIndex >= 0) {
+            jsonContent[collectionIndex] = collection;
+        }
     }
     return jsonContent;
 }
