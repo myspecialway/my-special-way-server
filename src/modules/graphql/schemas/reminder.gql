@@ -1,11 +1,11 @@
 type Reminder {
   type: ReminderType
-  schedule: [TimeSlot!]
+  schedule: [ReminderTime!]
 }
 
 input InputReminder {
   type: ReminderType
-  schedule: [InputTimeSlot!]
+  schedule: [InputReminderTime!]
 }
 
 enum ReminderType {
