@@ -1,11 +1,11 @@
 import { ReminderTimeDbModel } from './reminder-time.db.model';
 
-export interface Reminders {
+export interface IReminders {
   enabled: boolean;
-  data: Reminder[];
+  data: IReminder[];
 }
 
-export interface Reminder {
+export interface IReminder {
   type: ReminderType;
   schedule: ReminderTimeDbModel[];
 }
@@ -15,7 +15,7 @@ export enum ReminderType {
   REHAB = 'גמילה',
 }
 
-export const DEFAULT_REMINDERS: Reminders = {
+export const DEFAULT_REMINDERS: IReminders = {
   enabled: false,
   data: [],
 };

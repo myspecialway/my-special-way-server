@@ -1,4 +1,4 @@
-import { Reminders, DEFAULT_REMINDERS } from './../../models/reminder.db.model';
+import { IReminders, DEFAULT_REMINDERS } from './../../models/reminder.db.model';
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
@@ -197,7 +197,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     }
   }
 
-  getStudentReminders(student: UserDbModel): Reminders {
+  getStudentReminders(student: UserDbModel): IReminders {
     return student.reminders || DEFAULT_REMINDERS;
   }
 }
