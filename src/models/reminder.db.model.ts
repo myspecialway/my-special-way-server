@@ -1,4 +1,4 @@
-import { ReminderTimeDbModel } from '@models/reminder-time.db.model';
+import { ReminderTimeDbModel } from './reminder-time.db.model';
 
 export interface Reminders {
   enabled: boolean;

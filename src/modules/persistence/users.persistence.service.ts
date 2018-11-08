@@ -1,4 +1,4 @@
-import { Reminders } from './../../models/reminder.db.model';
+import { Reminders, DEFAULT_REMINDERS } from './../../models/reminder.db.model';
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
