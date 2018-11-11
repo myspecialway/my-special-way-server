@@ -4,7 +4,7 @@ import {
   Permission,
   Permissions,
   TEACHER_PERMISSION_RULES,
-  STUDENT_PERMISSION_RULES,
+  // STUDENT_PERMISSION_RULES,
 } from './permission.interface';
 
 export class PrinciplePermission implements Permissions {
