@@ -1,9 +1,0 @@
-type Reminders {
-  enabled: Boolean!
-  data: [Reminder]
-}
-
-input InputReminders {
-  enabled: Boolean
-  data: [InputReminder]
-}

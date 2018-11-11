@@ -1,4 +1,4 @@
-import { IReminders } from './reminder.db.model';
+import { IReminder } from './reminder.db.model';
 import { TimeSlotDbModel } from './timeslot.db.model';
 
 export interface UserDbModel {
@@ -13,7 +13,7 @@ export interface UserDbModel {
   gender: Gender;
   class_id?: string;
   schedule?: TimeSlotDbModel[];
-  reminders?: IReminders;
+  reminders?: IReminder[];
 }
 
 export enum Gender {
