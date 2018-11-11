@@ -1,7 +1,7 @@
 type Mutation {
   createUser(user: InputUser!): User
   updateUser(id: ID!, user: InputUser!): User
-  updateUserPassword(id: ID!, password: String!): User
+  updateUserPassword(username: String!, password: String!): User
   deleteUser(id: ID!): Int
 
   createStudent(student: InputStudent!): Student

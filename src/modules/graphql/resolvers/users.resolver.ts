@@ -40,10 +40,10 @@ export class UsersResolver {
   }
 
   @Mutation('updateUserPassword')
-  async updateUserPassword(_, { id, password }, context) {
+  async updateUserPassword(_, { username, password }, context) {
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER);
     // TODO: Handle errors!!!!
-    const [, response] = await this.usersPersistence.updateUserPassword(id, password);
+    const [, response] = await this.usersPersistence.updateUserPassword(username, password);
     return response;
   }
 

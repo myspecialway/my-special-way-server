@@ -114,22 +114,21 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       return [error, null];
     }
   }
-  async updateUserPassword(id: string, password: string): Promise<[Error, UserDbModel]> {
-    const mongoId = new ObjectID(id);
+  async updateUserPassword(username: string, password: string): Promise<[Error, UserDbModel]> {
     try {
-      const user = await this.collection.findOne({ _id: mongoId });
-      this.logger.log(`updateUser:: updating user ${mongoId}`);
+      const user = await this.collection.findOne({ username });
+      this.logger.log(`updateUser:: updating user ${username}`);
       user.passwordStatus = PasswordStatus.VALID;
       user.password = password;
       const updatedDocument = await this.collection.findOneAndUpdate(
-        { _id: mongoId },
+        { _id: user._id },
         { $set: user },
         { returnOriginal: false },
       );
       this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
       return [null, updatedDocument.value];
     } catch (error) {
-      this.logger.error(`updateUser:: error updating user ${mongoId}`, error.stack);
+      this.logger.error(`updateUser:: error updating user ${username}`, error.stack);
       return [error, null];
     }
   }
