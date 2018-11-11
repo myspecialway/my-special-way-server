@@ -42,6 +42,10 @@ async function init() {
     db = client.db(args.name);
   }
   const collectionContents = getFilesJSONContent('./data');
+  logger.info(`dbseed:: collections to insert: `);
+  collectionContents.forEach((col) => {
+    logger.info('' + col.loadOrder + '. ' + col.collection);
+  });
   logger.info(`dbseed:: filling collections`);
   for (const collectionContent of collectionContents) {
     logger.info(
@@ -49,6 +53,7 @@ async function init() {
     );
     const collection = db.collection(collectionContent.collection);
     if (collectionContent.collection === 'classes') {
+      logger.info(`dbseed:: fixing lesson id's in class schedule`);
       // since collection list is sorted, we know that the database
       // contains lessons with generated ids, so we can use these id's in the class schedule
       for (const cls of collectionContent.data) {
@@ -94,32 +99,14 @@ function getFilesJSONContent(relativeFolderPath) {
   logger.info(`dbseed:: reading files complete for ${JSON.stringify(filesPaths, null, 2)}`);
   // currently we have 4 collections, we need to insert them by the given order,
   // so we can use the lessons created ids when inserting class with schedule
-  const jsonContent = [null, null, null, null];
+  const jsonContent = [];
   for (const filePath of filesPaths) {
     const fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
-    let collectionIndex = -1;
     const collection = JSON.parse(fileContent);
-    // this is the actual sorting. TODO: move this somewhere else (maybeein as field in each data file)
-    switch (collection.collection) {
-      case 'classes':
-        collectionIndex = 2;
-        break;
-      case 'lessons':
-        collectionIndex = 0;
-        break;
-      case 'locations':
-        collectionIndex = 1;
-        break;
-      case 'users':
-        collectionIndex = 3;
-        break;
-      default:
-        break;
-    }
-    if (collectionIndex >= 0) {
-      jsonContent[collectionIndex] = collection;
-    }
+    jsonContent.push(collection);
   }
-  return jsonContent;
+  return jsonContent.sort((a, b) => {
+    return a.loadOrder - b.loadOrder;
+  });
 }
 //# sourceMappingURL=seed.js.map

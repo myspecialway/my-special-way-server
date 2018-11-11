@@ -1,39 +1,40 @@
 {
-    "collection": "users",
-    "data": [
-        {
-            "username": "teacher",
-            "password": "Aa123456",
-            "email": "msw-teacher@gmail.com",
-            "firstname": "Msw",
-            "lastname": "Teacher",
-            "role": "TEACHER",
-            "gender": "MALE"
-        },
-        {
-            "username": "principle",
-            "password": "Aa123456",
-            "email": "msw-principle@gmail.com",
-            "firstname": "Msw",
-            "lastname": "Principle",
-            "role": "PRINCIPLE",
-            "gender": "FEMALE"
-        },
-        {
-            "username": "student",
-            "password": "Aa123456",
-            "email": "msw-student@gmail.com",
-            "firstname": "Msw",
-            "lastname": "Student",
-            "role": "STUDENT",
-            "gender": "MALE"
-        }
-    ],
-    "add_relations":[
-        {
-            "from_collection": "classes",
-            "to_field": "class_id",
-            "by": "random"
-        }
-    ]
+  "collection": "users",
+  "loadOrder": 3,
+  "data": [
+    {
+      "username": "teacher",
+      "password": "Aa123456",
+      "email": "msw-teacher@gmail.com",
+      "firstname": "Msw",
+      "lastname": "Teacher",
+      "role": "TEACHER",
+      "gender": "MALE"
+    },
+    {
+      "username": "principle",
+      "password": "Aa123456",
+      "email": "msw-principle@gmail.com",
+      "firstname": "Msw",
+      "lastname": "Principle",
+      "role": "PRINCIPLE",
+      "gender": "FEMALE"
+    },
+    {
+      "username": "student",
+      "password": "Aa123456",
+      "email": "msw-student@gmail.com",
+      "firstname": "Msw",
+      "lastname": "Student",
+      "role": "STUDENT",
+      "gender": "MALE"
+    }
+  ],
+  "add_relations": [
+    {
+      "from_collection": "classes",
+      "to_field": "class_id",
+      "by": "random"
+    }
+  ]
 }
