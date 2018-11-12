@@ -13,7 +13,7 @@ export enum ReminderType {
   REHAB = 'גמילה',
 }
 
-export const getReminderTypeKeys = Object.keys(ReminderType);
+export const getReminderTypeKeys = Object.keys(ReminderType) as ReminderTypeKey[];
 
 export const DEFAULT_REMINDERS: IReminder[] = getReminderTypeKeys.map((key: ReminderTypeKey) => ({
   enabled: false,
