@@ -35,15 +35,15 @@ export class StudentResolver {
 
   @Query('student')
   async getStudentById(_, args, context) {
-    const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [permission, student] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
       DBOperation.READ,
       args.id,
       context,
     );
-    if (permission === Permission.ALLOW && !students) {
+    if (permission === Permission.ALLOW && !student) {
       return this.usersPersistence.getUserByFilters({ role: UserRole.STUDENT }, args.id);
     } else {
-      return students;
+      return [student];
     }
   }
 

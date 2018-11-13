@@ -2,10 +2,10 @@
 type ReminderTime {
   # numeric chars (0, 1,...6) represents the dayIndex of remindertime
   daysindex: [Int!]
-  hours: String
+  hours: [String!]
 }
 
 input InputReminderTime {
   daysindex: [Int!]
-  hours: [String]
+  hours: [String!]
 }
