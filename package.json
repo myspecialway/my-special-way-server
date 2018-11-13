@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.91",
+  "version": "0.0.95",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "start:watch": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
+    "seed": "./db-seed/seed mongodb://localhost --name msw-dev",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage --detectOpenHandles",
@@ -97,6 +98,7 @@
     "ts-loader": "^4.1.0",
     "ts-node": "^6.1.1",
     "tsconfig-paths": "^3.1.1",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "5.10.0",
     "webpack": "^4.2.0",
     "webpack-cli": "^2.0.13",
