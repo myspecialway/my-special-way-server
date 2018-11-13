@@ -55,6 +55,13 @@ export class ClassResolver {
   @ResolveProperty('schedule')
   async getClassSchedule(obj, {}, context) {
     const schedule = obj.schedule || [];
+    if (!schedule || !schedule.length || schedule.length === 0) {
+      return await Promise.resolve([]);
+    }
+    if (schedule.filter((s) => s.lesson).length === 0) {
+      // no lesson to check
+      return await schedule;
+    }
     const allLessons = await this.lessonPersistence.getAll();
     schedule.forEach((scheduleItem) => {
       const found = allLessons.filter((lesson) => {
@@ -64,7 +71,7 @@ export class ClassResolver {
         scheduleItem.lesson = found[0];
       }
     });
-    return schedule;
+    return await schedule;
   }
 
   @ResolveProperty('students')
