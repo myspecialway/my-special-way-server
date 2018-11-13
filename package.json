@@ -20,7 +20,7 @@
     "start:watch": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
-    "seed": "./db-seed/seed mongodb://localhost --name msw-dev",
+    "mongo-shell": "mongo mongodb://localhost:27017/msw-local",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage --detectOpenHandles",
