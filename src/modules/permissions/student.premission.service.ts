@@ -22,26 +22,37 @@ export class StudentPermissionService {
     return permission;
   }
 
-  async getAndValidateStudentsInRequesterClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel]> {
+  async getAndValidateSingleStudentInClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel]> {
     const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
     if (permission === Permission.OWN) {
       // find student in requester's class
       const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
       const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
       const [, classStudents] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
-      if (id) {
-        return this.getClassStudentById(classStudents, id);
-      }
-      return [Permission.OWN, null];
+
+      return this.getClassStudentById(classStudents, id);
+    }
+    return [permission, null];
+  }
+
+  async getAndValidateAllStudentsInClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel[]]> {
+    const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
+    if (permission === Permission.OWN) {
+      // find student in requester's class
+      const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
+      const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
+      const [, classStudents] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
+
+      return [Permission.OWN, classStudents];
     }
     return [permission, null];
   }
 
   private getClassStudentById(classStudents: UserDbModel[], studentId: string): [Permission, UserDbModel] {
-    const expectedClassStudent = classStudents.find((student) => student._id.toString() === studentId);
-    if (!expectedClassStudent) {
+    const classStudent = classStudents.find((student) => student._id.toString() === studentId);
+    if (!classStudent) {
       throw new Error(NO_PERMISSION);
     }
-    return [Permission.OWN, expectedClassStudent];
+    return [Permission.OWN, classStudent];
   }
 }

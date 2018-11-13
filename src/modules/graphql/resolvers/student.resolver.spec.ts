@@ -70,7 +70,8 @@ describe('student resolver', () => {
     };
     studentPermission = {
       validateObjClassMatchRequester: jest.fn(),
-      getAndValidateStudentsInRequesterClass: jest.fn(),
+      getAndValidateSingleStudentInClass: jest.fn(),
+      getAndValidateAllStudentsInClass: jest.fn(),
     };
 
     studentResolver = new StudentResolver(
@@ -82,7 +83,7 @@ describe('student resolver', () => {
 
   it('should call getUsersByFilters function and return students on getStudents', async () => {
     (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateAllStudentsInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, null]),
     );
 
@@ -93,19 +94,19 @@ describe('student resolver', () => {
 
   it('should not call getUsersByFilters function and return students on getStudents', async () => {
     (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test-1' }]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateAllStudentsInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, [{ username: 'test-user' }]]),
     );
 
     const response = await studentResolver.getStudents(null, {}, MOCK_PRINCIPLE_CONTEXT);
     expect(response).toEqual([{ username: 'test-user' }]);
     expect(usersPersistence.getUsersByFilters).not.toHaveBeenCalled();
-    expect(studentPermission.getAndValidateStudentsInRequesterClass).toHaveBeenCalled();
+    expect(studentPermission.getAndValidateAllStudentsInClass).toHaveBeenCalled();
   });
 
   it('should call getUserByFilters function and return student on getStudentById', async () => {
     (usersPersistence.getUserByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, null]),
     );
 

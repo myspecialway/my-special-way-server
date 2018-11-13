@@ -20,7 +20,7 @@ export class StudentResolver {
 
   @Query('students')
   async getStudents(_, {}, context) {
-    const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [permission, students] = await this.studentPermissionService.getAndValidateAllStudentsInClass(
       DBOperation.READ,
       null,
       context,
@@ -35,7 +35,7 @@ export class StudentResolver {
 
   @Query('student')
   async getStudentById(_, args, context) {
-    const [permission, student] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [permission, student] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.READ,
       args.id,
       context,
@@ -43,7 +43,7 @@ export class StudentResolver {
     if (permission === Permission.ALLOW && !student) {
       return this.usersPersistence.getUserByFilters({ role: UserRole.STUDENT }, args.id);
     } else {
-      return [student];
+      return student;
     }
   }
 
@@ -80,12 +80,12 @@ export class StudentResolver {
 
   @Mutation('updateStudent')
   async updateStudent(_, { id, student }, context) {
-    const [, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.UPDATE,
       id,
       context,
     );
-    if (!students) {
+    if (!stdnt) {
       this.logger.error(`updateUser:: error updating user ${id} - user not found`);
       return null;
     }
@@ -96,12 +96,12 @@ export class StudentResolver {
 
   @Mutation('deleteStudent')
   async deleteStudent(_, { id }, context) {
-    const [, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.DELETE,
       id,
       context,
     );
-    if (!students) {
+    if (!stdnt) {
       this.logger.error(`deleteStudent:: error deleting user ${id} - user not found`);
       return null;
     }
