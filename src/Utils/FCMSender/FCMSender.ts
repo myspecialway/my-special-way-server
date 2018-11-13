@@ -19,7 +19,7 @@ export class FCMSender {
     });
 
     this.logger = new Logger('FCMSender');
-    this.logger.log('FCMSender:: created FCMSender instance');
+    this.logger.log('FCMSender:: created FCMSender instance ');
   }
 
   /* https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android-specific_fields */
