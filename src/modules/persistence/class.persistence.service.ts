@@ -1,5 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
+import { SchedulePersistenceService } from './schedule.persistence.service';
 import { Collection, ObjectID } from 'mongodb';
 import { ClassDbModel } from 'models/class.db.model';
 
@@ -7,7 +8,7 @@ import { ClassDbModel } from 'models/class.db.model';
 export class ClassPersistenceService {
     private collection: Collection<ClassDbModel>;
     private logger = new Logger('ClassPersistenceService');
-    constructor(private dbService: DbService) {
+    constructor(private dbService: DbService, private schedulePersistenceService: SchedulePersistenceService) {
         const db = this.dbService.getConnection();
         this.collection = db.collection<ClassDbModel>('classes');
     }
@@ -24,7 +25,7 @@ export class ClassPersistenceService {
 
     async getById(id: string) {
         try {
-            const mongoId = new ObjectID(id);
+            const mongoId = ObjectID.isValid(id) ? new ObjectID(id) : id;
             this.logger.log(`getAll:: fetching class by id ${id}`);
             return await this.collection.findOne({ _id: mongoId });
         } catch (error) {
@@ -60,8 +61,9 @@ export class ClassPersistenceService {
         try {
             this.logger.log(`ClassPersistence::updateClass:: updating class ${mongoId}`);
             const currentClass = await this.getById(id);
+            classObj.schedule = this.schedulePersistenceService.mergeSchedule(currentClass.schedule || [], classObj.schedule, 'index');
             const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId },
-                { ...currentClass, ...classObj }, { returnOriginal: false });
+                { $set: {...classObj} }, { returnOriginal: false });
             this.logger.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return updatedDocument.value;
         } catch (error) {

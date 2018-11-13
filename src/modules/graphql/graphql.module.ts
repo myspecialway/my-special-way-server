@@ -4,18 +4,21 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { GraphQlService } from './schemas/graphql.service';
 import { GraphqlController } from './graphql-controller/graphql.controller.temp';
 import { UsersResolver } from './resolvers/users.resolver';
-import { ClassResolver } from './resolvers/class.resolver';
+import { ClassResolver } from './resolvers/class/class.resolver';
 import { LessonResolver } from './resolvers/lesson.resolver';
 import { StudentResolver } from './resolvers/student.resolver';
 import { LocationsResolver } from './resolvers/locations.resolver';
 import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
+import { ClassLogic } from './resolvers/class/services/class-logic.service';
+import {PermissionsModule} from '../permissions/permissions.module';
 
 @Module({
     imports: [
         GraphQLModule,
         PersistenceModule,
+        PermissionsModule,
     ],
     providers: [
         GraphQlService,
@@ -24,6 +27,7 @@ import { getConfig } from '../../config/config-loader';
         StudentResolver,
         LessonResolver,
         LocationsResolver,
+        ClassLogic,
     ],
     controllers: [GraphqlController],
 })
