@@ -6,43 +6,42 @@ import { Get } from '../../utils/get';
 
 @Injectable()
 export class StudentPermissionService {
+  constructor(private usersPersistence: UsersPersistenceService) {}
 
-    constructor(private usersPersistence: UsersPersistenceService) { }
-
-    async validateObjClassMatchRequester(op: DBOperation, obj, context): Promise<Permission> {
-        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
-        if (permission === Permission.OWN) {
-            // find student in requester's class
-            const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
-            const objClassId = obj.class_id ? obj.class_id.toString() : '';
-            if (requesterClassId !== objClassId) {
-                throw new Error(NO_PERMISSION);
-            }
-        }
-        return permission;
+  async validateObjClassMatchRequester(op: DBOperation, obj, context): Promise<Permission> {
+    const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
+    if (permission === Permission.OWN) {
+      // find student in requester's class
+      const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
+      const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
+      const objClassId = obj.class_id ? obj.class_id.toString() : '';
+      if (requesterClassId !== objClassId) {
+        throw new Error(NO_PERMISSION);
+      }
     }
+    return permission;
+  }
 
-    async getAndValidateStudentsInRequesterClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel[]]> {
-        const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
-        if (permission === Permission.OWN) {
-            // find student in requester's class
-            const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
-            const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
-            const [, students] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
-            if (id) {
-                return this.getStudentsByClass(students, id);
-            }
-            return [Permission.OWN, students];
-        }
-        return [permission, null];
+  async getAndValidateStudentsInRequesterClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel]> {
+    const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
+    if (permission === Permission.OWN) {
+      // find student in requester's class
+      const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
+      const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
+      const [, classStudents] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
+      if (id) {
+        return this.getClassStudentById(classStudents, id);
+      }
+      return [Permission.OWN, null];
     }
+    return [permission, null];
+  }
 
-    private getStudentsByClass(students: UserDbModel[], classId: string): [Permission, UserDbModel[]] {
-        const studentsInClass = students.filter((obj) => obj._id.toString() === classId.toString());
-        if (!studentsInClass || studentsInClass.length === 0) {
-            throw new Error(NO_PERMISSION);
-        }
-        return [Permission.OWN, studentsInClass];
+  private getClassStudentById(classStudents: UserDbModel[], studentId: string): [Permission, UserDbModel] {
+    const expectedClassStudent = classStudents.find((student) => student._id.toString() === studentId);
+    if (!expectedClassStudent) {
+      throw new Error(NO_PERMISSION);
     }
+    return [Permission.OWN, expectedClassStudent];
+  }
 }
