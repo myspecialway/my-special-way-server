@@ -44,7 +44,7 @@ export class LessonPersistenceService {
       const currentLesson = await this.collection.findOne({ _id: mongoId });
       const updatedDocument = await this.collection.findOneAndUpdate(
         { _id: mongoId },
-        { ...currentLesson, ...lesson },
+        { $set: { ...currentLesson, ...lesson } },
         { returnOriginal: false },
       );
       this.logger.log(`LessonsPersistenceService::updateLesson:: updated DB :${JSON.stringify(updatedDocument.value)}`);
