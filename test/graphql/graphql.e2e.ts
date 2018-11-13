@@ -1,5 +1,6 @@
 import * as request from 'supertest';
 import * as helpers from '../utils/e2e-helper';
+import {UserRole} from '../../src/models/user.db.model';
 
 describe('AppController (e2e)', async () => {
     let token: string;
@@ -8,9 +9,10 @@ describe('AppController (e2e)', async () => {
         await helpers.addUser({
             username: 'test-user',
             password: 'Aa123456',
+            role: UserRole.PRINCIPLE,
         });
 
-        token = await helpers.getToken('test-user', 'Aa123456');
+        token = await helpers.getToken('test-user', 'Aa123456', UserRole.PRINCIPLE);
     });
 
     it('should get 401 error on unauthenticated graphql query', () => {

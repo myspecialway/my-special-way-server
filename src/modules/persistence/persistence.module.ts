@@ -6,6 +6,7 @@ import { LessonPersistenceService } from './lesson.persistence.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { LocationsPersistenceService } from './locations.persistence.service';
 import { getConfig } from '../../config/config-loader';
+import { StudentPermissionService } from '../permissions/student.premission.service';
 
 @Module({
     providers: [
@@ -15,6 +16,7 @@ import { getConfig } from '../../config/config-loader';
         LessonPersistenceService,
         SchedulePersistenceService,
         LocationsPersistenceService,
+        StudentPermissionService,
     ],
     exports: [
         UsersPersistenceService,
@@ -22,6 +24,7 @@ import { getConfig } from '../../config/config-loader';
         LessonPersistenceService,
         SchedulePersistenceService,
         LocationsPersistenceService,
+        StudentPermissionService,
     ],
 })
 export class PersistenceModule { }
