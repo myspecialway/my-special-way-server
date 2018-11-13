@@ -58,7 +58,7 @@ export class ClassResolver {
     const allLessons = await this.lessonPersistence.getAll();
     schedule.forEach((scheduleItem) => {
       const found = allLessons.filter((lesson) => {
-        return lesson._id.toString() === scheduleItem.lesson._id.toString();
+        return lesson._id.toString() === (scheduleItem.lesson._id || '').toString();
       });
       if (found && found.length > 0) {
         scheduleItem.lesson = found[0];
