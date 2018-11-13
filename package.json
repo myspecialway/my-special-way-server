@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.95",
+  "version": "0.0.96",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -50,8 +50,8 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "mongodb": "^3.0.10",
-    "nodemailer": "^4.6.8",
     "nest-winston": "^1.0.2",
+    "nodemailer": "^4.6.8",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.12",
