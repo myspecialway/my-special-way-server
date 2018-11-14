@@ -7,6 +7,7 @@ import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
+import { isString } from 'util';
 
 describe('users persistence', () => {
   const collectionName = 'users';
@@ -413,7 +414,7 @@ describe('users persistence', () => {
       expect(error).toBeDefined();
     });
   });
-  it('should create user successfuly on createUser', async () => {
+  it('should create user with passwordStatus NO_SET and first login token on createUser principle', async () => {
     expect.hasAssertions();
     (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
       username: 'some created user',
@@ -423,14 +424,37 @@ describe('users persistence', () => {
       insertedId: '507f1f77bcf86cd799439011',
     });
 
-    const [_, createdUser] = await usersPersistanceService.createUser({});
+    const [_, createdUser] = await usersPersistanceService.createUser({}, UserRole.PRINCIPLE);
     expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
       expect.objectContaining({
         passwordStatus: PasswordStatus.NOT_SET,
+        firstLoginToken: expect.any(String),
       }),
     );
   });
-  it('should create user successfuly on createUser', async () => {
+  it('should create user with passwordStatus VALID and password not null on createUser student', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      username: 'some created user',
+    });
+
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+
+    const [_, createdUser] = await usersPersistanceService.createUser(
+      { _id: 'id', password: '12345' },
+      UserRole.STUDENT,
+    );
+    expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        passwordStatus: PasswordStatus.VALID,
+        password: expect.any(String),
+      }),
+    );
+  });
+
+  it('should remove firstLoginToken successfuly on updateUser', async () => {
     expect.hasAssertions();
     (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
       passwordStatus: PasswordStatus.NOT_SET,
@@ -441,10 +465,12 @@ describe('users persistence', () => {
       insertedId: '507f1f77bcf86cd799439011',
     });
 
-    const [_, createdUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    const [_, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
     expect(dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate).toHaveBeenCalledWith(
       expect.anything(),
-      expect.objectContaining({ $set: { password: '123456', passwordStatus: PasswordStatus.VALID } }),
+      expect.objectContaining({
+        $set: { password: '123456', passwordStatus: PasswordStatus.VALID, firstLoginToken: undefined },
+      }),
       expect.anything(),
     );
   });

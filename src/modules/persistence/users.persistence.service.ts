@@ -82,11 +82,16 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       if (userRole) {
         user.role = userRole;
       }
-      user.passwordStatus = PasswordStatus.NOT_SET;
-      const randomToken = Math.random()
-        .toString(36)
-        .substring(2);
-      user.firstLoginToken = randomToken;
+
+      if (user.role === UserRole.STUDENT) {
+        user.passwordStatus = PasswordStatus.VALID;
+      } else {
+        user.passwordStatus = PasswordStatus.NOT_SET;
+        const randomToken = Math.random()
+          .toString(36)
+          .substring(2);
+        user.firstLoginToken = randomToken;
+      }
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
