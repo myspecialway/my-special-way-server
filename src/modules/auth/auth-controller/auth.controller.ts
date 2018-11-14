@@ -54,6 +54,23 @@ export class AuthController {
     }
     const [error, token] = await this.authService.createTokenFromFirstLoginToken(body.firstLoginToken);
 
+    if (error) {
+      this.logger.error(`login:: error while logging first time with ${body.firstLoginToken} `, error.stack);
+      res.status(500).json({
+        error: 'server error',
+        message: 'unknown server error',
+      });
+
+      return;
+    }
+
+    if (!token) {
+      this.logger.warn(`login:: token wasnt found  ${body.firstLoginToken}`);
+      res.status(401).json({
+        error: 'unauthenticated',
+        message: 'first Login unauthenticated',
+      });
+    }
     this.logger.log(`login:: token ${token} created for ${body.firstLoginToken}`);
     res.json({
       accessToken: token,

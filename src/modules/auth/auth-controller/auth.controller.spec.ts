@@ -90,5 +90,21 @@ describe('auth controller', () => {
 
       expect(responseMock.status).toHaveBeenCalledWith(400);
     });
+    it('should return 500 if error return from service', async () => {
+      const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
+      createTokenFn.mockReturnValueOnce(['null', null]);
+
+      await authController.firstLogin(responseMock, { firstLoginToken: 'firstToken' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(500);
+    });
+    it('should return 401 if token not created', async () => {
+      const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
+      createTokenFn.mockReturnValueOnce([null, null]);
+
+      await authController.firstLogin(responseMock, { firstLoginToken: 'firstToken' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(401);
+    });
   });
 });
