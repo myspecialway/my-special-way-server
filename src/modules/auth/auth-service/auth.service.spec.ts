@@ -31,7 +31,7 @@ describe('auth.service', () => {
     const token = await authService.createTokenFromCridentials({} as UserLoginRequest);
     expect(token).toBeDefined();
   });
-  it.only('should create valid token if user was found in db', async () => {
+  it('should create valid token if user was found in db', async () => {
     expect.hasAssertions();
     // given
     (userPersistanceServiceMock.getUserByFilters as jest.Mock).mockReturnValueOnce({
