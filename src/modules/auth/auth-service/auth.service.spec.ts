@@ -5,27 +5,41 @@ import { UserDbModel } from '../../../models/user.db.model';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 
 describe('auth.service', () => {
-    let authService: AuthServiceInterface;
-    let userPersistanceServiceMock: Partial<UsersPersistenceService>;
+  let authService: AuthServiceInterface;
+  let userPersistanceServiceMock: Partial<UsersPersistenceService>;
 
-    beforeEach(() => {
-        userPersistanceServiceMock = {
-            authenticateUser: jest.fn(),
-        };
+  beforeEach(() => {
+    userPersistanceServiceMock = {
+      authenticateUser: jest.fn(),
+      getUserByFilters: jest.fn(),
+    };
 
-        authService = new AuthService(userPersistanceServiceMock as UsersPersistenceService);
+    authService = new AuthService(userPersistanceServiceMock as UsersPersistenceService);
+  });
 
+  it('should create valid token if user was found in db', async () => {
+    expect.hasAssertions();
+    // given
+    (userPersistanceServiceMock.authenticateUser as jest.Mock).mockReturnValueOnce([
+      null,
+      {
+        username: 'mock user',
+      } as UserDbModel,
+    ]);
+
+    // when
+    const token = await authService.createTokenFromCridentials({} as UserLoginRequest);
+    expect(token).toBeDefined();
+  });
+  it.only('should create valid token if user was found in db', async () => {
+    expect.hasAssertions();
+    // given
+    (userPersistanceServiceMock.getUserByFilters as jest.Mock).mockReturnValueOnce({
+      username: 'mock user',
     });
 
-    it('should create valid token if user was found in db', async () => {
-        expect.hasAssertions();
-        // given
-        (userPersistanceServiceMock.authenticateUser as jest.Mock).mockReturnValueOnce([null, {
-            username: 'mock user',
-        } as UserDbModel]);
-
-        // when
-        const token = await authService.createTokenFromCridentials({} as UserLoginRequest);
-        expect(token).toBeDefined();
-    });
+    // when
+    const token = await authService.createTokenFromFirstLoginToken('firstLoginToken');
+    expect(token).toBeDefined();
+  });
 });
