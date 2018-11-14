@@ -15,6 +15,7 @@ export interface UserDbModel {
   schedule?: TimeSlotDbModel[];
   reminders?: Reminders;
   passwordStatus: PasswordStatus;
+  firstLoginToken?: string;
 }
 
 export enum Gender {

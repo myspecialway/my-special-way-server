@@ -83,6 +83,10 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         user.role = userRole;
       }
       user.passwordStatus = PasswordStatus.NOT_SET;
+      const randomToken = Math.random()
+        .toString(36)
+        .substring(2);
+      user.firstLoginToken = randomToken;
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
@@ -119,6 +123,9 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       const user = await this.collection.findOne({ username });
       this.logger.log(`updateUser:: updating user ${username}`);
       user.passwordStatus = PasswordStatus.VALID;
+      if (user.firstLoginToken !== undefined || user.firstLoginToken !== null) {
+        delete user.firstLoginToken;
+      }
       user.password = password;
       const updatedDocument = await this.collection.findOneAndUpdate(
         { _id: user._id },

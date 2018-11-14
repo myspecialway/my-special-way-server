@@ -59,10 +59,26 @@ export class AuthService implements AuthServiceInterface {
     }
     return user;
   }
-  async getUserFromFirstLoginToken(firstLoginToken: string): Promise<UserLoginRequest> {
-    return {
-      username: 'principle',
-      password: 'Aa123456',
+  async createTokenFromFirstLoginToken(firstLoginToken: string): Promise<[Error, string]> {
+    const user = await this.userPersistanceService.getUserByFilters({ firstLoginToken });
+    if (user === null) {
+      this.logger.warn(`createTokenFromCridentials:: user with firstLoginToken:${firstLoginToken} not found`);
+      return null;
+    }
+    const userCridentials: UserTokenProfile = {
+      id: user._id,
+      username: user.username,
+      role: user.role,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      class_id: user.class_id,
     };
+
+    return [
+      null,
+      jwt.sign(userCridentials, JWT_SECRET, {
+        expiresIn: '2h',
+      }),
+    ];
   }
 }

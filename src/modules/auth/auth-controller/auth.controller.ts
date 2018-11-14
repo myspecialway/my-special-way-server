@@ -52,28 +52,9 @@ export class AuthController {
       res.status(400).send(new BadRequestException({ message: 'must pass token request' }));
       return;
     }
+    const [error, token] = await this.authService.createTokenFromFirstLoginToken(body.firstLoginToken);
 
-    const user = await this.authService.getUserFromFirstLoginToken(body.firstLoginToken);
-    if (user === null) {
-      this.logger.warn(`firstLogin:: token wasnt created for ${body.firstLoginToken}`);
-      res.status(401).json({
-        error: 'unauthenticated',
-        message: 'token is incorrect or expired',
-      });
-    }
-
-    this.logger.log(`firstLogin:: first login request for ${user.username}`);
-    const [error, token] = await this.authService.createTokenFromCridentials(user);
-    if (error) {
-      this.logger.error(`firstLogin:: error while logging in ${user.username}`, error.stack);
-      res.status(500).json({
-        error: 'server error',
-        message: 'unknown server error',
-      });
-      return;
-    }
-
-    this.logger.log(`login:: token ${token} created for ${user.username}`);
+    this.logger.log(`login:: token ${token} created for ${body.firstLoginToken}`);
     res.json({
       accessToken: token,
     });
