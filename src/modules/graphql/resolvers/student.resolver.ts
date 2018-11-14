@@ -89,6 +89,9 @@ export class StudentResolver {
       this.logger.error(`updateUser:: error updating user ${id} - user not found`);
       return null;
     }
+    if (ObjectID.isValid(student.class_id)) {
+      student.class_id = new ObjectID(student.class_id);
+    }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
     return response;
