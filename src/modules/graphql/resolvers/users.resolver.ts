@@ -1,10 +1,12 @@
 import { ClassPersistenceService } from './../../persistence/class.persistence.service';
 import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { Asset, checkAndGetBasePermission, DBOperation } from '../../permissions/permission.interface';
+import { Asset, checkAndGetBasePermission, DBOperation, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 import { ObjectID } from 'mongodb';
+import { UserTokenProfile } from '@models/user-token-profile.model';
 
+export const NO_PERMISSION = 'not permissions to execute command';
 @Resolver('User')
 export class UsersResolver {
   constructor(private usersPersistence: UsersPersistenceService, private classPersistence: ClassPersistenceService) {}
@@ -41,7 +43,13 @@ export class UsersResolver {
 
   @Mutation('updateUserPassword')
   async updateUserPassword(_, { username, password }, context) {
-    checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.USER);
+    const caller = Get.getObject(context, 'user') as UserTokenProfile;
+    const permission = checkAndGetBasePermission(caller, DBOperation.UPDATE, Asset.USER);
+    if (permission === Permission.OWN) {
+      if (username !== caller.username) {
+        throw new Error(NO_PERMISSION);
+      }
+    }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUserPassword(username, password);
     return response;
