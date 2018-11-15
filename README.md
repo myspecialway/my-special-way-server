@@ -88,11 +88,19 @@ To seed initial data please cd in db-seed run:
 
     yarn install
 
-Then to run seed script:
-Mac:
-./seed -n msw-dev mongodb://localhost:27017
-Windows:
-node ./seed -n msw-dev mongodb://localhost:27017
+Then to run seed script(with clean flag):
+
+    yarn seed
+
+for Mac you can also go to db-seed folder and run:
+
+    ./seed -n msw-dev mongodb://localhost:27017
+
+for Windows, go to db-seed folder and run:
+
+    node ./seed -n msw-dev mongodb://localhost:27017
+
+if you change the seed process (when editing seed.ts), make sure you run 'yarn seed-compile' when finished.
 
 The following users will be created:
 

@@ -4,6 +4,10 @@
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myspecialway/my-special-way-server"
+  },
   "scripts": {
     "build": "bash ./scripts/build",
     "bump": "yarn version --new-version patch",
@@ -16,7 +20,7 @@
     "start:watch": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
-    "seed": "./db-seed/seed mongodb://localhost --name msw-dev",
+    "mongo-shell": "mongo mongodb://localhost:27017/msw-local",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage --detectOpenHandles",
@@ -27,7 +31,9 @@
     "webpack": "webpack --config webpack.config.js",
     "stryker": "npx stryker run",
     "format:fix": "pretty-quick --staged",
-    "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\""
+    "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
+    "seed-compile": "tsc -p ./db-seed",
+    "seed": "node ./db-seed/seed.js -c -n msw-local mongodb://localhost:27017"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
