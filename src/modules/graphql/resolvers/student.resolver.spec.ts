@@ -172,7 +172,7 @@ describe('student resolver', () => {
   it('should call updateUser function as teacher and return the student was not updated', async () => {
     (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
     (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
-      Promise.resolve([Permission.ALLOW, null]),
+      Promise.resolve([Permission.OWN, null]),
     );
 
     const response = await studentResolver.updateStudent(
@@ -197,7 +197,7 @@ describe('student resolver', () => {
   it('should call deleteUser function as teacher and return none deleted', async () => {
     (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, null]));
     (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
-      Promise.resolve([Permission.ALLOW, null]),
+      Promise.resolve([Permission.OWN, null]),
     );
 
     const response = await studentResolver.deleteStudent(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
