@@ -57,7 +57,7 @@ export class AuthController {
     if (error) {
       this.logger.error(`firstLogin:: error while logging first time with ${body.firstLoginToken} `, error.stack);
       res.status(500).json({
-        error: 'server error',
+        error: `server error ${error.message || ''}`,
         message: 'unknown server error',
       });
 

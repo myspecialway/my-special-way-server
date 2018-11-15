@@ -60,10 +60,13 @@ export class AuthService implements AuthServiceInterface {
     return user;
   }
   async createTokenFromFirstLoginToken(firstLoginToken: string): Promise<[Error, string]> {
-    const user = await this.userPersistanceService.getUserByFilters({ firstLoginToken });
+    const user = await this.userPersistanceService.getUserByFilters({ 'firstLoginData.token': firstLoginToken });
     if (user === null) {
       this.logger.warn(`createTokenFromCridentials:: user with firstLoginToken:${firstLoginToken} not found`);
       return null;
+    }
+    if (user.firstLoginData.expiration < new Date()) {
+      return [new Error('expired email'), null];
     }
     const userCridentials: UserTokenProfile = {
       id: user._id,

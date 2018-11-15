@@ -87,10 +87,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         user.passwordStatus = PasswordStatus.VALID;
       } else {
         user.passwordStatus = PasswordStatus.NOT_SET;
-        const randomToken = Math.random()
-          .toString(36)
-          .substring(2);
-        user.firstLoginToken = randomToken;
+        user.firstLoginData = this.makeFirstLoginData();
       }
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
@@ -101,6 +98,17 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(`createUser:: error adding user `, error.stack);
       return [error, null];
     }
+  }
+
+  private makeFirstLoginData() {
+    const date = new Date();
+    date.setMinutes(date.getMinutes() + 1);
+    return {
+      token: Math.random()
+        .toString(36)
+        .substring(2),
+      expiration: date,
+    };
   }
 
   async updateUser(id: string, user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
@@ -128,13 +136,16 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       const user = await this.collection.findOne({ username });
       this.logger.log(`updateUser:: updating user ${username}`);
       user.passwordStatus = PasswordStatus.VALID;
-      if (user.firstLoginToken !== undefined || user.firstLoginToken !== null) {
-        delete user.firstLoginToken;
+      if (user.firstLoginData !== undefined) {
+        delete user.firstLoginData;
       }
       user.password = password;
       const updatedDocument = await this.collection.findOneAndUpdate(
         { _id: user._id },
-        { $set: user },
+        {
+          $set: user,
+          $unset: { firstLoginData: 1 },
+        },
         { returnOriginal: false },
       );
       this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);

@@ -1,5 +1,6 @@
 import { Reminders } from './reminder.db.model';
 import { TimeSlotDbModel } from './timeslot.db.model';
+import { FirstLoginData } from './user-first-login.db.model';
 
 export interface UserDbModel {
   _id: string;
@@ -15,7 +16,7 @@ export interface UserDbModel {
   schedule?: TimeSlotDbModel[];
   reminders?: Reminders;
   passwordStatus: PasswordStatus;
-  firstLoginToken?: string;
+  firstLoginData?: FirstLoginData;
 }
 
 export enum Gender {

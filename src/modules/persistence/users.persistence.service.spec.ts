@@ -7,7 +7,6 @@ import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
-import { isString } from 'util';
 
 describe('users persistence', () => {
   const collectionName = 'users';
@@ -428,7 +427,7 @@ describe('users persistence', () => {
     expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
       expect.objectContaining({
         passwordStatus: PasswordStatus.NOT_SET,
-        firstLoginToken: expect.any(String),
+        firstLoginData: expect.objectContaining({ token: expect.any(String), expiration: expect.any(Date) }),
       }),
     );
   });
