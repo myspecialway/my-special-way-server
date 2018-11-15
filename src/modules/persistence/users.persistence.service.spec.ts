@@ -458,6 +458,7 @@ describe('users persistence', () => {
     (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
       passwordStatus: PasswordStatus.NOT_SET,
       password: undefined,
+      firstLoginData: {},
     });
 
     (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce({
@@ -468,9 +469,34 @@ describe('users persistence', () => {
     expect(dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({
-        $set: { password: '123456', passwordStatus: PasswordStatus.VALID, firstLoginToken: undefined },
+        $set: { password: '123456', passwordStatus: PasswordStatus.VALID, firstLoginData: undefined },
       }),
       expect.anything(),
     );
+  });
+
+  it('should return error on updateUser failed because no user found', async () => {
+    expect.hasAssertions();
+
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(() => {
+      throw new Error('mock error');
+    });
+    const [error, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    expect(error).toBeDefined();
+  });
+
+  it('should return error on updateUser failed ', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      passwordStatus: PasswordStatus.NOT_SET,
+      password: undefined,
+      firstLoginData: {},
+    });
+
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce(() => {
+      throw new Error('mock error');
+    });
+    const [error, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    expect(error).toBeDefined();
   });
 });
