@@ -8,6 +8,7 @@ import { ClassPersistenceService } from './class.persistence.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
+import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -90,6 +91,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         );
         user.password = 'Aa123456';
       }
+      await this.uniqueUserNameValidation(user.username, undefined);
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
@@ -108,6 +110,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
 
     const mongoId = new ObjectID(id);
     try {
+      await this.uniqueUserNameValidation(user.username, id);
       this.logger.log(`updateUser:: updating user ${mongoId}`);
 
       const updatedDocument = await this.collection.findOneAndUpdate(
@@ -199,5 +202,44 @@ export class UsersPersistenceService implements IUsersPersistenceService {
 
   getStudentReminders(student: UserDbModel): IReminder[] {
     return student.reminders || DEFAULT_REMINDERS;
+  }
+  async validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]> {
+    const [error, user] = await this.getByUsername(userUniqueValidation.username);
+    if (error) {
+      this.logger.error(`validateUserNameUnique:: error validating user ${userUniqueValidation.username}`, error.stack);
+      return [error, null];
+    }
+
+    // User not found => Username is unique
+    if (!user || !user.username) {
+      return [null, true];
+    }
+
+    // Validate the 'edit user' form
+    if (userUniqueValidation.id) {
+      if (userUniqueValidation.id === user._id.toString()) {
+        // Current user found => Username is unique
+        return [null, true];
+      } else {
+        // Another user found => Username isn't unique
+        return [null, false];
+      }
+      // Validate the 'create user' form
+    } else {
+      return [null, false];
+    }
+  }
+
+  private async uniqueUserNameValidation(username: string, id: string) {
+    const [error, isUnique] = await this.validateUserNameUnique({
+      username,
+      id,
+    } as UserUniqueValidationRequest);
+    if (error) {
+      throw error;
+    }
+    if (!isUnique) {
+      throw new Error(`validateUserNameUnique:: username ${username} is taken`);
+    }
   }
 }

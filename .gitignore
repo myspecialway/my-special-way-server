@@ -8,4 +8,5 @@ reports
 .stryker-tmp
 .env
 .idea/**
+*.iml
 ts-node

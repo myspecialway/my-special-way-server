@@ -1,5 +1,5 @@
 import { ObjectID } from 'mongodb';
-import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
+import { Mutation, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 import { UserRole } from '../../../models/user.db.model';
