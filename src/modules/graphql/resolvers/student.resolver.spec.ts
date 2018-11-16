@@ -117,7 +117,7 @@ describe('student resolver', () => {
 
   it('should not getUserByFilters function and return student on getStudentById', async () => {
     (usersPersistence.getUsersByFilters as jest.Mock).mockReturnValue(Promise.resolve([{ username: 'test' }]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
     );
 
@@ -155,9 +155,9 @@ describe('student resolver', () => {
     expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_PRINCIPLE, UserRole.STUDENT);
   });
 
-  it('should call updatqeUser function as principle and return the student updated', async () => {
+  it('should call updateUser function as principle and return the student updated', async () => {
     (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_PRINCIPLE]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
     );
 
@@ -172,7 +172,7 @@ describe('student resolver', () => {
 
   it('should call updateUser function as teacher and return the student was not updated', async () => {
     (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_STUDENT]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.OWN, null]),
     );
 
@@ -187,7 +187,7 @@ describe('student resolver', () => {
 
   it('should call deleteUser function as principle and return the number of students deleted', async () => {
     (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
     );
 
@@ -197,7 +197,7 @@ describe('student resolver', () => {
 
   it('should call deleteUser function as teacher and return none deleted', async () => {
     (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, null]));
-    (studentPermission.getAndValidateStudentsInRequesterClass as jest.Mock).mockReturnValue(
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.OWN, null]),
     );
 

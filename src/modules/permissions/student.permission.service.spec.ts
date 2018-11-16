@@ -121,7 +121,7 @@ describe('student permission service', () => {
       '123',
       MOCK_TEACHER_CONTEXT,
     );
-    expect(response).toEqual([Permission.OWN, [{ _id: '123', username: 'test' }]]);
+    expect(response).toEqual([Permission.OWN, { _id: '123', username: 'test' }]);
     expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
   });
 
