@@ -8,6 +8,8 @@ import { IUsersPersistenceService } from './interfaces/users.persistence.service
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
 import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
 import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
+import { sendemail } from '../../utils/nodeMailer/email.client';
+import { EmailBody } from '../../utils/nodeMailer/email.body';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -95,11 +97,72 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
 
+      const subject: string = ' אישור הרשמה למערכת בדרכי שלי ';
+
+      const msgBody = this.createEmailMessage(user);
+
+      const sent = await sendemail(
+        `"בדרכי שלי"<mswemailclient@gmail.com>`,
+        user.email,
+        subject,
+        msgBody.html,
+        msgBody.text,
+      );
+      if (!sent) {
+        this.logger.error('Failed to send email');
+      }
       return [null, newDocument];
     } catch (error) {
       this.logger.error(`createUser:: error adding user `, error.stack);
       return [error, null];
     }
+  }
+
+  private createEmailMessage(user: UserDbModel): EmailBody {
+    const msgStr: string =
+      `שלום ${user.firstname} ${user.lastname}\nאנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו.\n` +
+      `המערכת מאפשרת לך לנהל את רשימות התלמידים, מערכת השעות שלהם, תזכורות שונות ועוד.\n` +
+      `שם המשתמש שלך: ${user.username}\n` +
+      ` על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
+      `http://localhost:4200/login/${user.username}\n` +
+      ` תודה שהצטרפת!`;
+
+    const msgHtml: string =
+      `<html><head><style>` +
+      `.inline {  display: inline;}` +
+      `.link-button {` +
+      `background: none;` +
+      `border: none;` +
+      `color: blue;` +
+      `text-decoration: underline;` +
+      `cursor: pointer;` +
+      `font-size: 1em;` +
+      `font-family: serif;` +
+      `}` +
+      `.link-button:focus {` +
+      `outline: none;` +
+      `}` +
+      `.link-button:active {` +
+      `color:red;` +
+      `}` +
+      `</style></head>` +
+      `<body>` +
+      `<p>שלום ${user.firstname} ${user.lastname}<br>` +
+      `אנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו<br>` +
+      `שם המשתמש שלך: ${user.username}<br>` +
+      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:</br` +
+      `<a href="http://localhost:4200/login">בדרכי שלי</a>` +
+      `<form method="post" action="http://localhost:4200/login"">` +
+      `<input type="hidden" name="password" value="password">` +
+      `<button type="submit" name="username" value="${user.username}">` +
+      `</button>` +
+      `</form><br>` +
+      `תודה שהצטרפת!</p>` +
+      `</body></html>`;
+    return {
+      text: msgStr,
+      html: msgHtml,
+    };
   }
 
   private makeFirstLoginData() {
