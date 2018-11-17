@@ -45,6 +45,7 @@ describe('users persistence', () => {
           replaceOne: jest.fn(),
           findOneAndUpdate: jest.fn(),
           insertOne: jest.fn(),
+          getByUsername: jest.fn(),
         } as Partial<Collection>),
       } as Partial<Db>),
     };
@@ -283,21 +284,47 @@ describe('users persistence', () => {
 
   it('should return error on updateUser when error happened', async () => {
     expect.hasAssertions();
-    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockImplementationOnce(
-      () => {
-        throw new Error('mock error');
-      },
-    );
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockImplementationOnce(() => {
+      throw new Error('mock error');
+    });
 
     const [error, _] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {});
     expect(error).toBeDefined();
   });
 
-  it('should create user successfuly on createUser', async () => {
+  it('should update student successfuly when updating to username that taken by this user', async () => {
     expect.hasAssertions();
     (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      username: 'some created user',
+      username: 'username',
+      _id: '507f1f77bcf86cd799439011',
     });
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+      value: { username: 'username', someotherfied: 'somevalue' },
+    });
+    const [_, updatedUser] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {
+      username: 'username',
+    });
+    expect(updatedUser).toEqual({ username: 'username', someotherfied: 'somevalue' });
+  });
+
+  it('should return error on updateUser when updating to taken username', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      username: 'takenUsername',
+      _id: '99999',
+    });
+
+    const [error, _] = await usersPersistanceService.updateUser('507f1f77bcf86cd799439011', {
+      username: 'takenUsername',
+    });
+    expect(error).toBeDefined();
+  });
+
+  it('should create user successfuly on createUser', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
 
     (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
@@ -312,9 +339,9 @@ describe('users persistence', () => {
 
   it('should create student successfuly on createUser', async () => {
     expect.hasAssertions();
-    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      username: 'some created student',
-    });
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created student' });
 
     (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
@@ -337,6 +364,23 @@ describe('users persistence', () => {
     });
 
     const [error, _] = await usersPersistanceService.createUser({});
+    expect(error).toBeDefined();
+  });
+
+  it('should return error on createUser when username is taken', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      username: 'some created student',
+    });
+
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+
+    const [error, _] = await usersPersistanceService.createUser({
+      username: 'some created student',
+    });
+
     expect(error).toBeDefined();
   });
 
@@ -415,15 +459,15 @@ describe('users persistence', () => {
   });
   it('should create user with passwordStatus NO_SET and first login token on createUser principle', async () => {
     expect.hasAssertions();
-    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      username: 'some created user',
-    });
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
 
     (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
 
-    const [_, createdUser] = await usersPersistanceService.createUser({}, UserRole.PRINCIPLE);
+    await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
     expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
       expect.objectContaining({
         passwordStatus: PasswordStatus.NOT_SET,
@@ -432,17 +476,15 @@ describe('users persistence', () => {
     );
   });
   it('should create user with passwordStatus VALID and password not null on createUser student', async () => {
-    expect.hasAssertions();
-    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      username: 'some created user',
-    });
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
 
     (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
-
-    const [_, createdUser] = await usersPersistanceService.createUser(
-      { _id: 'id', password: '12345' },
+    await usersPersistanceService.createUser(
+      { _id: 'id', password: '12345', username: 'someUsername' },
       UserRole.STUDENT,
     );
     expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
@@ -455,17 +497,19 @@ describe('users persistence', () => {
 
   it('should remove firstLoginToken successfuly on updateUser', async () => {
     expect.hasAssertions();
-    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      passwordStatus: PasswordStatus.NOT_SET,
-      password: undefined,
-      firstLoginData: {},
-    });
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({
+        passwordStatus: PasswordStatus.NOT_SET,
+        password: undefined,
+        firstLoginData: {},
+      });
 
     (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
 
-    const [_, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
     expect(dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate).toHaveBeenCalledWith(
       expect.anything(),
       expect.objectContaining({

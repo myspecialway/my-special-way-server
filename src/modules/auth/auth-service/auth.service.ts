@@ -5,6 +5,7 @@ import { AuthServiceInterface } from './auth.service.interface';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { UserDbModel } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
+import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
 
 export const JWT_SECRET = '3678ee53-5207-4124-bc58-fef9d48d12b1';
 export const JWT_PAYLOAD = 'payload';
@@ -48,6 +49,11 @@ export class AuthService implements AuthServiceInterface {
   /* istanbul ignore next */
   async validateUserByCridentials(userLogin: UserLoginRequest): Promise<[Error, UserDbModel]> {
     return await this.userPersistanceService.authenticateUser(userLogin);
+  }
+
+  /* istanbul ignore next */
+  async validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]> {
+    return this.userPersistanceService.validateUserNameUnique(userUniqueValidation);
   }
 
   /* istanbul ignore next */

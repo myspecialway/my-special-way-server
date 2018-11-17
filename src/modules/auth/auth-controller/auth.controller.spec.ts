@@ -11,6 +11,7 @@ describe('auth controller', () => {
       createTokenFromCridentials: jest.fn(),
       validateUserByCridentials: jest.fn(),
       createTokenFromFirstLoginToken: jest.fn(),
+      validateUserNameUnique: jest.fn(),
     };
 
     responseMock = {
@@ -105,6 +106,50 @@ describe('auth controller', () => {
       await authController.firstLogin(responseMock, { firstLoginToken: 'firstToken' });
 
       expect(responseMock.status).toHaveBeenCalledWith(401);
+    });
+  });
+
+  describe('validateUserNameUnique', () => {
+    it('should return 400 if no body was passed', async () => {
+      const validateUserNameUniqueFn = authServiceMock.validateUserNameUnique as jest.Mock<Promise<[Error, string]>>;
+      validateUserNameUniqueFn.mockReturnValueOnce([null, true]);
+
+      await authController.validateUserNameUnique(responseMock, null);
+
+      expect(responseMock.status).toHaveBeenCalledWith(400);
+    });
+
+    it('should return 500 server error if error happened', async () => {
+      const validateUserNameUniqueFn = authServiceMock.validateUserNameUnique as jest.Mock<Promise<[Error, string]>>;
+      validateUserNameUniqueFn.mockReturnValueOnce([new Error('mock error'), null]);
+
+      await authController.validateUserNameUnique(responseMock, { username: 'mock-user', id: 'mock-id' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(500);
+      expect(responseMock.json).toHaveBeenCalledWith({
+        error: 'server error',
+        message: 'unknown server error',
+      });
+    });
+
+    it('should return 200 ok with response true if username is unique', async () => {
+      const validateUserNameUniqueFn = authServiceMock.validateUserNameUnique as jest.Mock<Promise<[Error, string]>>;
+      validateUserNameUniqueFn.mockReturnValueOnce([null, true]);
+
+      await authController.validateUserNameUnique(responseMock, { username: 'mock-user', id: 'mock-id' });
+
+      expect(responseMock.status).not.toHaveBeenCalled();
+      expect(responseMock.json).toHaveBeenCalledWith({ isUnique: true });
+    });
+
+    it('should return 200 ok with response false if username is taken', async () => {
+      const validateUserNameUniqueFn = authServiceMock.validateUserNameUnique as jest.Mock<Promise<[Error, string]>>;
+      validateUserNameUniqueFn.mockReturnValueOnce([null, false]);
+
+      await authController.validateUserNameUnique(responseMock, { username: 'mock-user', id: 'mock-id' });
+
+      expect(responseMock.status).not.toHaveBeenCalled();
+      expect(responseMock.json).toHaveBeenCalledWith({ isUnique: false });
     });
   });
 });

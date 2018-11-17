@@ -1,5 +1,6 @@
 {
   "collection": "classes",
+  "loadOrder": 2,
   "data": [
     {
       "name": "טיטאן",
