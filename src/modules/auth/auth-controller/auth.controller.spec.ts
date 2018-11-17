@@ -72,7 +72,7 @@ describe('auth controller', () => {
       accessToken: 'some-very-secret-token',
     });
   });
-  describe.only('Fisrt Login', () => {
+  describe('Fisrt Login', () => {
     it('should return 200 if body with firsLoginToken was passed', async () => {
       const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
       createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
