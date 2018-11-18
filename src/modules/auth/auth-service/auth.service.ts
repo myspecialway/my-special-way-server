@@ -72,7 +72,7 @@ export class AuthService implements AuthServiceInterface {
       return null;
     }
     if (user.firstLoginData.expiration < new Date()) {
-      return [new Error('expired email'), null];
+      return [new Error('expired token'), null];
     }
     const userCridentials: UserTokenProfile = {
       id: user._id,

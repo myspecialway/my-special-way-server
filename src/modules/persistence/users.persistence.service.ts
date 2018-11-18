@@ -128,37 +128,12 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       ` תודה שהצטרפת!`;
 
     const msgHtml: string =
-      `<html><head><style>` +
-      `.inline {  display: inline;}` +
-      `.link-button {` +
-      `background: none;` +
-      `border: none;` +
-      `color: blue;` +
-      `text-decoration: underline;` +
-      `cursor: pointer;` +
-      `font-size: 1em;` +
-      `font-family: serif;` +
-      `}` +
-      `.link-button:focus {` +
-      `outline: none;` +
-      `}` +
-      `.link-button:active {` +
-      `color:red;` +
-      `}` +
-      `</style></head>` +
-      `<body>` +
       `<p>שלום ${user.firstname} ${user.lastname}<br>` +
       `אנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו<br>` +
       `שם המשתמש שלך: ${user.username}<br>` +
-      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:</br` +
-      `<a href="http://localhost:4200/login">בדרכי שלי</a>` +
-      `<form method="post" action="http://localhost:4200/login"">` +
-      `<input type="hidden" name="password" value="password">` +
-      `<button type="submit" name="username" value="${user.username}">` +
-      `</button>` +
-      `</form><br>` +
-      `תודה שהצטרפת!</p>` +
-      `</body></html>`;
+      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:<br>` +
+      `<a href=http://localhost:4200/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
+      `תודה שהצטרפת!</p>`;
     return {
       text: msgStr,
       html: msgHtml,
