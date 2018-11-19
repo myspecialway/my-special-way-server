@@ -1,9 +1,13 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.94",
+  "version": "0.0.99",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myspecialway/my-special-way-server"
+  },
   "scripts": {
     "build": "bash ./scripts/build",
     "bump": "yarn version --new-version patch",
@@ -16,7 +20,7 @@
     "start:watch": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
-    "seed": "./db-seed/seed mongodb://localhost --name msw-dev",
+    "mongo-shell": "mongo mongodb://localhost:27017/msw-local",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage --detectOpenHandles",
@@ -27,7 +31,9 @@
     "webpack": "webpack --config webpack.config.js",
     "stryker": "npx stryker run",
     "format:fix": "pretty-quick --staged",
-    "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\""
+    "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
+    "seed-compile": "tsc -p ./db-seed",
+    "seed": "node ./db-seed/seed.js -c -n msw-local mongodb://localhost:27017"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
@@ -41,6 +47,7 @@
     "dotenv": "^6.0.0",
     "envalid": "^4.1.4",
     "fastify-formbody": "^2.0.0",
+    "firebase-admin": "^6.1.0",
     "global": "^4.3.2",
     "graphiql": "^0.11.11",
     "graphql": "^0.13.2",
@@ -51,6 +58,7 @@
     "moment": "^2.22.2",
     "mongodb": "^3.0.10",
     "nest-winston": "^1.0.2",
+    "nodemailer": "^4.6.8",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.12",
