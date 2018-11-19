@@ -147,6 +147,27 @@ describe('student resolver', () => {
     expect(response).toEqual(expected);
   });
 
+  it('should call getStudentReminders function and return student reminders', async () => {
+    const reminders = [
+      {
+        enabled: false,
+        type: 'MEDICINE',
+        schedule: [],
+      },
+      {
+        enabled: false,
+        type: 'REHAB',
+        schedule: [],
+      },
+    ];
+
+    usersPersistence.getStudentReminders = jest.fn().mockReturnValueOnce(Promise.resolve(reminders));
+
+    const response = await studentResolver.getStudentReminders(MOCK_STUDENT, {}, MOCK_PRINCIPLE_CONTEXT);
+    expect(usersPersistence.getStudentReminders).toHaveBeenCalledWith(MOCK_STUDENT);
+    expect(response).toEqual(reminders);
+  });
+
   it('should call createUser function and return the new student created', async () => {
     (usersPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_PRINCIPLE]));
 
