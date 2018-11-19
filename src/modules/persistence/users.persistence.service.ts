@@ -1,3 +1,4 @@
+import { DEFAULT_REMINDERS, IReminder } from './../../models/reminder.db.model';
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
@@ -197,6 +198,10 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(`getStudentSchedule:: error fetching student schedule`, error.stack);
       throw [error, null];
     }
+  }
+
+  getStudentReminders(student: UserDbModel): IReminder[] {
+    return student.reminders || DEFAULT_REMINDERS;
   }
 
   async validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]> {

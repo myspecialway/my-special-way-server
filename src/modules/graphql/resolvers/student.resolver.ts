@@ -20,7 +20,7 @@ export class StudentResolver {
 
   @Query('students')
   async getStudents(_, {}, context) {
-    const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [permission, students] = await this.studentPermissionService.getAndValidateAllStudentsInClass(
       DBOperation.READ,
       null,
       context,
@@ -35,15 +35,15 @@ export class StudentResolver {
 
   @Query('student')
   async getStudentById(_, args, context) {
-    const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [permission, student] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.READ,
       args.id,
       context,
     );
-    if (permission === Permission.ALLOW && !students) {
+    if (permission === Permission.ALLOW && !student) {
       return this.usersPersistence.getUserByFilters({ role: UserRole.STUDENT }, args.id);
     } else {
-      return students;
+      return student;
     }
   }
 
@@ -61,6 +61,12 @@ export class StudentResolver {
     return response;
   }
 
+  @ResolveProperty('reminders')
+  getStudentReminders(obj, {}, context) {
+    this.studentPermissionService.validateObjClassMatchRequester(DBOperation.READ, obj, context);
+    return this.usersPersistence.getStudentReminders(obj);
+  }
+
   @Mutation('createStudent')
   async createStudent(_, { student }, context) {
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
@@ -74,14 +80,17 @@ export class StudentResolver {
 
   @Mutation('updateStudent')
   async updateStudent(_, { id, student }, context) {
-    const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.UPDATE,
       id,
       context,
     );
-    if (permission === Permission.OWN && !students) {
+    if (!stdnt) {
       this.logger.error(`updateUser:: error updating user ${id} - user not found`);
       return null;
+    }
+    if (ObjectID.isValid(student.class_id)) {
+      student.class_id = new ObjectID(student.class_id);
     }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
@@ -90,12 +99,12 @@ export class StudentResolver {
 
   @Mutation('deleteStudent')
   async deleteStudent(_, { id }, context) {
-    const [permission, students] = await this.studentPermissionService.getAndValidateStudentsInRequesterClass(
+    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.DELETE,
       id,
       context,
     );
-    if (permission === Permission.OWN && !students) {
+    if (!stdnt) {
       this.logger.error(`deleteStudent:: error deleting user ${id} - user not found`);
       return null;
     }

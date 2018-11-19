@@ -27,7 +27,19 @@
       "firstname": "Msw",
       "lastname": "Student",
       "role": "STUDENT",
-      "gender": "MALE"
+      "gender": "MALE",
+      "reminders": [
+        {
+          "enabled": false,
+          "type": "MEDICINE",
+          "schedule": []
+        },
+        {
+          "enabled": false,
+          "type": "REHAB",
+          "schedule": []
+        }
+      ]
     }
   ],
   "add_relations": [
