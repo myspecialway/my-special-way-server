@@ -90,6 +90,20 @@ describe('student permission service', () => {
     expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
   });
 
+  it('should call getAndValidateAllStudentsInClass function and return null when not permitted ', async () => {
+    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '123' }));
+    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([, [{ username: 'test' }]]));
+
+    const response = await studentPermissionService.getAndValidateAllStudentsInClass(
+      DBOperation.UPDATE,
+      null,
+      MOCK_PRINCIPLE_CONTEXT,
+    );
+
+    expect(usersPersistence.getStudentsByClassId).not.toHaveBeenCalled();
+    expect(response).toEqual([Permission.ALLOW, null]);
+  });
+
   it('should call getStudentsByClassId function and throw exception on getAndValidateSingleStudentInClass with diff class_id', async () => {
     (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '234' }));
     (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(

@@ -203,6 +203,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   getStudentReminders(student: UserDbModel): IReminder[] {
     return student.reminders || DEFAULT_REMINDERS;
   }
+
   async validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]> {
     const [error, user] = await this.getByUsername(userUniqueValidation.username);
     if (error) {

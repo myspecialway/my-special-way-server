@@ -1,3 +1,4 @@
+import { DEFAULT_REMINDERS } from './../../models/reminder.db.model';
 jest.mock('mongodb');
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
@@ -455,5 +456,19 @@ describe('users persistence', () => {
     await usersPersistanceService.getStudentSchedule(mockedStudent).catch((error) => {
       expect(error).toBeDefined();
     });
+  });
+
+  it('should return default reminders when missing on getStudentReminders', () => {
+    const res = usersPersistanceService.getStudentReminders(MOCK_STUDENT);
+    const expected = DEFAULT_REMINDERS;
+
+    expect(res).toEqual(expected);
+  });
+
+  it('should return same student reminders when existing on getStudentReminders', () => {
+    const res = usersPersistanceService.getStudentReminders({ ...MOCK_STUDENT, reminders: [] });
+    const expected = [];
+
+    expect(res).toEqual(expected);
   });
 });
