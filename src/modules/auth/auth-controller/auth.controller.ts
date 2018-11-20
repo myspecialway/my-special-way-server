@@ -3,6 +3,7 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
+import { ResetPasswordRequest } from '@models/reset-password-request.model';
 
 @Controller()
 export class AuthController {
@@ -42,6 +43,19 @@ export class AuthController {
     this.logger.log(`login:: token ${token} created for ${body.username}`);
     res.json({
       accessToken: token,
+    });
+  }
+  @Post('/reset-password')
+  async resetPassword(@Res() res: Response, @Body() body: ResetPasswordRequest): Promise<void> {
+    if (!body) {
+      return this.noBodyError('login', res);
+    }
+
+    this.logger.log(`reset-password:: reset-password request for ${body.email}`);
+
+    this.logger.log(`reset-password:: email sent to ${body.email}`);
+    res.json({
+      testRes: 'okkkk',
     });
   }
 
