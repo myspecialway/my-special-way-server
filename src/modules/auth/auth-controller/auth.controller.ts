@@ -3,6 +3,8 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
+import { sendemail } from '../../../utils/nodeMailer/email.client';
+import { restoreTemplate } from '../../../utils/nodeMailer/email.body';
 
 @Controller()
 export class AuthController {
@@ -42,6 +44,43 @@ export class AuthController {
     this.logger.log(`login:: token ${token} created for ${body.username}`);
     res.json({
       accessToken: token,
+    });
+  }
+
+  @Post('/restore-password')
+  async restorePassword(@Res() res: Response, @Body() body: any): Promise<void> {
+    if (!body) {
+      return this.noBodyError('login', res);
+    }
+    const result = await sendemail('taltal115@gmail.com', 'taltal115@gmail.com', 'subject', restoreTemplate);
+    this.logger.log(`restorePassword:: restorePassword request for ${result}`);
+
+    // this.logger.log(`login:: login request for ${body.username}`);
+    // const [error, token] = await this.authService.createTokenFromCridentials(body);
+    //
+    // if (error) {
+    //   this.logger.error(`login:: error while logging in ${body.username}`, error.stack);
+    //   res.status(500).json({
+    //     error: 'server error',
+    //     message: 'unknown server error',
+    //   });
+    //
+    //   return;
+    // }
+    //
+    // if (!token) {
+    //   this.logger.warn(`login:: token wasnt created for ${body.username}`);
+    //   res.status(401).json({
+    //     error: 'unauthenticated',
+    //     message: 'username of password are incorrect',
+    //   });
+    //
+    //   return;
+    // }
+    //
+    // this.logger.log(`login:: token ${token} created for ${body.username}`);
+    res.json({
+      status: 'ok',
     });
   }
 
