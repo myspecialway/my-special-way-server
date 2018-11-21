@@ -1,4 +1,4 @@
-import { Reminders } from './reminder.db.model';
+import { IReminder } from './reminder.db.model';
 import { TimeSlotDbModel } from './timeslot.db.model';
 import { FirstLoginData } from './user-first-login.db.model';
 
@@ -14,7 +14,7 @@ export interface UserDbModel {
   gender: Gender;
   class_id?: string;
   schedule?: TimeSlotDbModel[];
-  reminders?: Reminders;
+  reminders: IReminder[];
   passwordStatus: PasswordStatus;
   firstLoginData?: FirstLoginData;
 }

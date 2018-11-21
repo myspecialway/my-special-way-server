@@ -1,3 +1,4 @@
+import { DEFAULT_REMINDERS } from './../../models/reminder.db.model';
 jest.mock('mongodb');
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
@@ -457,6 +458,7 @@ describe('users persistence', () => {
       expect(error).toBeDefined();
     });
   });
+
   it('should create user with passwordStatus NO_SET and first login token on createUser principle', async () => {
     expect.hasAssertions();
     (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
@@ -542,5 +544,19 @@ describe('users persistence', () => {
     });
     const [error, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
     expect(error).toBeDefined();
+  });
+
+  it('should return default reminders when missing on getStudentReminders', () => {
+    const res = usersPersistanceService.getStudentReminders(MOCK_STUDENT);
+    const expected = DEFAULT_REMINDERS;
+
+    expect(res).toEqual(expected);
+  });
+
+  it('should return same student reminders when existing on getStudentReminders', () => {
+    const res = usersPersistanceService.getStudentReminders({ ...MOCK_STUDENT, reminders: [] });
+    const expected = [];
+
+    expect(res).toEqual(expected);
   });
 });

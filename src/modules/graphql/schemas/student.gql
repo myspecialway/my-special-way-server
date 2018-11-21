@@ -9,7 +9,7 @@ type Student {
   gender: Gender
   class: Class
   schedule: [TimeSlot!]
-  reminders: Reminders
+  reminders: [Reminder!]
   # teacher: Teacher!
 }
 
@@ -22,5 +22,5 @@ input InputStudent {
   gender: Gender
   class_id: String
   schedule: [InputTimeSlot!]
-  reminders: InputReminders
+  reminders: [InputReminder!]
 }
