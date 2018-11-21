@@ -1,7 +1,7 @@
 import * as jwt from 'jsonwebtoken';
 
 import { AuthServiceInterface } from './auth.service.interface';
-import { AuthService, JWT_EXPIRATION } from './auth.service';
+import { AuthService } from './auth.service';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { UserDbModel, UserRole } from '../../../models/user.db.model';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
@@ -29,7 +29,7 @@ describe('auth.service', () => {
     ]);
 
     // when
-    const token = (await authService.createTokenFromCridentials({} as UserLoginRequest))[1];
+    const token = await authService.createTokenFromCridentials({} as UserLoginRequest);
     expect(token).toBeDefined();
   });
 
@@ -49,6 +49,7 @@ describe('auth.service', () => {
     const decodedToken: any = jwt.decode(token, { json: true });
     expect(decodedToken.exp).not.toBeDefined();
   });
+
   for (const role in UserRole) {
     if (role === UserRole.STUDENT) {
       continue;
