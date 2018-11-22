@@ -9,8 +9,8 @@ import { IUsersPersistenceService } from './interfaces/users.persistence.service
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
 import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
 import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
-import { sendemail } from '../../utils/nodeMailer/email.client';
-import { EmailBody } from '../../utils/nodeMailer/email.body';
+import { EmailBody } from 'utils/nodeMailer/email.body';
+import { sendemail } from 'utils/nodeMailer/email.client';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
