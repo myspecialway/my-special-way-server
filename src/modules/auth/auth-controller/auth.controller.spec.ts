@@ -71,6 +71,22 @@ describe('auth controller', () => {
       accessToken: 'some-very-secret-token',
     });
   });
+  it('should return response with status ok if mail as been sent', async () => {
+    expect.hasAssertions();
+
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+    await authController.restorePassword(responseMock, {
+      email: 'user@gmail.com',
+      username: 'mock-user',
+      password: 'mock-password',
+    });
+
+    expect(responseMock.json).toHaveBeenCalledWith({
+      status: 'ok',
+    });
+  });
 
   describe('validateUserNameUnique', () => {
     it('should return 400 if no body was passed', async () => {

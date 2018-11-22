@@ -26,7 +26,6 @@ export class AuthController {
         error: 'server error',
         message: 'unknown server error',
       });
-
       return;
     }
 
@@ -36,7 +35,6 @@ export class AuthController {
         error: 'unauthenticated',
         message: 'username of password are incorrect',
       });
-
       return;
     }
 
