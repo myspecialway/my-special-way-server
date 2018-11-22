@@ -92,30 +92,32 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       } else {
         user.passwordStatus = PasswordStatus.NOT_SET;
         user.firstLoginData = this.makeFirstLoginData();
+        await this.sendFirstEmailToUser(user);
       }
       await this.uniqueUserNameValidation(user.username, undefined);
       const insertResponse = await this.collection.insertOne(user);
       const newDocument = await this.getById(insertResponse.insertedId.toString());
       this.logger.log(`createUser:: inserted user to DB with id: ${newDocument._id}`);
 
-      const subject: string = ' אישור הרשמה למערכת בדרכי שלי ';
-
-      const msgBody = this.createEmailMessage(user);
-
-      const sent = await sendemail(
-        `"בדרכי שלי"<mswemailclient@gmail.com>`,
-        user.email,
-        subject,
-        msgBody.html,
-        msgBody.text,
-      );
-      if (!sent) {
-        this.logger.error('Failed to send email');
-      }
       return [null, newDocument];
     } catch (error) {
       this.logger.error(`createUser:: error adding user `, error.stack);
       return [error, null];
+    }
+  }
+
+  private async sendFirstEmailToUser(user: UserDbModel) {
+    const subject: string = ' אישור הרשמה למערכת בדרכי שלי ';
+    const msgBody = this.createEmailMessage(user);
+    const sent = await sendemail(
+      `"בדרכי שלי"<mswemailclient@gmail.com>`,
+      user.email,
+      subject,
+      msgBody.html,
+      msgBody.text,
+    );
+    if (!sent) {
+      this.logger.error('Failed to send email');
     }
   }
 
