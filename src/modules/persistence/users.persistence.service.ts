@@ -1,14 +1,14 @@
-import { DEFAULT_REMINDERS, IReminder } from './../../models/reminder.db.model';
 import { Injectable, Logger } from '@nestjs/common';
-import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
-import { UserLoginRequest } from 'models/user-login-request.model';
+import { DEFAULT_REMINDERS, IReminder } from '../../models/reminder.db.model';
+import { DbService } from './db.service';
+import { UserLoginRequest } from '../../models/user-login-request.model';
 import { ClassPersistenceService } from './class.persistence.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
-import { TimeSlotDbModel } from 'models/timeslot.db.model';
+import { TimeSlotDbModel } from '../../models/timeslot.db.model';
 import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
-import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
+import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
 import { EmailBody, sendemail } from '../../utils/nodeMailer';
 
 @Injectable()
