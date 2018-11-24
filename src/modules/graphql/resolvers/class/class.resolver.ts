@@ -33,7 +33,6 @@ export class ClassResolver {
     if (permission === Permission.OWN) {
       // find classes of requester only
       const requester: UserDbModel = await this.userPersistenceService.getById(context.user.id);
-      console.log(requester);
       const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
       return classes.filter((cls) => cls._id.toString() === requesterClassId);
     }

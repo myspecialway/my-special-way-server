@@ -1,9 +1,7 @@
-import { Injectable, Logger } from '@nestjs/common';
+import {Injectable, Logger} from '@nestjs/common';
 
-import {Collection, ObjectID} from 'mongodb';
-import { DbService } from './db.service';
+import {ObjectID} from 'mongodb';
 import {ClassPersistenceService} from './class.persistence.service';
-import {ClassDbModel} from '@models/class.db.model';
 
 @Injectable()
 export class SchedulePersistenceService {
