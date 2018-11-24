@@ -1,12 +1,12 @@
 import { Resolver, Mutation } from '@nestjs/graphql';
-import { SchedulePersistenceService } from 'modules/persistence/schedule.persistence.service';
+import {SchedulePersistenceService} from '../../persistence/schedule.persistence.service';
 
 @Resolver('Schedule')
 export class ScheduleResolver {
-    constructor(private schedulePersistance: SchedulePersistenceService) { }
+    constructor(private persistenceService: SchedulePersistenceService) { }
 
     @Mutation('deleteScheduleSlotFromClass')
     async deleteScheduleSlotFromClass(_, { classId, scheduleIndex }, context) {
-        return this.schedulePersistance.deleteScheduleSlotFromClass(classId, scheduleIndex);
+        return this.persistenceService.deleteScheduleSlotFromClass(classId, scheduleIndex);
     }
 }
