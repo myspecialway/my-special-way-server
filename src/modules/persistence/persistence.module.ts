@@ -7,24 +7,27 @@ import { SchedulePersistenceService } from './schedule.persistence.service';
 import { LocationsPersistenceService } from './locations.persistence.service';
 import { getConfig } from '../../config/config-loader';
 import { StudentPermissionService } from '../permissions/student.premission.service';
+import { FileSystemPersistenceService } from './file-system.persistence.service';
 
 @Module({
-    providers: [
-        getDbServiceProvider(getConfig().DB_CONNECTION_STRING, getConfig().DB_NAME),
-        UsersPersistenceService,
-        ClassPersistenceService,
-        LessonPersistenceService,
-        SchedulePersistenceService,
-        LocationsPersistenceService,
-        StudentPermissionService,
-    ],
-    exports: [
-        UsersPersistenceService,
-        ClassPersistenceService,
-        LessonPersistenceService,
-        SchedulePersistenceService,
-        LocationsPersistenceService,
-        StudentPermissionService,
-    ],
+  providers: [
+    getDbServiceProvider(getConfig().DB_CONNECTION_STRING, getConfig().DB_NAME),
+    UsersPersistenceService,
+    ClassPersistenceService,
+    LessonPersistenceService,
+    SchedulePersistenceService,
+    LocationsPersistenceService,
+    StudentPermissionService,
+    FileSystemPersistenceService,
+  ],
+  exports: [
+    UsersPersistenceService,
+    ClassPersistenceService,
+    LessonPersistenceService,
+    SchedulePersistenceService,
+    LocationsPersistenceService,
+    StudentPermissionService,
+    FileSystemPersistenceService,
+  ],
 })
-export class PersistenceModule { }
+export class PersistenceModule {}
