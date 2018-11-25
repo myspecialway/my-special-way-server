@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": ["esnext.asynciterable", "esnext", "dom", "ES2015"],
+    "lib": ["esnext.asynciterable", "esnext", "dom", "es2015"],
     "declaration": false,
     "noImplicitAny": false,
     "noLib": false,
