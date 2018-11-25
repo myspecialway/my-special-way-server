@@ -56,6 +56,10 @@ export class AuthService implements AuthServiceInterface {
     return this.userPersistanceService.validateUserNameUnique(userUniqueValidation);
   }
 
+  async sendResetPasswordEmail(email: string): Promise<[boolean]> {
+    return this.userPersistanceService.resetPassword(email);
+  }
+
   /* istanbul ignore next */
   static getUserProfileFromToken(token: string): UserTokenProfile {
     let user = new UserTokenProfile();

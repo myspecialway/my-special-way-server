@@ -53,10 +53,28 @@ export class AuthController {
 
     this.logger.log(`reset-password:: reset-password request for ${body.email}`);
 
+    const [error, sent] = await this.authService.sendResetPasswordEmail(body.email);
+
+    if (error) {
+      this.logger.error(`login:: error while send email to ${body.email}`, error.stack);
+      res.status(500).json({
+        error: 'server error',
+        message: 'unknown server error',
+      });
+
+      return;
+    }
+
+    if (!sent) {
+      this.logger.warn(`login:: email wasn't sent for ${body.email}`);
+      res.status(401).json({
+        error: 'unauthenticated',
+        message: 'email address is incorrect',
+      });
+
+      return;
+    }
     this.logger.log(`reset-password:: email sent to ${body.email}`);
-    res.json({
-      testRes: 'okkkk',
-    });
   }
 
   @Post('/validateUserNameUnique')
