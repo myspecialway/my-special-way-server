@@ -573,6 +573,6 @@ describe('users persistence', () => {
     (sendemail as jest.Mock).mockReturnValue(false);
     common.Logger.error = jest.fn();
     await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
-    expect(common.Logger.error).toBeCalledWith('Failed to send email', expect.anything(), expect.anything());
+    expect(common.Logger.error).toHaveBeenCalledWith('Failed to send email', expect.anything(), expect.anything());
   });
 });
