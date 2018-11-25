@@ -14,19 +14,16 @@ export class SchedulePersistenceService {
         const mongoId = new ObjectID(classId);
         try {
             this.logger.log(`SchedulePersistenceService::deleteScheduleSlotFromClass:: remove from class ${classId} schedule ${scheduleIndex}`);
-
             const currentClass = await this.classPersistenceService.getById(classId);
             currentClass.schedule = currentClass.schedule.filter((element) => {
                 return (element.index !== scheduleIndex);
             });
             const updatedDocument = await this.classPersistenceService.updateClassAsIs(mongoId, currentClass);
-
             this.logger.log(`SchedulePersistenceService::deleteScheduleSlotFromClass:: class updated :${JSON.stringify(updatedDocument.value)}`);
             return 1;
         } catch (error) {
             this.logger.error(`SchedulePersistenceService::deleteScheduleSlotFromClass:: error updating class ${mongoId}`, error.stack);
             throw error;
         }
-        return 0;
     }
 }
