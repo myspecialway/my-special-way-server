@@ -115,7 +115,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       msgBody.html,
       msgBody.text,
     );
-    if (!sent) {
+    if (sent === false) {
       this.logger.error('Failed to send email');
     }
   }

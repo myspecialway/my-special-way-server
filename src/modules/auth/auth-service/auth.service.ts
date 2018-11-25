@@ -68,7 +68,7 @@ export class AuthService implements AuthServiceInterface {
     const user = await this.userPersistanceService.getUserByFilters({ 'firstLoginData.token': firstLoginToken });
     if (user === null) {
       this.logger.warn(`createTokenFromCridentials:: user with firstLoginToken:${firstLoginToken} not found`);
-      return null;
+      return [new Error('not found'), null];
     }
     if (user.firstLoginData.expiration < new Date()) {
       return [new Error('expired token'), null];

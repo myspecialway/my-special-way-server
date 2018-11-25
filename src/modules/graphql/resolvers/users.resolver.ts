@@ -45,11 +45,10 @@ export class UsersResolver {
   async updateUserPassword(_, { username, password }, context) {
     const caller = Get.getObject(context, 'user') as UserTokenProfile;
     const permission = checkAndGetBasePermission(caller, DBOperation.UPDATE, Asset.USER);
-    if (permission === Permission.OWN) {
-      if (username !== caller.username) {
-        throw new Error(NO_PERMISSION);
-      }
+    if (permission !== Permission.OWN || username !== caller.username) {
+      throw new Error(NO_PERMISSION);
     }
+
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUserPassword(username, password);
     return response;

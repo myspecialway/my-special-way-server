@@ -8,6 +8,8 @@ import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
+jest.mock('../../Utils/node-mailer/email.client');
+import { sendemail } from '../../Utils/node-mailer/email.client';
 
 describe('users persistence', () => {
   const collectionName = 'users';
@@ -558,5 +560,19 @@ describe('users persistence', () => {
     const expected = [];
 
     expect(res).toEqual(expected);
+  });
+  it('should write on log when send mail fails', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
+
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+    (sendemail as jest.Mock).mockReturnValue(false);
+    common.Logger.error = jest.fn();
+    await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
+    expect(common.Logger.error).toBeCalledWith('Failed to send email', expect.anything(), expect.anything());
   });
 });
