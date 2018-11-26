@@ -11,7 +11,7 @@ export class BlockedSectionsResolver {
   }
 
   @Mutation('createBlockedSection')
-  async createLocation(obj, { blockedSection }) {
+  async createBlockedSection(obj, { blockedSection }) {
     return this.blockedSectionsPersistence.createBlockedSection(blockedSection);
   }
 
