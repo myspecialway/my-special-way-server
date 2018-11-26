@@ -1,0 +1,10 @@
+# A type describing a single blocked section between 2 locations
+type BlockedSection {
+  _id: ID
+  # the reson for blocking this section
+  reason: String
+  # the from Location object
+  fromLocation: Location
+  # the to Location object
+  toLocation: Location
+}
