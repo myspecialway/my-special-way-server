@@ -3,8 +3,14 @@ type BlockedSection {
   _id: ID
   # the reson for blocking this section
   reason: String
-  # the from Location object
-  fromLocation: Location
-  # the to Location object
-  toLocation: Location
+  # the from point
+  from: String
+  # the to point
+  to: String
+}
+
+input InputBlockedSection {
+  reason: String!
+  from: String!
+  to: String!
 }
