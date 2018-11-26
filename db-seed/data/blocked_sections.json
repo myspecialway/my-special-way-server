@@ -1,0 +1,11 @@
+{
+  "collection": "blocked_sections",
+  "loadOrder": 4,
+  "data": [
+    {
+      "reason": "מרתון תל אביב'",
+      "fromLocation": "ObjectId('5bf6604859b6e6335cb63f12')",
+      "toLocation": "ObjectId('5bf6604859b6e6335cb63f14')"
+    }
+  ]
+}
