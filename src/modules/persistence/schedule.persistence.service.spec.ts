@@ -51,6 +51,9 @@ describe('class persistence', () => {
     it('should return error on deleteScheduleSlotFromClass when error happened', async () => {
         expect.hasAssertions();
         classPersistenceService.updateClassAsIs = jest.fn(() => { throw new Error('mock error'); });
-        await schedulePersistenceService.deleteScheduleSlotFromClass('123', {}).catch((error) => expect(error).toBeDefined());
+        await schedulePersistenceService.deleteScheduleSlotFromClass('5bf4fd64a8c75f3080286e6b', {}).catch((error) => {
+            expect(error).toBeDefined();
+            expect(error.toString()).toContain('mock error');
+        });
     });
 });
