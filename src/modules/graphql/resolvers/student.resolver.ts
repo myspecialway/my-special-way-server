@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb';
 import { Mutation, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { UserRole } from '../../../models/user.db.model';
+import { UserRole, UserDbModel } from '../../../models/user.db.model';
 import { Asset, checkAndGetBasePermission, DBOperation, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
@@ -76,6 +76,21 @@ export class StudentResolver {
     }
     const [, response] = await this.usersPersistence.createUser(student, UserRole.STUDENT);
     return response;
+  }
+
+  @Mutation('createStudents')
+  async createStudents(_, { students }, context) {
+    const createdUsers: UserDbModel[] = [];
+    checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
+    for (const student of students) {
+      // TODO: Handle errors!!!!
+      if (ObjectID.isValid(student.class_id)) {
+        student.class_id = new ObjectID(student.class_id);
+      }
+      const [, response] = await this.usersPersistence.createUser(student, UserRole.STUDENT);
+      createdUsers.push(response);
+    }
+    return createdUsers;
   }
 
   @Mutation('updateStudent')
