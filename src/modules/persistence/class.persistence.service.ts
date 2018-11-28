@@ -1,14 +1,14 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
-import { SchedulePersistenceService } from './schedule.persistence.service';
 import { Collection, ObjectID } from 'mongodb';
 import { ClassDbModel } from 'models/class.db.model';
+import {SchedulePersistenceHelper} from './schedule.persistence.helper';
 
 @Injectable()
 export class ClassPersistenceService {
     private collection: Collection<ClassDbModel>;
     private logger = new Logger('ClassPersistenceService');
-    constructor(private dbService: DbService, private schedulePersistenceService: SchedulePersistenceService) {
+    constructor(private dbService: DbService, private schedulePersistenceHelper: SchedulePersistenceHelper) {
         const db = this.dbService.getConnection();
         this.collection = db.collection<ClassDbModel>('classes');
     }
@@ -61,15 +61,19 @@ export class ClassPersistenceService {
         try {
             this.logger.log(`ClassPersistence::updateClass:: updating class ${mongoId}`);
             const currentClass = await this.getById(id);
-            classObj.schedule = this.schedulePersistenceService.mergeSchedule(currentClass.schedule || [], classObj.schedule, 'index');
-            const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId },
-                { $set: {...classObj} }, { returnOriginal: false });
+            classObj.schedule = this.schedulePersistenceHelper.mergeSchedule(currentClass.schedule || [], classObj.schedule, 'index');
+            const updatedDocument = await this.updateClassAsIs(mongoId, classObj);
             this.logger.log(`ClassPersistence::updateClass:: updated DB :${JSON.stringify(updatedDocument.value)}`);
             return updatedDocument.value;
         } catch (error) {
             this.logger.error(`ClassPersistence::updateClass:: error updating class ${mongoId}`, error.stack);
             throw error;
         }
+    }
+
+    async updateClassAsIs(mongoId, classObj: ClassDbModel) {
+        return await this.collection.findOneAndUpdate({_id: mongoId},
+            {$set: {...classObj}}, {returnOriginal: false});
     }
 
     async deleteClass(id: string): Promise<number> {

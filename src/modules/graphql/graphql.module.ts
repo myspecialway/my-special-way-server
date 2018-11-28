@@ -13,6 +13,7 @@ import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
 import { ClassLogic } from './resolvers/class/services/class-logic.service';
 import {PermissionsModule} from '../permissions/permissions.module';
+import { ScheduleResolver } from './resolvers/schedule.resolver';
 
 @Module({
     imports: [
@@ -28,6 +29,7 @@ import {PermissionsModule} from '../permissions/permissions.module';
         LessonResolver,
         LocationsResolver,
         ClassLogic,
+        ScheduleResolver,
     ],
     controllers: [GraphqlController],
 })
