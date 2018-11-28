@@ -5,10 +5,10 @@ import { Collection, ObjectID } from 'mongodb';
 import { UserDbModel, UserRole } from 'models/user.db.model';
 import { UserLoginRequest } from 'models/user-login-request.model';
 import { ClassPersistenceService } from './class.persistence.service';
-import { SchedulePersistenceService } from './schedule.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
 import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
+import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -18,7 +18,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   constructor(
     private dbService: DbService,
     private classPersistenceService: ClassPersistenceService,
-    private schedulePersistenceService: SchedulePersistenceService,
+    private schedulePersistenceHelper: SchedulePersistenceHelper,
   ) {
     const db = this.dbService.getConnection();
     this.collection = db.collection<UserDbModel>('users');
@@ -193,7 +193,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       if (!studentClass || !studentClass.schedule) {
         return [null, student.schedule];
       }
-      return [null, this.schedulePersistenceService.mergeSchedule(studentClass.schedule, student.schedule, 'index')];
+      return [null, this.schedulePersistenceHelper.mergeSchedule(studentClass.schedule, student.schedule, 'index')];
     } catch (error) {
       this.logger.error(`getStudentSchedule:: error fetching student schedule`, error.stack);
       throw [error, null];

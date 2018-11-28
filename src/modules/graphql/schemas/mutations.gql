@@ -22,4 +22,7 @@ type Mutation {
   createLocation(location: InputLocation!): Location
   updateLocation(id: ID!, location: InputLocation!): Location
   deleteLocation(id: ID!): Int
+
+  # Schedule
+  deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Int
 }
