@@ -83,12 +83,7 @@ export class StudentResolver {
     const createdUsers: UserDbModel[] = [];
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
     for (const student of students) {
-      // TODO: Handle errors!!!!
-      if (ObjectID.isValid(student.class_id)) {
-        student.class_id = new ObjectID(student.class_id);
-      }
-      const [, response] = await this.usersPersistence.createUser(student, UserRole.STUDENT);
-      createdUsers.push(response);
+      createdUsers.push(await this.createStudent(_, { student }, context));
     }
     return createdUsers;
   }
