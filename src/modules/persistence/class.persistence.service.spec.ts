@@ -1,12 +1,12 @@
 import { ClassPersistenceService } from './class.persistence.service';
-import { SchedulePersistenceService } from './schedule.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
+import {SchedulePersistenceHelper} from './schedule.persistence.helper';
 
 describe('class persistence', () => {
     const collectioName = 'classes';
     let classPersistanceService: ClassPersistenceService;
-    let schedulePersistenceService: SchedulePersistenceService;
+    let schedulePersistenceHelper: SchedulePersistenceHelper;
     let dbServiceMock: Partial<DbService>;
     beforeEach(() => {
         dbServiceMock = {
@@ -21,14 +21,14 @@ describe('class persistence', () => {
                 } as Partial<Collection>),
             } as Partial<Db>),
         };
-        schedulePersistenceService = {
+        schedulePersistenceHelper = {
             mergeSchedule: jest.fn().mockReturnValue([
                 {index: '00', lesson: {_id: 'someid', title: 'updatedlesson', icon: 'updatedicon'}},
                 {index: '02', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
                 {index: '01', lesson: {_id: 'someid', title: 'somelesson', icon: 'someicon'}},
             ]),
         };
-        classPersistanceService = new ClassPersistenceService(dbServiceMock as DbService, schedulePersistenceService);
+        classPersistanceService = new ClassPersistenceService(dbServiceMock as DbService, schedulePersistenceHelper);
     });
 
     it('should get all classes successfuly on getAll', async () => {
