@@ -1,25 +1,25 @@
-import { Response } from 'express';
-import {
-  Controller,
-  Res,
-  Post,
-  Req,
-  Get,
-  Body,
-  HttpStatus,
-  UseInterceptors,
-  FileInterceptor,
-  UploadedFile,
-  Param,
-  Put,
-  Logger,
-  Delete,
-} from '@nestjs/common';
-import { FileSystemPersistenceService } from '../../persistence/file-system.persistence.service';
 import { FileSystemDbModel } from '@models/file-system.db.model';
-import { AuthService } from '../../../modules/auth/auth-service/auth.service';
 import { UserTokenProfile } from '@models/user-token-profile.model';
+import {
+  Body,
+  Controller,
+  Delete,
+  FileInterceptor,
+  Get,
+  HttpStatus,
+  Logger,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UploadedFile,
+  UseInterceptors,
+} from '@nestjs/common';
+import { Response } from 'express';
 import { UserRole } from '../../../models/user.db.model';
+import { AuthService } from '../../../modules/auth/auth-service/auth.service';
+import { FileSystemPersistenceService } from '../../persistence/file-system.persistence.service';
 const NO_PERMISSION = 'not permissions to execute command';
 const ALREADY_EXIST = 'Map already exist, try update (PUT)';
 @Controller('/map')
@@ -61,7 +61,7 @@ export class FileSystemController {
 
   @Delete(':floor')
   @UseInterceptors(FileInterceptor('mapFilename'))
-  async delete(@Param('floor') floor: string, @Req() req, @Body() body, @Res() res: Response) {
+  async delete(@Param('floor') floor: string, @Req() req, @Res() res: Response) {
     const userProfile: UserTokenProfile = AuthService.getUserProfileFromToken(req.headers.authorization);
     if (userProfile.role !== UserRole.PRINCIPLE) {
       res.sendStatus(HttpStatus.FORBIDDEN).send(NO_PERMISSION);
@@ -83,7 +83,7 @@ export class FileSystemController {
 
   @Put(':floor')
   @UseInterceptors(FileInterceptor('mapFilename'))
-  async update(@Param('floor') floor: string, @UploadedFile() file, @Req() req, @Body() body, @Res() res: Response) {
+  async update(@Param('floor') floor: string, @UploadedFile() file, @Req() req, @Res() res: Response) {
     const userProfile: UserTokenProfile = AuthService.getUserProfileFromToken(req.headers.authorization);
     if (userProfile.role !== UserRole.PRINCIPLE) {
       res.sendStatus(HttpStatus.FORBIDDEN).send(NO_PERMISSION);
