@@ -3,7 +3,7 @@ jest.mock('mongodb');
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
 import { ClassPersistenceService } from './class.persistence.service';
-import { SchedulePersistenceService } from './schedule.persistence.service';
+import { SchedulePersistenceHelper } from './schedule.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
@@ -29,7 +29,7 @@ describe('users persistence', () => {
   };
   let usersPersistanceService: UsersPersistenceService;
   let dbServiceMock: Partial<DbService>;
-  let schedulePersistenceService: SchedulePersistenceService;
+  let schedulePersistenceHelper: SchedulePersistenceHelper;
   let classPersistanceService: Partial<ClassPersistenceService>;
   beforeAll(() => {
     const errorFunc = common.Logger.error.bind(common.Logger);
@@ -53,7 +53,7 @@ describe('users persistence', () => {
       } as Partial<Db>),
     };
 
-    schedulePersistenceService = {
+    schedulePersistenceHelper = {
       mergeSchedule: jest
         .fn()
         .mockReturnValue([
@@ -69,7 +69,7 @@ describe('users persistence', () => {
     usersPersistanceService = new UsersPersistenceService(
       dbServiceMock as DbService,
       classPersistanceService as ClassPersistenceService,
-      schedulePersistenceService,
+      schedulePersistenceHelper,
     );
   });
 
