@@ -3,13 +3,14 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserTokenProfile } from '../../../models/user-token-profile.model';
 import { AuthServiceInterface } from './auth.service.interface';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { UserDbModel } from 'models/user.db.model';
-import { UserLoginRequest } from 'models/user-login-request.model';
-import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
+import { UserDbModel, UserRole } from '../../../models/user.db.model';
+import { UserLoginRequest } from '../../../models/user-login-request.model';
+import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
 
 export const JWT_SECRET = '3678ee53-5207-4124-bc58-fef9d48d12b1';
 export const JWT_PAYLOAD = 'payload';
 
+export const JWT_EXPIRATION = '2h';
 @Injectable()
 export class AuthService implements AuthServiceInterface {
   private logger = new Logger('AuthService');
@@ -37,13 +38,11 @@ export class AuthService implements AuthServiceInterface {
       lastname: user.lastname,
       class_id: user.class_id,
     };
-
-    return [
-      null,
-      jwt.sign(userCridentials, JWT_SECRET, {
-        expiresIn: '2h',
-      }),
-    ];
+    const jwtOptions = {};
+    if (user.role !== UserRole.STUDENT) {
+      Object.assign(jwtOptions, { expiresIn: JWT_EXPIRATION });
+    }
+    return [null, jwt.sign(userCridentials, JWT_SECRET, jwtOptions)];
   }
 
   /* istanbul ignore next */
