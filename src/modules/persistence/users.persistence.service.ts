@@ -1,14 +1,15 @@
-import { DEFAULT_REMINDERS, IReminder } from './../../models/reminder.db.model';
 import { Injectable, Logger } from '@nestjs/common';
-import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
-import { UserDbModel, UserRole } from 'models/user.db.model';
-import { UserLoginRequest } from 'models/user-login-request.model';
+import { DEFAULT_REMINDERS, IReminder } from '../../models/reminder.db.model';
+import { DbService } from './db.service';
+import { UserLoginRequest } from '../../models/user-login-request.model';
 import { ClassPersistenceService } from './class.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
-import { TimeSlotDbModel } from 'models/timeslot.db.model';
-import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
-import {SchedulePersistenceHelper} from './schedule.persistence.helper';
+import { TimeSlotDbModel } from '../../models/timeslot.db.model';
+import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
+import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
+import { EmailBody, sendemail } from '../../Utils/node-mailer';
+import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -84,12 +85,13 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       if (userRole) {
         user.role = userRole;
       }
-      if (!user.password) {
-        this.logger.error(
-          '***********************Temporary fix - default password Aa123456 is temporary until we implement ' +
-            'initial login user story ****************************************',
-        );
-        user.password = 'Aa123456';
+
+      if (user.role === UserRole.STUDENT) {
+        user.passwordStatus = PasswordStatus.VALID;
+      } else {
+        user.passwordStatus = PasswordStatus.NOT_SET;
+        user.firstLoginData = this.makeFirstLoginData();
+        await this.sendFirstEmailToUser(user);
       }
       await this.uniqueUserNameValidation(user.username, undefined);
       const insertResponse = await this.collection.insertOne(user);
@@ -103,6 +105,54 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     }
   }
 
+  private async sendFirstEmailToUser(user: UserDbModel) {
+    const subject: string = ' אישור הרשמה למערכת בדרכי שלי ';
+    const msgBody = this.createEmailMessage(user);
+    const sent = await sendemail(
+      `"בדרכי שלי"<mswemailclient@gmail.com>`,
+      user.email,
+      subject,
+      msgBody.html,
+      msgBody.text,
+    );
+    if (sent === false) {
+      this.logger.error('Failed to send email');
+    }
+  }
+
+  private createEmailMessage(user: UserDbModel): EmailBody {
+    const msgStr: string =
+      `שלום ${user.firstname} ${user.lastname}\nאנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו.\n` +
+      `המערכת מאפשרת לך לנהל את רשימות התלמידים, מערכת השעות שלהם, תזכורות שונות ועוד.\n` +
+      `שם המשתמש שלך: ${user.username}\n` +
+      ` על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
+      `http://localhost:4200/login/${user.username}\n` +
+      ` תודה שהצטרפת!`;
+
+    const msgHtml: string =
+      `<p>שלום ${user.firstname} ${user.lastname}<br>` +
+      `אנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו<br>` +
+      `שם המשתמש שלך: ${user.username}<br>` +
+      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:<br>` +
+      `<a href=http://localhost:4200/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
+      `תודה שהצטרפת!</p>`;
+    return {
+      text: msgStr,
+      html: msgHtml,
+    };
+  }
+
+  private makeFirstLoginData() {
+    const date = new Date();
+    date.setMinutes(date.getMinutes() + 1);
+    return {
+      token: Math.random()
+        .toString(36)
+        .substring(2),
+      expiration: date,
+    };
+  }
+
   async updateUser(id: string, user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {
     if (userRole) {
       user.role = userRole;
@@ -112,7 +162,6 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     try {
       await this.uniqueUserNameValidation(user.username, id);
       this.logger.log(`updateUser:: updating user ${mongoId}`);
-
       const updatedDocument = await this.collection.findOneAndUpdate(
         { _id: mongoId },
         { $set: user },
@@ -125,7 +174,30 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       return [error, null];
     }
   }
-
+  async updateUserPassword(username: string, password: string): Promise<[Error, UserDbModel]> {
+    try {
+      const user = await this.collection.findOne({ username });
+      this.logger.log(`updateUser:: updating user ${username}`);
+      user.passwordStatus = PasswordStatus.VALID;
+      if (user.firstLoginData !== undefined) {
+        delete user.firstLoginData;
+      }
+      user.password = password;
+      const updatedDocument = await this.collection.findOneAndUpdate(
+        { _id: user._id },
+        {
+          $set: user,
+          $unset: { firstLoginData: 1 },
+        },
+        { returnOriginal: false },
+      );
+      this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
+      return [null, updatedDocument.value];
+    } catch (error) {
+      this.logger.error(`updateUser:: error updating user ${username}`, error.stack);
+      return [error, null];
+    }
+  }
   async deleteUser(id: string): Promise<[Error, number]> {
     try {
       const mongoId = new ObjectID(id);
