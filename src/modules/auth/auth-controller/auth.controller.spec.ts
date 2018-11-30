@@ -1,6 +1,7 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
+import { UserLoginRequest } from '../../../models/user-login-request.model';
 
 describe('auth controller', () => {
   let authController: AuthController;
@@ -11,6 +12,7 @@ describe('auth controller', () => {
       createTokenFromCridentials: jest.fn(),
       validateUserByCridentials: jest.fn(),
       validateUserNameUnique: jest.fn(),
+      handlePushToken: jest.fn(),
     };
 
     responseMock = {
@@ -71,7 +73,38 @@ describe('auth controller', () => {
       accessToken: 'some-very-secret-token',
     });
   });
+  /**************************8 */
+  it('should call store firebase token if user provides firebase token', async () => {
+    // create user object with push token.
+    const anyUserWithToken: UserLoginRequest = {
+      username: 'mock-use',
+      password: 'mock-password',
+      pushToken: 'pushToken',
+    };
+    // do success login
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'any-token']);
+    await authController.login(responseMock, anyUserWithToken);
+    // make sure store token is called
+    expect(authServiceMock.handlePushToken).toHaveBeenCalled();
+  });
 
+  it('should not try to store push token if user login fails', async () => {
+    // create user object with push token.
+    const anyUserWithToken: UserLoginRequest = {
+      username: 'mock-use',
+      password: 'mock-password',
+      pushToken: 'pushToken',
+    };
+    // do success login
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([new Error(), null]);
+    await authController.login(responseMock, anyUserWithToken);
+    // make sure store token is called
+    expect(authServiceMock.handlePushToken).not.toHaveBeenCalled();
+  });
+
+  /***************************** */
   describe('validateUserNameUnique', () => {
     it('should return 400 if no body was passed', async () => {
       const validateUserNameUniqueFn = authServiceMock.validateUserNameUnique as jest.Mock<Promise<[Error, string]>>;

@@ -6,4 +6,5 @@ export interface AuthServiceInterface {
   createTokenFromCridentials(userLogin: UserLoginRequest): Promise<[Error, string]>;
   validateUserByCridentials(userLogin: UserLoginRequest): Promise<[Error, UserDbModel]>;
   validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]>;
+  handlePushToken(userLogin: UserLoginRequest): void;
 }

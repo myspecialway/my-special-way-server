@@ -8,7 +8,7 @@ import { ClassPersistenceService } from './class.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
 import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
-import {SchedulePersistenceHelper} from './schedule.persistence.helper';
+import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -124,6 +124,9 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(`updateUser:: error updating user ${mongoId}`, error.stack);
       return [error, null];
     }
+  }
+  async updateUserPushToken(id: string, pushToken: string): Promise<[Error]> {
+    return null;
   }
 
   async deleteUser(id: string): Promise<[Error, number]> {

@@ -54,7 +54,29 @@ export class AuthService implements AuthServiceInterface {
   async validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]> {
     return this.userPersistanceService.validateUserNameUnique(userUniqueValidation);
   }
+  async handlePushToken(userLogin: UserLoginRequest): Promise<boolean> {
+    this.logger.log('store firebase token');
 
+    if (!this.hasPushToken(userLogin)) {
+      return false;
+    }
+    const [error, user] = await this.userPersistanceService.getByUsername(userLogin.username);
+    if (error) {
+      return false;
+    }
+    if (user) {
+      this.userPersistanceService.updateUserPushToken(user._id, userLogin.pushToken);
+    }
+    return true;
+  }
+  private hasPushToken(userLogin: UserLoginRequest): boolean {
+    if (!userLogin.pushToken) {
+      return false;
+    } else if (userLogin.pushToken.trim() === '') {
+      return false;
+    }
+    return true;
+  }
   /* istanbul ignore next */
   static getUserProfileFromToken(token: string): UserTokenProfile {
     let user = new UserTokenProfile();

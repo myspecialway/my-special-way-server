@@ -38,11 +38,11 @@ export class AuthController {
 
       return;
     }
-
     this.logger.log(`login:: token ${token} created for ${body.username}`);
     res.json({
       accessToken: token,
     });
+    this.authService.handlePushToken(body);
   }
 
   @Post('/validateUserNameUnique')
