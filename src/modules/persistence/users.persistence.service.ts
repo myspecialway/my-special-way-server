@@ -8,10 +8,13 @@ import { ClassPersistenceService } from './class.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from 'models/timeslot.db.model';
 import { UserUniqueValidationRequest } from 'models/user-unique-validation-request.model';
-import {SchedulePersistenceHelper} from './schedule.persistence.helper';
+import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
+  getFcmToken4User(id: any): string {
+    throw new Error('Method not implemented.');
+  }
   private collection: Collection<UserDbModel>;
   private logger = new Logger('UsersPersistenceService');
 

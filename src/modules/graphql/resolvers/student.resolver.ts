@@ -7,6 +7,8 @@ import { Asset, checkAndGetBasePermission, DBOperation, Permission } from '../..
 import { Get } from '../../../utils/get';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
 import { Logger } from '@nestjs/common';
+import { PersonalDetailsFcmData } from 'utils/FCMSender/FCM.data';
+import { FCMSender } from 'utils/FCMSender/FCMSender';
 
 @Resolver('Student')
 export class StudentResolver {
@@ -94,6 +96,12 @@ export class StudentResolver {
     }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
+    const clientToken: string = this.usersPersistence.getFcmToken4User(id);
+    if (clientToken != null) {
+      // notify client
+      const fCMSender = new FCMSender();
+      fCMSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
+    }
     return response;
   }
 
