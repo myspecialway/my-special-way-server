@@ -13,6 +13,7 @@ describe('auth.service', () => {
   beforeEach(() => {
     userPersistanceServiceMock = {
       authenticateUser: jest.fn(),
+      getUserByFilters: jest.fn(),
     };
 
     authService = new AuthService(userPersistanceServiceMock as UsersPersistenceService);
@@ -72,4 +73,45 @@ describe('auth.service', () => {
       expect(decodedToken.exp).toBeDefined();
     });
   }
+  it('should create valid token if user was found in db', async () => {
+    expect.hasAssertions();
+    // given
+    const mockExp = new Date();
+    mockExp.setDate(mockExp.getDate() + 1);
+    (userPersistanceServiceMock.getUserByFilters as jest.Mock).mockReturnValueOnce({
+      username: 'mock user',
+      firstLoginData: { expiration: mockExp },
+    });
+
+    // when
+    const token = await authService.createTokenFromFirstLoginToken('firstLoginToken');
+    expect(token[0]).toBeNull();
+    expect(token[1]).toBeDefined();
+  });
+  it('should no create valid token if the expiration is over', async () => {
+    expect.hasAssertions();
+    // given
+    const mockExp = new Date();
+    mockExp.setDate(mockExp.getDate() - 1);
+    (userPersistanceServiceMock.getUserByFilters as jest.Mock).mockReturnValueOnce({
+      username: 'mock user',
+      firstLoginData: { expiration: mockExp },
+    });
+
+    // when
+    const token = await authService.createTokenFromFirstLoginToken('firstLoginToken');
+    expect(token[0]).toBeDefined();
+    expect(token[1]).toBeNull();
+  });
+  it('should no create valid token if the user is not found', async () => {
+    expect.hasAssertions();
+    // given
+    const mockExp = new Date();
+    mockExp.setDate(mockExp.getDate() - 1);
+    (userPersistanceServiceMock.getUserByFilters as jest.Mock).mockReturnValueOnce(null);
+    // when
+    const token = await authService.createTokenFromFirstLoginToken('firstLoginToken');
+    expect(token[0]).toBeDefined();
+    expect(token[1]).toBeNull();
+  });
 });

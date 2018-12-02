@@ -3,11 +3,12 @@ import { getDbServiceProvider } from './db.service';
 import { ClassPersistenceService } from './class.persistence.service';
 import { UsersPersistenceService } from './users.persistence.service';
 import { LessonPersistenceService } from './lesson.persistence.service';
-import { SchedulePersistenceService } from './schedule.persistence.service';
 import { LocationsPersistenceService } from './locations.persistence.service';
 import { getConfig } from '../../config/config-loader';
 import { StudentPermissionService } from '../permissions/student.premission.service';
+import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 import { SettingsPersistenceService } from './settings.persistence.service';
+import { SchedulePersistenceService } from './schedule.persistence.service';
 
 @Module({
   providers: [
@@ -15,6 +16,7 @@ import { SettingsPersistenceService } from './settings.persistence.service';
     UsersPersistenceService,
     ClassPersistenceService,
     LessonPersistenceService,
+    SchedulePersistenceHelper,
     SchedulePersistenceService,
     LocationsPersistenceService,
     StudentPermissionService,
@@ -24,6 +26,7 @@ import { SettingsPersistenceService } from './settings.persistence.service';
     UsersPersistenceService,
     ClassPersistenceService,
     LessonPersistenceService,
+    SchedulePersistenceHelper,
     SchedulePersistenceService,
     LocationsPersistenceService,
     StudentPermissionService,

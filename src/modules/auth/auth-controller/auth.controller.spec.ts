@@ -10,6 +10,7 @@ describe('auth controller', () => {
     authServiceMock = {
       createTokenFromCridentials: jest.fn(),
       validateUserByCridentials: jest.fn(),
+      createTokenFromFirstLoginToken: jest.fn(),
       validateUserNameUnique: jest.fn(),
     };
 
@@ -69,6 +70,42 @@ describe('auth controller', () => {
 
     expect(responseMock.json).toHaveBeenCalledWith({
       accessToken: 'some-very-secret-token',
+    });
+  });
+  describe('Fisrt Login', () => {
+    it('should return 200 if body with firsLoginToken was passed', async () => {
+      const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
+      createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+      await authController.firstLogin(responseMock, { firstLoginToken: 'firstToken' });
+
+      expect(responseMock.json).toHaveBeenCalledWith({
+        accessToken: 'some-very-secret-token',
+      });
+    });
+    it('should return 400 if body not was passed', async () => {
+      const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
+      createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+      await authController.firstLogin(responseMock, null);
+
+      expect(responseMock.status).toHaveBeenCalledWith(400);
+    });
+    it('should return 500 if error return from service', async () => {
+      const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
+      createTokenFn.mockReturnValueOnce(['null', null]);
+
+      await authController.firstLogin(responseMock, { firstLoginToken: 'firstToken' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(500);
+    });
+    it('should return 401 if token not created', async () => {
+      const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
+      createTokenFn.mockReturnValueOnce([null, null]);
+
+      await authController.firstLogin(responseMock, { firstLoginToken: 'firstToken' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(401);
     });
   });
 

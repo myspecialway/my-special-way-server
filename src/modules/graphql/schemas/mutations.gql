@@ -1,6 +1,7 @@
 type Mutation {
   createUser(user: InputUser!): User
   updateUser(id: ID!, user: InputUser!): User
+  updateUserPassword(username: String!, password: String!): User
   deleteUser(id: ID!): Int
 
   createStudent(student: InputStudent!): Student
@@ -22,6 +23,8 @@ type Mutation {
   updateLocation(id: ID!, location: InputLocation!): Location
   deleteLocation(id: ID!): Int
 
+  # Schedule
+  deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Int
   # Settings
   updateSettings(id: ID!, settings: InputSettings!): Settings
 }
