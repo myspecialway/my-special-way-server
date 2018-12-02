@@ -1,0 +1,8 @@
+type Settings {
+  _id: ID!
+  teachercode: Int
+}
+
+input InputSettings {
+  teachercode: Int
+}
