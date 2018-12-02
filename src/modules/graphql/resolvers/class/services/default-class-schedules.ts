@@ -147,7 +147,7 @@ const indx22: TimeSlotDbModel = {
 const indx23: TimeSlotDbModel = {
   index: '8_5',
   hours: '12:45 - 13:15',
-  lesson: lunchLesson,
+  lesson: dismissLesson,
 };
 
 const indx24: TimeSlotDbModel = {
@@ -181,43 +181,31 @@ const indx28: TimeSlotDbModel = {
 };
 
 const indx29: TimeSlotDbModel = {
-  index: '9_5',
-  hours: '13:15 - 13:45',
-  lesson: recessLesson,
-};
-
-const indx30: TimeSlotDbModel = {
   index: '14_0',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
 
-const indx31: TimeSlotDbModel = {
+const indx30: TimeSlotDbModel = {
   index: '14_1',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
 
-const indx32: TimeSlotDbModel = {
+const indx31: TimeSlotDbModel = {
   index: '14_2',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
 
-const indx33: TimeSlotDbModel = {
+const indx32: TimeSlotDbModel = {
   index: '14_3',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
 
-const indx34: TimeSlotDbModel = {
+const indx33: TimeSlotDbModel = {
   index: '14_4',
-  hours: '16:30 - 16:45',
-  lesson: dismissLesson,
-};
-
-const indx35: TimeSlotDbModel = {
-  index: '14_5',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
@@ -257,8 +245,6 @@ export const ELMENTARY_SCHEDULE: TimeSlotDbModel[] = [
   indx31,
   indx32,
   indx33,
-  indx34,
-  indx35,
 ];
 
 const jn1: TimeSlotDbModel = {
@@ -352,6 +338,7 @@ const jn18: TimeSlotDbModel = {
   hours: '10:00 - 10:30',
   lesson: breakfastLesson,
 };
+
 const jn19: TimeSlotDbModel = {
   index: '8_0',
   hours: '12:45 - 13:15',
@@ -380,8 +367,9 @@ const jn23: TimeSlotDbModel = {
 const jn24: TimeSlotDbModel = {
   index: '8_5',
   hours: '12:45 - 13:15',
-  lesson: recessLesson,
+  lesson: dismissLesson,
 };
+
 const jn25: TimeSlotDbModel = {
   index: '9_0',
   hours: '13:15 - 13:45',
@@ -407,38 +395,29 @@ const jn29: TimeSlotDbModel = {
   hours: '13:15 - 13:45',
   lesson: lunchLesson,
 };
+
 const jn30: TimeSlotDbModel = {
-  index: '9_5',
-  hours: '13:15 - 13:45',
-  lesson: lunchLesson,
-};
-const jn31: TimeSlotDbModel = {
   index: '14_0',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
-const jn32: TimeSlotDbModel = {
+const jn31: TimeSlotDbModel = {
   index: '14_1',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
-const jn33: TimeSlotDbModel = {
+const jn32: TimeSlotDbModel = {
   index: '14_2',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
-const jn34: TimeSlotDbModel = {
+const jn33: TimeSlotDbModel = {
   index: '14_3',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
-const jn35: TimeSlotDbModel = {
+const jn34: TimeSlotDbModel = {
   index: '14_4',
-  hours: '16:30 - 16:45',
-  lesson: dismissLesson,
-};
-const jn36: TimeSlotDbModel = {
-  index: '14_5',
   hours: '16:30 - 16:45',
   lesson: dismissLesson,
 };
@@ -478,6 +457,4 @@ export const JUNIOR_HIGH: TimeSlotDbModel[] = [
   jn32,
   jn33,
   jn34,
-  jn35,
-  jn36,
 ];
