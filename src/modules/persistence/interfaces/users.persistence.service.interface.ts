@@ -15,7 +15,7 @@ export interface IUsersPersistenceService {
   readonly updateUserPassword: (username: string, password: string) => Promise<[Error, UserDbModel]>;
   readonly deleteUser: (id: string) => Promise<[Error, number]>;
 
-  readonly updateUserPushToken: (id: string, pushToken: string) => Promise<[Error]>;
+  readonly updateUserPushToken: (username: string, pushToken: string) => Promise<[Error]>;
 
   // Authentication
   readonly authenticateUser: ({ username, password }: UserLoginRequest) => Promise<[Error, UserDbModel]>;

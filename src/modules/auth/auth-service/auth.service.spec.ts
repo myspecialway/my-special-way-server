@@ -77,10 +77,10 @@ describe('auth.service', () => {
       password: 'mock-pass',
       pushToken: 'mock-valid-push-token',
     };
-    (userPersistanceServiceMock.getByUsername as jest.Mock).mockReturnValueOnce([null, { _id: 'any-id' }]);
+    (userPersistanceServiceMock.getByUsername as jest.Mock).mockReturnValueOnce([null, { username: 'any-name' }]);
     const persisted = await authService.handlePushToken(user);
     expect(persisted).toBeTruthy();
-    expect(userPersistanceServiceMock.updateUserPushToken).toHaveBeenCalledWith('any-id', user.pushToken);
+    expect(userPersistanceServiceMock.updateUserPushToken).toHaveBeenCalledWith('any-name', user.pushToken);
   });
 
   for (const role in UserRole) {

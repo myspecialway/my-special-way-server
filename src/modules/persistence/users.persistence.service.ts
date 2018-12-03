@@ -174,8 +174,24 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       return [error, null];
     }
   }
-  async updateUserPushToken(id: string, pushToken: string): Promise<[Error]> {
-    return null;
+  async updateUserPushToken(username: string, pushToken: string): Promise<[Error]> {
+    try {
+      const user = await this.collection.findOne({ username });
+      this.logger.log(`updateUser:: updating push token for user ${username}`);
+      user.pushToken = pushToken;
+      const updatedDocument = await this.collection.findOneAndUpdate(
+        { _id: user._id },
+        {
+          $set: user,
+        },
+        { returnOriginal: false },
+      );
+      this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
+      return [null];
+    } catch (error) {
+      this.logger.error(`updateUser:: error updating user push token ${username}`, error.stack);
+      return [error];
+    }
   }
   async updateUserPassword(username: string, password: string): Promise<[Error, UserDbModel]> {
     try {
