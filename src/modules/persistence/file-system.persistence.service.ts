@@ -13,10 +13,10 @@ export class FileSystemPersistenceService {
     this.collection = db.collection<FileSystemDbModel>('fileSystem');
   }
   private buildMongoFilterFromQuery(query: { [id: string]: any }, id?: string): { [id: string]: string } {
-    if (id) {
-      const mongoId = new ObjectID(id);
-      query._id = mongoId;
-    }
+    // if (id) {
+    //   const mongoId = new ObjectID(id);
+    //   query._id = mongoId;
+    // }
     return query;
   }
   async createFile(newFile: FileSystemDbModel): Promise<void> {
