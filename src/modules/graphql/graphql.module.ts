@@ -12,38 +12,32 @@ import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
 import { ClassLogic } from './resolvers/class/services/class-logic.service';
-import {PermissionsModule} from '../permissions/permissions.module';
+import { PermissionsModule } from '../permissions/permissions.module';
 import { ScheduleResolver } from './resolvers/schedule.resolver';
 
 @Module({
-    imports: [
-        GraphQLModule,
-        PersistenceModule,
-        PermissionsModule,
-    ],
-    providers: [
-        GraphQlService,
-        UsersResolver,
-        ClassResolver,
-        StudentResolver,
-        LessonResolver,
-        LocationsResolver,
-        ClassLogic,
-        ScheduleResolver,
-    ],
-    controllers: [GraphqlController],
+  imports: [GraphQLModule, PersistenceModule, PermissionsModule],
+  providers: [
+    GraphQlService,
+    UsersResolver,
+    ClassResolver,
+    StudentResolver,
+    LessonResolver,
+    LocationsResolver,
+    ClassLogic,
+    ScheduleResolver,
+  ],
+  controllers: [GraphqlController],
 })
 export class GraphqlModule implements NestModule {
-    configure(consumer: MiddlewareConsumer) {
-        if (!getConfig().isDev) {
-            consumer
-                .apply(passport.initialize())
-                .forRoutes('/graphql')
-                .apply(passport.authenticate('jwt', { session: false }))
-                .forRoutes('/graphql');
-        }
-        consumer
-            .apply(graphqlPlayground({ endpoint: '/graphql' }))
-            .forRoutes('/play');
+  configure(consumer: MiddlewareConsumer) {
+    if (!getConfig().isDev) {
+      consumer
+        .apply(passport.initialize())
+        .forRoutes('/graphql')
+        .apply(passport.authenticate('jwt', { session: false }))
+        .forRoutes('/graphql');
     }
+    consumer.apply(graphqlPlayground({ endpoint: '/graphql' })).forRoutes('/play');
+  }
 }

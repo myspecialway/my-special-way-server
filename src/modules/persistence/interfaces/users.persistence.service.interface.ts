@@ -12,6 +12,7 @@ export interface IUsersPersistenceService {
   readonly getById: (id: string) => Promise<UserDbModel>;
   readonly createUser: (user: UserDbModel, userRole?: UserRole) => Promise<[Error, UserDbModel]>;
   readonly updateUser: (id: string, user: UserDbModel, userRole?: UserRole) => Promise<[Error, UserDbModel]>;
+  readonly updateUserPassword: (username: string, password: string) => Promise<[Error, UserDbModel]>;
   readonly deleteUser: (id: string) => Promise<[Error, number]>;
 
   readonly updateUserPushToken: (id: string, pushToken: string) => Promise<[Error]>;
