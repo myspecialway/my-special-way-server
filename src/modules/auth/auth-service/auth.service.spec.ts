@@ -15,6 +15,7 @@ describe('auth.service', () => {
       authenticateUser: jest.fn(),
       updateUserPushToken: jest.fn(),
       getByUsername: jest.fn(),
+      getUserByFilters: jest.fn(),
     };
 
     authService = new AuthService(userPersistanceServiceMock as UsersPersistenceService);
