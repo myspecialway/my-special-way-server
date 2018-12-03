@@ -2,7 +2,6 @@ import { Collection } from 'mongodb';
 import { FileSystemDbModel } from '@models/file-system.db.model';
 import { Logger, Injectable } from '@nestjs/common';
 import { DbService } from './db.service';
-import { ObjectID } from 'bson';
 
 @Injectable()
 export class FileSystemPersistenceService {
