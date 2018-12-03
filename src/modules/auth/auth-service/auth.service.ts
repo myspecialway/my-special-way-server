@@ -60,7 +60,7 @@ export class AuthService implements AuthServiceInterface {
     if (!this.hasPushToken(userLogin)) {
       return false;
     }
-    const [error, user] = await this.userPersistanceService.getByUsername(userLogin.username);
+    const [, user] = await this.userPersistanceService.getByUsername(userLogin.username);
     if (user) {
       this.userPersistanceService.updateUserPushToken(user.username, userLogin.pushToken);
       return true;
