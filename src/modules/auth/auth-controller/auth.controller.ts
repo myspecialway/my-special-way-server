@@ -3,7 +3,7 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
-import * as sendemail from '../../../utils/nodeMailer/email.client';
+import * as sendemail from './../../../utils/nodeMailer/email.client';
 
 @Controller()
 export class AuthController {
