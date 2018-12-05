@@ -96,7 +96,7 @@ export class AuthController {
     res.json({ isUnique });
   }
 
-  private noBodyError(fn: string, res: Response) {
+  private noBodyError(fn: string, res: Response): Promise<void> {
     this.logger.warn(`${fn}:: request body is empty`);
     res.status(400).send(new BadRequestException({ message: `must pass ${fn} request` }));
     return;
