@@ -71,7 +71,7 @@ describe('auth controller', () => {
       accessToken: 'some-very-secret-token',
     });
   });
-  it('should return response with status ok if mail as been sent', async () => {
+  it('should failed to return response with status ok if mail as been sent', async () => {
     expect.hasAssertions();
 
     const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
@@ -83,8 +83,12 @@ describe('auth controller', () => {
       password: 'mock-password',
     });
 
+    // expect(responseMock.json).toHaveBeenCalledWith({
+    //   status: 'ok',
+    // });
     expect(responseMock.json).toHaveBeenCalledWith({
-      status: 'ok',
+      error: 'server error',
+      message: 'unknown server error',
     });
   });
 

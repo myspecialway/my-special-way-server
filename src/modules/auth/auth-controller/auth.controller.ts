@@ -2,14 +2,14 @@ import { Response } from 'express';
 import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestjs/common';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
+import { SendEmail } from '../../../utils/nodeMailer/email.client';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
-// import * as sendemail from './../../../utils/nodeMailer/email.client';
 
 @Controller()
 export class AuthController {
   private logger = new Logger('AuthController');
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(private readonly authService: AuthService, private sendEmail: SendEmail) {}
 
   @Post('/login')
   async login(@Res() res: Response, @Body() body: UserLoginRequest): Promise<void> {
@@ -53,21 +53,21 @@ export class AuthController {
     }
     this.logger.log(JSON.stringify(body.email));
     try {
-      // const restoreTemplate: string = `
-      //   <div class="email-content" style="text-align: right">
-      //     <h1>שחזור ססמא למערכת בדרכי שלי</h1>
-      //     <p>${body.firstname} ${body.lastname} שלום</p>
-      //     <p>.אנו שולחים לך לינק חדש לכניסה למערכת</p>
-      //     <p>:על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך</p>
-      //     <a href="#">http://www.example.com</a>
-      //     <p>!תודה</p>
-      //   </div>
-      //   `;
-      // const result = await sendemail('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
+      const restoreTemplate: string = `
+        <div class="email-content" style="text-align: right">
+          <h1>שחזור ססמא למערכת בדרכי שלי</h1>
+          <p>${body.firstname} ${body.lastname} שלום</p>
+          <p>.אנו שולחים לך לינק חדש לכניסה למערכת</p>
+          <p>:על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך</p>
+          <a href="#">http://www.example.com</a>
+          <p>!תודה</p>
+        </div>
+        `;
+      const result = await this.sendEmail.send('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
       res.status(200).json({
         status: 'ok',
       });
-      // this.logger.log(`restorePassword:: restorePassword request for ${result}`);
+      this.logger.log(`restorePassword:: restorePassword request for ${result}`);
     } catch (e) {
       this.logger.error(`login:: error while logging in ${body.email}`, 'e.stack');
       res.status(422).json({
