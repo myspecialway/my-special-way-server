@@ -85,13 +85,13 @@ describe('auth controller', () => {
       password: 'mock-password',
     });
 
-    // expect(responseMock.json).toHaveBeenCalledWith({
-    //   status: 'ok',
-    // });
     expect(responseMock.json).toHaveBeenCalledWith({
-      error: 'server error',
-      message: 'unknown server error',
+      status: 'ok',
     });
+    // expect(responseMock.json).toHaveBeenCalledWith({
+    //   error: 'server error',
+    //   message: 'unknown server error',
+    // });
   });
 
   describe('validateUserNameUnique', () => {

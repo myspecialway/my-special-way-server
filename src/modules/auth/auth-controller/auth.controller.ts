@@ -30,15 +30,15 @@ export class AuthController {
       return;
     }
 
-    // if (!token) {
-    //   this.logger.warn(`login:: token wasnt created for ${body.username}`);
-    //   res.status(401).json({
-    //     error: 'unauthenticated',
-    //     message: 'username of password are incorrect',
-    //   });
-    //
-    //   return;
-    // }
+    if (!token) {
+      this.logger.warn(`login:: token wasnt created for ${body.username}`);
+      res.status(401).json({
+        error: 'unauthenticated',
+        message: 'username of password are incorrect',
+      });
+
+      return;
+    }
 
     this.logger.log(`login:: token ${token} created for ${body.username}`);
     res.json({
