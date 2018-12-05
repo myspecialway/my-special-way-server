@@ -1,10 +1,12 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
+import { SendEmail } from '../../../utils/nodeMailer/email.client';
 
 describe('auth controller', () => {
   let authController: AuthController;
   let authServiceMock: AuthServiceInterface;
+  const sendEmail: SendEmail = new SendEmail();
   let responseMock;
   beforeEach(() => {
     authServiceMock = {
@@ -19,7 +21,7 @@ describe('auth controller', () => {
       json: jest.fn(),
     };
 
-    authController = new AuthController(authServiceMock as AuthService);
+    authController = new AuthController(authServiceMock as AuthService, sendEmail);
   });
 
   it('should return 400 if no body was passed', async () => {
