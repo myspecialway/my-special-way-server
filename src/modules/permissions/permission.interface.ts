@@ -70,7 +70,7 @@ export function checkAndGetBasePermission(
   if (user) {
     permission = PermissionFactory.get(user).getPermission(asset, op);
   }
-  if (permission === Permission.FORBID) {
+  if (permission !== Permission.FORBID) {
     throw new Error(NO_PERMISSION);
   }
   return permission;
