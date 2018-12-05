@@ -3,7 +3,7 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
-import * as sendemail from './../../../utils/nodeMailer/email.client';
+// import * as sendemail from './../../../utils/nodeMailer/email.client';
 
 @Controller()
 export class AuthController {
@@ -63,11 +63,11 @@ export class AuthController {
           <p>!תודה</p>
         </div>
         `;
-      const result = await sendemail('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
+      // const result = await sendemail('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
       res.status(200).json({
         status: 'ok',
       });
-      this.logger.log(`restorePassword:: restorePassword request for ${result}`);
+      // this.logger.log(`restorePassword:: restorePassword request for ${result}`);
     } catch (e) {
       this.logger.error(`login:: error while logging in ${body.email}`, 'e.stack');
       res.status(422).json({
