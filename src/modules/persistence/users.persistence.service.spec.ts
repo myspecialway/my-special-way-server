@@ -6,8 +6,10 @@ import { ClassPersistenceService } from './class.persistence.service';
 import { SchedulePersistenceHelper } from './schedule.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
-import { UserRole, UserDbModel, Gender } from '../../models/user.db.model';
+import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
+jest.mock('../../Utils/node-mailer/email.client');
+import { sendemail } from '../../Utils/node-mailer/email.client';
 
 describe('users persistence', () => {
   const collectionName = 'users';
@@ -46,6 +48,7 @@ describe('users persistence', () => {
           replaceOne: jest.fn(),
           findOneAndUpdate: jest.fn(),
           insertOne: jest.fn(),
+          getByUsername: jest.fn(),
         } as Partial<Collection>),
       } as Partial<Db>),
     };
@@ -458,6 +461,93 @@ describe('users persistence', () => {
     });
   });
 
+  it('should create user with passwordStatus NO_SET and first login token on createUser principle', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
+
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+
+    await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
+    expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        passwordStatus: PasswordStatus.NOT_SET,
+        firstLoginData: expect.objectContaining({ token: expect.any(String), expiration: expect.any(Date) }),
+      }),
+    );
+  });
+  it('should create user with passwordStatus VALID and password not null on createUser student', async () => {
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
+
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+    await usersPersistanceService.createUser(
+      { _id: 'id', password: '12345', username: 'someUsername' },
+      UserRole.STUDENT,
+    );
+    expect(dbServiceMock.getConnection().collection(collectionName).insertOne).toHaveBeenCalledWith(
+      expect.objectContaining({
+        passwordStatus: PasswordStatus.VALID,
+        password: expect.any(String),
+      }),
+    );
+  });
+
+  it('should remove firstLoginToken successfuly on updateUser', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({
+        passwordStatus: PasswordStatus.NOT_SET,
+        password: undefined,
+        firstLoginData: {},
+      });
+
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+
+    await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    expect(dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.objectContaining({
+        $set: { password: '123456', passwordStatus: PasswordStatus.VALID, firstLoginData: undefined },
+      }),
+      expect.anything(),
+    );
+  });
+
+  it('should return error on updateUser failed because no user found', async () => {
+    expect.hasAssertions();
+
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(() => {
+      throw new Error('mock error');
+    });
+    const [error, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    expect(error).toBeDefined();
+  });
+
+  it('should return error on updateUser failed ', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      passwordStatus: PasswordStatus.NOT_SET,
+      password: undefined,
+      firstLoginData: {},
+    });
+
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce(() => {
+      throw new Error('mock error');
+    });
+    const [error, updatedUser] = await usersPersistanceService.updateUserPassword('507f1f77bcf86cd799439011', '123456');
+    expect(error).toBeDefined();
+  });
+
   it('should return default reminders when missing on getStudentReminders', () => {
     const res = usersPersistanceService.getStudentReminders(MOCK_STUDENT);
     const expected = DEFAULT_REMINDERS;
@@ -470,5 +560,22 @@ describe('users persistence', () => {
     const expected = [];
 
     expect(res).toEqual(expected);
+  });
+  it('should write on log when send mail fails', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
+
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+    (sendemail as jest.Mock).mockReturnValue(false);
+    common.Logger.error = jest.fn();
+    (common.Logger.error as jest.Mock).mockImplementation((message, trace, context) => {
+      expect(message).toBe('Failed to send email');
+    });
+    await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
+    expect(common.Logger.error).toHaveBeenCalled();
   });
 });

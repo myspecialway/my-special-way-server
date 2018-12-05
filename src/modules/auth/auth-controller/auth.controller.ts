@@ -100,4 +100,35 @@ export class AuthController {
     res.status(400).send(new BadRequestException({ message: `must pass ${fn} request` }));
     return;
   }
+  @Post('/first-login')
+  async firstLogin(@Res() res: Response, @Body() body: { firstLoginToken: string }): Promise<void> {
+    if (!body) {
+      this.logger.warn('firstLogin:: request body is empty');
+      res.status(400).send(new BadRequestException({ message: 'must pass token request' }));
+      return;
+    }
+    const [error, token] = await this.authService.createTokenFromFirstLoginToken(body.firstLoginToken);
+
+    if (error) {
+      this.logger.error(`firstLogin:: error while logging first time with ${body.firstLoginToken} `, error.stack);
+      res.status(500).json({
+        error: `server error ${error.message || ''}`,
+        message: 'unknown server error',
+      });
+
+      return;
+    }
+
+    if (!token) {
+      this.logger.warn(`firstLogin:: token wasnt found  ${body.firstLoginToken}`);
+      res.status(401).json({
+        error: 'unauthenticated',
+        message: 'first Login unauthenticated',
+      });
+    }
+    this.logger.log(`firstLogin:: token ${token} created for ${body.firstLoginToken}`);
+    res.json({
+      accessToken: token,
+    });
+  }
 }
