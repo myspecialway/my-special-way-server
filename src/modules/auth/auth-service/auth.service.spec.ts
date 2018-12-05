@@ -83,6 +83,18 @@ describe('auth.service', () => {
     expect(userPersistanceServiceMock.updateUserPushToken).toHaveBeenCalledWith('any-name', user.pushToken);
   });
 
+  it('should NOT update push token when user is not found', async () => {
+    const user: UserLoginRequest = {
+      username: 'mock-user',
+      password: 'mock-pass',
+      pushToken: 'mock-valid-push-token',
+    };
+    (userPersistanceServiceMock.getByUsername as jest.Mock).mockReturnValueOnce([{}, null]);
+    const persisted = await authService.handlePushToken(user);
+    expect(persisted).toBeFalsy();
+    expect(userPersistanceServiceMock.updateUserPushToken).not.toHaveBeenCalled();
+  });
+
   for (const role in UserRole) {
     if (role === UserRole.STUDENT) {
       continue;
