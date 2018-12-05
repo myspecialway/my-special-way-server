@@ -26,6 +26,7 @@ export class AuthController {
         error: 'server error',
         message: 'unknown server error',
       });
+
       return;
     }
 
@@ -35,9 +36,14 @@ export class AuthController {
         error: 'unauthenticated',
         message: 'username of password are incorrect',
       });
+
       return;
     }
-    res.json({ accessToken: token });
+
+    this.logger.log(`login:: token ${token} created for ${body.username}`);
+    res.json({
+      accessToken: token,
+    });
   }
 
   @Post('/restore-password')
