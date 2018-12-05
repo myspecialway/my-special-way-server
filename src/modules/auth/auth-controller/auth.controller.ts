@@ -37,9 +37,7 @@ export class AuthController {
       });
       return;
     }
-    res.json({
-      accessToken: token,
-    });
+    res.json({ accessToken: token });
   }
 
   @Post('/restore-password')
