@@ -13,6 +13,8 @@ describe('auth.service', () => {
   beforeEach(() => {
     userPersistanceServiceMock = {
       authenticateUser: jest.fn(),
+      updateUserPushToken: jest.fn(),
+      getByUsername: jest.fn(),
       getUserByFilters: jest.fn(),
     };
 
@@ -49,6 +51,48 @@ describe('auth.service', () => {
     const token = (await authService.createTokenFromCridentials({} as UserLoginRequest))[1];
     const decodedToken: any = jwt.decode(token, { json: true });
     expect(decodedToken.exp).not.toBeDefined();
+  });
+
+  describe('test user with no push token', () => {
+    for (const emptyPushToken of [null, undefined, , '', '  ', '\n']) {
+      const user: UserLoginRequest = {
+        username: 'mock-user',
+        password: 'mock-pass',
+      };
+      user.pushToken = emptyPushToken;
+      it(`should not try to persist when push token is empty (i.e. '${emptyPushToken}')`, async () => {
+        const persisted = await authService.handlePushToken(user);
+        expect(persisted).toBeFalsy();
+        expect(userPersistanceServiceMock.updateUserPushToken).not.toHaveBeenCalledWith();
+      });
+    }
+  });
+
+  // should call update user when token is provided,
+  // make sure that it is being called only with push token
+  // parameter
+  it('should update push token when a push token is provided', async () => {
+    const user: UserLoginRequest = {
+      username: 'mock-user',
+      password: 'mock-pass',
+      pushToken: 'mock-valid-push-token',
+    };
+    (userPersistanceServiceMock.getByUsername as jest.Mock).mockReturnValueOnce([null, { username: 'any-name' }]);
+    const persisted = await authService.handlePushToken(user);
+    expect(persisted).toBeTruthy();
+    expect(userPersistanceServiceMock.updateUserPushToken).toHaveBeenCalledWith('any-name', user.pushToken);
+  });
+
+  it('should NOT update push token when user is not found', async () => {
+    const user: UserLoginRequest = {
+      username: 'mock-user',
+      password: 'mock-pass',
+      pushToken: 'mock-valid-push-token',
+    };
+    (userPersistanceServiceMock.getByUsername as jest.Mock).mockReturnValueOnce([{}, null]);
+    const persisted = await authService.handlePushToken(user);
+    expect(persisted).toBeFalsy();
+    expect(userPersistanceServiceMock.updateUserPushToken).not.toHaveBeenCalled();
   });
 
   for (const role in UserRole) {
