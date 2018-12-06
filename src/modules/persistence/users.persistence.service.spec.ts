@@ -548,6 +548,40 @@ describe('users persistence', () => {
     expect(error).toBeDefined();
   });
 
+  it('should return error on update pushToken failed ', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      passwordStatus: PasswordStatus.NOT_SET,
+      password: undefined,
+      firstLoginData: {},
+    });
+
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockImplementationOnce(
+      () => {
+        throw new Error('mock error');
+      },
+    );
+    const [error] = await usersPersistanceService.updateUserPushToken('507f1f77bcf86cd799439011', '7890123');
+    expect(error).toBeDefined();
+    expect(error).not.toBe(null);
+  });
+
+  it('should NOT return error on update pushToken success ', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      passwordStatus: PasswordStatus.NOT_SET,
+      password: undefined,
+      firstLoginData: {},
+    });
+
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockImplementationOnce(
+      () => {
+        return { value: 'a value to log' };
+      },
+    );
+    const [error] = await usersPersistanceService.updateUserPushToken('507f1f77bcf86cd799439011', '7890123');
+    expect(error).toBe(null);
+  });
   it('should return default reminders when missing on getStudentReminders', () => {
     const res = usersPersistanceService.getStudentReminders(MOCK_STUDENT);
     const expected = DEFAULT_REMINDERS;
