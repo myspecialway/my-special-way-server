@@ -17,6 +17,7 @@ export interface UserDbModel {
   reminders: IReminder[];
   passwordStatus: PasswordStatus;
   firstLoginData?: FirstLoginData;
+  pushToken?: string;
 }
 
 export enum Gender {

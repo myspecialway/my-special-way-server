@@ -6,6 +6,7 @@ import { LessonPersistenceService } from './lesson.persistence.service';
 import { LocationsPersistenceService } from './locations.persistence.service';
 import { getConfig } from '../../config/config-loader';
 import { StudentPermissionService } from '../permissions/student.premission.service';
+import { FileSystemPersistenceService } from './file-system.persistence.service';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 import { SettingsPersistenceService } from './settings.persistence.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
@@ -16,6 +17,7 @@ import { SchedulePersistenceService } from './schedule.persistence.service';
     UsersPersistenceService,
     ClassPersistenceService,
     LessonPersistenceService,
+    FileSystemPersistenceService,
     SchedulePersistenceHelper,
     SchedulePersistenceService,
     LocationsPersistenceService,
@@ -26,9 +28,10 @@ import { SchedulePersistenceService } from './schedule.persistence.service';
     UsersPersistenceService,
     ClassPersistenceService,
     LessonPersistenceService,
+    LocationsPersistenceService,
+    FileSystemPersistenceService,
     SchedulePersistenceHelper,
     SchedulePersistenceService,
-    LocationsPersistenceService,
     StudentPermissionService,
     SettingsPersistenceService,
   ],
