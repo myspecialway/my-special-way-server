@@ -33,7 +33,8 @@
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
     "seed-compile": "tsc -p ./db-seed",
-    "seed": "node ./db-seed/seed.js -c -n msw-local mongodb://localhost:27017"
+    "seed-local": "node ./db-seed/seed.js -c -n msw-local mongodb://localhost:27017",
+    "seed-dev": "node ./db-seed/seed.js -c -n msw-dev mongodb://localhost:27017"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
