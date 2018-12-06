@@ -8,6 +8,7 @@ import { getConfig } from '../../config/config-loader';
 import { StudentPermissionService } from '../permissions/student.premission.service';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 import { SchedulePersistenceService } from './schedule.persistence.service';
+import { NonActiveTimePersistenceService } from './non-active-time.persistence.service';
 
 @Module({
   providers: [
@@ -19,6 +20,7 @@ import { SchedulePersistenceService } from './schedule.persistence.service';
     SchedulePersistenceService,
     LocationsPersistenceService,
     StudentPermissionService,
+    NonActiveTimePersistenceService,
   ],
   exports: [
     UsersPersistenceService,
@@ -28,6 +30,7 @@ import { SchedulePersistenceService } from './schedule.persistence.service';
     SchedulePersistenceService,
     LocationsPersistenceService,
     StudentPermissionService,
+    NonActiveTimePersistenceService,
   ],
 })
 export class PersistenceModule {}

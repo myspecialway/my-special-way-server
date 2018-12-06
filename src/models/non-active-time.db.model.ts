@@ -2,8 +2,8 @@ export interface NonActiveTimeDbModel {
   _id: string;
   title: string;
   isAllDayEvent: boolean;
-  startDateTime: Date;
-  endDateTime: Date;
+  startDateTime: number;
+  endDateTime: number;
   isAllClassesEvent: boolean;
   classes?: string[];
 }
