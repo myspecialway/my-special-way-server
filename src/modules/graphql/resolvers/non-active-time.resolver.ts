@@ -16,18 +16,18 @@ export class NonActiveTimeResolver {
   @Mutation('createNonActiveTime')
   async createNonActiveTime(_, { nonActiveTime }, context) {
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.ANY);
-    return this.nonActiveTimePersistence.createNonActiveTime(nonActiveTime);
+    return this.nonActiveTimePersistence.create(nonActiveTime);
   }
 
   @Mutation('updateNonActiveTime')
   async updateNonActiveTime(_, { id, nonActiveTime }, context) {
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.UPDATE, Asset.ANY);
-    return this.nonActiveTimePersistence.updateNonActiveTime(id, nonActiveTime);
+    return this.nonActiveTimePersistence.update(id, nonActiveTime);
   }
 
   @Mutation('deleteNonActiveTime')
   async deleteNonActiveTime(_, { id }, context) {
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.ANY);
-    return this.nonActiveTimePersistence.deleteNonActiveTime(id);
+    return this.nonActiveTimePersistence.delete(id);
   }
 }

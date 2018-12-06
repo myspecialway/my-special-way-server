@@ -5,5 +5,5 @@ export interface NonActiveTimeDbModel {
   startDateTime: number;
   endDateTime: number;
   isAllClassesEvent: boolean;
-  classes?: string[];
+  classesIds?: string[];
 }

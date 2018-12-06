@@ -25,7 +25,7 @@ export class NonActiveTimePersistenceService {
     }
   }
 
-  async createNonActiveTime(newNonActiveTime: NonActiveTimeDbModel): Promise<NonActiveTimeDbModel> {
+  async create(newNonActiveTime: NonActiveTimeDbModel): Promise<NonActiveTimeDbModel> {
     try {
       this.logger.log(`NonActiveTimePersistenceService createNonActiveTime`);
       const insertResponse = await this.collection.insertOne(newNonActiveTime);
@@ -40,7 +40,7 @@ export class NonActiveTimePersistenceService {
     }
   }
 
-  async updateNonActiveTime(id: string, nonActiveTime: NonActiveTimeDbModel): Promise<NonActiveTimeDbModel> {
+  async update(id: string, nonActiveTime: NonActiveTimeDbModel): Promise<NonActiveTimeDbModel> {
     const mongoId = new ObjectID(id);
     try {
       this.logger.log(`NonActiveTimePersistenceService::updateNonActiveTime:: updating non-active-time ${mongoId}`);
@@ -65,7 +65,7 @@ export class NonActiveTimePersistenceService {
     }
   }
 
-  async deleteNonActiveTime(id: string): Promise<number> {
+  async delete(id: string): Promise<number> {
     try {
       const mongoId = new ObjectID(id);
       this.logger.log(`NonActiveTimePersistenceService::deleteNonActiveTime:: deleting non-active-time by id ${id}`);

@@ -6,7 +6,7 @@ type NonActiveTime {
   startDateTime: Int!
   endDateTime: Int!
   isAllClassesEvent: Boolean!
-  classes: [String]
+  classesIds: [String]
 }
 
 input InputNonActiveTime {
@@ -15,5 +15,5 @@ input InputNonActiveTime {
   startDateTime: Int!
   endDateTime: Int!
   isAllClassesEvent: Boolean!
-  classes: [String]
+  classesIds: [String]
 }
