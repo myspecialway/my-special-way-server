@@ -3,13 +3,13 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
-import { SendEmail } from '../../../utils/node-mailer/email.client';
+import { sendemail } from '../../../utils/node-mailer';
 
 @Controller()
 export class AuthController {
   private logger = new Logger('AuthController');
 
-  constructor(private readonly authService: AuthService, private sendEmail: SendEmail) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('/login')
   async login(@Res() res: Response, @Body() body: UserLoginRequest): Promise<void> {
@@ -63,7 +63,7 @@ export class AuthController {
           <p>!תודה</p>
         </div>
         `;
-      const result = await this.sendEmail.send('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
+      const result = await sendemail('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
       res.status(200).json({
         status: 'ok',
       });
@@ -100,5 +100,36 @@ export class AuthController {
     this.logger.warn(`${fn}:: request body is empty`);
     res.status(400).send(new BadRequestException({ message: `must pass ${fn} request` }));
     return;
+  }
+  @Post('/first-login')
+  async firstLogin(@Res() res: Response, @Body() body: { firstLoginToken: string }): Promise<void> {
+    if (!body) {
+      this.logger.warn('firstLogin:: request body is empty');
+      res.status(400).send(new BadRequestException({ message: 'must pass token request' }));
+      return;
+    }
+    const [error, token] = await this.authService.createTokenFromFirstLoginToken(body.firstLoginToken);
+
+    if (error) {
+      this.logger.error(`firstLogin:: error while logging first time with ${body.firstLoginToken} `, error.stack);
+      res.status(500).json({
+        error: `server error ${error.message || ''}`,
+        message: 'unknown server error',
+      });
+
+      return;
+    }
+
+    if (!token) {
+      this.logger.warn(`firstLogin:: token wasnt found  ${body.firstLoginToken}`);
+      res.status(401).json({
+        error: 'unauthenticated',
+        message: 'first Login unauthenticated',
+      });
+    }
+    this.logger.log(`firstLogin:: token ${token} created for ${body.firstLoginToken}`);
+    res.json({
+      accessToken: token,
+    });
   }
 }

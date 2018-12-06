@@ -35,6 +35,8 @@ export interface PermissionRule {
 }
 
 export const TEACHER_PERMISSION_RULES: PermissionRule[] = [
+  { operation: DBOperation.READ, asset: Asset.USER, role: UserRole.TEACHER, permission: Permission.OWN },
+  { operation: DBOperation.UPDATE, asset: Asset.USER, role: UserRole.TEACHER, permission: Permission.OWN },
   // Asset.STUDENT
   { operation: DBOperation.READ, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.OWN },
   { operation: DBOperation.UPDATE, asset: Asset.STUDENT, role: UserRole.TEACHER, permission: Permission.OWN },
