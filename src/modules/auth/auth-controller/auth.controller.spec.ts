@@ -1,7 +1,7 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
-import { SendEmail } from '../../../Utils/nodeMailer/email.client';
+import { SendEmail } from '../../../utils/node-mailer/email.client';
 
 describe('auth controller', () => {
   let authController: AuthController;
