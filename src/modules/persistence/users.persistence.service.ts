@@ -12,7 +12,7 @@ import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
-  getFcmToken4User(id: any): string {
+  getFcmToken4StudentUpdate(id: any): string {
     throw new Error('Method not implemented.');
   }
   private collection: Collection<UserDbModel>;

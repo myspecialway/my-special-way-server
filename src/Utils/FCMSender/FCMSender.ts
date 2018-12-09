@@ -1,5 +1,5 @@
 import * as admin from 'firebase-admin';
-import { FCMData } from './FCM.data';
+import { IFCMData } from './FCM.data';
 import { Injectable, Logger } from '@nestjs/common';
 import { getConfig } from '../../config/config-loader';
 
@@ -59,7 +59,7 @@ export class FCMSender {
   }
 
   /* https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android-specific_fields */
-  async sendDataMsgToAndroid(clientToken: string, messageData: FCMData): Promise<boolean> {
+  async sendDataMsgToAndroid(clientToken: string, messageData: IFCMData): Promise<boolean> {
     this.logger.log('FCMSender:: Calling SendDataMsgToAndroid');
     const fcmRequest = {
       data: messageData.data,

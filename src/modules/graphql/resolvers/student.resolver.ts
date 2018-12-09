@@ -96,7 +96,7 @@ export class StudentResolver {
     }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
-    const clientToken: string = this.usersPersistence.getFcmToken4User(id);
+    const clientToken: string = await this.usersPersistence.getFcmToken4StudentUpdate(id);
     if (clientToken != null) {
       // notify client
       const fCMSender = new FCMSender();
