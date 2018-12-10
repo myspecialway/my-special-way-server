@@ -3,8 +3,8 @@ type NonActiveTime {
   _id: ID!
   title: String!
   isAllDayEvent: Boolean!
-  startDateTime: Int!
-  endDateTime: Int!
+  startDateTime: String!
+  endDateTime: String!
   isAllClassesEvent: Boolean!
   classesIds: [String]
 }
@@ -12,8 +12,8 @@ type NonActiveTime {
 input InputNonActiveTime {
   title: String!
   isAllDayEvent: Boolean!
-  startDateTime: Int!
-  endDateTime: Int!
+  startDateTime: String!
+  endDateTime: String!
   isAllClassesEvent: Boolean!
   classesIds: [String]
 }
