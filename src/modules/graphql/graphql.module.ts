@@ -14,9 +14,10 @@ import { getConfig } from '../../config/config-loader';
 import { ClassLogic } from './resolvers/class/services/class-logic.service';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { ScheduleResolver } from './resolvers/schedule.resolver';
+import { FCMModule } from 'Utils/FCMSender/fcm.module';
 
 @Module({
-  imports: [GraphQLModule, PersistenceModule, PermissionsModule],
+  imports: [GraphQLModule, PersistenceModule, PermissionsModule, FCMModule],
   providers: [
     GraphQlService,
     UsersResolver,

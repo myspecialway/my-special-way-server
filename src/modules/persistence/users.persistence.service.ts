@@ -10,12 +10,22 @@ import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.mode
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
 import { EmailBody, sendemail } from '../../Utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
+import { UserTokenProfile } from '@models/user-token-profile.model';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
   private collection: Collection<UserDbModel>;
   private logger = new Logger('UsersPersistenceService');
-
+  async getFcmToken4User(id: string): Promise<string> {
+    const user = await this.getById(id);
+    if (user && user.pushToken) {
+      return user.pushToken;
+    } else {
+      //  return null;
+      // }
+      return 'eCqXZYtMxCg:APA91bH3SEZKK1dnNkHizXiEDNeD6RGVK0-D5UhSgmgkquAGsPtpG2zjRrD6yAY9CW1agZ5q2dpQkf-FYU4RaWcVVNNaFw0K3TkX10-JdGg0rBFq1WTYswpW9PD0NsH0LeQupDC4yI26';
+    }
+  }
   constructor(
     private dbService: DbService,
     private classPersistenceService: ClassPersistenceService,
