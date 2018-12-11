@@ -3,6 +3,7 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
+import { sendemail } from '../../../Utils/node-mailer';
 
 @Controller()
 export class AuthController {
@@ -45,6 +46,38 @@ export class AuthController {
     this.authService.handlePushToken(body);
   }
 
+  @Post('/restore-password')
+  async restorePassword(@Res() res: Response, @Body() body: any): Promise<void> {
+    if (!body) {
+      return this.noBodyError('restorePassword', res);
+    }
+    this.logger.log(JSON.stringify(body.email));
+    try {
+      const restoreTemplate: string = `
+        <div class="email-content" style="text-align: right">
+          <h1>שחזור ססמא למערכת בדרכי שלי</h1>
+          <p>${body.firstname} ${body.lastname} שלום</p>
+          <p>.אנו שולחים לך לינק חדש לכניסה למערכת</p>
+          <p>:על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך</p>
+          <a href="#">http://www.example.com</a>
+          <p>!תודה</p>
+        </div>
+        `;
+      const result = await sendemail('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
+      res.status(200).json({
+        status: 'ok',
+      });
+      this.logger.log(`restorePassword:: restorePassword request for ${result}`);
+    } catch (e) {
+      this.logger.error(`login:: error while logging in ${body.email}`, 'e.stack');
+      res.status(422).json({
+        error: 'server error',
+        message: 'unknown server error',
+      });
+      return;
+    }
+  }
+
   @Post('/validateUserNameUnique')
   async validateUserNameUnique(@Res() res: Response, @Body() body: UserUniqueValidationRequest): Promise<void> {
     if (!body) {
@@ -63,7 +96,7 @@ export class AuthController {
     res.json({ isUnique });
   }
 
-  private noBodyError(fn: string, res: Response) {
+  private noBodyError(fn: string, res: Response): Promise<void> {
     this.logger.warn(`${fn}:: request body is empty`);
     res.status(400).send(new BadRequestException({ message: `must pass ${fn} request` }));
     return;
