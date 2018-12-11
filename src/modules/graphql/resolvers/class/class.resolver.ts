@@ -93,17 +93,8 @@ export class ClassResolver {
       return error;
     }
     const lessons = await this.lessonPersistence.getAll();
-    // fix lessons to contain lesson id
-    schedule.forEach((tss) => {
-      if (tss.lesson) {
-        const found = lessons.find((lessonInDb) => {
-          return lessonInDb.title === tss.lesson.title;
-        });
-        if (found) {
-          tss.lesson = found;
-        }
-      }
-    });
+
+    this.classLogic.fixLessonIds(lessons, schedule);
     newClass.schedule = schedule;
     return this.classPersistence.createClass(newClass);
   }
