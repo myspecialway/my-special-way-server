@@ -99,7 +99,7 @@ export class StudentResolver {
 
   @Mutation('deleteStudent')
   async deleteStudent(_, { id }, context) {
-    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
+    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClassForRequestedUser(
       DBOperation.DELETE,
       id,
       context,

@@ -22,15 +22,40 @@ export class StudentPermissionService {
     return permission;
   }
 
-  async getAndValidateSingleStudentInClass(op: DBOperation, id, context): Promise<[Permission, UserDbModel]> {
+  checkPermissionForAction = async (requesedUserId: any, id?: any) => {
+    if (id === undefined) {
+      id = requesedUserId;
+    }
+
+    const requester: UserDbModel = await this.usersPersistence.getById(id);
+    const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
+    const [, classStudents] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
+
+    return this.getClassStudentById(classStudents, requesedUserId);
+  };
+
+  async getAndValidateSingleStudentInClassForRequestedUser(
+    op: DBOperation,
+    requesedUserId,
+    context,
+  ): Promise<[Permission, UserDbModel]> {
+    const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
+    if (permission === Permission.ALLOW) {
+      // find student in requester's class
+      return this.checkPermissionForAction(requesedUserId);
+    }
+    return [permission, null];
+  }
+
+  async getAndValidateSingleStudentInClass(
+    op: DBOperation,
+    requesedUserId,
+    context,
+  ): Promise<[Permission, UserDbModel]> {
     const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
     if (permission === Permission.OWN) {
       // find student in requester's class
-      const requester: UserDbModel = await this.usersPersistence.getById(context.user.id);
-      const requesterClassId = requester.class_id ? requester.class_id.toString() : '';
-      const [, classStudents] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
-
-      return this.getClassStudentById(classStudents, id);
+      return this.checkPermissionForAction(requesedUserId, context.user.id);
     }
     return [permission, null];
   }
