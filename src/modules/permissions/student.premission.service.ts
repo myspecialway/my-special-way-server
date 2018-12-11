@@ -22,7 +22,7 @@ export class StudentPermissionService {
     return permission;
   }
 
-  checkPermissionForAction = async (requesedUserId: any, id?: any) => {
+  async checkPermissionForAction(requesedUserId: any, id?: any) {
     if (id === undefined) {
       id = requesedUserId;
     }
@@ -32,7 +32,8 @@ export class StudentPermissionService {
     const [, classStudents] = await this.usersPersistence.getStudentsByClassId(requesterClassId);
 
     return this.getClassStudentById(classStudents, requesedUserId);
-  };
+    // push
+  }
 
   async getAndValidateSingleStudentInClassForRequestedUser(
     op: DBOperation,
