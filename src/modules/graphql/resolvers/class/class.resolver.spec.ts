@@ -183,7 +183,6 @@ describe('class resolver', () => {
   it('should call createClass and return new created class', async () => {
     const expected = { name: 'טיטאן', level: 'א', number: 1, grade: 'a' };
     (classPersistence.createClass as jest.Mock).mockReturnValue(Promise.resolve(expected));
-
     const response = await classResolver.createClass(null, { class: expected }, MOCK_PRINCIPLE_CONTEXT);
     expect(response).toEqual(expected);
     expect(classPersistence.createClass).toHaveBeenCalledWith(expected);
