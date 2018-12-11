@@ -7,6 +7,8 @@ import { Asset, checkAndGetBasePermission, DBOperation, Permission } from '../..
 import { Get } from '../../../utils/get';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
 import { Logger } from '@nestjs/common';
+import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
+import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
 
 @Resolver('Student')
 export class StudentResolver {
@@ -15,6 +17,7 @@ export class StudentResolver {
   constructor(
     private usersPersistence: UsersPersistenceService,
     private classPersistence: ClassPersistenceService,
+    private nonActiveTimePersistence: NonActiveTimePersistenceService,
     private studentPermissionService: StudentPermissionService,
   ) {}
 
@@ -65,6 +68,28 @@ export class StudentResolver {
   getStudentReminders(obj, {}, context) {
     this.studentPermissionService.validateObjClassMatchRequester(DBOperation.READ, obj, context);
     return this.usersPersistence.getStudentReminders(obj);
+  }
+
+  @ResolveProperty('nonActiveTimes')
+  async getNonActiveTimes(user, {}, context) {
+    const classId: string = user.class_id.toString();
+
+    function filterNonActiveTimes(nonActiveTime: NonActiveTimeDbModel): boolean {
+      if (nonActiveTime.isAllClassesEvent) {
+        return true;
+      } else if (nonActiveTime.classesIds.includes(classId.toString())) {
+        return true;
+      }
+      return false;
+    }
+
+    if (classId) {
+      const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
+      const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter(filterNonActiveTimes);
+      return filteredNonActiveTimes;
+    } else {
+      return [];
+    }
   }
 
   @Mutation('createStudent')

@@ -8,7 +8,7 @@ import { ClassPersistenceService } from '../../persistence/class.persistence.ser
 export class NonActiveTimeResolver {
   constructor(
     private nonActiveTimePersistence: NonActiveTimePersistenceService,
-    private classPersistance: ClassPersistenceService,
+    private classPersistence: ClassPersistenceService,
   ) {}
 
   @Query('nonActiveTimes')
@@ -36,8 +36,8 @@ export class NonActiveTimeResolver {
   }
 
   @ResolveProperty('classes')
-  async getNonActiveTimeClassed(nonActiveTime, {}, context) {
-    const classes = await nonActiveTime.classesIds.map((classId) => this.classPersistance.getById(classId));
+  async getNonActiveTimeClasses(nonActiveTime, {}, context) {
+    const classes = await nonActiveTime.classesIds.map((classId) => this.classPersistence.getById(classId));
     return classes;
   }
 }
