@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import { MongoClient, Collection, ObjectID } from 'mongodb';
 import { ArgumentParser } from 'argparse';
+import { getConfig } from '../src/config/config-loader';
 
 const logger = winston.createLogger({
   format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
@@ -24,7 +25,7 @@ parser.addArgument(['connectionString'], {
 
 parser.addArgument(['-n', '--name'], {
   help: 'db name',
-  required: true,
+  required: false,
 });
 
 parser.addArgument(['-c', '--clean'], {
@@ -34,6 +35,11 @@ parser.addArgument(['-c', '--clean'], {
 });
 
 const args = parser.parseArgs();
+
+if (!args.name) {
+  args.name = getConfig().DB_NAME;
+}
+
 init();
 
 const relationsToAdd: Array<{ collection: Collection; collectionContent: FileCollectionContent }> = [];
@@ -46,6 +52,7 @@ async function init() {
   if (args.clean) {
     logger.info(`dbseed:: cleaning db`);
     await db.dropDatabase();
+    logger.info(`dbseed:: creating db table: "${args.name}"`);
     db = client.db(args.name);
   }
   const collectionContents = getFilesJSONContent('./data');
