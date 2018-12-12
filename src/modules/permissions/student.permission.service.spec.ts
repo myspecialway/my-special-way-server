@@ -104,7 +104,7 @@ describe('student permission service', () => {
     expect(response).toEqual([Permission.ALLOW, null]);
   });
 
-  it('should call getStudentsByClassId function on getAndValidateSingleStudentInClassForRequestedUser', async () => {
+  it('should call getStudentsByClassId function on getCandidateStudentForDelete', async () => {
     const students = [
       {
         _id: '101',
@@ -143,7 +143,7 @@ describe('student permission service', () => {
     let response = null;
     let err = false;
     try {
-      response = await studentPermissionService.getAndValidateSingleStudentInClassForRequestedUser(
+      response = await studentPermissionService.getCandidateStudentForDelete(
         DBOperation.DELETE,
         '102',
         MOCK_PRINCIPLE_CONTEXT,
