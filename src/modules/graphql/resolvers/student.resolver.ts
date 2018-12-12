@@ -77,9 +77,7 @@ export class StudentResolver {
     if (classId) {
       const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
       const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
-        if (time.isAllClassesEvent) {
-          return true;
-        } else if (time.classesIds.includes(classId.toString())) {
+        if (time.isAllClassesEvent || time.classesIds.includes(classId.toString())) {
           return true;
         }
         return false;
