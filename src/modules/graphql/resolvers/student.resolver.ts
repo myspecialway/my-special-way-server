@@ -73,19 +73,14 @@ export class StudentResolver {
   @ResolveProperty('nonActiveTimes')
   async getNonActiveTimes(user, {}, context) {
     const classId: string = user.class_id.toString();
-
-    if (classId) {
-      const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
-      const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
-        if (time.isAllClassesEvent || time.classesIds.includes(classId.toString())) {
-          return true;
-        }
-        return false;
-      });
-      return filteredNonActiveTimes;
-    } else {
-      return [];
-    }
+    const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
+    const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
+      if (time.isAllClassesEvent || time.classesIds.includes(classId.toString())) {
+        return true;
+      }
+      return false;
+    });
+    return filteredNonActiveTimes;
   }
 
   @Mutation('createStudent')

@@ -9,6 +9,7 @@ import { NonActiveTimePersistenceService } from '../../persistence/non-active-ti
 import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
 
 export const NO_PERMISSION = 'not permissions to execute command';
+
 @Resolver('User')
 export class UsersResolver {
   constructor(
@@ -77,18 +78,13 @@ export class UsersResolver {
   @ResolveProperty('nonActiveTimes')
   async getNonActiveTimes(user, {}, context) {
     const classId: string = user.class_id.toString();
-
-    if (classId) {
-      const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
-      const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
-        if (time.isAllClassesEvent || time.classesIds.includes(classId.toString())) {
-          return true;
-        }
-        return false;
-      });
-      return filteredNonActiveTimes;
-    } else {
-      return [];
-    }
+    const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
+    const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
+      if (time.isAllClassesEvent || time.classesIds.includes(classId.toString())) {
+        return true;
+      }
+      return false;
+    });
+    return filteredNonActiveTimes;
   }
 }
