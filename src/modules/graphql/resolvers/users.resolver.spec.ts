@@ -178,4 +178,25 @@ describe('user resolver', () => {
     expect(response).toEqual(mockNonActiveTime);
     expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
   });
+
+  it('should call getNonActiveTimes function and return the empty array when no times are relevant', async () => {
+    const mockNonActiveTime = [
+      {
+        _id: 'ID',
+        title: 'title',
+        isAllDayEvent: true,
+        startDateTime: 'start',
+        endDateTime: 'end',
+        isAllClassesEvent: false,
+        classesIds: [],
+      },
+    ];
+    const mockUser = { class_id: 'ID' };
+
+    (nonActiveTimePersistence.getAll as jest.Mock).mockReturnValueOnce(Promise.resolve(mockNonActiveTime));
+
+    const response = await usersResolver.getNonActiveTimes(mockUser, {}, MOCK_CONTEXT);
+    expect(response).toEqual(mockNonActiveTime);
+    expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
+  });
 });
