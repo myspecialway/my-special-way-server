@@ -274,4 +274,24 @@ describe('student resolver', () => {
     const response = await studentResolver.deleteStudent(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
     expect(response).toBeNull();
   });
+
+  it('should call getNonActiveTimes function and return the nonActiveTIme object', async () => {
+    const mockNonActiveTime = [
+      {
+        _id: 'ID',
+        title: 'title',
+        isAllDayEvent: true,
+        startDateTime: 'start',
+        endDateTime: 'end',
+        isAllClassesEvent: true,
+      },
+    ];
+    const mockUser = { class_id: 'ID' };
+
+    (nonActiveTimePersistence.getAll as jest.Mock).mockReturnValueOnce(Promise.resolve(mockNonActiveTime));
+
+    const response = await studentResolver.getNonActiveTimes(mockUser, {}, MOCK_PRINCIPLE_CONTEXT);
+    expect(response).toEqual(mockNonActiveTime);
+    expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
+  });
 });
