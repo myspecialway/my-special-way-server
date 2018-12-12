@@ -36,12 +36,15 @@ export class StudentPermissionService {
   }
 
   async getCandidateStudentForDelete(op: DBOperation, requesedUserId, context): Promise<[Permission, UserDbModel]> {
-    const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
-    if (permission === Permission.ALLOW) {
-      // find student in requester's class
-      return this.checkPermissionForAction(requesedUserId);
+    try {
+      const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
+      if (permission === Permission.ALLOW) {
+        // find student in requester's class
+        return this.checkPermissionForAction(requesedUserId);
+      }
+    } catch (error) {
+      return [Permission.FORBID, null];
     }
-    return [permission, null];
   }
 
   async getAndValidateSingleStudentInClass(

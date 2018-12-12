@@ -105,6 +105,22 @@ describe('student permission service', () => {
   });
 
   it('should call getStudentsByClassId function on getCandidateStudentForDelete', async () => {
+    let response = null;
+    let err = false;
+    try {
+      response = await studentPermissionService.getCandidateStudentForDelete(
+        DBOperation.DELETE,
+        'teacher_1234',
+        MOCK_TEACHER_CONTEXT,
+      );
+    } catch (e) {
+      err = true;
+    }
+
+    expect(response).toEqual([Permission.FORBID, null]);
+  });
+
+  it('should call getStudentsByClassId function on getCandidateStudentForDelete', async () => {
     const students = [
       {
         _id: '101',
