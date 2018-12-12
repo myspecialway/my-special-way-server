@@ -196,7 +196,7 @@ describe('user resolver', () => {
     (nonActiveTimePersistence.getAll as jest.Mock).mockReturnValueOnce(Promise.resolve(mockNonActiveTime));
 
     const response = await usersResolver.getNonActiveTimes(mockUser, {}, MOCK_CONTEXT);
-    expect(response).toEqual(mockNonActiveTime);
+    expect(response).toEqual([]);
     expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
   });
 });
