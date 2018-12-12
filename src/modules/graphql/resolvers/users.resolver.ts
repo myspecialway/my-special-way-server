@@ -78,15 +78,6 @@ export class UsersResolver {
   async getNonActiveTimes(user, {}, context) {
     const classId: string = user.class_id.toString();
 
-    /*    function filterNonActiveTimes(nonActiveTime: NonActiveTimeDbModel): boolean {
-      if (nonActiveTime.isAllClassesEvent) {
-        return true;
-      } else if (nonActiveTime.classesIds.includes(classId.toString())) {
-        return true;
-      }
-      return false;
-    }*/
-
     if (classId) {
       const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
       const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
