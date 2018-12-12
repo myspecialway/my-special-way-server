@@ -6,6 +6,7 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 import { Permission } from '../../permissions/permission.interface';
 import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
+import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 
 describe('student resolver', () => {
   const MOCK_PRINCIPLE = {
@@ -54,6 +55,7 @@ describe('student resolver', () => {
   let usersPersistence: Partial<UsersPersistenceService>;
   let classPersistence: Partial<ClassPersistenceService>;
   let studentPermission: Partial<StudentPermissionService>;
+  let nonActiveTimePersistence: Partial<NonActiveTimePersistenceService>;
   beforeEach(() => {
     usersPersistence = {
       getAll: jest.fn(),
@@ -74,10 +76,17 @@ describe('student resolver', () => {
       getAndValidateSingleStudentInClass: jest.fn(),
       getAndValidateAllStudentsInClass: jest.fn(),
     };
+    nonActiveTimePersistence = {
+      getAll: jest.fn(),
+      update: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+    };
 
     studentResolver = new StudentResolver(
       usersPersistence as UsersPersistenceService,
       classPersistence as ClassPersistenceService,
+      nonActiveTimePersistence as NonActiveTimePersistenceService,
       studentPermission as StudentPermissionService,
     );
   });
