@@ -147,9 +147,9 @@ describe('student resolver', () => {
 
   it('should call getStudentSchedule and return the merged schedule', async () => {
     const expected: TimeSlotDbModel[] = [
-      { index: '00', lesson: { _id: 'someid', title: 'updatedlesson', icon: 'updatedicon' } },
-      { index: '02', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
-      { index: '01', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
+      { index: '00', hours: '123', lesson: { _id: 'someid', title: 'updatedlesson', icon: 'updatedicon' } },
+      { index: '02', hours: '456', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
+      { index: '01', hours: '789', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
     ];
     (usersPersistence.getStudentSchedule as jest.Mock).mockReturnValue(Promise.resolve([null, expected]));
     (studentPermission.validateObjClassMatchRequester as jest.Mock).mockReturnValue(Promise.resolve(Permission.ALLOW));

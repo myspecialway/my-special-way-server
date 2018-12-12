@@ -3,9 +3,10 @@ import { ClassDbModel } from '../../../models/class.db.model';
 import { UsersPersistenceService } from './../../persistence/users.persistence.service';
 import { UsersResolver } from './users.resolver';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { Permission, checkAndGetBasePermission } from '../../permissions/permission.interface';
+import { checkAndGetBasePermission, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
-import { UserRole } from '../../../models/user.db.model';
+import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
+
 jest.mock('../../permissions/permission.interface');
 jest.mock('../../../utils/get');
 
@@ -23,6 +24,7 @@ describe('user resolver', () => {
   let usersResolver: UsersResolver;
   let userPersistence: Partial<UsersPersistenceService>;
   let classPersistenceService: Partial<ClassPersistenceService>;
+  let nonActiveTimePersistence: Partial<NonActiveTimePersistenceService>;
   beforeEach(() => {
     userPersistence = {
       getAll: jest.fn(),
@@ -41,10 +43,17 @@ describe('user resolver', () => {
       updateClass: jest.fn(),
       deleteClass: jest.fn(),
     };
+    nonActiveTimePersistence = {
+      getAll: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+    };
 
     usersResolver = new UsersResolver(
       userPersistence as UsersPersistenceService,
       classPersistenceService as ClassPersistenceService,
+      nonActiveTimePersistence as NonActiveTimePersistenceService,
     );
   });
 
@@ -148,5 +157,25 @@ describe('user resolver', () => {
     const response = await usersResolver.getUserClass(mockObj, {}, MOCK_CONTEXT);
     expect(response).toEqual(mockClass);
     expect(classPersistenceService.getById).toHaveBeenCalledWith(classId);
+  });
+
+  it('should call getNonActiveTimes function and return the nonActiveTIme object', async () => {
+    const mockNonActiveTime = [
+      {
+        _id: 'ID',
+        title: 'title',
+        isAllDayEvent: true,
+        startDateTime: 'start',
+        endDateTime: 'end',
+        isAllClassesEvent: true,
+      },
+    ];
+    const mockUser = { class_id: 'ID' };
+
+    (nonActiveTimePersistence.getAll as jest.Mock).mockReturnValueOnce(Promise.resolve(mockNonActiveTime));
+
+    const response = await usersResolver.getNonActiveTimes(mockUser, {}, MOCK_CONTEXT);
+    expect(response).toEqual(mockNonActiveTime);
+    expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
   });
 });
