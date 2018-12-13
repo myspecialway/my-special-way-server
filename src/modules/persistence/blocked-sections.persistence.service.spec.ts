@@ -28,6 +28,7 @@ describe('BlockedSectionsPersistenceService', () => {
         collection: jest.fn().mockReturnValue({
           find: jest.fn(),
           findOne: jest.fn(),
+          findOneAndUpdate: jest.fn(),
           deleteOne: jest.fn(),
           insertOne: jest.fn(),
         } as Partial<Collection>),
@@ -139,5 +140,47 @@ describe('BlockedSectionsPersistenceService', () => {
     await blockedSectionsPersistenceService
       .deleteBlockedSection('507f1f77bcf86cd799439011')
       .catch((error) => expect(error).toBeDefined());
+  });
+
+  it('should update a blocked section successfully on updateBlockedSection', async () => {
+    expect.hasAssertions();
+    const expected = {
+      from: 'A',
+      to: 'A',
+      reason: 'some updated reason2',
+      _id: '507f1f77bcf86cd799439011',
+    };
+    const current = {
+      _id: '507f1f77bcf86cd799439011',
+      from: 'C',
+      to: 'D',
+      reason: 'some reason2',
+    };
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementation(() => {
+      return { value: current };
+    });
+    (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockImplementation(() => {
+      return { value: expected };
+    });
+    const blockedSection = await blockedSectionsPersistenceService.updateBlockedSection(
+      '507f1f77bcf86cd799439011',
+      expected,
+    );
+
+    expect(blockedSection).toEqual(expected);
+  });
+
+  it('should return error on updateBlockedSection when error happened', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectioName).findOneAndUpdate as jest.Mock).mockImplementation(() => {
+      return { value: expected };
+    });
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementation(() => {
+      throw new Error('mock error');
+    });
+
+    await blockedSectionsPersistenceService
+      .updateBlockedSection({})
+      .catch((error) => expect(error).not.toBeUndefined());
   });
 });

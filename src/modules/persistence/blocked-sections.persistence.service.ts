@@ -49,8 +49,8 @@ export class BlockedSectionsPersistenceService {
   }
 
   async updateBlockedSection(id: string, blockedSection: BlockedSectionsDbModel): Promise<BlockedSectionsDbModel> {
+    const mongoId = new ObjectID(id);
     try {
-      const mongoId = new ObjectID(id);
       this.logger.log(`BlockedSectionsPersistenceService::updateBlockedSection:: update blockedSection ${mongoId}`);
       const currentBlockedSection = await this.collection.findOne({ _id: mongoId });
       const updatedDocument = await this.collection.findOneAndUpdate(
@@ -66,7 +66,7 @@ export class BlockedSectionsPersistenceService {
       return updatedDocument.value;
     } catch (error) {
       this.logger.error(
-        'BlockedSectionsPersistenceService::updateBlockedSection:: error updating blockedSection ${mongoId}',
+        `BlockedSectionsPersistenceService::updateBlockedSection:: error updating blockedSection ${mongoId}`,
         error.stack,
       );
       throw error;
