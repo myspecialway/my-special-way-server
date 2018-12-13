@@ -104,6 +104,74 @@ describe('student permission service', () => {
     expect(response).toEqual([Permission.ALLOW, null]);
   });
 
+  it('should call getStudentsByClassId function on getCandidateStudentForDelete', async () => {
+    let response = null;
+    let err = false;
+    try {
+      response = await studentPermissionService.getCandidateStudentForDelete(
+        DBOperation.DELETE,
+        'teacher_1234',
+        MOCK_TEACHER_CONTEXT,
+      );
+    } catch (e) {
+      err = true;
+    }
+
+    expect(response).toEqual([Permission.FORBID, null]);
+  });
+
+  it('should call getStudentsByClassId function on getCandidateStudentForDelete', async () => {
+    const students = [
+      {
+        _id: '101',
+        email: 'msw-student@gmail.com',
+        firstname: 'Msw',
+        gender: 'MALE',
+        lastname: 'Student',
+        password: 'Aa123456',
+      },
+      {
+        _id: '102',
+        firstname: 'Yossi',
+        gender: 'MALE',
+        lastname: 'Goeta',
+        password: 'ggggg',
+        passwordStatus: 'VALID',
+        role: 'STUDENT',
+        username: 'dsggs',
+      },
+    ];
+
+    const deletedUser = {
+      _id: '102',
+      firstname: 'Yossi',
+      gender: 'MALE',
+      lastname: 'Goeta',
+      password: 'ggggg',
+      passwordStatus: 'VALID',
+      role: 'STUDENT',
+      username: 'dsggs',
+    };
+
+    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '123' }));
+
+    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(Promise.resolve([Permission.OWN, students]));
+    let response = null;
+    let err = false;
+    try {
+      response = await studentPermissionService.getCandidateStudentForDelete(
+        DBOperation.DELETE,
+        '102',
+        MOCK_PRINCIPLE_CONTEXT,
+      );
+    } catch (e) {
+      err = true;
+    }
+    expect(response).not.toBeNull();
+    expect(response[1]).toEqual(deletedUser);
+    expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
+  });
+
   it('should call getStudentsByClassId function and throw exception on getAndValidateSingleStudentInClass with diff class_id', async () => {
     (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '234' }));
     (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
