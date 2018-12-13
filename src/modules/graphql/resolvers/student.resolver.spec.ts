@@ -73,6 +73,7 @@ describe('student resolver', () => {
       validateObjClassMatchRequester: jest.fn(),
       getAndValidateSingleStudentInClass: jest.fn(),
       getAndValidateAllStudentsInClass: jest.fn(),
+      getCandidateStudentForDelete: jest.fn(),
     };
 
     studentResolver = new StudentResolver(
@@ -248,7 +249,7 @@ describe('student resolver', () => {
 
   it('should call deleteUser function as principle and return the number of students deleted', async () => {
     (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, 1]));
-    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
+    (studentPermission.getCandidateStudentForDelete as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.ALLOW, { username: 'test-user' }]),
     );
 
@@ -258,7 +259,7 @@ describe('student resolver', () => {
 
   it('should call deleteUser function as teacher and return none deleted', async () => {
     (usersPersistence.deleteUser as jest.Mock).mockReturnValue(Promise.resolve([null, null]));
-    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
+    (studentPermission.getCandidateStudentForDelete as jest.Mock).mockReturnValue(
       Promise.resolve([Permission.OWN, null]),
     );
 
