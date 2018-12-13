@@ -5,5 +5,7 @@ import { UserUniqueValidationRequest } from 'models/user-unique-validation-reque
 export interface AuthServiceInterface {
   createTokenFromCridentials(userLogin: UserLoginRequest): Promise<[Error, string]>;
   validateUserByCridentials(userLogin: UserLoginRequest): Promise<[Error, UserDbModel]>;
+  createTokenFromFirstLoginToken(firstLoginToken: string): Promise<[Error, string]>;
   validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]>;
+  handlePushToken(userLogin: UserLoginRequest): void;
 }

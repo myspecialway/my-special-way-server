@@ -54,7 +54,27 @@ export class AuthService implements AuthServiceInterface {
   async validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]> {
     return this.userPersistanceService.validateUserNameUnique(userUniqueValidation);
   }
+  async handlePushToken(userLogin: UserLoginRequest): Promise<boolean> {
+    this.logger.log('store firebase token');
 
+    if (!this.hasPushToken(userLogin)) {
+      return false;
+    }
+    const [, user] = await this.userPersistanceService.getByUsername(userLogin.username);
+    if (user) {
+      this.userPersistanceService.updateUserPushToken(user.username, userLogin.pushToken);
+      return true;
+    }
+    return false;
+  }
+  private hasPushToken(userLogin: UserLoginRequest): boolean {
+    if (!userLogin.pushToken) {
+      return false;
+    } else if (userLogin.pushToken.trim() === '') {
+      return false;
+    }
+    return true;
+  }
   /* istanbul ignore next */
   static getUserProfileFromToken(token: string): UserTokenProfile {
     let user = new UserTokenProfile();
@@ -63,5 +83,30 @@ export class AuthService implements AuthServiceInterface {
       user = jwttoken[JWT_PAYLOAD] as UserTokenProfile;
     }
     return user;
+  }
+  async createTokenFromFirstLoginToken(firstLoginToken: string): Promise<[Error, string]> {
+    const user = await this.userPersistanceService.getUserByFilters({ 'firstLoginData.token': firstLoginToken });
+    if (user === null) {
+      this.logger.warn(`createTokenFromCridentials:: user with firstLoginToken:${firstLoginToken} not found`);
+      return [new Error('not found'), null];
+    }
+    if (user.firstLoginData.expiration < new Date()) {
+      return [new Error('expired token'), null];
+    }
+    const userCridentials: UserTokenProfile = {
+      id: user._id,
+      username: user.username,
+      role: user.role,
+      firstname: user.firstname,
+      lastname: user.lastname,
+      class_id: user.class_id,
+    };
+
+    return [
+      null,
+      jwt.sign(userCridentials, JWT_SECRET, {
+        expiresIn: '2h',
+      }),
+    ];
   }
 }
