@@ -5,6 +5,7 @@ type Mutation {
   deleteUser(id: ID!): Int
 
   createStudent(student: InputStudent!): Student
+  createStudents(students: [InputStudent!]!): [Student]
   updateStudent(id: ID!, student: InputStudent!): Student
   deleteStudent(id: ID!): Int
 

@@ -178,6 +178,30 @@ describe('student resolver', () => {
     expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_PRINCIPLE, UserRole.STUDENT);
   });
 
+  it('should call createUser function and return the new students that were created', async () => {
+    (usersPersistence.createUser as jest.Mock)
+      .mockReturnValueOnce(Promise.resolve([null, MOCK_PRINCIPLE]))
+      .mockReturnValueOnce(Promise.resolve([null, MOCK_STUDENT]));
+
+    const response = await studentResolver.createStudents(
+      null,
+      { students: [MOCK_PRINCIPLE, MOCK_STUDENT] },
+      MOCK_PRINCIPLE_CONTEXT,
+    );
+    expect(response).toEqual([MOCK_PRINCIPLE, MOCK_STUDENT]);
+    expect(usersPersistence.createUser).toHaveBeenCalledTimes(2);
+    expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_PRINCIPLE, UserRole.STUDENT);
+    expect(usersPersistence.createUser).toHaveBeenCalledWith(MOCK_STUDENT, UserRole.STUDENT);
+  });
+
+  it('should call createUser function with class_id as object', async () => {
+    const studentMock = Object.assign(MOCK_STUDENT, { class_id: '5bfcf4b8b8a8413fb484a867' });
+    (usersPersistence.createUser as jest.Mock).mockReturnValue(Promise.resolve([null, studentMock]));
+
+    const response = await studentResolver.createStudent(null, { student: studentMock }, MOCK_PRINCIPLE_CONTEXT);
+    expect(response.class_id).toEqual(new ObjectID(studentMock.class_id));
+  });
+
   it('should call updateUser function as principle and return the student updated', async () => {
     (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_PRINCIPLE]));
     (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
