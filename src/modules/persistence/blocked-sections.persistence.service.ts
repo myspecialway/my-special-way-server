@@ -48,6 +48,31 @@ export class BlockedSectionsPersistenceService {
     }
   }
 
+  async updateBlockedSection(id: string, blockedSection: BlockedSectionsDbModel): Promise<BlockedSectionsDbModel> {
+    try {
+      const mongoId = new ObjectID(id);
+      this.logger.log(`BlockedSectionsPersistenceService::updateBlockedSection:: update blockedSection ${mongoId}`);
+      const currentBlockedSection = await this.collection.findOne({ _id: mongoId });
+      const updatedDocument = await this.collection.findOneAndUpdate(
+        { _id: mongoId },
+        { $set: { ...currentBlockedSection, ...blockedSection } },
+        { returnOriginal: false },
+      );
+      this.logger.log(
+        `BlockedSectionsPersistenceService::updateBlockedSection:: updated DB :${JSON.stringify(
+          updatedDocument.value,
+        )}`,
+      );
+      return updatedDocument.value;
+    } catch (error) {
+      this.logger.error(
+        'BlockedSectionsPersistenceService::updateBlockedSection:: error updating blockedSection ${mongoId}',
+        error.stack,
+      );
+      throw error;
+    }
+  }
+
   async deleteBlockedSection(id: string): Promise<number> {
     try {
       const mongoId = new ObjectID(id);

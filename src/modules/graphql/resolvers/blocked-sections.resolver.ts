@@ -15,6 +15,11 @@ export class BlockedSectionsResolver {
     return this.blockedSectionsPersistence.createBlockedSection(blockedSection);
   }
 
+  @Mutation('updateBlockedSection')
+  async updateBlockedSection(obj, { id, blockedSection }) {
+    return this.blockedSectionsPersistence.updateBlockedSection(id, blockedSection);
+  }
+
   @Mutation('deleteBlockedSection')
   async deleteBlockedSection(obj, { id }) {
     return this.blockedSectionsPersistence.deleteBlockedSection(id);

@@ -24,5 +24,6 @@ type Mutation {
 
   # Blocked Sections
   createBlockedSection(blockedSection: InputBlockedSection!): BlockedSection
+  updateBlockedSection(id: ID!, blockedSection: InputBlockedSection!): BlockedSection
   deleteBlockedSection(id: ID!): Int
 }
