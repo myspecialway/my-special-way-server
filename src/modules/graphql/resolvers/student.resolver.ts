@@ -115,11 +115,7 @@ export class StudentResolver {
 
   @Mutation('deleteStudent')
   async deleteStudent(_, { id }, context) {
-    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
-      DBOperation.DELETE,
-      id,
-      context,
-    );
+    const [, stdnt] = await this.studentPermissionService.getCandidateStudentForDelete(DBOperation.DELETE, id, context);
     if (!stdnt) {
       this.logger.error(`deleteStudent:: error deleting user ${id} - user not found`);
       return null;
