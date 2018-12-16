@@ -1,11 +1,15 @@
-import { Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Mutation, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { Asset, checkAndGetBasePermission, DBOperation } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
+import { ClassPersistenceService } from '../../persistence/class.persistence.service';
 
 @Resolver('NonActiveTime')
 export class NonActiveTimeResolver {
-  constructor(private nonActiveTimePersistence: NonActiveTimePersistenceService) {}
+  constructor(
+    private nonActiveTimePersistence: NonActiveTimePersistenceService,
+    private classPersistence: ClassPersistenceService,
+  ) {}
 
   @Query('nonActiveTimes')
   async getNonActiveTimes(_, {}, context) {
@@ -29,5 +33,11 @@ export class NonActiveTimeResolver {
   async deleteNonActiveTime(_, { id }, context) {
     checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.DELETE, Asset.ANY);
     return this.nonActiveTimePersistence.delete(id);
+  }
+
+  @ResolveProperty('classes')
+  async getNonActiveTimeClasses(nonActiveTime, {}, context) {
+    const classes = await nonActiveTime.classesIds.map((classId) => this.classPersistence.getById(classId));
+    return classes;
   }
 }
