@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { ObjectID } from 'mongodb';
 import { ClassPersistenceService } from './class.persistence.service';
+import {ClassDbModel} from '@models/class.db.model';
 
 @Injectable()
 export class SchedulePersistenceService {
@@ -9,7 +10,7 @@ export class SchedulePersistenceService {
 
   constructor(private classPersistenceService: ClassPersistenceService) {}
 
-  async deleteScheduleSlotFromClass(classId: string, scheduleIndex: string): Promise<number> {
+  async deleteScheduleSlotFromClass(classId: string, scheduleIndex: string): Promise<ClassDbModel> {
     const mongoId = new ObjectID(classId);
     try {
       this.logger.log(
@@ -23,7 +24,7 @@ export class SchedulePersistenceService {
           updatedDocument.value,
         )}`,
       );
-      return 1;
+      return updatedDocument.value;
     } catch (error) {
       this.logger.error(
         `SchedulePersistenceService::deleteScheduleSlotFromClass:: error updating class ${mongoId}`,
