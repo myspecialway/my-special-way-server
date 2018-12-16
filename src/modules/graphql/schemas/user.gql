@@ -7,6 +7,7 @@ type User {
   role: UserType
   gender: Gender
   class: Class
+  nonActiveTimes: [NonActiveTime]
 }
 
 enum Gender {
@@ -21,11 +22,11 @@ enum UserType {
 }
 
 input InputUser {
-    username: String!
-    email: String!
-    firstname: String!
-    lastname: String!
-    gender: Gender
-    role: UserType!
-    class_id: String
+  username: String!
+  email: String!
+  firstname: String!
+  lastname: String!
+  gender: Gender
+  role: UserType!
+  class_id: String
 }

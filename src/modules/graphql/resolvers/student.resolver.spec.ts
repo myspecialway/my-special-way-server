@@ -6,6 +6,7 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 import { Permission } from '../../permissions/permission.interface';
 import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
+import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 
 describe('student resolver', () => {
   const MOCK_PRINCIPLE = {
@@ -54,6 +55,7 @@ describe('student resolver', () => {
   let usersPersistence: Partial<UsersPersistenceService>;
   let classPersistence: Partial<ClassPersistenceService>;
   let studentPermission: Partial<StudentPermissionService>;
+  let nonActiveTimePersistence: Partial<NonActiveTimePersistenceService>;
   beforeEach(() => {
     usersPersistence = {
       getAll: jest.fn(),
@@ -75,10 +77,17 @@ describe('student resolver', () => {
       getAndValidateAllStudentsInClass: jest.fn(),
       getCandidateStudentForDelete: jest.fn(),
     };
+    nonActiveTimePersistence = {
+      getAll: jest.fn(),
+      update: jest.fn(),
+      create: jest.fn(),
+      delete: jest.fn(),
+    };
 
     studentResolver = new StudentResolver(
       usersPersistence as UsersPersistenceService,
       classPersistence as ClassPersistenceService,
+      nonActiveTimePersistence as NonActiveTimePersistenceService,
       studentPermission as StudentPermissionService,
     );
   });
@@ -139,9 +148,9 @@ describe('student resolver', () => {
 
   it('should call getStudentSchedule and return the merged schedule', async () => {
     const expected: TimeSlotDbModel[] = [
-      { index: '00', lesson: { _id: 'someid', title: 'updatedlesson', icon: 'updatedicon' } },
-      { index: '02', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
-      { index: '01', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
+      { index: '00', hours: '123', lesson: { _id: 'someid', title: 'updatedlesson', icon: 'updatedicon' } },
+      { index: '02', hours: '456', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
+      { index: '01', hours: '789', lesson: { _id: 'someid', title: 'somelesson', icon: 'someicon' } },
     ];
     (usersPersistence.getStudentSchedule as jest.Mock).mockReturnValue(Promise.resolve([null, expected]));
     (studentPermission.validateObjClassMatchRequester as jest.Mock).mockReturnValue(Promise.resolve(Permission.ALLOW));
@@ -289,5 +298,46 @@ describe('student resolver', () => {
 
     const response = await studentResolver.deleteStudent(null, { id: 'someid' }, MOCK_PRINCIPLE_CONTEXT);
     expect(response).toBeNull();
+  });
+
+  it('should call getNonActiveTimes function and return the nonActiveTIme object', async () => {
+    const mockNonActiveTime = [
+      {
+        _id: 'ID',
+        title: 'title',
+        isAllDayEvent: true,
+        startDateTime: 'start',
+        endDateTime: 'end',
+        isAllClassesEvent: true,
+      },
+    ];
+    const mockUser = { class_id: 'ID' };
+
+    (nonActiveTimePersistence.getAll as jest.Mock).mockReturnValueOnce(Promise.resolve(mockNonActiveTime));
+
+    const response = await studentResolver.getNonActiveTimes(mockUser, {}, MOCK_PRINCIPLE_CONTEXT);
+    expect(response).toEqual(mockNonActiveTime);
+    expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
+  });
+
+  it('should call getNonActiveTimes function and return the empty array when no times are relevant', async () => {
+    const mockNonActiveTime = [
+      {
+        _id: 'ID',
+        title: 'title',
+        isAllDayEvent: true,
+        startDateTime: 'start',
+        endDateTime: 'end',
+        isAllClassesEvent: false,
+        classesIds: [],
+      },
+    ];
+    const mockUser = { class_id: 'ID' };
+
+    (nonActiveTimePersistence.getAll as jest.Mock).mockReturnValueOnce(Promise.resolve(mockNonActiveTime));
+
+    const response = await studentResolver.getNonActiveTimes(mockUser, {}, MOCK_PRINCIPLE_CONTEXT);
+    expect(response).toEqual([]);
+    expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
   });
 });

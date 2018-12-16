@@ -1,5 +1,7 @@
 import { NonActiveTimeResolver } from './non-active-time.resolver';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
+import { ClassPersistenceService } from '../../persistence/class.persistence.service';
+import { NonActiveTimeDbModel } from '../../../models/non-active-time.db.model';
 
 describe('non active time resolver', () => {
   const MOCK_PRINCIPLE = {
@@ -29,6 +31,7 @@ describe('non active time resolver', () => {
   };
 
   let nonActiveTimeResolver: NonActiveTimeResolver;
+  let classPersistence: Partial<ClassPersistenceService>;
   let nonActiveTimePersistence: Partial<NonActiveTimePersistenceService>;
   beforeEach(() => {
     nonActiveTimePersistence = {
@@ -37,8 +40,19 @@ describe('non active time resolver', () => {
       update: jest.fn(),
       delete: jest.fn(),
     };
-
-    nonActiveTimeResolver = new NonActiveTimeResolver(nonActiveTimePersistence as NonActiveTimePersistenceService);
+    classPersistence = {
+      getAll: jest.fn(),
+      getById: jest.fn(),
+      createClass: jest.fn(),
+      deleteClass: jest.fn(),
+      getByName: jest.fn(),
+      updateClass: jest.fn(),
+      updateClassAsIs: jest.fn(),
+    };
+    nonActiveTimeResolver = new NonActiveTimeResolver(
+      nonActiveTimePersistence as NonActiveTimePersistenceService,
+      classPersistence as ClassPersistenceService,
+    );
   });
 
   it('should call getAll function and return nonActiveTime', async () => {
@@ -168,5 +182,22 @@ describe('non active time resolver', () => {
       err = true;
     }
     expect(err).toBeTruthy();
+  });
+
+  it('should call getNonActiveTimeClasses and return classes array', async () => {
+    const nonActiveTime: NonActiveTimeDbModel = {
+      _id: 'id',
+      title: 'title',
+      isAllDayEvent: true,
+      startDateTime: '1',
+      endDateTime: '1',
+      isAllClassesEvent: false,
+      classesIds: ['1'],
+    };
+    const mockClass = { name: 'class', _id: '1' };
+
+    classPersistence.getById = jest.fn().mockReturnValueOnce(mockClass);
+    const result = await nonActiveTimeResolver.getNonActiveTimeClasses(nonActiveTime, {}, MOCK_PRINCIPLE_CONTEXT);
+    expect(result).toEqual([mockClass]);
   });
 });
