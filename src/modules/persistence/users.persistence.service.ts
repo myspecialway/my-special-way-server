@@ -8,7 +8,7 @@ import { IUsersPersistenceService } from './interfaces/users.persistence.service
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
 import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
-import { EmailBody, sendemail } from '../../Utils/node-mailer';
+import { EmailBody, sendemail } from '../../utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
