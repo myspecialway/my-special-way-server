@@ -241,9 +241,9 @@ describe('student resolver', () => {
 
   it('should try to send push message when updating a user', async () => {
     (usersPersistence.getFcmToken4User as jest.Mock).mockReturnValue(Promise.resolve('any-token'));
-    (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_PRINCIPLE]));
+    (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_TEACHER]));
     (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
-      Promise.resolve([Permission.OWN, null]),
+      Promise.resolve([Permission.OWN, MOCK_STUDENT]),
     );
 
     const response = await studentResolver.updateStudent(

@@ -84,14 +84,6 @@ export class StudentResolver {
 
   @Mutation('updateStudent')
   async updateStudent(_, { id, student }, context) {
-    try {
-      const clientToken: string = await this.usersPersistence.getFcmToken4User(id);
-      if (clientToken != null) {
-        this.fcmsSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
-      }
-    } catch (e) {
-      this.logger.error(e);
-    }
     const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.UPDATE,
       id,
@@ -106,7 +98,14 @@ export class StudentResolver {
     }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
-
+    try {
+      const clientToken: string = await this.usersPersistence.getFcmToken4User(id);
+      if (clientToken != null) {
+        this.fcmsSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
+      }
+    } catch (e) {
+      this.logger.error(e);
+    }
     return response;
   }
 

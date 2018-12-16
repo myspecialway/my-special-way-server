@@ -23,8 +23,6 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     } else {
       return null;
     }
-    //   return 'eCqXZYtMxCg:APA91bH3SEZKK1dnNkHizXiEDNeD6RGVK0-D5UhSgmgkquAGsPtpG2zjRrD6yAY9CW1agZ5q2dpQkf-FYU4RaWcVVNNaFw0K3TkX10-JdGg0rBFq1WTYswpW9PD0NsH0LeQupDC4yI26';
-    // }
   }
   constructor(
     private dbService: DbService,
