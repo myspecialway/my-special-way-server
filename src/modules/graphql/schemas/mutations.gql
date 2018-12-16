@@ -25,7 +25,7 @@ type Mutation {
   deleteLocation(id: ID!): Int
 
   # Schedule
-  deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Int
+  deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Class
 
   # Non-Active-Time
   createNonActiveTime(nonActiveTime: InputNonActiveTime!): NonActiveTime
