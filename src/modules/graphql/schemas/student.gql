@@ -10,6 +10,7 @@ type Student {
   class: Class
   schedule: [TimeSlot!]
   reminders: [Reminder!]
+  nonActiveTimes: [NonActiveTime]
   # teacher: Teacher!
 }
 
