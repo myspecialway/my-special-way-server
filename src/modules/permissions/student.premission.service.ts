@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { checkAndGetBasePermission, DBOperation, Asset, Permission, NO_PERMISSION } from './permission.interface';
+import { Asset, checkAndGetBasePermission, DBOperation, NO_PERMISSION, Permission } from './permission.interface';
 import { UserDbModel } from 'models/user.db.model';
 import { UsersPersistenceService } from '../persistence/users.persistence.service';
 import { Get } from '../../utils/get';
@@ -53,7 +53,7 @@ export class StudentPermissionService {
     context,
   ): Promise<[Permission, UserDbModel]> {
     const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
-    if (permission === Permission.OWN) {
+    if (permission === Permission.OWN || permission === Permission.ALLOW) {
       // find student in requester's class
       return this.checkPermissionForAction(requesedUserId, context.user.id);
     }
