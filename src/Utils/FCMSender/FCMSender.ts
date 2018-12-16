@@ -19,12 +19,12 @@ export class FCMSender {
       databaseURL: config.FIREBASE_DB_URL,
     });
     this.logger = new Logger('FCMSender');
-    this.logger.log('FCMSender:: created FCMSender instance');
+    this.logger.log('FCMSender: created FCMSender instance');
   }
 
   /* https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android-specific_fields */
   async sendTxtMsgToAndroid(clientToken: string, messageBody: string, messageTitle: string): Promise<boolean> {
-    this.logger.log('FCMSender:: Calling sendTxtMsgToAndroid');
+    this.logger.log('FCMSender: Calling sendTxtMsgToAndroid');
     const fcmRequest = {
       android: {
         /* The time-to-live duration of the message.
@@ -43,15 +43,12 @@ export class FCMSender {
       // Send a message to the device corresponding to the provided registration token.
       const response = await admin.messaging().send(fcmRequest);
       this.logger.log(
-        'FCMSender:: success in sending text message to client with token: ' &&
-          clientToken &&
-          '. Message ID: ' &&
-          response,
+        'FCMSender: success in sending text message to client with token: ' + clientToken + '. Message ID: ' + response,
       );
       return true;
     } catch (err) {
       this.logger.log(
-        'FCMSender:: failure in sending text message to client with token: ' && clientToken && '. Error: ' && err,
+        'FCMSender: failure in sending text message to client with token: ' + clientToken + '. Error: ' + err,
       );
       // write to log
       return false;
@@ -60,7 +57,7 @@ export class FCMSender {
 
   /* https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android-specific_fields */
   async sendDataMsgToAndroid(clientToken: string, messageData: IFCMData): Promise<boolean> {
-    this.logger.log('FCMSender:: Calling SendDataMsgToAndroid');
+    this.logger.log('FCMSender: Calling SendDataMsgToAndroid');
     const fcmRequest = {
       data: messageData.data,
       //    data: DATA.data,
@@ -77,13 +74,13 @@ export class FCMSender {
     try {
       const response = await admin.messaging().send(fcmRequest);
       this.logger.log(
-        'FCMSender:: success in sending text message to client with token: ' + clientToken + '. Message ID: ',
+        'FCMSender: success in sending text message to client with token: ' + clientToken + '. Message ID: ',
         response,
       );
       return true;
     } catch (err) {
       this.logger.log(
-        'FCMSender:: failure in sending text message to client with token: ' && clientToken && '. Error: ' && err,
+        'FCMSender: failure in sending text message to client with token: ' + clientToken + '. Error: ' + err,
       );
       return false;
     }

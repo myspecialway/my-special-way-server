@@ -8,8 +8,8 @@ import { Get } from '../../../utils/get';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
 import { Logger } from '@nestjs/common';
 
-import { PersonalDetailsFcmData } from 'utils/FCMSender/FCM.data';
-import { FCMSender } from 'utils/FCMSender/FCMSender';
+import { PersonalDetailsFcmData } from '../../../utils/FCMSender/FCM.data';
+import { FCMSender } from '../../../utils/FCMSender/FCMSender';
 
 @Resolver('Student')
 export class StudentResolver {
@@ -87,8 +87,6 @@ export class StudentResolver {
     try {
       const clientToken: string = await this.usersPersistence.getFcmToken4User(id);
       if (clientToken != null) {
-        // notify client
-        // const fCMSender = new FCMSender();
         this.fcmsSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
       }
     } catch (e) {
