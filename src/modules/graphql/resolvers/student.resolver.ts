@@ -2,7 +2,7 @@ import { ObjectID } from 'mongodb';
 import { Mutation, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { ClassPersistenceService } from '../../persistence/class.persistence.service';
-import { UserRole } from '../../../models/user.db.model';
+import { UserRole, UserDbModel } from '../../../models/user.db.model';
 import { Asset, checkAndGetBasePermission, DBOperation, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
@@ -78,6 +78,16 @@ export class StudentResolver {
     return response;
   }
 
+  @Mutation('createStudents')
+  async createStudents(_, { students }, context) {
+    const createdUsers: UserDbModel[] = [];
+    checkAndGetBasePermission(Get.getObject(context, 'user'), DBOperation.CREATE, Asset.STUDENT);
+    for (const student of students) {
+      createdUsers.push(await this.createStudent(_, { student }, context));
+    }
+    return createdUsers;
+  }
+
   @Mutation('updateStudent')
   async updateStudent(_, { id, student }, context) {
     const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
@@ -99,11 +109,7 @@ export class StudentResolver {
 
   @Mutation('deleteStudent')
   async deleteStudent(_, { id }, context) {
-    const [, stdnt] = await this.studentPermissionService.getAndValidateSingleStudentInClass(
-      DBOperation.DELETE,
-      id,
-      context,
-    );
+    const [, stdnt] = await this.studentPermissionService.getCandidateStudentForDelete(DBOperation.DELETE, id, context);
     if (!stdnt) {
       this.logger.error(`deleteStudent:: error deleting user ${id} - user not found`);
       return null;
