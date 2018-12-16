@@ -10,7 +10,6 @@ import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.mode
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
 import { EmailBody, sendemail } from '../../Utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
-import { UserTokenProfile } from '@models/user-token-profile.model';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
