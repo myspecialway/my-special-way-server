@@ -10,8 +10,8 @@ import { Logger } from '@nestjs/common';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
 
-import { PersonalDetailsFcmData } from '../../../utils/FCMSender/FCM.data';
-import { FCMSender } from '../../../utils/FCMSender/FCMSender';
+import { PersonalDetailsFcmData } from '../../../Utils/FCMSender/FCM.data';
+import { FCMSender } from '../../../Utils/FCMSender/FCMSender';
 
 @Resolver('Student')
 export class StudentResolver {
