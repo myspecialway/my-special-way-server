@@ -6,9 +6,8 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 import { Permission } from '../../permissions/permission.interface';
 import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
-
-import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 import { FCMSender } from '../../../Utils/FCMSender/FCMSender';
+import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 
 describe('student resolver', () => {
   const MOCK_PRINCIPLE = {
