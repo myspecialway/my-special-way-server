@@ -53,9 +53,11 @@ export class StudentPermissionService {
     context,
   ): Promise<[Permission, UserDbModel]> {
     const permission = checkAndGetBasePermission(Get.getObject(context, 'user'), op, Asset.STUDENT);
-    if (permission === Permission.OWN || permission === Permission.ALLOW) {
+    if (permission === Permission.OWN) {
       // find student in requester's class
       return this.checkPermissionForAction(requesedUserId, context.user.id);
+    } else if (permission === Permission.ALLOW) {
+      return [Permission.ALLOW, await this.usersPersistence.getById(requesedUserId)];
     }
     return [permission, null];
   }

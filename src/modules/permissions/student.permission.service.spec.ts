@@ -207,18 +207,15 @@ describe('student permission service', () => {
     expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
   });
 
-  it('should call getStudentsByClassId and return students on getAndValidateSingleStudentInClass when using principle permission', async () => {
-    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ class_id: '234' }));
-    (usersPersistence.getStudentsByClassId as jest.Mock).mockReturnValue(
-      Promise.resolve([, [{ _id: '123', username: 'test' }]]),
-    );
+  it('should not call getStudentsByClassId and return student on getAndValidateSingleStudentInClass when using principle permission', async () => {
+    (usersPersistence.getById as jest.Mock).mockReturnValue(Promise.resolve({ _id: '123', username: 'test' }));
 
     const response = await studentPermissionService.getAndValidateSingleStudentInClass(
       DBOperation.READ,
       '123',
       MOCK_PRINCIPLE_CONTEXT,
     );
-    expect(response).toEqual([Permission.OWN, { _id: '123', username: 'test' }]);
-    expect(usersPersistence.getStudentsByClassId).toHaveBeenCalled();
+    expect(response).toEqual([Permission.ALLOW, { _id: '123', username: 'test' }]);
+    expect(usersPersistence.getStudentsByClassId).not.toHaveBeenCalled();
   });
 });
