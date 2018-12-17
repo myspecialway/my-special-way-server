@@ -5,6 +5,7 @@ type Mutation {
   deleteUser(id: ID!): Int
 
   createStudent(student: InputStudent!): Student
+  createStudents(students: [InputStudent!]!): [Student]
   updateStudent(id: ID!, student: InputStudent!): Student
   deleteStudent(id: ID!): Int
 
@@ -24,5 +25,10 @@ type Mutation {
   deleteLocation(id: ID!): Int
 
   # Schedule
-  deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Int
+  deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Class
+
+  # Non-Active-Time
+  createNonActiveTime(nonActiveTime: InputNonActiveTime!): NonActiveTime
+  updateNonActiveTime(id: ID!, nonActiveTime: InputNonActiveTime!): NonActiveTime
+  deleteNonActiveTime(id: ID!): Int
 }

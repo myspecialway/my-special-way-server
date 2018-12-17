@@ -15,6 +15,7 @@ import { ClassLogic } from './resolvers/class/services/class-logic.service';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { ScheduleResolver } from './resolvers/schedule.resolver';
 import { FCMModule } from 'Utils/FCMSender/fcm.module';
+import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
 
 @Module({
   imports: [GraphQLModule, PersistenceModule, PermissionsModule, FCMModule],
@@ -27,6 +28,7 @@ import { FCMModule } from 'Utils/FCMSender/fcm.module';
     LocationsResolver,
     ClassLogic,
     ScheduleResolver,
+    NonActiveTimeResolver,
   ],
   controllers: [GraphqlController],
 })
