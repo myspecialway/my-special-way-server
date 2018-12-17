@@ -8,7 +8,7 @@ import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
 
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
-import { FCMSender } from '../../../utils/FCMSender/FCMSender';
+import { FCMSender } from '../../../Utils/FCMSender/FCMSender';
 
 describe('student resolver', () => {
   const MOCK_PRINCIPLE = {
