@@ -107,13 +107,14 @@ describe('class persistence', () => {
 
   it('should create a new class successfully on createClass', async () => {
     expect.hasAssertions();
-    const expected = { name: 'classname' };
+    const expected = { name: 'newName', grade: 'a' };
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
     (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
 
-    const createdClass = await classPersistanceService.createClass({});
+    const createdClass = await classPersistanceService.createClass({ name: 'newName', grade: 'a' });
 
     expect(createdClass).toEqual(expected);
   });
