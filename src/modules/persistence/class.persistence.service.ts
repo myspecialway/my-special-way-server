@@ -11,6 +11,7 @@ export class ClassPersistenceService {
   constructor(private dbService: DbService, private schedulePersistenceHelper: SchedulePersistenceHelper) {
     const db = this.dbService.getConnection();
     this.collection = db.collection<ClassDbModel>('classes');
+    this.collection.createIndex({ name: 1 }, { unique: true });
   }
 
   async getAll() {
