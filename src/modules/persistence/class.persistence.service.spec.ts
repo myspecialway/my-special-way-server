@@ -8,6 +8,7 @@ describe('class persistence', () => {
     let classPersistanceService: ClassPersistenceService;
     let schedulePersistenceService: SchedulePersistenceService;
     let dbServiceMock: Partial<DbService>;
+    // new test
     beforeEach(() => {
         dbServiceMock = {
             getConnection: jest.fn().mockReturnValue({
