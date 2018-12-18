@@ -132,6 +132,18 @@ describe('class persistence', () => {
     await classPersistanceService.createClass({}).catch((error) => expect(error).not.toBeUndefined());
   });
 
+  it('should return class already exists error on createClass when is already exists', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({
+      name: 'className',
+      grade: 'a',
+    });
+
+    await classPersistanceService
+      .createClass({ name: 'className', grade: 'a' })
+      .catch((error) => expect(error.message).toBe('Class already exists'));
+  });
+
   it('should update class sucessfuly on updateClass', async () => {
     expect.hasAssertions();
     const expected = { name: 'updated class name', number: 1 };
