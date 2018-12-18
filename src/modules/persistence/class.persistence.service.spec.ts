@@ -124,6 +124,7 @@ describe('class persistence', () => {
     (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementationOnce(() => {
       throw new Error('mock error');
     });
