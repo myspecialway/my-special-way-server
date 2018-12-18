@@ -48,6 +48,9 @@ export class ClassPersistenceService {
   async createClass(newClass: ClassDbModel): Promise<ClassDbModel> {
     try {
       this.logger.log(`ClassPersistenceService::createClass:: create class`);
+      if ((await this.getByName(newClass.name)) === null) {
+        throw new Error('Class already exists');
+      }
       const insertResponse = await this.collection.insertOne(newClass);
       return await this.getById(insertResponse.insertedId.toString());
     } catch (error) {
