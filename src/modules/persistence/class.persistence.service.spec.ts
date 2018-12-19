@@ -107,13 +107,14 @@ describe('class persistence', () => {
 
   it('should create a new class successfully on createClass', async () => {
     expect.hasAssertions();
-    const expected = { name: 'classname' };
+    const expected = { name: 'newName', grade: 'a' };
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
     (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
 
-    const createdClass = await classPersistanceService.createClass({});
+    const createdClass = await classPersistanceService.createClass({ name: 'newName', grade: 'a' });
 
     expect(createdClass).toEqual(expected);
   });
@@ -123,11 +124,24 @@ describe('class persistence', () => {
     (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementationOnce(() => {
       throw new Error('mock error');
     });
 
     await classPersistanceService.createClass({}).catch((error) => expect(error).not.toBeUndefined());
+  });
+
+  it('should return class already exists error on createClass when is already exists', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({
+      name: 'className',
+      grade: 'a',
+    });
+
+    await classPersistanceService
+      .createClass({ name: 'className', grade: 'a' })
+      .catch((error) => expect(error.message).toBe('Class already exists'));
   });
 
   it('should update class sucessfuly on updateClass', async () => {
