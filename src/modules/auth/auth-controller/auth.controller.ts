@@ -53,17 +53,46 @@ export class AuthController {
     }
     this.logger.log(JSON.stringify(body.email));
     try {
-      const restoreTemplate: string = `
-        <div class="email-content" style="text-align: right">
-          <h1>שחזור ססמא למערכת בדרכי שלי</h1>
-          <p>${body.firstname} ${body.lastname} שלום</p>
-          <p>.אנו שולחים לך לינק חדש לכניסה למערכת</p>
-          <p>:על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך</p>
-          <a href="#">http://www.example.com</a>
-          <p>!תודה</p>
-        </div>
-        `;
-      const result = await sendemail('mswemailclient@gmail.com', body.email, 'שחזור ססמא', restoreTemplate);
+      let restoreTemplate: string = `
+      <!DOCTYPE html>
+        <html>
+          <head dir="rtl" lang="he">
+	          <meta charset="utf-8" />
+            <style type="text/css">
+              body {background-color: white;}
+              .textStyle   {
+                font-family: Rubik;
+                color: #222222;
+                letter-spacing: 0.2px;
+                dir: "rtl";
+                }
+              .linkStyle{
+                font-family: Rubik;
+                color: #222222;
+                letter-spacing: 0.2px;
+              }
+            </style>
+          </head>`;
+
+      restoreTemplate += `<body style="text-align:right;">
+            <div class="textStyle">,${body.firstname} ${body.lastname} שלום</div>
+            <br/>
+            <div class="textStyle">אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;<br/>
+            המערכת מאפשרת לך לנהל את רשימות התלמידים, מערכת השעות שלהם, תזכורות שונות ועוד.&rlm;</div>
+            <br/>
+            <div class="textStyle">.${body.username} :שם המשתמש שלך<br/>
+            :על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך</div>
+            <div class="linkStyle"><a href ="#">http://www.example.com</a></div>
+            <br/>
+            <div class="textStyle">!תודה שהצטרפת</div>
+          </body>
+        </html> `;
+      const result = await sendemail(
+        'mswemailclient@gmail.com',
+        body.email,
+        'שחזור ססמא למערכת בדרכי שלי ',
+        restoreTemplate,
+      );
       res.status(200).json({
         status: 'ok',
       });
