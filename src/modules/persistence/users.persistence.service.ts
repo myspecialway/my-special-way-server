@@ -131,13 +131,36 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       `${BASE_URL}/login/${user.username}\n` +
       ` תודה שהצטרפת!`;
 
-    const msgHtml: string =
+    let msgHtml: string = `
+      <!DOCTYPE html>
+        <html>
+          <head dir="rtl" lang="he">
+            <meta charset="utf-8" />
+            <style type="text/css">
+              body {background-color: white;}
+              .textStyle   {
+                font-family: Rubik;
+                color: #222222;
+                letter-spacing: 0.2px;
+                dir: "rtl";
+                }
+              .linkStyle{
+                font-family: Rubik;
+                color: #222222;
+                letter-spacing: 0.2px;
+              }
+            </style>
+          </head>`;
+
+    msgHtml +=
+      `<div class="textStyle">` +
       `<p>שלום ${user.firstname} ${user.lastname}<br>` +
-      `אנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו<br>` +
+      `אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;<br>` +
       `שם המשתמש שלך: ${user.username}<br>` +
-      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:<br>` +
+      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;<br>` +
       `<a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
-      `תודה שהצטרפת!</p>`;
+      `תודה שהצטרפת!&rlm;</p>` +
+      `</div>`;
     return {
       text: msgStr,
       html: msgHtml,
