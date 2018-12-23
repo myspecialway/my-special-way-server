@@ -1,0 +1,11 @@
+{
+  "collection": "blocked_sections",
+  "loadOrder": 4,
+  "data": [
+    {
+      "reason": "מרתון תל אביב'",
+      "from": "A",
+      "to": "B"
+    }
+  ]
+}

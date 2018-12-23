@@ -5,4 +5,6 @@ export default interface LocationDbModel {
   disabled: boolean;
   location_id: string;
   position: Point;
+  icon: string;
+  type: string;
 }
