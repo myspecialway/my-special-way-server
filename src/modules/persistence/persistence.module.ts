@@ -7,6 +7,8 @@ import { LocationsPersistenceService } from './locations.persistence.service';
 import { getConfig } from '../../config/config-loader';
 import { StudentPermissionService } from '../permissions/student.premission.service';
 import { FileSystemPersistenceService } from './file-system.persistence.service';
+import { BlockedSectionsPersistenceService } from './blocked-sections.persistence.service';
+
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { NonActiveTimePersistenceService } from './non-active-time.persistence.service';
@@ -23,6 +25,7 @@ import { NonActiveTimePersistenceService } from './non-active-time.persistence.s
     LocationsPersistenceService,
     StudentPermissionService,
     NonActiveTimePersistenceService,
+    BlockedSectionsPersistenceService,
   ],
   exports: [
     UsersPersistenceService,
@@ -34,6 +37,7 @@ import { NonActiveTimePersistenceService } from './non-active-time.persistence.s
     SchedulePersistenceService,
     StudentPermissionService,
     NonActiveTimePersistenceService,
+    BlockedSectionsPersistenceService,
   ],
 })
 export class PersistenceModule {}
