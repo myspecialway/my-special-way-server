@@ -13,6 +13,7 @@ import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
 import { ClassLogic } from './resolvers/class/services/class-logic.service';
 import { PermissionsModule } from '../permissions/permissions.module';
+import { BlockedSectionsResolver } from './resolvers/blocked-sections.resolver';
 import { ScheduleResolver } from './resolvers/schedule.resolver';
 import { FCMModule } from 'Utils/FCMSender/fcm.module';
 import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
@@ -27,6 +28,7 @@ import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
     LessonResolver,
     LocationsResolver,
     ClassLogic,
+    BlockedSectionsResolver,
     ScheduleResolver,
     NonActiveTimeResolver,
   ],
