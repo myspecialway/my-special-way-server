@@ -152,15 +152,12 @@ export class UsersPersistenceService implements IUsersPersistenceService {
             </style>
           </head>`;
 
-    msgHtml +=
-      `<div class="textStyle">` +
-      `<p>שלום ${user.firstname} ${user.lastname}<br>` +
-      `אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;<br>` +
-      `שם המשתמש שלך: ${user.username}<br>` +
-      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;<br>` +
-      `<a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
-      `תודה שהצטרפת!&rlm;</p>` +
-      `</div>`;
+    msgHtml += `<div class="textStyle">שלום ${user.firstname} ${user.lastname}<br>
+      אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;<br>
+      שם המשתמש שלך: ${user.username}<br>
+      על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;<br>
+      <a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>
+      תודה שהצטרפת!&rlm;</div>`;
     return {
       text: msgStr,
       html: msgHtml,
