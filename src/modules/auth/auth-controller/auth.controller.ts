@@ -88,7 +88,7 @@ export class AuthController {
           </body>
         </html> `;
       const result = await sendemail(
-        'mswemailclient@gmail.com',
+        `"בדרכי שלי"<mswemailclient@gmail.com>`,
         body.email,
         'שחזור ססמא למערכת בדרכי שלי ',
         restoreTemplate,
