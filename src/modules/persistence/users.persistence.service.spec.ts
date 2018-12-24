@@ -621,4 +621,16 @@ describe('users persistence', () => {
     await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
     expect(common.Logger.error).toHaveBeenCalled();
   });
+  it('should return null when trying to get push token of non existing user', async () => {
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(null);
+    const pushToken = await usersPersistanceService.getFcmToken4User('no-id');
+    expect(pushToken).toBeNull();
+  });
+  it('should return the push token of the user', async () => {
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      pushToken: 'very-explicit-token',
+    });
+    const pushToken = await usersPersistanceService.getFcmToken4User('no-id');
+    expect(pushToken).toBe('very-explicit-token');
+  });
 });

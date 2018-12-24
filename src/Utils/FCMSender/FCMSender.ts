@@ -9,17 +9,21 @@ export class FCMSender {
   private logger: Logger;
 
   constructor() {
-    const config = getConfig();
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: config.FIREBASE_PROJECT_ID,
-        clientEmail: config.FIREBASE_CLIENT_EMAIL,
-        privateKey: config.FIREBASE_PRIVATE_KEY,
-      }),
-      databaseURL: config.FIREBASE_DB_URL,
-    });
-    this.logger = new Logger('FCMSender');
-    this.logger.log('FCMSender: created FCMSender instance');
+    try {
+      const config = getConfig();
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: config.FIREBASE_PROJECT_ID,
+          clientEmail: config.FIREBASE_CLIENT_EMAIL,
+          privateKey: config.FIREBASE_PRIVATE_KEY,
+        }),
+        databaseURL: config.FIREBASE_DB_URL,
+      });
+      this.logger = new Logger('FCMSender');
+      this.logger.log('FCMSender: created FCMSender instance');
+    } catch (ex) {
+      this.logger.error('FCMSender: error', ex);
+    }
   }
 
   /* https://firebase.google.com/docs/cloud-messaging/admin/send-messages#android-specific_fields */
