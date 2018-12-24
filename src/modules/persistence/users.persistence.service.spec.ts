@@ -10,11 +10,10 @@ import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
 jest.mock('../../utils/node-mailer/email.client');
 import { sendemail } from '../../utils/node-mailer/email.client';
-
 jest.mock('../../config/config-loader');
 import { getConfig } from '../../config/config-loader';
 import { ProcessEnvConfig } from '../../config/config-interface';
-
+//users persistence
 describe('users persistence', () => {
   const collectionName = 'users';
   const mockedStudentSchedule: TimeSlotDbModel[] = [

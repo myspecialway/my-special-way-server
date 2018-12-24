@@ -15,7 +15,7 @@ export function getEnvalidValidations(): { [K in keyof ProcessEnvConfig]: envali
     DB_CONNECTION_STRING: envalid.str(),
     DB_NAME: envalid.str({ default: 'msw-dev' }),
     PAPERTRAIL_HOST_PORT: envalid.str({ default: 'logs7.papertrailapp.com:32979' }),
-    BASE_URL: envalid.str({ default: 'https://msw-westus-app-k8s.att.io/' }),
+    BASE_URL: envalid.str({ default: 'https://msw-westus-app-k8s.att.io' }),
     EXPIRATION_FIRST_TOKEN_MINUTES: envalid.str({ default: '15' }),
   };
 }
