@@ -92,7 +92,9 @@ export class ClassResolver {
     if (error) {
       return error;
     }
+    const lessons = await this.lessonPersistence.getAll();
 
+    this.classLogic.fixLessonIds(lessons, schedule);
     newClass.schedule = schedule;
     return this.classPersistence.createClass(newClass);
   }

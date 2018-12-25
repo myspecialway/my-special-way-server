@@ -15,4 +15,8 @@ type Query {
 
   locations: [Location]!
   locationById(id: ID!): Location
+
+  blockedSections: [BlockedSection]!
+
+  nonActiveTimes: [NonActiveTime]
 }

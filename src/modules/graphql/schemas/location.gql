@@ -10,6 +10,8 @@ type Location {
   location_id: String
   # The lat lan cordinates
   position: Point
+  icon: String
+  type: String
 }
 
 input InputLocation {
@@ -19,4 +21,6 @@ input InputLocation {
   disabled: Boolean
   location_id: String
   position: InputPoint
+  icon: String
+  type: String
 }

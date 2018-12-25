@@ -3,7 +3,6 @@ import { SchedulePersistenceService } from './schedule.persistence.service';
 import { ObjectID } from 'bson';
 
 describe('class persistence', () => {
-  const collectionName = 'classes';
   let classPersistenceService: ClassPersistenceService;
   let schedulePersistenceService: SchedulePersistenceService;
   beforeEach(() => {
@@ -42,12 +41,12 @@ describe('class persistence', () => {
       ],
     };
     const expectedMongoId = new ObjectID(classId);
-    classPersistenceService.updateClassAsIs = jest.fn().mockReturnValue({});
+    classPersistenceService.updateClassAsIs = jest.fn().mockReturnValue({ value: classWithoutSchedule });
 
     const updatedClass = await schedulePersistenceService.deleteScheduleSlotFromClass(classId, '0_1');
 
     expect(classPersistenceService.updateClassAsIs).toBeCalledWith(expectedMongoId, classWithoutSchedule);
-    expect(updatedClass).toEqual(1);
+    expect(updatedClass).toEqual(classWithoutSchedule);
   });
 
   it('should return error on deleteScheduleSlotFromClass when error happened', async () => {
@@ -55,7 +54,7 @@ describe('class persistence', () => {
     classPersistenceService.updateClassAsIs = jest.fn(() => {
       throw new Error('mock error');
     });
-    await schedulePersistenceService.deleteScheduleSlotFromClass('5bf4fd64a8c75f3080286e6b', {}).catch((error) => {
+    await schedulePersistenceService.deleteScheduleSlotFromClass('5bf4fd64a8c75f3080286e6b', 'abc').catch((error) => {
       expect(error).toBeDefined();
       expect(error.toString()).toContain('mock error');
     });

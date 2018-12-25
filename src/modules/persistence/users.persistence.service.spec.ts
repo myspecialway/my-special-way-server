@@ -8,9 +8,12 @@ import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
 import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
-jest.mock('../../Utils/node-mailer/email.client');
-import { sendemail } from '../../Utils/node-mailer/email.client';
-
+jest.mock('../../utils/node-mailer/email.client');
+import { sendemail } from '../../utils/node-mailer/email.client';
+jest.mock('../../config/config-loader');
+import { getConfig } from '../../config/config-loader';
+import { ProcessEnvConfig } from '../../config/config-interface';
+//users persistence
 describe('users persistence', () => {
   const collectionName = 'users';
   const mockedStudentSchedule: TimeSlotDbModel[] = [
@@ -71,6 +74,11 @@ describe('users persistence', () => {
       classPersistanceService as ClassPersistenceService,
       schedulePersistenceHelper,
     );
+
+    (getConfig as jest.Mock).mockReturnValue({
+      BASE_URL: '',
+      EXPIRATION_FIRST_TOKEN_MINUTES: '1',
+    } as ProcessEnvConfig);
   });
 
   it('should get all users successfuly on getAll', async () => {
