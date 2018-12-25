@@ -41,7 +41,7 @@ describe('class persistence', () => {
       ],
     };
     const expectedMongoId = new ObjectID(classId);
-    classPersistenceService.updateClassAsIs = jest.fn().mockReturnValue({value: classWithoutSchedule});
+    classPersistenceService.updateClassAsIs = jest.fn().mockReturnValue({ value: classWithoutSchedule });
 
     const updatedClass = await schedulePersistenceService.deleteScheduleSlotFromClass(classId, '0_1');
 

@@ -10,6 +10,7 @@ import { FileSystemPersistenceService } from './file-system.persistence.service'
 import { BlockedSectionsPersistenceService } from './blocked-sections.persistence.service';
 
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
+import { SettingsPersistenceService } from './settings.persistence.service';
 import { SchedulePersistenceService } from './schedule.persistence.service';
 import { NonActiveTimePersistenceService } from './non-active-time.persistence.service';
 
@@ -24,6 +25,7 @@ import { NonActiveTimePersistenceService } from './non-active-time.persistence.s
     SchedulePersistenceService,
     LocationsPersistenceService,
     StudentPermissionService,
+    SettingsPersistenceService,
     NonActiveTimePersistenceService,
     BlockedSectionsPersistenceService,
   ],
@@ -36,6 +38,7 @@ import { NonActiveTimePersistenceService } from './non-active-time.persistence.s
     SchedulePersistenceHelper,
     SchedulePersistenceService,
     StudentPermissionService,
+    SettingsPersistenceService,
     NonActiveTimePersistenceService,
     BlockedSectionsPersistenceService,
   ],
