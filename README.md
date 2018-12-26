@@ -9,6 +9,8 @@ Server part of the My special way project enabling indoor navigation for schools
 
 Demo master version running at _(link to be added here)_
 
+##### TL;DR: [Simple Setup Guide](https://github.com/myspecialway/my-special-way-server/blob/master/simple-setup.md)
+
 ## Table of Content
 
 1. [Genesis](#Genesis)
