@@ -8,6 +8,7 @@ import { ClassResolver } from './resolvers/class/class.resolver';
 import { LessonResolver } from './resolvers/lesson.resolver';
 import { StudentResolver } from './resolvers/student.resolver';
 import { LocationsResolver } from './resolvers/locations.resolver';
+import { SettingsResolver } from './resolvers/settings.resolver';
 import { PersistenceModule } from '../persistence/persistence.module';
 import graphqlPlayground from 'graphql-playground-middleware-express';
 import { getConfig } from '../../config/config-loader';
@@ -27,6 +28,7 @@ import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
     StudentResolver,
     LessonResolver,
     LocationsResolver,
+    SettingsResolver,
     ClassLogic,
     BlockedSectionsResolver,
     ScheduleResolver,
