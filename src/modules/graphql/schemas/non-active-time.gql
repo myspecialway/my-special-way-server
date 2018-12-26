@@ -1,0 +1,19 @@
+# A type describing a single non-active-time for the non-active-time screen
+type NonActiveTime {
+  _id: ID!
+  title: String!
+  isAllDayEvent: Boolean!
+  startDateTime: String!
+  endDateTime: String!
+  isAllClassesEvent: Boolean!
+  classes: [Class]
+}
+
+input InputNonActiveTime {
+  title: String!
+  isAllDayEvent: Boolean!
+  startDateTime: String!
+  endDateTime: String!
+  isAllClassesEvent: Boolean!
+  classesIds: [String]
+}

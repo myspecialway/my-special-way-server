@@ -84,23 +84,11 @@ _NOTE: if you are adding new env variables please make sure to add them into `.e
 
 ### Database Seed
 
-To seed initial data please cd in db-seed run:
-
-    yarn install
-
-Then to run seed script(with clean flag):
+To seed initial data please run seed script:
 
     yarn seed
 
-for Mac you can also go to db-seed folder and run:
-
-    ./seed -n msw-dev mongodb://localhost:27017
-
-for Windows, go to db-seed folder and run:
-
-    node ./seed -n msw-dev mongodb://localhost:27017
-
-if you change the seed process (when editing seed.ts), make sure you run 'yarn seed-compile' when finished.
+**The db name will be taken from .env variables**
 
 The following users will be created:
 

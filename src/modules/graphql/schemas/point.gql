@@ -1,12 +1,8 @@
 # A type that describes lat lang cordinates.
 type Point {
-  latitude: Float!
-  longitude: Float!
   floor: Int
 }
 
 input InputPoint {
-  latitude: Float!
-  longitude: Float!
   floor: Int!
 }
