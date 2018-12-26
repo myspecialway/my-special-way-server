@@ -2,24 +2,106 @@
   "collection": "locations",
   "data": [
     {
-      "name": "פטל כיתת",
-      "location_id": "A",
+      "name": "כניסה/יציאה ראשית",
+      "location_id": "A1",
+      "icon": "03149.png",
+      "position": {
+        "floor": 0
+      },
+      "type": "כניסה/יציאה ראשי"
+    },
+    {
+      "name": "חדר הנהלה",
+      "location_id": "A18",
+      "icon": "03490.png",
       "position": {
         "floor": 0
       }
     },
     {
+      "name": "מדרגות 0 דרומי",
+      "location_id": "A5",
+      "icon": "",
+      "position": {
+        "floor": 0
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "חדר מורים",
+      "location_id": "A4",
+      "position": {
+        "floor": 0
+      },
+      "icon": "teachers lounge.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "חצר לימודית",
+      "location_id": "A19",
+      "position": {
+        "floor": 0
+      },
+      "icon": "learning playground.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת אלון",
+      "location_id": "A7",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Alon.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת דקל",
+      "location_id": "A9",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Dekel.png",
+      "type": "רגיל"
+    },
+    {
       "name": "כיתת סחלב",
-      "location_id": "A_0",
+      "location_id": "A11",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Sahlav.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת פיקוס",
+      "location_id": "A13",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Ficus.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "שירותים קומת קרקע",
+      "location_id": "A15",
       "position": {
         "floor": 1
       }
     },
     {
-      "name": "כיתת דקל",
-      "location_id": "A_1",
+      "name": "מדרגות 0 צפוני",
+      "location_id": "A17",
+      "icon": "",
       "position": {
-        "floor": 1
+        "floor": 0
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "פטל כיתת",
+      "location_id": "A",
+      "position": {
+        "floor": 0
       }
     },
     {
@@ -170,13 +252,6 @@
       }
     },
     {
-      "name": "חדר מורים",
-      "location_id": "C_9",
-      "position": {
-        "floor": 1
-      }
-    },
-    {
       "name": "חדר סגנית",
       "location_id": "D",
       "position": {
@@ -221,13 +296,6 @@
     {
       "name": "חצר קטנה",
       "location_id": "D_6",
-      "position": {
-        "floor": 1
-      }
-    },
-    {
-      "name": "חצר לימודית",
-      "location_id": "D_7",
       "position": {
         "floor": 1
       }
@@ -319,13 +387,6 @@
     {
       "name": "שער יציאה להסעות",
       "location_id": "E_9",
-      "position": {
-        "floor": 0
-      }
-    },
-    {
-      "name": "דלת כניסה/יציאה ראשית",
-      "location_id": "F",
       "position": {
         "floor": 0
       }
