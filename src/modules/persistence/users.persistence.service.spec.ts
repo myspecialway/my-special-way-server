@@ -620,4 +620,28 @@ describe('users persistence', () => {
     await usersPersistanceService.createUser({ username: 'someUsername' }, UserRole.PRINCIPLE);
     expect(common.Logger.error).toHaveBeenCalled();
   });
+  it('should update user when restore password is called', async () => {
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock)
+      .mockReturnValueOnce({})
+      .mockReturnValueOnce({ username: 'some created user' });
+
+    (dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+    await usersPersistanceService.userForgetPassword('someUsername');
+    expect(dbServiceMock.getConnection().collection(collectionName).findOneAndUpdate).toHaveBeenCalled();
+  });
+  it('should return error on restore password is failed because no user found', async () => {
+    expect.hasAssertions();
+
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce(() => {
+      throw new Error('mock error');
+    });
+    common.Logger.error = jest.fn();
+    (common.Logger.error as jest.Mock).mockImplementation((message, trace, context) => {
+      expect(message).toBe('updateUser:: error updating user 507f1f77bcf86cd79943901w');
+    });
+    const [error, updatedUser] = await usersPersistanceService.userForgetPassword('507f1f77bcf86cd79943901w');
+    expect(error).toBeDefined();
+  });
 });
