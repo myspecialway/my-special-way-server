@@ -12,6 +12,7 @@ describe('auth controller', () => {
       validateUserByCridentials: jest.fn(),
       createTokenFromFirstLoginToken: jest.fn(),
       validateUserNameUnique: jest.fn(),
+      sendResetPasswordEmail: jest.fn(),
     };
 
     responseMock = {
@@ -154,12 +155,21 @@ describe('auth controller', () => {
   });
   describe('resetPassword', () => {
     it('should return 400 if no body was passed for resetPassword', async () => {
-      // const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-      // createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-
       await authController.resetPassword(responseMock, null);
 
       expect(responseMock.status).toHaveBeenCalledWith(400);
+    });
+    it('should return 500 server error if error happened', async () => {
+      const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
+      sendResetPasswordEmailFn.mockReturnValueOnce([new Error('mock error'), null]);
+
+      await authController.resetPassword(responseMock, { email: 'some-error' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(500);
+      expect(responseMock.json).toHaveBeenCalledWith({
+        error: 'server error',
+        message: 'unknown server error',
+      });
     });
   });
 });
