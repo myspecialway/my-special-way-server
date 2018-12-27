@@ -1,9 +1,9 @@
 import { Response } from 'express';
-import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Logger, Post, Res } from '@nestjs/common';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
-import { ResetPasswordRequest } from '@models/reset-password-request.model';
+import { ResetPasswordRequest } from '../../../models/reset-password-request.model';
 
 @Controller()
 export class AuthController {
