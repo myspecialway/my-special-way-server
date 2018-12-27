@@ -3,7 +3,6 @@ import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestj
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
-import { sendemail } from '../../../utils/node-mailer';
 
 @Controller()
 export class AuthController {
@@ -44,67 +43,6 @@ export class AuthController {
       accessToken: token,
     });
     this.authService.handlePushToken(body);
-  }
-
-  @Post('/restore-password')
-  async restorePassword(@Res() res: Response, @Body() body: any): Promise<void> {
-    if (!body) {
-      return this.noBodyError('restorePassword', res);
-    }
-    this.logger.log(JSON.stringify(body.email));
-    try {
-      let restoreTemplate: string = `
-      <!DOCTYPE html>
-        <html>
-          <head dir="rtl" lang="he">
-	          <meta charset="utf-8" />
-            <style type="text/css">
-              body {background-color: white;}
-              .textStyle   {
-                font-family: Rubik;
-                color: #222222;
-                letter-spacing: 0.2px;
-                dir: "rtl";
-                }
-              .linkStyle{
-                font-family: Rubik;
-                color: #222222;
-                letter-spacing: 0.2px;
-              }
-            </style>
-          </head>`;
-
-      restoreTemplate += `<body style="text-align:right;">
-            <div class="textStyle">,${body.firstname} ${body.lastname} שלום</div>
-            <br/>
-            <div class="textStyle">אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;<br/>
-            המערכת מאפשרת לך לנהל את רשימות התלמידים, מערכת השעות שלהם, תזכורות שונות ועוד.&rlm;</div>
-            <br/>
-            <div class="textStyle">.${body.username} :שם המשתמש שלך<br/>
-            :על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך</div>
-            <div class="linkStyle"><a href ="#">http://www.example.com</a></div>
-            <br/>
-            <div class="textStyle">!תודה שהצטרפת</div>
-          </body>
-        </html> `;
-      const result = await sendemail(
-        `"בדרכי שלי"<mswemailclient@gmail.com>`,
-        body.email,
-        'שחזור ססמא למערכת בדרכי שלי ',
-        restoreTemplate,
-      );
-      res.status(200).json({
-        status: 'ok',
-      });
-      this.logger.log(`restorePassword:: restorePassword request for ${result}`);
-    } catch (e) {
-      this.logger.error(`login:: error while logging in ${body.email}`, 'e.stack');
-      res.status(422).json({
-        error: 'server error',
-        message: 'unknown server error',
-      });
-      return;
-    }
   }
 
   @Post('/validateUserNameUnique')

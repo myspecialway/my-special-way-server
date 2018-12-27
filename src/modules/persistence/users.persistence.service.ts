@@ -108,7 +108,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
 
   private async sendFirstEmailToUser(user: UserDbModel) {
     const subject: string = ' אישור הרשמה למערכת בדרכי שלי ';
-    const msgBody = this.createEmailMessage(user);
+    const msgBody = this.createFirstEmailMessage(user);
     const sent = await sendemail(
       `"בדרכי שלי"<mswemailclient@gmail.com>`,
       user.email,
@@ -120,8 +120,21 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error('Failed to send email');
     }
   }
-
-  private createEmailMessage(user: UserDbModel): EmailBody {
+  private async sendRestoreEmailToUser(user: UserDbModel) {
+    const subject: string = ' שחזור ססמא למערכת בדרכי שלי ';
+    const msgBody = this.createFirstEmailMessage(user);
+    const sent = await sendemail(
+      `"בדרכי שלי"<mswemailclient@gmail.com>`,
+      user.email,
+      subject,
+      msgBody.html,
+      msgBody.text,
+    );
+    if (sent === false) {
+      this.logger.error('Failed to send email');
+    }
+  }
+  createFirstEmailMessage(user: UserDbModel): EmailBody {
     const BASE_URL = getConfig().BASE_URL;
     const msgStr: string =
       `שלום ${user.firstname} ${user.lastname}\nאנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו.\n` +
@@ -243,6 +256,24 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       );
       this.logger.log(`updateUser:: updated DB :${JSON.stringify(updatedDocument.value)}`);
       return [null, updatedDocument.value];
+    } catch (error) {
+      this.logger.error(`updateUser:: error updating user ${username}`, error.stack);
+      return [error, null];
+    }
+  }
+  async userForgetPassword(username: any): Promise<[Error, UserDbModel]> {
+    try {
+      const user = await this.collection.findOne({ username });
+      this.logger.log(`userForgetPassword:: userForgetPassword user ${username}`);
+      user.firstLoginData = this.makeFirstLoginData();
+      const updatedDocument = await this.collection.findOneAndUpdate(
+        { _id: user._id },
+        { $set: user },
+        { returnOriginal: false },
+      );
+      await this.sendRestoreEmailToUser(user);
+      this.logger.log(`userForgetPassword::  DB :${JSON.stringify(updatedDocument.value)}`);
+      return [null, user];
     } catch (error) {
       this.logger.error(`updateUser:: error updating user ${username}`, error.stack);
       return [error, null];

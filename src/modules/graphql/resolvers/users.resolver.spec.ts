@@ -6,6 +6,7 @@ import { ClassPersistenceService } from '../../persistence/class.persistence.ser
 import { checkAndGetBasePermission, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
+import { UserRole } from '../../../models/user.db.model';
 
 jest.mock('../../permissions/permission.interface');
 jest.mock('../../../utils/get');
@@ -33,6 +34,7 @@ describe('user resolver', () => {
       updateUser: jest.fn(),
       deleteUser: jest.fn(),
       updateUserPassword: jest.fn(),
+      userForgetPassword: jest.fn(),
     };
 
     classPersistenceService = {
@@ -198,5 +200,26 @@ describe('user resolver', () => {
     const response = await usersResolver.getNonActiveTimes(mockUser, {}, MOCK_CONTEXT);
     expect(response).toEqual([]);
     expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
+  });
+  it('should call userForgetPassword function only by Principle', async () => {
+    (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.OWN);
+    (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
+    (userPersistence.userForgetPassword as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
+
+    const response = await usersResolver.userForgetPassword(null, { username: MOCK_USER.username }, MOCK_CONTEXT);
+    expect(response).toEqual(MOCK_USER);
+    expect(userPersistence.userForgetPassword).toHaveBeenCalledWith(MOCK_USER.username);
+  });
+  it('should call userForgetPassword function only by Principle', async () => {
+    MOCK_USER.role = UserRole.STUDENT;
+    (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.OWN);
+    (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
+    (userPersistence.userForgetPassword as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
+
+    try {
+      await usersResolver.userForgetPassword(null, { username: MOCK_USER.username }, MOCK_CONTEXT);
+    } catch (error) {
+      expect(error.message).toBe('not permissions to execute command');
+    }
   });
 });
