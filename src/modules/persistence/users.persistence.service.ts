@@ -15,7 +15,6 @@ import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 export class UsersPersistenceService implements IUsersPersistenceService {
   private collection: Collection<UserDbModel>;
   private logger = new Logger('UsersPersistenceService');
-  private mswAddress = `"בדרכי שלי"<mswemailclient@gmail.com>`;
 
   constructor(
     private dbService: DbService,
