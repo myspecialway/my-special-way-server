@@ -64,7 +64,6 @@ export class UsersResolver {
   @Mutation('userForgetPassword')
   async userForgetPassword(_, { username }, context) {
     const caller = Get.getObject(context, 'user') as UserTokenProfile;
-    const permission = checkAndGetBasePermission(caller, DBOperation.UPDATE, Asset.USER);
     if (caller.role !== UserRole.PRINCIPLE) {
       throw new Error(NO_PERMISSION);
     }
