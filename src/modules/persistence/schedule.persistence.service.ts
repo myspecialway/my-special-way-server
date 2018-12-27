@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 
 import { ObjectID } from 'mongodb';
 import { ClassPersistenceService } from './class.persistence.service';
-import {ClassDbModel} from '@models/class.db.model';
+import { ClassDbModel } from '@models/class.db.model';
 
 @Injectable()
 export class SchedulePersistenceService {

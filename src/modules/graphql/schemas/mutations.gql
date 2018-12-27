@@ -24,8 +24,15 @@ type Mutation {
   updateLocation(id: ID!, location: InputLocation!): Location
   deleteLocation(id: ID!): Int
 
+  # Blocked Sections
+  createBlockedSection(blockedSection: InputBlockedSection!): BlockedSection
+  updateBlockedSection(id: ID!, blockedSection: InputBlockedSection!): BlockedSection
+  deleteBlockedSection(id: ID!): Int
+
   # Schedule
   deleteScheduleSlotFromClass(classId: ID!, scheduleIndex: String!): Class
+  # Settings
+  updateSettings(id: ID!, settings: InputSettings!): Settings
 
   # Non-Active-Time
   createNonActiveTime(nonActiveTime: InputNonActiveTime!): NonActiveTime

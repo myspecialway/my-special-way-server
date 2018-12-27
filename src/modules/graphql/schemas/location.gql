@@ -4,19 +4,20 @@ type Location {
   _id: ID!
   # The location name
   name: String
-  # flag indicating if location is disabled
-  disabled: Boolean!
   # location name from the 3D map model
   location_id: String
   # The lat lan cordinates
   position: Point
+  icon: String
+  type: String
 }
 
 input InputLocation {
   # optional id for when updating schedules
   _id: ID
   name: String
-  disabled: Boolean
   location_id: String
   position: InputPoint
+  icon: String
+  type: String
 }

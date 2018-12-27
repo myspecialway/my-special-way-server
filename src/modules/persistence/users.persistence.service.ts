@@ -8,8 +8,9 @@ import { IUsersPersistenceService } from './interfaces/users.persistence.service
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
 import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
-import { EmailBody, sendemail } from '../../Utils/node-mailer';
+import { EmailBody, sendemail } from '../../utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
+import { getConfig } from '../../config/config-loader';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -121,21 +122,50 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   }
 
   private createEmailMessage(user: UserDbModel): EmailBody {
+    const BASE_URL = getConfig().BASE_URL;
     const msgStr: string =
       `שלום ${user.firstname} ${user.lastname}\nאנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו.\n` +
       `המערכת מאפשרת לך לנהל את רשימות התלמידים, מערכת השעות שלהם, תזכורות שונות ועוד.\n` +
       `שם המשתמש שלך: ${user.username}\n` +
       ` על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
-      `http://localhost:4200/login/${user.username}\n` +
+      `${BASE_URL}/login/${user.username}\n` +
       ` תודה שהצטרפת!`;
 
-    const msgHtml: string =
-      `<p>שלום ${user.firstname} ${user.lastname}<br>` +
-      `אנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו<br>` +
-      `שם המשתמש שלך: ${user.username}<br>` +
-      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:<br>` +
-      `<a href=http://localhost:4200/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
-      `תודה שהצטרפת!</p>`;
+    let msgHtml: string = `
+      <!DOCTYPE html>
+        <html>
+          <head dir="rtl" lang="he">
+            <meta charset="utf-8" />
+            <style type="text/css">
+              body {background-color: white;}
+              .textStyle   {
+                font-family: Rubik;
+                color: #222222;
+                letter-spacing: 0.2px;
+                dir: "rtl";
+                }
+              .linkStyle{
+                font-family: Rubik;
+                color: #222222;
+                letter-spacing: 0.2px;
+              }
+            </style>
+          </head>`;
+
+    msgHtml += `<body style="text-align:right;">
+          <div class="textStyle">שלום ${user.firstname} ${user.lastname}</div>
+          <br/>
+          <div class="textStyle">אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;</div>
+          <br/>
+          <div class="textStyle">שם המשתמש שלך: ${user.username}</div>
+          <br/>
+          <div class="textStyle">על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;</div>
+          <br/>
+          <div class="linkStyle"><a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי</a></div>
+          <br/>
+          <div class="textStyle">תודה שהצטרפת!&rlm;</div>
+        </body>
+        </html> `;
     return {
       text: msgStr,
       html: msgHtml,
@@ -143,8 +173,9 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   }
 
   private makeFirstLoginData() {
+    const minutesToAdd = Number.parseInt(getConfig().EXPIRATION_FIRST_TOKEN_MINUTES);
     const date = new Date();
-    date.setMinutes(date.getMinutes() + 1);
+    date.setMinutes(date.getMinutes() + minutesToAdd);
     return {
       token: Math.random()
         .toString(36)

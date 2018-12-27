@@ -1,8 +1,8 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
-jest.mock('../../../Utils/node-mailer/email.client');
-import { sendemail } from '../../../Utils/node-mailer/email.client';
+jest.mock('../../../utils/node-mailer/email.client');
+import { sendemail } from '../../../utils/node-mailer/email.client';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 
 describe('auth controller', () => {
