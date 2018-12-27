@@ -134,7 +134,7 @@
     },
     {
       "name": "כיתת תאנה",
-      "location_id": "B_3",
+      "location_id": "test",
       "position": {
         "floor": 1
       }
