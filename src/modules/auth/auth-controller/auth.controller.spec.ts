@@ -152,4 +152,14 @@ describe('auth controller', () => {
       expect(responseMock.json).toHaveBeenCalledWith({ isUnique: false });
     });
   });
+  describe('resetPassword', () => {
+    it('should return 400 if no body was passed for resetPassword', async () => {
+      // const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+      // createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+      await authController.resetPassword(responseMock, null);
+
+      expect(responseMock.status).toHaveBeenCalledWith(400);
+    });
+  });
 });
