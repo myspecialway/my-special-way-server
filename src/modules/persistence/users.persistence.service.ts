@@ -10,7 +10,6 @@ import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.mode
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
 import { EmailBody, sendemail } from '../../Utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
-import { EmailBody } from '../../utils/nodeMailer/email.body';
 
 @Injectable()
 export class UsersPersistenceService implements IUsersPersistenceService {
@@ -82,7 +81,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   }
 
   async resetPassword(email: string): Promise<boolean> {
-    const userResponse = await this.getUserByFilters({ email: email });
+    const userResponse = await this.getUserByFilters({ email });
     if (!userResponse) {
       this.logger.error(`resetPassword:: error fetching user by email ${email}`);
       return false;
