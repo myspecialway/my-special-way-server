@@ -1,6 +1,6 @@
 version: '3'
 services:
-  mongodb: 
+  mongodb:
     image: mongo
     restart: always
     ports:
@@ -8,12 +8,14 @@ services:
   server:
     build: .
     image: msw-server:e2e
-    ports: 
-      - "3000:3000"
+    ports:
+      - '3000:3000'
     links:
       - mongodb
     environment:
       - DB_CONNECTION_STRING=mongodb://mongodb:27017/msw-test
       - DB_NAME=msw-test
       - PAPERTRAIL_HOST_PORT=logs7.papertrailapp.com:32979
+      - BASE_URL=https://msw-westus-app-k8s.att.io
+      - EXPIRATION_FIRST_TOKEN_MINUTES=15
       - NODE_ENV=e2e-tests

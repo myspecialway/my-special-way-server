@@ -12,7 +12,7 @@
     },
     {
       "title": "אנגלית מוסיקלית",
-      "icon": "musical-english"
+      "icon": "musical english"
     },
     {
       "title": "ארוחת ארבע",
@@ -20,7 +20,7 @@
     },
     {
       "title": "ארוחת בוקר",
-      "icon": "breakfest-icon"
+      "icon": "breakfest"
     },
     {
       "title": "ארוחת צהריים",
@@ -56,7 +56,7 @@
     },
     {
       "title": "הקלדה",
-      "icon": "typing"
+      "icon": "Typing"
     },
     {
       "title": "זהירות בדרכים",
@@ -64,7 +64,7 @@
     },
     {
       "title": "חגים",
-      "icon": "holidays"
+      "icon": "Holidays"
     },
     {
       "title": "חווה",
@@ -76,7 +76,7 @@
     },
     {
       "title": "חקלאות",
-      "icon": "agriculture"
+      "icon": "agriculture garden"
     },
     {
       "title": "חשבון",
@@ -84,7 +84,7 @@
     },
     {
       "title": "טיול",
-      "icon": "field-trip"
+      "icon": "trip"
     },
     {
       "title": "טיפול",
@@ -116,7 +116,7 @@
     },
     {
       "title": "מוטוריקה",
-      "icon": "motor"
+      "icon": "motor skills"
     },
     {
       "title": "מולדת",

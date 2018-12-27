@@ -1,15 +1,22 @@
 import { ClassPersistenceService } from './../../persistence/class.persistence.service';
-import { Resolver, Query, Mutation, ResolveProperty } from '@nestjs/graphql';
+import { Mutation, Query, ResolveProperty, Resolver } from '@nestjs/graphql';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
 import { Asset, checkAndGetBasePermission, DBOperation, Permission } from '../../permissions/permission.interface';
 import { Get } from '../../../utils/get';
 import { ObjectID } from 'mongodb';
 import { UserTokenProfile } from '@models/user-token-profile.model';
+import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
+import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
 
 export const NO_PERMISSION = 'not permissions to execute command';
+
 @Resolver('User')
 export class UsersResolver {
-  constructor(private usersPersistence: UsersPersistenceService, private classPersistence: ClassPersistenceService) {}
+  constructor(
+    private usersPersistence: UsersPersistenceService,
+    private classPersistence: ClassPersistenceService,
+    private nonActiveTimePersistence: NonActiveTimePersistenceService,
+  ) {}
 
   @Query('users')
   async getUsers(_, {}, context) {
@@ -66,5 +73,18 @@ export class UsersResolver {
   async getUserClass(obj, {}, context) {
     const objClassId = obj.class_id ? obj.class_id.toString() : '';
     return this.classPersistence.getById(objClassId);
+  }
+
+  @ResolveProperty('nonActiveTimes')
+  async getNonActiveTimes(user, {}, context) {
+    const classId: string = user.class_id.toString();
+    const nonActiveTimes: NonActiveTimeDbModel[] = await this.nonActiveTimePersistence.getAll();
+    const filteredNonActiveTimes: NonActiveTimeDbModel[] = nonActiveTimes.filter((time) => {
+      if (time.isAllClassesEvent || time.classesIds.includes(classId.toString())) {
+        return true;
+      }
+      return false;
+    });
+    return filteredNonActiveTimes;
   }
 }

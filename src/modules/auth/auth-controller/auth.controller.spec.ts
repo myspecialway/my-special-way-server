@@ -1,6 +1,9 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
+jest.mock('../../../utils/node-mailer/email.client');
+import { sendemail } from '../../../utils/node-mailer/email.client';
+import { UserLoginRequest } from '../../../models/user-login-request.model';
 
 describe('auth controller', () => {
   let authController: AuthController;
@@ -13,6 +16,7 @@ describe('auth controller', () => {
       createTokenFromFirstLoginToken: jest.fn(),
       validateUserNameUnique: jest.fn(),
       sendResetPasswordEmail: jest.fn(),
+      handlePushToken: jest.fn(),
     };
 
     responseMock = {
@@ -20,7 +24,6 @@ describe('auth controller', () => {
       send: jest.fn(),
       json: jest.fn(),
     };
-
     authController = new AuthController(authServiceMock as AuthService);
   });
 
@@ -73,6 +76,65 @@ describe('auth controller', () => {
       accessToken: 'some-very-secret-token',
     });
   });
+  it('should not return "200 ok" if send email fails', async () => {
+    expect.hasAssertions();
+
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+    (sendemail as jest.Mock).mockImplementationOnce(() => {
+      throw new Error();
+    });
+    await authController.restorePassword(responseMock, {
+      email: 'user@gmail.com',
+      password: 'mock-password',
+    });
+
+    expect(responseMock.json).not.toHaveBeenCalledWith(200);
+  });
+
+  it('should not return "200 ok" if body is missing', async () => {
+    expect.hasAssertions();
+
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+    await authController.restorePassword(responseMock, null);
+    expect(responseMock.json).not.toHaveBeenCalled();
+  });
+  it('should not return "200 ok" if send email fails', async () => {
+    expect.hasAssertions();
+
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+    (sendemail as jest.Mock).mockImplementationOnce(() => {
+      throw new Error();
+    });
+    await authController.restorePassword(responseMock, {
+      email: 'user@gmail.com',
+      password: 'mock-password',
+    });
+
+    expect(responseMock.json).not.toHaveBeenCalledWith(200);
+  });
+  it('should failed to return response with status ok if mail as been sent', async () => {
+    expect.hasAssertions();
+
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
+
+    await authController.restorePassword(responseMock, {
+      email: 'user@gmail.com',
+      username: 'mock-user',
+      password: 'mock-password',
+    });
+    expect(responseMock.json).toHaveBeenCalledWith({
+      status: 'ok',
+    });
+  });
+  // expect(responseMock.json).toHaveBeenCalledWith({
+  //   error: 'server error',
+  //   message: 'unknown server error',
+  // });
   describe('Fisrt Login', () => {
     it('should return 200 if body with firsLoginToken was passed', async () => {
       const createTokenFn = authServiceMock.createTokenFromFirstLoginToken as jest.Mock<Promise<[Error, string]>>;
@@ -109,7 +171,38 @@ describe('auth controller', () => {
       expect(responseMock.status).toHaveBeenCalledWith(401);
     });
   });
+  /**************************8 */
+  it('should call store firebase token if user provides firebase token', async () => {
+    // create user object with push token.
+    const anyUserWithToken: UserLoginRequest = {
+      username: 'mock-use',
+      password: 'mock-password',
+      pushToken: 'pushToken',
+    };
+    // do success login
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([null, 'any-token']);
+    await authController.login(responseMock, anyUserWithToken);
+    // make sure store token is called
+    expect(authServiceMock.handlePushToken).toHaveBeenCalled();
+  });
 
+  it('should not try to store push token if user login fails', async () => {
+    // create user object with push token.
+    const anyUserWithToken: UserLoginRequest = {
+      username: 'mock-use',
+      password: 'mock-password',
+      pushToken: 'pushToken',
+    };
+    // do success login
+    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
+    createTokenFn.mockReturnValueOnce([new Error(), null]);
+    await authController.login(responseMock, anyUserWithToken);
+    // make sure store token is called
+    expect(authServiceMock.handlePushToken).not.toHaveBeenCalled();
+  });
+
+  /***************************** */
   describe('validateUserNameUnique', () => {
     it('should return 400 if no body was passed', async () => {
       const validateUserNameUniqueFn = authServiceMock.validateUserNameUnique as jest.Mock<Promise<[Error, string]>>;

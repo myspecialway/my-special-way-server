@@ -1,0 +1,9 @@
+{
+  "collection": "settings",
+  "loadOrder": 1,
+  "data": [
+    {
+      "teachercode": 1234
+    }
+  ]
+}

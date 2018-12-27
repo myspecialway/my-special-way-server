@@ -2,482 +2,399 @@
   "collection": "locations",
   "data": [
     {
-      "name": "פטל כיתת",
-      "disabled": true,
-      "location_id": "A",
+      "name": "כניסה/יציאה ראשית",
+      "location_id": "A1",
+      "icon": "03149.png",
       "position": {
-        "latitude": 31.986417758011342,
-        "longitude": 34.91077744955874,
+        "floor": 0
+      },
+      "type": "כניסה/יציאה ראשי"
+    },
+    {
+      "name": "חדר הנהלה",
+      "location_id": "A18",
+      "icon": "03490.png",
+      "position": {
         "floor": 0
       }
     },
     {
-      "name": "כיתת סחלב",
-      "disabled": false,
-      "location_id": "A_0",
+      "name": "מדרגות 0 דרומי",
+      "location_id": "A5",
+      "icon": "",
       "position": {
-        "latitude": 31.986419691740092,
-        "longitude": 34.91078563034535,
+        "floor": 0
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "חדר מורים",
+      "location_id": "A4",
+      "position": {
+        "floor": 0
+      },
+      "icon": "teachers lounge.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "חצר לימודית",
+      "location_id": "A19",
+      "position": {
+        "floor": 0
+      },
+      "icon": "learning playground.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת אלון",
+      "location_id": "A7",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Alon.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת דקל",
+      "location_id": "A9",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Dekel.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת סחלב",
+      "location_id": "A11",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Sahlav.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת פיקוס",
+      "location_id": "A13",
+      "position": {
+        "floor": 0
+      },
+      "icon": "class-Ficus.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "שירותים קומת קרקע",
+      "location_id": "A15",
+      "position": {
         "floor": 1
       }
     },
     {
-      "name": "כיתת דקל",
-      "disabled": false,
-      "location_id": "A_1",
+      "name": "מדרגות 0 צפוני",
+      "location_id": "A17",
+      "icon": "",
       "position": {
-        "latitude": 31.986478841176982,
-        "longitude": 34.910685047507286,
-        "floor": 1
+        "floor": 0
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "פטל כיתת",
+      "location_id": "A",
+      "position": {
+        "floor": 0
       }
     },
     {
       "name": "כיתת תמר",
-      "disabled": false,
       "location_id": "B",
       "position": {
-        "latitude": 31.98650159095027,
-        "longitude": 34.91038229704,
         "floor": 1
       }
     },
     {
       "name": "כיתת ניצן",
-      "disabled": false,
       "location_id": "B_0",
       "position": {
-        "latitude": 31.986487941086967,
-        "longitude": 34.91072729229928,
         "floor": 1
       }
     },
     {
       "name": "כיתת נרקיס",
-      "disabled": false,
       "location_id": "B_1",
       "position": {
-        "latitude": 31.986518084532342,
-        "longitude": 34.9106776714325,
         "floor": 1
       }
     },
     {
       "name": "כיתת שקד",
-      "disabled": false,
       "location_id": "B_2",
       "position": {
-        "latitude": 31.98649305978595,
-        "longitude": 34.91065621376038,
         "floor": 1
       }
     },
     {
       "name": "כיתת תאנה",
-      "disabled": false,
       "location_id": "B_3",
       "position": {
-        "latitude": 31.986537421831716,
-        "longitude": 34.910647496581085,
         "floor": 1
       }
     },
     {
       "name": "כיתת סברס/ספריה",
-      "disabled": false,
       "location_id": "B_4",
       "position": {
-        "latitude": 31.98654822796782,
-        "longitude": 34.9105690419674,
         "floor": 1
       }
     },
     {
       "name": "כיתת הדר",
-      "disabled": false,
       "location_id": "B_5",
       "position": {
-        "latitude": 31.986571546467715,
-        "longitude": 34.910532161593444,
         "floor": 1
       }
     },
     {
       "name": "כיתת ברוש",
       "location_id": "B_6",
-      "disabled": false,
       "position": {
-        "latitude": 31.98660760481582,
-        "longitude": 34.91056005655083,
         "floor": 1
       }
     },
     {
       "name": "כיתת גפן",
-      "disabled": false,
       "location_id": "B_7",
       "position": {
-        "latitude": 31.986550161693845,
-        "longitude": 34.91051512954982,
         "floor": 1
       }
     },
     {
       "name": "כיתת רימון",
-      "disabled": false,
       "location_id": "B_8",
       "position": {
-        "latitude": 31.986575755168477,
-        "longitude": 34.91047959028038,
         "floor": 1
       }
     },
     {
       "name": "חדר מוסיקה",
-      "disabled": false,
       "location_id": "B_9",
       "position": {
-        "latitude": 31.986554142901465,
-        "longitude": 34.910467520339814,
         "floor": 1
       }
     },
     {
       "name": "חדר סנוזלן",
-      "disabled": false,
       "location_id": "C",
       "position": {
-        "latitude": 31.986534805605626,
-        "longitude": 34.91010479525,
         "floor": 1
       }
     },
     {
       "name": "אולם ספורט",
-      "disabled": false,
       "location_id": "C_1",
       "position": {
-        "latitude": 31.986595092455687,
-        "longitude": 34.910775347504,
         "floor": 1
       }
     },
     {
       "name": "פינת בעלי חיים",
-      "disabled": false,
       "location_id": "C_1",
       "position": {
-        "latitude": 31.98660191737959,
-        "longitude": 34.91048830745967,
         "floor": 1
       }
     },
     {
       "name": "חדר קלינאיות תקשורת",
-      "disabled": false,
       "location_id": "C_2",
       "position": {
-        "latitude": 31.986523430723807,
-        "longitude": 34.91045276819023,
         "floor": 1
       }
     },
     {
       "name": "חדר הכנה לחיים",
-      "disabled": false,
       "location_id": "C_3",
       "position": {
-        "latitude": 31.98650466216575,
-        "longitude": 34.91047959028038,
         "floor": 1
       }
     },
     {
       "name": "חדר הבעה ביצירה",
-      "disabled": false,
       "location_id": "C_4",
       "position": {
-        "latitude": 31.986467125038082,
-        "longitude": 34.91052652893814,
         "floor": 1
       }
     },
     {
       "name": "חדר אומנות",
-      "disabled": false,
       "location_id": "C_5",
       "position": {
-        "latitude": 31.986444944000898,
-        "longitude": 34.91055133937152,
         "floor": 1
       }
     },
     {
       "name": "מקלט צפוני- מרכז למידה",
-      "disabled": false,
       "location_id": "C_6",
       "position": {
-        "latitude": 31.98638545330904,
-        "longitude": 34.9107263445854,
         "floor": 1
       }
     },
     {
       "name": "מקלט דרומי- ג'ימבורי",
-      "disabled": false,
       "location_id": "C_7",
       "position": {
-        "latitude": 31.986417644255447,
-        "longitude": 34.91063381729873,
         "floor": 1
       }
     },
     {
       "name": "חדר מנהלת",
-      "disabled": false,
       "location_id": "C_8",
       "position": {
-        "latitude": 31.986458025126037,
-        "longitude": 34.91066801546367,
-        "floor": 1
-      }
-    },
-    {
-      "name": "חדר מורים",
-      "disabled": false,
-      "location_id": "C_9",
-      "position": {
-        "latitude": 31.986366912199955,
-        "longitude": 34.910587415074595,
         "floor": 1
       }
     },
     {
       "name": "חדר סגנית",
-      "disabled": false,
       "location_id": "D",
       "position": {
-        "latitude": 31.986405928091354,
-        "longitude": 34.910270365779,
         "floor": 1
       }
     },
     {
       "name": "מזכירות",
-      "disabled": false,
       "location_id": "D_1",
       "position": {
-        "latitude": 31.986326872522554,
-        "longitude": 34.91026159436,
         "floor": 1
       }
     },
     {
       "name": "חדר יועצת",
-      "disabled": false,
       "location_id": "D_2",
       "position": {
-        "latitude": 31.986372372138817,
-        "longitude": 34.91073815521304,
         "floor": 1
       }
     },
     {
       "name": "אב בית",
-      "disabled": false,
       "location_id": "D_3",
       "position": {
-        "latitude": 31.98630298524969,
-        "longitude": 34.910685047507286,
         "floor": 1
       }
     },
     {
       "name": "שיכפול",
-      "disabled": false,
       "location_id": "D_4",
       "position": {
-        "latitude": 31.986325166321222,
-        "longitude": 34.910643473267555,
         "floor": 1
       }
     },
     {
       "name": "חצר גדולה",
-      "disabled": false,
       "location_id": "D_5",
       "position": {
-        "latitude": 31.986269998005213,
-        "longitude": 34.91074003279209,
         "floor": 1
       }
     },
     {
       "name": "חצר קטנה",
-      "disabled": false,
       "location_id": "D_6",
       "position": {
-        "latitude": 31.986322322594408,
-        "longitude": 34.91077758371831,
-        "floor": 1
-      }
-    },
-    {
-      "name": "חצר לימודית",
-      "disabled": false,
-      "location_id": "D_7",
-      "position": {
-        "latitude": 31.986344503661257,
-        "longitude": 34.91072796285153,
         "floor": 1
       }
     },
     {
       "name": "חממה",
-      "disabled": false,
       "location_id": "D_8",
       "position": {
-        "latitude": 31.98635246609418,
-        "longitude": 34.91071522235871,
         "floor": 1
       }
     },
     {
       "name": "גינה חקלאית",
-      "disabled": false,
       "location_id": "D_9",
       "position": {
-        "latitude": 31.98646212009352,
-        "longitude": 34.910516604732045,
         "floor": 1
       }
     },
     {
       "name": "שירותים אולם ספורט",
-      "disabled": false,
       "location_id": "E",
       "position": {
-        "latitude": 31.986482594893445,
-        "longitude": 34.91047905380583,
         "floor": 1
       }
     },
     {
       "name": "שירותי תלמידים קומה 0",
-      "disabled": false,
       "location_id": "E_1",
       "position": {
-        "latitude": 31.98643766407651,
-        "longitude": 34.91054409737445,
         "floor": 1
       }
     },
     {
       "name": "שירותי תלמידים קומה 1",
-      "disabled": false,
       "location_id": "E_2",
       "position": {
-        "latitude": 31.98641150181853,
-        "longitude": 34.91057561333037,
         "floor": 1
       }
     },
     {
       "name": "שירותי תלמידים קומה 2",
-      "disabled": false,
       "location_id": "E_2",
       "position": {
-        "latitude": 31.986390458257798,
-        "longitude": 34.91061048204757,
         "floor": 2
       }
     },
     {
       "name": "ברזיה אולם ספורט",
-      "disabled": false,
       "location_id": "E_3",
       "position": {
-        "latitude": 31.986457570137357,
-        "longitude": 34.91052129859782,
         "floor": 0
       }
     },
     {
       "name": "ברזיה קומה 0",
-      "disabled": false,
       "location_id": "E_4",
       "position": {
-        "latitude": 31.98651160085219,
-        "longitude": 34.91045290226794,
         "floor": 0
       }
     },
     {
       "name": "מעלית קומה 1-",
-      "disabled": false,
       "location_id": "E_5",
       "position": {
-        "latitude": 31.986545156753788,
-        "longitude": 34.91048844153739,
         "floor": -1
       }
     },
     {
       "name": "0 מעלית קומה",
-      "disabled": false,
       "location_id": "E_6",
       "position": {
-        "latitude": 31.986560512840278,
-        "longitude": 34.910118203021,
         "floor": 0
       }
     },
     {
       "name": "1 מעלית קומה",
-      "disabled": false,
       "location_id": "E_7",
       "position": {
-        "latitude": 31.98645927637093,
-        "longitude": 34.910666137884625,
         "floor": 1
       }
     },
     {
       "name": "2 מעלית קומה",
-      "disabled": false,
       "location_id": "E_8",
       "position": {
-        "latitude": 31.986439370310467,
-        "longitude": 34.91064870352603,
         "floor": 2
       }
     },
     {
       "name": "שער יציאה להסעות",
-      "disabled": false,
       "location_id": "E_9",
       "position": {
-        "latitude": 31.986325621310563,
-        "longitude": 34.9106969832883,
-        "floor": 0
-      }
-    },
-    {
-      "name": "דלת כניסה/יציאה ראשית",
-      "disabled": false,
-      "location_id": "F",
-      "position": {
-        "latitude": 31.98634609614094,
-        "longitude": 34.91071240599013,
         "floor": 0
       }
     },
     {
       "name": "דלת פלדלת",
-      "disabled": false,
       "location_id": "F_1",
       "position": {
-        "latitude": 31.986376808377962,
-        "longitude": 34.910739228080274,
         "floor": 0
       }
     }

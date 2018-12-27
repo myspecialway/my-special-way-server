@@ -8,4 +8,5 @@ export interface AuthServiceInterface {
   createTokenFromFirstLoginToken(firstLoginToken: string): Promise<[Error, string]>;
   validateUserNameUnique(userUniqueValidation: UserUniqueValidationRequest): Promise<[Error, boolean]>;
   sendResetPasswordEmail(email: string): Promise<[Error, boolean]>;
+  handlePushToken(userLogin: UserLoginRequest): void;
 }

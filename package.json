@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.104",
+  "version": "0.0.128",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -32,8 +32,7 @@
     "stryker": "npx stryker run",
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
-    "seed-compile": "tsc -p ./db-seed",
-    "seed": "node ./db-seed/seed.js -c -n msw-local mongodb://localhost:27017"
+    "seed": "ts-node ./db-seed/seed.ts -c mongodb://localhost:27017"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",

@@ -22,6 +22,6 @@ Call sendemail command with these parameters:
 # Example:
 
 import { sendemail } from 'Utils/NodeMailer/email.client'
-import { msg } from './utils/nodeMailer/email.body';
+import { msg } from './Utils/nodeMailer/email.body';
 
 let email = sendemail('"My Special Way" <mmyspecialway@gmail.com>', '"Eran Leiser (AT&T)" <el091q@intl.att.com>', 'Hello World!', msg.html,msg.text);
