@@ -1,12 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "lib": [
-      "esnext.asynciterable",
-      "esnext",
-      "dom",
-      "ES2015"
-    ],
+    "lib": ["esnext.asynciterable", "esnext", "dom", "es2015"],
     "declaration": false,
     "noImplicitAny": false,
     "noLib": false,
@@ -16,13 +11,11 @@
     "sourceMap": true,
     "allowJs": true,
     "outDir": "./dist",
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "paths": {
+      "@models/*": ["models/*"]
+    }
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.spec.ts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
 }

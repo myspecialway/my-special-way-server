@@ -1,17 +1,18 @@
-type Query{
-    students: [Student]
-    student(id: ID!): Student
-    
-    users:  [User]
-    user(id: ID!): User
+type Query {
+  students: [Student]
+  student(id: ID!): Student
 
-    classes: [Class]!
-    classById(id: ID!): Class
-    classByName(name: String): Class
+  users: [User]
+  user(id: ID!): User
 
-    lessons: [Lesson]!
+  classes: [Class]!
+  classById(id: ID!): Class
+  classByName(name: String): Class
 
-    locations:[Location]!
-    locationById(id: ID!): Location
+  lessons: [Lesson]!
 
+  locations: [Location]!
+  locationById(id: ID!): Location
+
+  nonActiveTimes: [NonActiveTime]
 }

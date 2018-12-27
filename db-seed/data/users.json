@@ -1,39 +1,52 @@
 {
-    "collection": "users",
-    "data": [
+  "collection": "users",
+  "loadOrder": 3,
+  "data": [
+    {
+      "username": "teacher",
+      "password": "Aa123456",
+      "email": "msw-teacher@gmail.com",
+      "firstname": "Msw",
+      "lastname": "Teacher",
+      "role": "TEACHER",
+      "gender": "MALE"
+    },
+    {
+      "username": "principle",
+      "password": "Aa123456",
+      "email": "msw-principle@gmail.com",
+      "firstname": "Msw",
+      "lastname": "Principle",
+      "role": "PRINCIPLE",
+      "gender": "FEMALE"
+    },
+    {
+      "username": "student",
+      "password": "Aa123456",
+      "email": "msw-student@gmail.com",
+      "firstname": "Msw",
+      "lastname": "Student",
+      "role": "STUDENT",
+      "gender": "MALE",
+      "reminders": [
         {
-            "username": "teacher",
-            "password": "Aa123456",
-            "email": "msw-teacher@gmail.com",
-            "firstname": "Msw",
-            "lastname": "Teacher",
-            "role": "TEACHER",
-            "gender": "MALE"
+          "enabled": false,
+          "type": "MEDICINE",
+          "schedule": []
         },
         {
-            "username": "principle",
-            "password": "Aa123456",
-            "email": "msw-principle@gmail.com",
-            "firstname": "Msw",
-            "lastname": "Principle",
-            "role": "PRINCIPLE",
-            "gender": "FEMALE"
-        },
-        {
-            "username": "student",
-            "password": "Aa123456",
-            "email": "msw-student@gmail.com",
-            "firstname": "Msw",
-            "lastname": "Student",
-            "role": "STUDENT",
-            "gender": "MALE"
+          "enabled": false,
+          "type": "REHAB",
+          "schedule": []
         }
-    ],
-    "add_relations":[
-        {
-            "from_collection": "classes",
-            "to_field": "class_id",
-            "by": "random"
-        }
-    ]
+      ]
+    }
+  ],
+  "add_relations": [
+    {
+      "from_collection": "classes",
+      "to_field": "class_id",
+      "by": "random"
+    }
+  ]
 }

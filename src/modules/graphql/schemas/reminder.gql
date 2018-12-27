@@ -1,0 +1,16 @@
+type Reminder {
+  enabled: Boolean!
+  type: ReminderType
+  schedule: [ReminderTime!]
+}
+
+input InputReminder {
+  enabled: Boolean!
+  type: ReminderType
+  schedule: [InputReminderTime!]
+}
+
+enum ReminderType {
+  MEDICINE
+  REHAB
+}

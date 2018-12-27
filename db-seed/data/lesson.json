@@ -1,248 +1,250 @@
 {
-    "collection": "lessons",
-    "data": [{
-            "title": "אומנות",
-            "icon": "art"
-        },
-        {
-            "title": "אנגלית",
-            "icon": "english"
-        },
-        {
-            "title": "אנגלית מוסיקלית",
-            "icon": "musical-english"
-        },
-        {
-            "title": "ארוחת ארבע",
-            "icon": "afternoon"
-        },
-        {
-            "title": "ארוחת בוקר",
-            "icon": "breakfest-icon"
-        },
-        {
-            "title": "ארוחת צהריים",
-            "icon": "lunch-icon"
-        },
-        {
-            "title": "בריכה",
-            "icon": "pool"
-        },
-        {
-            "title": "ג'ימבורי",
-            "icon": "gimbori"
-        },
-        {
-            "title": "הבעה ביצירה",
-            "icon": "expression"
-        },
-        {
-            "title": "הכנה לחיים",
-            "icon": "reality"
-        },
-        {
-            "title": "העסקה עצמית",
-            "icon": "self-occupation"
-        },
-        {
-            "title": "הפסקה",
-            "icon": "break-icon"
-        },
-        {
-            "title": "הצגה",
-            "icon": "show"
-        },
-        {
-            "title": "הקלדה",
-            "icon": "typing"
-        },
-        {
-            "title": "זהירות בדרכים",
-            "icon": "traffic"
-        },
-        {
-            "title": "חגים",
-            "icon": "holidays"
-        },
-        {
-            "title": "חווה",
-            "icon": "farm"
-        },
-        {
-            "title": "חינוך",
-            "icon": "education"
-        },
-        {
-            "title": "חקלאות",
-            "icon": "agriculture"
-        },
-        {
-            "title": "חשבון",
-            "icon": "math"
-        },
-        {
-            "title": "טיול",
-            "icon": "field-trip"
-        },
-        {
-            "title": "טיפול",
-            "icon": "therapy"
-        },
-        {
-            "title": "טקס",
-            "icon": "ceremony"
-        },
-        {
-            "title": "יום הולדת",
-            "icon": "birthday"
-        },
-        {
-            "title": "כלכלת בית",
-            "icon": "economy"
-        },
-        {
-            "title": "כתיבה",
-            "icon": "writing"
-        },
-        {
-            "title": "למידה",
-            "icon": "learning"
-        },
-        {
-            "title": "מדעים",
-            "icon": "science"
-        },
-        {
-            "title": "מוטוריקה",
-            "icon": "motor"
-        },
-        {
-            "title": "מולדת",
-            "icon": "moledet"
-        },
-        {
-            "title": "מוסיקה",
-            "icon": "music"
-        },
-        {
-            "title": "מלאכה",
-            "icon": "crafts"
-        },
-        {
-            "title": "מפגש בוקר",
-            "icon": "morning"
-        },
-        {
-            "title": "מפגש צהריים",
-            "icon": "noon"
-        },
-        {
-            "title": "מקהלה",
-            "icon": "choir"
-        },
-        {
-            "title": "משחק חברתי",
-            "icon": "sociail-game"
-        },
-        {
-            "title": "משחק חופשי",
-            "icon": "free-game"
-        },
-        {
-            "title": "נבחרת ספורט",
-            "icon": "sport-team"
-        },
-        {
-            "title": "ניקיון אישי ",
-            "icon": "cleaning"
-        },
-        {
-            "title": "סנוזלן",
-            "icon": "snoozelen"
-        },
-        {
-            "title": "ספורט",
-            "icon": "sport"
-        },
-        {
-            "title": "ספרות",
-            "icon": "literature"
-        },
-        {
-            "title": "ספריה",
-            "icon": "library"
-        },
-        {
-            "title": "עונות השנה",
-            "icon": "seasons"
-        },
-        {
-            "title": "פיזור תלמידים",
-            "icon": "dismiss-icon"
-        },
-        {
-            "title": "קבלת שבת",
-            "icon": "shabat"
-        },
-        {
-            "title": "קבלת תלמידים",
-            "icon": "no-icon"
-        },
-        {
-            "title": "קפוארה",
-            "icon": "kapuera"
-        },
-        {
-            "title": "קריאה",
-            "icon": "reading"
-        },
-        {
-            "title": "רובוטיקה",
-            "icon": "robotics"
-        },
-        {
-            "title": "ריפוי בעיסוק",
-            "icon": "occupational-therapy"
-        },
-        {
-            "title": "ריתמוסיקה",
-            "icon": "ritmusic"
-        },
-        {
-            "title": "שיחת סיכום יום",
-            "icon": "daily"
-        },
-        {
-            "title": "שילוב",
-            "icon": "shiluv"
-        },
-        {
-            "title": "שינוי",
-            "icon": "change"
-        },
-        {
-            "title": "שיעור נושא",
-            "icon": "subject"
-        },
-        {
-            "title": "שעת סיפור",
-            "icon": "story"
-        },
-        {
-            "title": "תורה",
-            "icon": "tora"
-        },
-        {
-            "title": "תנועה",
-            "icon": "movement"
-        },
-        {
-            "title": "תקשוב",
-            "icon": "ict"
-        },
-        {
-            "title": "תקשורת",
-            "icon": "communication"
-        }
-    ]
+  "collection": "lessons",
+  "loadOrder": 1,
+  "data": [
+    {
+      "title": "אומנות",
+      "icon": "art"
+    },
+    {
+      "title": "אנגלית",
+      "icon": "english"
+    },
+    {
+      "title": "אנגלית מוסיקלית",
+      "icon": "musical english"
+    },
+    {
+      "title": "ארוחת ארבע",
+      "icon": "afternoon"
+    },
+    {
+      "title": "ארוחת בוקר",
+      "icon": "breakfest"
+    },
+    {
+      "title": "ארוחת צהריים",
+      "icon": "lunch-icon"
+    },
+    {
+      "title": "בריכה",
+      "icon": "pool"
+    },
+    {
+      "title": "ג'ימבורי",
+      "icon": "gimbori"
+    },
+    {
+      "title": "הבעה ביצירה",
+      "icon": "expression"
+    },
+    {
+      "title": "הכנה לחיים",
+      "icon": "reality"
+    },
+    {
+      "title": "העסקה עצמית",
+      "icon": "self-occupation"
+    },
+    {
+      "title": "הפסקה",
+      "icon": "break-icon"
+    },
+    {
+      "title": "הצגה",
+      "icon": "show"
+    },
+    {
+      "title": "הקלדה",
+      "icon": "Typing"
+    },
+    {
+      "title": "זהירות בדרכים",
+      "icon": "traffic"
+    },
+    {
+      "title": "חגים",
+      "icon": "Holidays"
+    },
+    {
+      "title": "חווה",
+      "icon": "farm"
+    },
+    {
+      "title": "חינוך",
+      "icon": "education"
+    },
+    {
+      "title": "חקלאות",
+      "icon": "agriculture garden"
+    },
+    {
+      "title": "חשבון",
+      "icon": "math"
+    },
+    {
+      "title": "טיול",
+      "icon": "trip"
+    },
+    {
+      "title": "טיפול",
+      "icon": "therapy"
+    },
+    {
+      "title": "טקס",
+      "icon": "ceremony"
+    },
+    {
+      "title": "יום הולדת",
+      "icon": "birthday"
+    },
+    {
+      "title": "כלכלת בית",
+      "icon": "economy"
+    },
+    {
+      "title": "כתיבה",
+      "icon": "writing"
+    },
+    {
+      "title": "למידה",
+      "icon": "learning"
+    },
+    {
+      "title": "מדעים",
+      "icon": "science"
+    },
+    {
+      "title": "מוטוריקה",
+      "icon": "motor skills"
+    },
+    {
+      "title": "מולדת",
+      "icon": "moledet"
+    },
+    {
+      "title": "מוסיקה",
+      "icon": "music"
+    },
+    {
+      "title": "מלאכה",
+      "icon": "crafts"
+    },
+    {
+      "title": "מפגש בוקר",
+      "icon": "morning"
+    },
+    {
+      "title": "מפגש צהריים",
+      "icon": "noon"
+    },
+    {
+      "title": "מקהלה",
+      "icon": "choir"
+    },
+    {
+      "title": "משחק חברתי",
+      "icon": "sociail-game"
+    },
+    {
+      "title": "משחק חופשי",
+      "icon": "free-game"
+    },
+    {
+      "title": "נבחרת ספורט",
+      "icon": "sport-team"
+    },
+    {
+      "title": "ניקיון אישי ",
+      "icon": "cleaning"
+    },
+    {
+      "title": "סנוזלן",
+      "icon": "snoozelen"
+    },
+    {
+      "title": "ספורט",
+      "icon": "sport"
+    },
+    {
+      "title": "ספרות",
+      "icon": "literature"
+    },
+    {
+      "title": "ספריה",
+      "icon": "library"
+    },
+    {
+      "title": "עונות השנה",
+      "icon": "seasons"
+    },
+    {
+      "title": "פיזור תלמידים",
+      "icon": "dismiss-icon"
+    },
+    {
+      "title": "קבלת שבת",
+      "icon": "shabat"
+    },
+    {
+      "title": "קבלת תלמידים",
+      "icon": "no-icon"
+    },
+    {
+      "title": "קפוארה",
+      "icon": "kapuera"
+    },
+    {
+      "title": "קריאה",
+      "icon": "reading"
+    },
+    {
+      "title": "רובוטיקה",
+      "icon": "robotics"
+    },
+    {
+      "title": "ריפוי בעיסוק",
+      "icon": "occupational-therapy"
+    },
+    {
+      "title": "ריתמוסיקה",
+      "icon": "ritmusic"
+    },
+    {
+      "title": "שיחת סיכום יום",
+      "icon": "daily"
+    },
+    {
+      "title": "שילוב",
+      "icon": "shiluv"
+    },
+    {
+      "title": "שינוי",
+      "icon": "change"
+    },
+    {
+      "title": "שיעור נושא",
+      "icon": "subject"
+    },
+    {
+      "title": "שעת סיפור",
+      "icon": "story"
+    },
+    {
+      "title": "תורה",
+      "icon": "tora"
+    },
+    {
+      "title": "תנועה",
+      "icon": "movement"
+    },
+    {
+      "title": "תקשוב",
+      "icon": "ict"
+    },
+    {
+      "title": "תקשורת",
+      "icon": "communication"
+    }
+  ]
 }

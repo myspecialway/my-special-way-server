@@ -1,9 +1,13 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.85",
+  "version": "0.0.118",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/myspecialway/my-special-way-server"
+  },
   "scripts": {
     "build": "bash ./scripts/build",
     "bump": "yarn version --new-version patch",
@@ -16,6 +20,7 @@
     "start:watch": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
+    "mongo-shell": "mongo mongodb://localhost:27017/msw-local",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage --detectOpenHandles",
@@ -24,7 +29,10 @@
     "test:watch": "jest --watch",
     "tslint": "tslint -p tsconfig.json -c tslint.json 'src/**/*.ts'",
     "webpack": "webpack --config webpack.config.js",
-    "stryker": "npx stryker run"
+    "stryker": "npx stryker run",
+    "format:fix": "pretty-quick --staged",
+    "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
+    "seed": "ts-node ./db-seed/seed.ts -c mongodb://localhost:27017"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
@@ -38,6 +46,7 @@
     "dotenv": "^6.0.0",
     "envalid": "^4.1.4",
     "fastify-formbody": "^2.0.0",
+    "firebase-admin": "^6.1.0",
     "global": "^4.3.2",
     "graphiql": "^0.11.11",
     "graphql": "^0.13.2",
@@ -48,6 +57,7 @@
     "moment": "^2.22.2",
     "mongodb": "^3.0.10",
     "nest-winston": "^1.0.2",
+    "nodemailer": "^4.6.8",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.12",
@@ -67,6 +77,7 @@
     "@types/lodash": "^4.14.110",
     "@types/mongodb": "^3.0.19",
     "@types/node": "^9.3.0",
+    "@types/nodemailer": "^4.6.5",
     "@types/passport": "^0.4.5",
     "@types/passport-jwt": "^3.0.1",
     "@types/supertest": "^2.0.4",
@@ -74,9 +85,11 @@
     "codecov": "^3.0.2",
     "cpy-cli": "^2.0.0",
     "cross-env": "^5.2.0",
+    "husky": "^1.1.2",
     "jest": "^23.0.1",
     "nodemon": "^1.14.1",
-    "prettier": "^1.11.1",
+    "prettier": "^1.14.2",
+    "pretty-quick": "^1.6.0",
     "stryker": "^0.24.1",
     "stryker-api": "^0.17.2",
     "stryker-html-reporter": "^0.14.2",
@@ -87,10 +100,17 @@
     "ts-loader": "^4.1.0",
     "ts-node": "^6.1.1",
     "tsconfig-paths": "^3.1.1",
+    "tsconfig-paths-webpack-plugin": "^3.2.0",
     "tslint": "5.10.0",
     "webpack": "^4.2.0",
     "webpack-cli": "^2.0.13",
     "webpack-node-externals": "^1.6.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn format:fix",
+      "pre-push": "yarn tslint"
+    }
   },
   "jest": {
     "automock": false,

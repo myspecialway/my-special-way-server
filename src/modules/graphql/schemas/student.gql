@@ -9,16 +9,19 @@ type Student {
   gender: Gender
   class: Class
   schedule: [TimeSlot!]
+  reminders: [Reminder!]
+  nonActiveTimes: [NonActiveTime]
   # teacher: Teacher!
 }
 
 input InputStudent {
-    username: String
-    password: String
-    email: String
-    firstname: String
-    lastname: String
-    gender: Gender
-    class_id: String
-    schedule: [InputTimeSlot!]
+  username: String
+  password: String
+  email: String
+  firstname: String
+  lastname: String
+  gender: Gender
+  class_id: String
+  schedule: [InputTimeSlot!]
+  reminders: [InputReminder!]
 }
