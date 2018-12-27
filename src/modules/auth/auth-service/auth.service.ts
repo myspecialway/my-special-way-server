@@ -55,7 +55,7 @@ export class AuthService implements AuthServiceInterface {
     return this.userPersistanceService.validateUserNameUnique(userUniqueValidation);
   }
 
-  async sendResetPasswordEmail(email: string): Promise<[boolean]> {
+  async sendResetPasswordEmail(email: string): Promise<[Error, boolean]> {
     return this.userPersistanceService.resetPassword(email);
   }
 

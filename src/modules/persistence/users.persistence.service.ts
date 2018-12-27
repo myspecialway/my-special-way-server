@@ -6,7 +6,7 @@ import { UserLoginRequest } from '../../models/user-login-request.model';
 import { ClassPersistenceService } from './class.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
-import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
+import { PasswordStatus, UserDbModel, UserRole } from '../../models/user.db.model';
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
 import { EmailBody, sendemail } from '../../Utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
@@ -80,20 +80,22 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     }
   }
 
-  async resetPassword(email: string): Promise<boolean> {
+  async resetPassword(email: string): Promise<[Error, boolean]> {
     const userResponse = await this.getUserByFilters({ email });
     if (!userResponse) {
-      this.logger.error(`resetPassword:: error fetching user by email ${email}`);
-      return false;
+      const errorMessage = `resetPassword:: error fetching user by email ${email}`;
+      this.logger.error(errorMessage);
+      return [new Error(errorMessage), false];
     }
     const subject: string = 'שחזור ססמא למערכת בדרכי שלי';
     const msgBody = this.createResetEmailMessage(userResponse);
     const sent = await sendemail('', email, subject, msgBody.html, msgBody.text);
     if (!sent) {
-      this.logger.error(`resetPassword:: error send email to user ${userResponse.username} by email ${email}`);
-      return false;
+      const errorMessage = `resetPassword:: error send email to user ${userResponse.username} by email ${email}`;
+      this.logger.error(errorMessage);
+      return [new Error(errorMessage), false];
     }
-    return sent;
+    return [null, true];
   }
 
   private createResetEmailMessage(user: UserDbModel): EmailBody {
