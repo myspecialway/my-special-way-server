@@ -76,7 +76,10 @@ In this project we use various tools and technologies for development and deploy
 
 ### Configurations
 
-Configurations are declared within the `.env` file. In the repository, `.env-example` file is available with the full list of variable available.
+Configurations are declared within the `.env` file. In the repository, `.env-example` file is available with the full list of variable available,
+and this file should be cloned.
+
+#### Windows Users Tip: `.env` (like any dotfiles) should be named `.env.` (mind the dot suffix) in order be allowed on Windows.
 
 These variables can be either declared in `.env` file as described above or passed as environments variables. Server support validation for env variables and will fail to load if some of them are missing or in wrong format.
 
