@@ -77,61 +77,6 @@ describe('auth controller', () => {
       accessToken: 'some-very-secret-token',
     });
   });
-  it('should not return "200 ok" if send email fails', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-    (sendemail as jest.Mock).mockImplementationOnce(() => {
-      throw new Error();
-    });
-    await authController.restorePassword(responseMock, {
-      email: 'user@gmail.com',
-      password: 'mock-password',
-    });
-
-    expect(responseMock.json).not.toHaveBeenCalledWith(200);
-  });
-
-  it('should not return "200 ok" if body is missing', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-
-    await authController.restorePassword(responseMock, null);
-    expect(responseMock.json).not.toHaveBeenCalled();
-  });
-  it('should not return "200 ok" if send email fails', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-    (sendemail as jest.Mock).mockImplementationOnce(() => {
-      throw new Error();
-    });
-    await authController.restorePassword(responseMock, {
-      email: 'user@gmail.com',
-      password: 'mock-password',
-    });
-
-    expect(responseMock.json).not.toHaveBeenCalledWith(200);
-  });
-  it('should failed to return response with status ok if mail as been sent', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-
-    await authController.restorePassword(responseMock, {
-      email: 'user@gmail.com',
-      username: 'mock-user',
-      password: 'mock-password',
-    });
-    expect(responseMock.json).toHaveBeenCalledWith({
-      status: 'ok',
-    });
-  });
   // expect(responseMock.json).toHaveBeenCalledWith({
   //   error: 'server error',
   //   message: 'unknown server error',
