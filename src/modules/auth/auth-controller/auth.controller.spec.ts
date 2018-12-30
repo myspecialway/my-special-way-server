@@ -1,9 +1,10 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
-jest.mock('../../../utils/node-mailer/email.client');
 import { sendemail } from '../../../utils/node-mailer/email.client';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
+
+jest.mock('../../../utils/node-mailer/email.client');
 
 describe('auth controller', () => {
   let authController: AuthController;
@@ -248,11 +249,13 @@ describe('auth controller', () => {
   });
   describe('resetPassword', () => {
     it('should return 400 if no body was passed for resetPassword', async () => {
+      expect.hasAssertions();
       await authController.resetPassword(responseMock, null);
 
       expect(responseMock.status).toHaveBeenCalledWith(400);
     });
     it('should return 500 server error if error happened', async () => {
+      expect.hasAssertions();
       const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
       sendResetPasswordEmailFn.mockReturnValueOnce([new Error('mock error'), null]);
 
