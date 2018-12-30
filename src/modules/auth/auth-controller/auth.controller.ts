@@ -74,7 +74,6 @@ export class AuthController {
 
       return;
     }
-    this.logger.log(`reset-password:: email sent to ${body.email}`);
   }
 
   @Post('/validateUserNameUnique')
