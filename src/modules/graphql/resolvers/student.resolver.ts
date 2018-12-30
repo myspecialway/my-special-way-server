@@ -124,13 +124,9 @@ export class StudentResolver {
     }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
-    try {
-      const clientToken: string = await this.usersPersistence.getFcmToken4User(id);
-      if (clientToken != null) {
-        this.fcmsSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
-      }
-    } catch (e) {
-      this.logger.error(e);
+    const clientToken: string = await this.usersPersistence.getFcmToken4User(id);
+    if (clientToken != null) {
+      this.fcmsSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
     }
     return response;
   }
