@@ -16,6 +16,7 @@ describe('auth.service', () => {
       updateUserPushToken: jest.fn(),
       getByUsername: jest.fn(),
       getUserByFilters: jest.fn(),
+      resetPassword: jest.fn(),
     };
 
     authService = new AuthService(userPersistanceServiceMock as UsersPersistenceService);
@@ -157,5 +158,11 @@ describe('auth.service', () => {
     const token = await authService.createTokenFromFirstLoginToken('firstLoginToken');
     expect(token[0]).toBeDefined();
     expect(token[1]).toBeNull();
+  });
+
+  it('should call userPersistanceService.resetPassword when sendResetPasswordEmail is called', async () => {
+    (userPersistanceServiceMock.resetPassword as jest.Mock).mockReturnValueOnce([null, true]);
+    const persisted = await authService.sendResetPasswordEmail('some-email');
+    expect(userPersistanceServiceMock.resetPassword).toHaveBeenCalledWith('some-email');
   });
 });
