@@ -646,6 +646,7 @@ describe('users persistence', () => {
     expect(error).toBeDefined();
   });
   it('should get correct error when resetPassword is called for wrong user', async () => {
+    common.Logger.error = jest.fn();
     (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockReturnValueOnce({
       toArray: jest.fn().mockReturnValueOnce(false),
     });
