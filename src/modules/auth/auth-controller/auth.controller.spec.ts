@@ -1,7 +1,6 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
-import { sendemail } from '../../../utils/node-mailer/email.client';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 
 jest.mock('../../../utils/node-mailer/email.client');
@@ -210,6 +209,20 @@ describe('auth controller', () => {
       expect(responseMock.json).toHaveBeenCalledWith({
         error: 'server error',
         message: 'unknown server error',
+      });
+    });
+    it('should return 401 if email was not sent', async () => {
+      expect.hasAssertions();
+
+      const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
+      sendResetPasswordEmailFn.mockReturnValueOnce([null, false]);
+
+      await authController.resetPassword(responseMock, { email: 'some@email.com' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(401);
+      expect(responseMock.json).toHaveBeenCalledWith({
+        error: 'unauthenticated',
+        message: 'email address is incorrect',
       });
     });
   });
