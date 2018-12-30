@@ -1,12 +1,12 @@
 # A type describing a single time slot on the class/student schedule
-type Temporal {
+type Original {
   # 2 numeric chars (0_0, 0_1...) represents the dayIndex_hourIndex of timeslot grid cell
   expired: String
   lesson: Lesson
   location: Location
 }
 
-input InputTemporal {
+input InputOriginal {
   expired: String!
   lesson: InputLesson
   location: InputLocation
