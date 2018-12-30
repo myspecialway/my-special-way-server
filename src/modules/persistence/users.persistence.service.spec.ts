@@ -1,19 +1,20 @@
 import { DEFAULT_REMINDERS } from './../../models/reminder.db.model';
-jest.mock('mongodb');
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
 import { ClassPersistenceService } from './class.persistence.service';
 import { SchedulePersistenceHelper } from './schedule.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
-import { UserRole, UserDbModel, Gender, PasswordStatus } from '../../models/user.db.model';
+import { Gender, PasswordStatus, UserDbModel, UserRole } from '../../models/user.db.model';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
-jest.mock('../../utils/node-mailer/email.client');
 import { sendemail } from '../../utils/node-mailer/email.client';
-jest.mock('../../config/config-loader');
 import { getConfig } from '../../config/config-loader';
 import { ProcessEnvConfig } from '../../config/config-interface';
-//users persistence
+
+jest.mock('mongodb');
+jest.mock('../../utils/node-mailer/email.client');
+jest.mock('../../config/config-loader');
+// users persistence
 describe('users persistence', () => {
   const collectionName = 'users';
   const mockedStudentSchedule: TimeSlotDbModel[] = [
@@ -643,5 +644,33 @@ describe('users persistence', () => {
     });
     const [error, updatedUser] = await usersPersistanceService.userForgetPassword('507f1f77bcf86cd79943901w');
     expect(error).toBeDefined();
+  });
+  it('should get correct error when resetPassword is called for wrong user', async () => {
+    common.Logger.error = jest.fn();
+    (dbServiceMock.getConnection().collection(collectionName).find as jest.Mock).mockReturnValueOnce({
+      toArray: jest.fn().mockReturnValueOnce(false),
+    });
+
+    const result = await usersPersistanceService.resetPassword('someEmail');
+    expect(result).toEqual([new Error('resetPassword:: error fetching user by email someEmail'), false]);
+  });
+  it('should get correct error when resetPassword is called and email is not sent', async () => {
+    common.Logger.error = jest.fn();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      toArray: jest.fn().mockReturnValueOnce(true),
+    });
+
+    const result = await usersPersistanceService.resetPassword('someEmail');
+    expect(result).toEqual([new Error('resetPassword:: error send email to user undefined by email someEmail'), false]);
+  });
+  it('should send email when resetPassword is called', async () => {
+    common.Logger.error = jest.fn();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
+      toArray: jest.fn().mockReturnValueOnce(true),
+    });
+    (sendemail as jest.Mock).mockReturnValue(true);
+
+    const result = await usersPersistanceService.resetPassword('someEmail');
+    expect(result).toEqual([null, true]);
   });
 });

@@ -6,7 +6,7 @@ import { UserLoginRequest } from '../../models/user-login-request.model';
 import { ClassPersistenceService } from './class.persistence.service';
 import { IUsersPersistenceService } from './interfaces/users.persistence.service.interface';
 import { TimeSlotDbModel } from '../../models/timeslot.db.model';
-import { UserDbModel, UserRole, PasswordStatus } from '../../models/user.db.model';
+import { PasswordStatus, UserDbModel, UserRole } from '../../models/user.db.model';
 import { UserUniqueValidationRequest } from '../../models/user-unique-validation-request.model';
 import { EmailBody, sendemail } from '../../utils/node-mailer';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
@@ -78,6 +78,42 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(`getAll:: error fetching user by id ${id}`, error.stack);
       throw error;
     }
+  }
+
+  async resetPassword(email: string): Promise<[Error, boolean]> {
+    const userResponse = await this.getUserByFilters({ email });
+    if (!userResponse) {
+      const errorMessage = `resetPassword:: error fetching user by email ${email}`;
+      this.logger.error(errorMessage);
+      return [new Error(errorMessage), false];
+    }
+    const subject: string = 'שחזור ססמא למערכת בדרכי שלי';
+    const msgBody = this.createResetEmailMessage(userResponse);
+    const sent = await sendemail('', email, subject, msgBody.html, msgBody.text);
+    if (!sent) {
+      const errorMessage = `resetPassword:: error send email to user ${userResponse.username} by email ${email}`;
+      this.logger.error(errorMessage);
+      return [new Error(errorMessage), false];
+    }
+    return [null, true];
+  }
+
+  private createResetEmailMessage(user: UserDbModel): EmailBody {
+    const msgStr: string =
+      `שלום ${user.firstname} ${user.lastname}\n אנו שולחים לך לינק חדש לכניסה למערכת.\n` +
+      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
+      `http://localhost:4200/login/${user.username}\n` +
+      ` תודה שהצטרפת!`;
+    const msgHtml: string =
+      `<p>שלום ${user.firstname} ${user.lastname}<br>` +
+      `אנו שולחים לך לינק חדש לכניסה למערכת<br>` +
+      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:<br>` +
+      //    `<a href=http://localhost:4200/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
+      `תודה שהצטרפת!</p>`;
+    return {
+      text: msgStr,
+      html: msgHtml,
+    };
   }
 
   async createUser(user: UserDbModel, userRole?: UserRole): Promise<[Error, UserDbModel]> {

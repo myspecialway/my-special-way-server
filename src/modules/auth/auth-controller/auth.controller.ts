@@ -1,8 +1,9 @@
 import { Response } from 'express';
-import { Controller, Body, Res, Post, Logger, BadRequestException } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Logger, Post, Res } from '@nestjs/common';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { AuthService } from '../auth-service/auth.service';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
+import { ResetPasswordRequest } from '../../../models/reset-password-request.model';
 
 @Controller()
 export class AuthController {
@@ -43,6 +44,36 @@ export class AuthController {
       accessToken: token,
     });
     this.authService.handlePushToken(body);
+  }
+  @Post('/reset-password')
+  async resetPassword(@Res() res: Response, @Body() body: ResetPasswordRequest): Promise<void> {
+    if (!body) {
+      return this.noBodyError('login', res);
+    }
+
+    this.logger.log(`reset-password:: reset-password request for ${body.email}`);
+
+    const [error, sent] = await this.authService.sendResetPasswordEmail(body.email);
+
+    if (error) {
+      this.logger.error(`login:: error while send email to ${body.email}`, error.stack);
+      res.status(500).json({
+        error: 'server error',
+        message: 'unknown server error',
+      });
+
+      return;
+    }
+
+    if (!sent) {
+      this.logger.warn(`login:: email wasn't sent for ${body.email}`);
+      res.status(401).json({
+        error: 'unauthenticated',
+        message: 'email address is incorrect',
+      });
+
+      return;
+    }
   }
 
   @Post('/validateUserNameUnique')
