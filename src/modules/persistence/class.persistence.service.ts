@@ -6,13 +6,17 @@ import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 
 @Injectable()
 export class ClassPersistenceService {
-    private collection: Collection<ClassDbModel>;
-    private logger = new Logger('ClassPersistenceService');
-    constructor(private dbService: DbService, private schedulePersistenceHelper: SchedulePersistenceHelper) {
-        const db = this.dbService.getConnection();
-        this.collection = db.collection<ClassDbModel>('classes');
-        this.collection.createIndex( { name: 1 }, {unique: true} );
-    }
+  private collection: Collection<ClassDbModel>;
+  private logger = new Logger('ClassPersistenceService');
+  constructor(private dbService: DbService, private schedulePersistenceHelper: SchedulePersistenceHelper) {
+    const db = this.dbService.getConnection();
+    this.collection = db.collection<ClassDbModel>('classes');
+    this.createIndex();
+  }
+
+  async createIndex() {
+    this.collection.createIndex({ name: 1 }, { unique: true });
+  }
 
   async getAll() {
     try {
