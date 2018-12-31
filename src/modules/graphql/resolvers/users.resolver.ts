@@ -7,6 +7,7 @@ import { ObjectID } from 'mongodb';
 import { UserTokenProfile } from '@models/user-token-profile.model';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
+import { UserRole } from '../../../models/user.db.model';
 
 export const NO_PERMISSION = 'not permissions to execute command';
 
@@ -55,9 +56,18 @@ export class UsersResolver {
     if (permission !== Permission.OWN || username !== caller.username) {
       throw new Error(NO_PERMISSION);
     }
-
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUserPassword(username, password);
+    return response;
+  }
+
+  @Mutation('userForgetPassword')
+  async userForgetPassword(_, { username }, context) {
+    const caller = Get.getObject(context, 'user') as UserTokenProfile;
+    if (caller.role !== UserRole.PRINCIPLE) {
+      throw new Error(NO_PERMISSION);
+    }
+    const [, response] = await this.usersPersistence.userForgetPassword(username);
     return response;
   }
 

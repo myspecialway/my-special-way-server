@@ -1,9 +1,9 @@
 import { AuthController } from './auth.controller';
 import { AuthServiceInterface } from '../auth-service/auth.service.interface';
 import { AuthService } from '../auth-service/auth.service';
-jest.mock('../../../utils/node-mailer/email.client');
-import { sendemail } from '../../../utils/node-mailer/email.client';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
+
+jest.mock('../../../utils/node-mailer/email.client');
 
 describe('auth controller', () => {
   let authController: AuthController;
@@ -15,6 +15,7 @@ describe('auth controller', () => {
       validateUserByCridentials: jest.fn(),
       createTokenFromFirstLoginToken: jest.fn(),
       validateUserNameUnique: jest.fn(),
+      sendResetPasswordEmail: jest.fn(),
       handlePushToken: jest.fn(),
     };
 
@@ -73,61 +74,6 @@ describe('auth controller', () => {
 
     expect(responseMock.json).toHaveBeenCalledWith({
       accessToken: 'some-very-secret-token',
-    });
-  });
-  it('should not return "200 ok" if send email fails', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-    (sendemail as jest.Mock).mockImplementationOnce(() => {
-      throw new Error();
-    });
-    await authController.restorePassword(responseMock, {
-      email: 'user@gmail.com',
-      password: 'mock-password',
-    });
-
-    expect(responseMock.json).not.toHaveBeenCalledWith(200);
-  });
-
-  it('should not return "200 ok" if body is missing', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-
-    await authController.restorePassword(responseMock, null);
-    expect(responseMock.json).not.toHaveBeenCalled();
-  });
-  it('should not return "200 ok" if send email fails', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-    (sendemail as jest.Mock).mockImplementationOnce(() => {
-      throw new Error();
-    });
-    await authController.restorePassword(responseMock, {
-      email: 'user@gmail.com',
-      password: 'mock-password',
-    });
-
-    expect(responseMock.json).not.toHaveBeenCalledWith(200);
-  });
-  it('should failed to return response with status ok if mail as been sent', async () => {
-    expect.hasAssertions();
-
-    const createTokenFn = authServiceMock.createTokenFromCridentials as jest.Mock<Promise<[Error, string]>>;
-    createTokenFn.mockReturnValueOnce([null, 'some-very-secret-token']);
-
-    await authController.restorePassword(responseMock, {
-      email: 'user@gmail.com',
-      username: 'mock-user',
-      password: 'mock-password',
-    });
-    expect(responseMock.json).toHaveBeenCalledWith({
-      status: 'ok',
     });
   });
   // expect(responseMock.json).toHaveBeenCalledWith({
@@ -243,6 +189,41 @@ describe('auth controller', () => {
 
       expect(responseMock.status).not.toHaveBeenCalled();
       expect(responseMock.json).toHaveBeenCalledWith({ isUnique: false });
+    });
+  });
+  describe('resetPassword', () => {
+    it('should return 400 if no body was passed for resetPassword', async () => {
+      expect.hasAssertions();
+      await authController.resetPassword(responseMock, null);
+
+      expect(responseMock.status).toHaveBeenCalledWith(400);
+    });
+    it('should return 500 server error if error happened', async () => {
+      expect.hasAssertions();
+      const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
+      sendResetPasswordEmailFn.mockReturnValueOnce([new Error('mock error'), null]);
+
+      await authController.resetPassword(responseMock, { email: 'some-error' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(500);
+      expect(responseMock.json).toHaveBeenCalledWith({
+        error: 'server error',
+        message: 'unknown server error',
+      });
+    });
+    it('should return 401 if email was not sent', async () => {
+      expect.hasAssertions();
+
+      const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
+      sendResetPasswordEmailFn.mockReturnValueOnce([null, false]);
+
+      await authController.resetPassword(responseMock, { email: 'some@email.com' });
+
+      expect(responseMock.status).toHaveBeenCalledWith(401);
+      expect(responseMock.json).toHaveBeenCalledWith({
+        error: 'unauthenticated',
+        message: 'email address is incorrect',
+      });
     });
   });
 });
