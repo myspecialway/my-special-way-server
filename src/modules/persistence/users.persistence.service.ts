@@ -95,7 +95,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(errorMessage);
       return [new Error(errorMessage), false];
     }
-    return [null, true];
+    return [null, sent];
   }
 
   private createResetEmailMessage(user: UserDbModel): EmailBody {
