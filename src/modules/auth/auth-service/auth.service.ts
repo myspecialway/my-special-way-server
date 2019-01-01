@@ -56,7 +56,6 @@ export class AuthService implements AuthServiceInterface {
   }
   async handlePushToken(userLogin: UserLoginRequest): Promise<boolean> {
     this.logger.log('store firebase token');
-
     if (!this.hasPushToken(userLogin)) {
       return false;
     }
@@ -75,6 +74,11 @@ export class AuthService implements AuthServiceInterface {
     }
     return true;
   }
+
+  async sendResetPasswordEmail(email: string): Promise<[Error, boolean]> {
+    return this.userPersistanceService.resetPassword(email);
+  }
+
   /* istanbul ignore next */
   static getUserProfileFromToken(token: string): UserTokenProfile {
     let user = new UserTokenProfile();
