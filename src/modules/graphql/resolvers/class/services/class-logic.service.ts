@@ -3,6 +3,9 @@ import { TimeSlotDbModel } from '../../../../../models/timeslot.db.model';
 import { EducationStage } from '../../../../../models/education-stage.enum';
 import * as defaultSchedules from './default-class-schedules';
 import { LessonDbModel } from '@models/lesson.db.model';
+import { ClassDbModel } from '@models/class.db.model';
+import { OriginalDbData } from '@models/original.db.mode';
+import * as moment from 'moment';
 
 @Injectable()
 export class ClassLogic {
@@ -32,6 +35,70 @@ export class ClassLogic {
       }
     });
   }
+
+  mergeSchedulerClass(schedule: TimeSlotDbModel[]) {
+    const res = {
+      isUpdate: false,
+      schedule: [],
+    };
+
+    if (schedule) {
+      let onlyExpierd = this.filterSchedulerByExpired(schedule);
+      if (onlyExpierd.length) {
+        onlyExpierd = this.filterExpiredItemWithoutParentState(onlyExpierd);
+        const withoutExpierd = this.filterSchedulerWithoutExpired(schedule);
+        res.schedule = onlyExpierd.concat(withoutExpierd);
+        res.isUpdate = true;
+      }
+    }
+    return res;
+  }
+
+  private filterExpiredItemWithoutParentState(onlyExpierd: TimeSlotDbModel[]) {
+    onlyExpierd = onlyExpierd.filter((expiredItem) => {
+      return !expiredItem.location || !expiredItem.lesson ? false : true;
+    });
+    return onlyExpierd;
+  }
+
+  filterSchedulerWithoutExpired(schedule: TimeSlotDbModel[]) {
+    const filterSchedulerWithoutExpiredV = schedule.filter((scheduleItem) => {
+      const original = scheduleItem.original;
+      const isExpired = this.isTemporeryClassTimeExpired(original);
+      return !isExpired;
+    });
+    return filterSchedulerWithoutExpiredV;
+  }
+
+  filterSchedulerByExpired(schedule: TimeSlotDbModel[]) {
+    let filterSchedulerByExpiredV = schedule.filter((scheduleItem) => {
+      const original = scheduleItem.original;
+      const isExpired = this.isTemporeryClassTimeExpired(original);
+      return isExpired ? true : false;
+    });
+
+    filterSchedulerByExpiredV = filterSchedulerByExpiredV.map((scheduleItem) => {
+      scheduleItem.lesson = scheduleItem.original.lesson;
+      scheduleItem.location = scheduleItem.original.location;
+      scheduleItem.original = undefined;
+      return scheduleItem;
+    });
+    return filterSchedulerByExpiredV;
+  }
+
+  private isTemporeryClassTimeExpired(original?: OriginalDbData) {
+    if (original) {
+      if (
+        moment()
+          .utc()
+          .isAfter(original.expired)
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   private calculateEducationStage(grade: string): EducationStage {
     const ELEMENTRY = /^[a-c]$/;
     const JUNIOR_HIGH = /^[d-f]$/;

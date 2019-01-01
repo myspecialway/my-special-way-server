@@ -8,6 +8,6 @@ export interface TimeSlotDbModel {
   hours: string;
   original?: OriginalDbData;
   lesson?: LessonDbModel;
-  room?: LocationDbModel;
+  location?: LocationDbModel;
   customized?: boolean;
 }

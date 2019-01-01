@@ -5,5 +5,5 @@ import LocationDbModel from './location.db.model';
 export interface OriginalDbData {
   expired: Date;
   lesson?: LessonDbModel;
-  room?: LocationDbModel;
+  location?: LocationDbModel;
 }

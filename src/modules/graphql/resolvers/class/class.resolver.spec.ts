@@ -64,6 +64,10 @@ describe('class resolver', () => {
     classLogic = {
       buildDefaultSchedule: jest.fn().mockReturnValue([null, []]),
       fixLessonIds: jest.fn(),
+      mergeSchedulerClass: jest.fn().mockReturnValue({
+        isUpdate: false,
+        schedule: [],
+      }),
     };
 
     classResolver = new ClassResolver(
