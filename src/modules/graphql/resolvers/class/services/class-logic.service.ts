@@ -3,7 +3,6 @@ import { TimeSlotDbModel } from '../../../../../models/timeslot.db.model';
 import { EducationStage } from '../../../../../models/education-stage.enum';
 import * as defaultSchedules from './default-class-schedules';
 import { LessonDbModel } from '@models/lesson.db.model';
-import { ClassDbModel } from '@models/class.db.model';
 import { OriginalDbData } from '@models/original.db.mode';
 import * as moment from 'moment';
 
