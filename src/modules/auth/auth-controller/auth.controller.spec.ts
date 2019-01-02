@@ -198,6 +198,14 @@ describe('auth controller', () => {
 
       expect(responseMock.status).toHaveBeenCalledWith(400);
     });
+    it('should return 200 if resetPassword finished successfully', async () => {
+      expect.hasAssertions();
+      const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
+      sendResetPasswordEmailFn.mockReturnValueOnce([null, true]);
+      await authController.resetPassword(responseMock, { email: 'msw-student@gmail.com' });
+
+      expect(responseMock.json).toHaveBeenCalledWith({ ok: true });
+    });
     it('should return 500 server error if error happened', async () => {
       expect.hasAssertions();
       const sendResetPasswordEmailFn = authServiceMock.sendResetPasswordEmail as jest.Mock<Promise<[Error, string]>>;
