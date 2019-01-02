@@ -43,7 +43,13 @@ export class ClassResolver {
   @Query('classById')
   async getClassById(obj, args, context, info) {
     const cls = await this.classPersistence.getById(args.id);
-    return await this.classPermissionService.getAndValidateClassOfRequster(cls, context);
+    const classObj = await this.classPermissionService.getAndValidateClassOfRequster(cls, context);
+    const mergeData = this.classLogic.mergeSchedulerClass(classObj.schedule);
+    if (mergeData.isUpdate) {
+      classObj.schedule = mergeData.schedule;
+      this.classPersistence.updateClass(args.id, classObj);
+    }
+    return classObj;
   }
 
   @Query('classByName')
@@ -65,7 +71,7 @@ export class ClassResolver {
     const allLessons = await this.lessonPersistence.getAll();
     schedule.forEach((scheduleItem) => {
       const found = allLessons.filter((lesson) => {
-        return lesson._id.toString() === (scheduleItem.lesson._id || '').toString();
+        return lesson._id.toString() === ((scheduleItem.lesson && scheduleItem.lesson._id) || '').toString();
       });
       if (found && found.length > 0) {
         scheduleItem.lesson = found[0];
