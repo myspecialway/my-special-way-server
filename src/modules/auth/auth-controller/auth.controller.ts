@@ -74,6 +74,7 @@ export class AuthController {
 
       return;
     }
+    res.json({ ok: true });
   }
 
   @Post('/validateUserNameUnique')

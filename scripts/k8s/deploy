@@ -6,7 +6,7 @@ if [ "$BRANCH" == 'master' ]
 then
     echo info::deploy:: branch is ${BRANCH}, deploying new version [${CUR_VER}] to k8s
     # update image
-    kubectl set image deployment/msw-server-deployment msw-server=myspecialway/msw-server:${CUR_VER}
+    kubectl set image deployment/msw-server msw-server=myspecialway/msw-server:${CUR_VER}
 else
     echo info::deploy:: branch is not master, skipping deployment
 fi

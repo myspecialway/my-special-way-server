@@ -76,7 +76,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async sendResetPasswordEmail(email: string): Promise<[Error, boolean]> {
-    return this.userPersistanceService.resetPassword(email);
+    return await this.userPersistanceService.resetPassword(email);
   }
 
   /* istanbul ignore next */
