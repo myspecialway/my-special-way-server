@@ -18,6 +18,7 @@ import { BlockedSectionsResolver } from './resolvers/blocked-sections.resolver';
 import { ScheduleResolver } from './resolvers/schedule.resolver';
 import { FCMModule } from 'Utils/FCMSender/fcm.module';
 import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
+import { DateUtilesService } from './resolvers/utiles/services/date-service';
 
 @Module({
   imports: [GraphQLModule, PersistenceModule, PermissionsModule, FCMModule],
@@ -33,6 +34,7 @@ import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
     BlockedSectionsResolver,
     ScheduleResolver,
     NonActiveTimeResolver,
+    DateUtilesService,
   ],
   controllers: [GraphqlController],
 })
