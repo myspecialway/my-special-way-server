@@ -16,7 +16,7 @@ import { ClassLogic } from './resolvers/class/services/class-logic.service';
 import { PermissionsModule } from '../permissions/permissions.module';
 import { BlockedSectionsResolver } from './resolvers/blocked-sections.resolver';
 import { ScheduleResolver } from './resolvers/schedule.resolver';
-import { FCMModule } from 'Utils/FCMSender/fcm.module';
+import { FCMModule } from '../../Utils/FCMSender/fcm.module';
 import { NonActiveTimeResolver } from './resolvers/non-active-time.resolver';
 import { DateUtilesService } from './resolvers/utiles/services/date-service';
 
