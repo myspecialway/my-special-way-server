@@ -3,8 +3,9 @@ import * as jwt from 'jsonwebtoken';
 import { AuthServiceInterface } from './auth.service.interface';
 import { AuthService } from './auth.service';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { UserDbModel, UserRole } from '../../../models/user.db.model';
+import { UserDbModel, UserRole, Gender } from '../../../models/user.db.model';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 describe('auth.service', () => {
   let authService: AuthServiceInterface;
@@ -125,8 +126,9 @@ describe('auth.service', () => {
     mockExp.setDate(mockExp.getDate() + 1);
     (userPersistanceServiceMock.getUserByFilters as jest.Mock).mockReturnValueOnce({
       username: 'mock user',
+      gender: Gender.MALE,
       firstLoginData: { expiration: mockExp },
-    });
+    } as Partial<UserDbModel>);
 
     // when
     const token = await authService.createTokenFromFirstLoginToken('firstLoginToken');
