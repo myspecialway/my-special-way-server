@@ -16,7 +16,7 @@ export enum ReminderType {
 export const getReminderTypeKeys = Object.keys(ReminderType) as ReminderTypeKey[];
 
 export const DEFAULT_REMINDERS: IReminder[] = getReminderTypeKeys.map((key: ReminderTypeKey) => ({
-  enabled: false,
+  enabled: true,
   type: key,
   schedule: [],
 }));
