@@ -16,6 +16,6 @@ services:
       - DB_CONNECTION_STRING=mongodb://mongodb:27017/msw-test
       - DB_NAME=msw-test
       - PAPERTRAIL_HOST_PORT=logs7.papertrailapp.com:32979
-      - BASE_URL=https://msw-westus-app-k8s.att.io
+      - BASE_URL=http://mswppr.tel-aviv.gov.il
       - EXPIRATION_FIRST_TOKEN_MINUTES=15
       - NODE_ENV=e2e-tests
