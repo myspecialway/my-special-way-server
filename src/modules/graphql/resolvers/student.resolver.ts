@@ -10,6 +10,9 @@ import { Logger } from '@nestjs/common';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
 
+import { PersonalDetailsFcmData } from '../../../Utils/FCMSender/FCM.data';
+import { FCMSender } from '../../../Utils/FCMSender/FCMSender';
+
 @Resolver('Student')
 export class StudentResolver {
   private logger = new Logger('StudentResolver');
@@ -19,6 +22,7 @@ export class StudentResolver {
     private classPersistence: ClassPersistenceService,
     private nonActiveTimePersistence: NonActiveTimePersistenceService,
     private studentPermissionService: StudentPermissionService,
+    private fcmsSender: FCMSender,
   ) {}
 
   @Query('students')
@@ -120,6 +124,10 @@ export class StudentResolver {
     }
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUser(id, student, UserRole.STUDENT);
+    const clientToken: string = await this.usersPersistence.getFcmToken4User(id);
+    if (clientToken != null) {
+      this.fcmsSender.sendDataMsgToAndroid(clientToken, PersonalDetailsFcmData);
+    }
     return response;
   }
 

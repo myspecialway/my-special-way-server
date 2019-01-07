@@ -1,6 +1,6 @@
 {
   "name": "my-special-way-server",
-  "version": "0.0.130",
+  "version": "0.0.140",
   "description": "server-for-my-special-way-android/portal",
   "author": "my-special-way",
   "license": "MIT",
@@ -20,7 +20,7 @@
     "start:watch": "nodemon",
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rm -rf dist && tsc",
-    "mongo-shell": "mongo mongodb://localhost:27017/msw-local",
+    "mongo-shell": "mongo mongodb://localhost:27017/msw-dev",
     "start:prod": "node dist/main.js",
     "start:hmr": "node dist/server",
     "test:ut": "jest --coverage --detectOpenHandles",

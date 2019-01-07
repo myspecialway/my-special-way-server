@@ -19,7 +19,7 @@ describe('classes graphql', () => {
   });
 
   // it('should fetch classes successfully by query', async () => {
-  it('should get error', async () => {
+  xit('should get error', async () => {
     await helpers.addClass({
       name: 'test-class',
     });

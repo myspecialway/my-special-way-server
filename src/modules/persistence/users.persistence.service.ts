@@ -16,7 +16,14 @@ import { getConfig } from '../../config/config-loader';
 export class UsersPersistenceService implements IUsersPersistenceService {
   private collection: Collection<UserDbModel>;
   private logger = new Logger('UsersPersistenceService');
-
+  async getFcmToken4User(id: string): Promise<string> {
+    const user = await this.getById(id);
+    if (user && user.pushToken) {
+      return user.pushToken;
+    } else {
+      return null;
+    }
+  }
   constructor(
     private dbService: DbService,
     private classPersistenceService: ClassPersistenceService,
@@ -95,7 +102,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(errorMessage);
       return [new Error(errorMessage), false];
     }
-    return [null, true];
+    return [null, sent];
   }
 
   private createResetEmailMessage(user: UserDbModel): EmailBody {

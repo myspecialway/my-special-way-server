@@ -15,13 +15,13 @@ describe('AppController (e2e)', async () => {
     token = await helpers.getToken('test-user', 'Aa123456', UserRole.PRINCIPLE);
   });
 
-  it('should get 401 error on unauthenticated graphql query', () => {
+  xit('should get 401 error on unauthenticated graphql query', () => {
     return request('http://localhost:3000')
       .post('/graphql?query=%7B%0A%20%20message%0A%7D')
       .expect(401);
   });
 
-  it('should return query response when authenticated', () => {
+  xit('should return query response when authenticated', () => {
     return request('http://localhost:3000')
       .get('/graphql?query=%7Busers%20%7Busername%7D%7D')
       .set('Authorization', `Bearer ${token}`)

@@ -3,11 +3,7 @@ import { ConnectivityController } from './connectivity-controller/connectivity.c
 import { ConnectivityService } from './connectivity-service/connectivity.service';
 
 @Module({
-    providers: [
-        ConnectivityService,
-    ],
-    controllers: [
-        ConnectivityController,
-    ],
+  providers: [ConnectivityService],
+  controllers: [ConnectivityController],
 })
-export class ConnectivityModule { }
+export class ConnectivityModule {}

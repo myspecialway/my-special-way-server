@@ -37,6 +37,7 @@ export class AuthService implements AuthServiceInterface {
       firstname: user.firstname,
       lastname: user.lastname,
       class_id: user.class_id,
+      gender: user.gender,
     };
     const jwtOptions = {};
     if (user.role !== UserRole.STUDENT) {
@@ -76,7 +77,7 @@ export class AuthService implements AuthServiceInterface {
   }
 
   async sendResetPasswordEmail(email: string): Promise<[Error, boolean]> {
-    return this.userPersistanceService.resetPassword(email);
+    return await this.userPersistanceService.resetPassword(email);
   }
 
   /* istanbul ignore next */
@@ -104,6 +105,7 @@ export class AuthService implements AuthServiceInterface {
       firstname: user.firstname,
       lastname: user.lastname,
       class_id: user.class_id,
+      gender: user.gender.toString(),
     };
 
     return [

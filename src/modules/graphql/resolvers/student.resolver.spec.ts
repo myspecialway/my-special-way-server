@@ -6,6 +6,7 @@ import { UsersPersistenceService } from '../../persistence/users.persistence.ser
 import { Permission } from '../../permissions/permission.interface';
 import { TimeSlotDbModel } from '../../../models/timeslot.db.model';
 import { StudentPermissionService } from '../../permissions/student.premission.service';
+import { FCMSender } from '../../../Utils/FCMSender/FCMSender';
 import { NonActiveTimePersistenceService } from '../../persistence/non-active-time.persistence.service';
 
 describe('student resolver', () => {
@@ -55,7 +56,9 @@ describe('student resolver', () => {
   let usersPersistence: Partial<UsersPersistenceService>;
   let classPersistence: Partial<ClassPersistenceService>;
   let studentPermission: Partial<StudentPermissionService>;
+  let fcmsSender: Partial<FCMSender>;
   let nonActiveTimePersistence: Partial<NonActiveTimePersistenceService>;
+
   beforeEach(() => {
     usersPersistence = {
       getAll: jest.fn(),
@@ -67,6 +70,8 @@ describe('student resolver', () => {
       updateUser: jest.fn(),
       deleteUser: jest.fn(),
       getStudentSchedule: jest.fn(),
+      getByUsername: jest.fn(),
+      getFcmToken4User: jest.fn(),
     };
     classPersistence = {
       getById: jest.fn(),
@@ -83,12 +88,16 @@ describe('student resolver', () => {
       create: jest.fn(),
       delete: jest.fn(),
     };
-
+    fcmsSender = {
+      sendTxtMsgToAndroid: jest.fn(),
+      sendDataMsgToAndroid: jest.fn(),
+    };
     studentResolver = new StudentResolver(
       usersPersistence as UsersPersistenceService,
       classPersistence as ClassPersistenceService,
       nonActiveTimePersistence as NonActiveTimePersistenceService,
       studentPermission as StudentPermissionService,
+      fcmsSender as FCMSender,
     );
   });
 
@@ -263,6 +272,21 @@ describe('student resolver', () => {
 
     expect(ObjectID.isValid(studentClassId)).toBeFalsy();
     expect(usersPersistence.updateUser).toHaveBeenCalledWith('someid', inputStudent, UserRole.STUDENT);
+  });
+
+  it('should try to send push message when updating a user', async () => {
+    (usersPersistence.getFcmToken4User as jest.Mock).mockReturnValue(Promise.resolve('any-token'));
+    (usersPersistence.updateUser as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_TEACHER]));
+    (studentPermission.getAndValidateSingleStudentInClass as jest.Mock).mockReturnValue(
+      Promise.resolve([Permission.OWN, MOCK_STUDENT]),
+    );
+
+    const response = await studentResolver.updateStudent(
+      null,
+      { id: 'studentid', student: MOCK_STUDENT },
+      MOCK_TEACHER_CONTEXT,
+    );
+    expect(fcmsSender.sendDataMsgToAndroid).toHaveBeenCalled();
   });
 
   it('should call updateUser function as teacher and return the student was not updated', async () => {
