@@ -6,6 +6,8 @@ import { OriginalDbData } from './original.db.mode';
 export interface TimeSlotDbModel {
   index: string;
   hours: string;
+  lesson?: LessonDbModel;
+  room?: LocationDbModel;
   original?: OriginalDbData;
   lesson?: LessonDbModel;
   location?: LocationDbModel;

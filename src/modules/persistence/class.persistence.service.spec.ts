@@ -18,6 +18,7 @@ describe('class persistence', () => {
           replaceOne: jest.fn(),
           findOneAndUpdate: jest.fn(),
           insertOne: jest.fn(),
+          createIndex: jest.fn(),
         } as Partial<Collection>),
       } as Partial<Db>),
     };
@@ -133,6 +134,21 @@ describe('class persistence', () => {
   });
 
   it('should return class already exists error on createClass when is already exists', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({
+      name: 'className',
+      grade: 'a',
+    });
+
+    await classPersistanceService
+      .createClass({ name: 'className', grade: 'a' })
+      .catch((error) => expect(error.message).toBe('Class already exists'));
+  });
+
+  it('should verify index is working', async () => {
+    expect.hasAssertions();
+    await classPersistanceService.createIndex();
+
     expect.hasAssertions();
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({
       name: 'className',
