@@ -216,7 +216,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
           <div class="textStyle">שם המשתמש שלך: ${user.username}&rlm;</div>
           <br/>
           <div class="textStyle">על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;</div>
-          <div class="linkStyle"><a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי</a></div>
+          <div class="linkStyle"><a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי&rlm;</a></div>
           <br/>
           <div class="textStyle">תודה שהצטרפת!&rlm;</div>
         </body>
