@@ -13,11 +13,10 @@ instance.use(bodyParser.urlencoded({ extended: false }));
 /* End of express middleware. */
 
 async function bootstrap() {
-  const app = await NestFactory.create(
-                                        AppModule,
-                                        instance,
-                                        {logger: new MSWLogger(getConfig().isProd, getConfig().PAPERTRAIL_HOST_PORT)},
-                                      );
+  const app = await NestFactory.create(AppModule, instance, {
+    logger: new MSWLogger(getConfig().isProd, getConfig().PAPERTRAIL_HOST_PORT),
+  });
+  app.setGlobalPrefix('/api');
   app.enableCors();
   app.useStaticAssets(path.join(__dirname, './public'));
   await app.listen(3000);
