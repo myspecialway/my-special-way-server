@@ -1,10 +1,11 @@
 import { DbService } from './db.service';
-import { Collection, Db } from 'mongodb';
+import { Collection, Db, ObjectID } from 'mongodb';
 import * as common from '@nestjs/common';
 import { FileSystemPersistenceService } from './file-system.persistence.service';
 import { FileSystemDbModel } from '../../models/file-system.db.model';
+import { InternalServerErrorException } from '@nestjs/common';
 
-describe('File Persistence Service', () => {
+describe.only('File Persistence Service', () => {
   const collectioName = 'fileSystem';
   let fileSystemPersistenceService: FileSystemPersistenceService;
   let dbServiceMock: Partial<DbService>;
@@ -29,11 +30,13 @@ describe('File Persistence Service', () => {
 
   describe('# Create File', () => {
     it('should create one file', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
-        some: 'some',
-      });
-      await fileSystemPersistenceService.createFile({ some: 'some' });
+      const obj = {
+        insertedId: new ObjectID(),
+      };
+      (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce(obj);
+      const id = await fileSystemPersistenceService.createFile({ file: 'some demmy file' });
       expect(dbServiceMock.getConnection().collection(collectioName).insertOne).toHaveBeenCalled();
+      expect(id).toEqual(obj.insertedId.toString());
     });
     it('should log error when db cannot create', async () => {
       (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockImplementation(() => {
@@ -44,105 +47,9 @@ describe('File Persistence Service', () => {
         expect(message).toBe('FileSystemPersistenceService::createFile:: error create File');
       });
       try {
-        await fileSystemPersistenceService.createFile({ some: 'some' });
+        await fileSystemPersistenceService.createFile({ file: 'some demmy file' });
       } catch (error) {
-        expect((error as Error).message).toBe('test');
-      }
-      expect(common.Logger.error).toHaveBeenCalled();
-    });
-  });
-
-  describe('# Get File by filter', () => {
-    function getFileMock(): FileSystemDbModel {
-      return {
-        _id: 'mockID',
-        content: 'mockContent',
-        description: 'mockDescription',
-        filename: 'mockFileName',
-      };
-    }
-    it('should get one file', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(getFileMock());
-      const resp = await fileSystemPersistenceService.getFileByFilters({ some: 'some' });
-      expect(resp).toEqual(getFileMock());
-    });
-    it('should build filter', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(getFileMock());
-      await fileSystemPersistenceService.getFileByFilters({ some: 'some' });
-      expect(dbServiceMock.getConnection().collection(collectioName).findOne).toHaveBeenCalledWith({ some: 'some' });
-    });
-    it('should log error when db cannot get', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementation(() => {
-        throw new Error('test');
-      });
-      common.Logger.error = jest.fn();
-      (common.Logger.error as jest.Mock).mockImplementation((message, trace, context) => {
-        expect(message).toEqual('getFileByFilters:: error fetching user by parameters');
-      });
-      try {
-        await fileSystemPersistenceService.getFileByFilters({ some: 'some' });
-      } catch (error) {
-        expect((error as Error).message).toBe('test');
-      }
-      expect(common.Logger.error).toHaveBeenCalled();
-    });
-  });
-
-  describe('# Delete File', () => {
-    it('should delete one file', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockReturnValueOnce({
-        some: 'some',
-      });
-      await fileSystemPersistenceService.deleteFile('test');
-      expect(dbServiceMock.getConnection().collection(collectioName).deleteOne).toHaveBeenCalled();
-    });
-    it('should log error when db cannot delete', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockImplementation(() => {
-        throw new Error('test');
-      });
-      common.Logger.error = jest.fn();
-      (common.Logger.error as jest.Mock).mockImplementation((message, trace, context) => {
-        expect(message).toBe('FileSystemPersistenceService::deleteFile:: error delete File');
-      });
-      try {
-        await fileSystemPersistenceService.deleteFile('test');
-      } catch (error) {
-        expect((error as Error).message).toBe('test');
-      }
-      expect(common.Logger.error).toHaveBeenCalled();
-    });
-  });
-
-  describe('# Update File', () => {
-    function getFileMock(): FileSystemDbModel {
-      return {
-        _id: 'mockID',
-        content: 'mockContent',
-        description: 'mockDescription',
-        filename: 'mockFileName',
-      };
-    }
-    it('should update one file', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).findOneAndReplace as jest.Mock).mockReturnValueOnce(
-        getFileMock(),
-      );
-      await fileSystemPersistenceService.updateFile('test', getFileMock());
-      expect(dbServiceMock.getConnection().collection(collectioName).findOneAndReplace).toHaveBeenCalled();
-    });
-    it('should log error when db cannot delete', async () => {
-      (dbServiceMock.getConnection().collection(collectioName).findOneAndReplace as jest.Mock).mockImplementation(
-        () => {
-          throw new Error('test');
-        },
-      );
-      common.Logger.error = jest.fn();
-      (common.Logger.error as jest.Mock).mockImplementation((message, trace, context) => {
-        expect(message).toBe('FileSystemPersistenceService::updateFile:: error update File');
-      });
-      try {
-        await fileSystemPersistenceService.updateFile('test', getFileMock());
-      } catch (error) {
-        expect((error as Error).message).toBe('test');
+        expect((error as InternalServerErrorException).message.message).toBe('can not insert file to db');
       }
       expect(common.Logger.error).toHaveBeenCalled();
     });

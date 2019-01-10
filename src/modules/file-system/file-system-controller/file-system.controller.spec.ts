@@ -1,478 +1,164 @@
 import { FileSystemController } from './file-system.controller';
 import { FileSystemPersistenceService } from '../../persistence/file-system.persistence.service';
-import { Response } from 'express';
-import { AuthService } from '../../auth/auth-service/auth.service';
-import { UserRole } from '../../../models/user.db.model';
 import { HttpStatus } from '@nestjs/common';
+import { FileUtilesService } from '../services/file-utiles';
+import { mockRes } from '../../../../test/express-mock/express-mock';
+import { Response } from 'express';
+import { ObjectID } from 'bson';
+import { DbService } from '../../persistence/db.service';
+import { Collection, Db } from 'mongodb';
+
 describe('file-system controller', () => {
+  const collectioName = 'fileSystem';
   let filesystemController: FileSystemController;
-  let fileSystemPersistenceService: Partial<FileSystemPersistenceService>;
+  let fileSystemPersistenceService: FileSystemPersistenceService;
+  let dbServiceMock: Partial<DbService>;
   let res: Partial<Response>;
   beforeEach(() => {
-    fileSystemPersistenceService = {
-      createFile: jest.fn(),
-      updateFile: jest.fn(),
-      deleteFile: jest.fn(),
-      getFileByFilters: jest.fn(),
+    dbServiceMock = {
+      getConnection: jest.fn().mockReturnValue({
+        collection: jest.fn().mockReturnValue({
+          find: jest.fn(),
+          findOne: jest.fn(),
+          deleteOne: jest.fn(),
+          replaceOne: jest.fn(),
+          findOneAndUpdate: jest.fn(),
+          insertOne: jest.fn(),
+          createIndex: jest.fn(),
+        } as Partial<Collection>),
+      } as Partial<Db>),
     };
-    filesystemController = new FileSystemController(fileSystemPersistenceService as FileSystemPersistenceService);
-    res = {
-      send: jest.fn(),
-      status: jest.fn(),
-    };
-    AuthService.getUserProfileFromToken = jest.fn();
-    (AuthService.getUserProfileFromToken as jest.Mock).mockImplementation((auth) => {
-      switch (auth) {
-        case 'PRINCIPLE':
-          return { role: UserRole.PRINCIPLE };
-        case 'TEACHER':
-          return { role: UserRole.TEACHER };
-        case 'STUDENT':
-          return { role: UserRole.STUDENT };
-        default:
-          return null;
-      }
-    });
+
+    res = mockRes();
+    fileSystemPersistenceService = new FileSystemPersistenceService(dbServiceMock as DbService);
+    filesystemController = new FileSystemController(
+      fileSystemPersistenceService as FileSystemPersistenceService,
+      new FileUtilesService(),
+    );
   });
 
   describe('Upload File Tests', () => {
     let file = {};
-    let req = {};
     let body = {};
     beforeEach(() => {
       file = {};
-      req = {};
       body = {};
     });
-    it('TEACHER Scenario', async () => {
-      req = { headers: { authorization: 'TEACHER' } };
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('STUDENT Scenario', async () => {
-      req = { headers: { authorization: 'STUDENT' } };
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('OTHER Scenario', async () => {
-      req = { headers: { authorization: 'OTHER' } };
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('PRINCIPLE Scenario without floor', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = {};
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with floor = null', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: null };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with existing floor', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({});
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalledWith('Map already exist, try update (PUT)');
-    });
-    it('PRINCIPLE Scenario with no file name', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
+    it('PRINCIPLE Scenario with floor and mapName and file', async () => {
+      const id = '1234567';
+      body = { floor: 5, mapName: 'mapName' };
       file = {
         encoding: 'mockEncoding',
         mimetype: 'mockmimetype',
         buffer: 'mockBuffer',
         size: 'mockSize',
+        originalname: 'originalname',
       };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no encoding', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      file = {
-        originalname: 'mockOriginalName',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no mimetype', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no buffer', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario no size', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence exist check fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
+      (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
+        insertedId: id,
       });
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence create fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      (fileSystemPersistenceService.createFile as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
-      });
-      await filesystemController.upload(file, req, body, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      body = { floor: 'mockFloor' };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      (fileSystemPersistenceService.createFile as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.upload(file, req, body, res as Response);
+
+      await filesystemController.upload(file, body, res as Response);
       expect(res.status).toHaveBeenCalledWith(HttpStatus.CREATED);
-      expect(res.send).toHaveBeenCalled();
+      expect(res.json).toHaveBeenCalledWith({ status: 'created', id });
+    });
+
+    it('PRINCIPLE Scenario with no encoding', async () => {
+      body = { floor: 5, mapName: 'mapName' };
+      file = {
+        mimetype: 'mockmimetype',
+        buffer: 'mockBuffer',
+        size: 'mockSize',
+        originalname: 'originalname',
+      };
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
+      await filesystemController.upload(file, body, res as Response);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
+    });
+
+    it('PRINCIPLE Scenario persistence create fails fails', async () => {
+      body = { floor: 5, mapName: 'mapName' };
+      file = {
+        encoding: 'mockEncoding',
+        mimetype: 'mockmimetype',
+        buffer: 'mockBuffer',
+        size: 'mockSize',
+        originalname: 'originalname',
+      };
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
+      (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockImplementation(() => {
+        throw new Error('mongo db error');
+      });
+
+      await filesystemController.upload(file, body, res as Response);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
     });
   });
+
   describe('Delete File Tests', () => {
-    let req = {};
-    beforeEach(() => {
-      req = {};
-    });
-    it('TEACHER Scenario', async () => {
-      req = { headers: { authorization: 'TEACHER' } };
-      await filesystemController.delete('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('STUDENT Scenario', async () => {
-      req = { headers: { authorization: 'STUDENT' } };
-      await filesystemController.delete('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('OTHER Scenario', async () => {
-      req = { headers: { authorization: 'OTHER' } };
-      await filesystemController.delete('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('PRINCIPLE Scenario not found', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.delete('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence exist check fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
-      });
-      await filesystemController.delete('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
+    it('Scenario for delete file', async () => {
+      const id = new ObjectID().toString();
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({ _id: id });
+      (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockReturnValueOnce({ id });
+      await filesystemController.deleteMap(id, res as Response);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.NO_CONTENT);
     });
     it('PRINCIPLE Scenario persistence delete fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({});
-      (fileSystemPersistenceService.deleteFile as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
+      const id = new ObjectID().toString();
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce({ _id: id });
+      (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockImplementationOnce(() => {
+        throw new Error('can not delete file');
       });
-      await filesystemController.delete('floorMock', req, res as Response);
+      await filesystemController.deleteMap(id, res as Response);
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
     });
-    it('PRINCIPLE Scenario', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({});
-      (fileSystemPersistenceService.deleteFile as jest.Mock).mockReturnValueOnce({});
-      await filesystemController.delete('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.NO_CONTENT);
-      expect(res.send).toHaveBeenCalled();
+    it('PRINCIPLE Scenario getFileByFilters delete fails', async () => {
+      const id = new ObjectID().toString();
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
+      (dbServiceMock.getConnection().collection(collectioName).deleteOne as jest.Mock).mockReturnValueOnce({ id });
+
+      await filesystemController.deleteMap(id, res as Response);
+      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
     });
   });
-  describe('Update File Tests', () => {
-    let file = {};
-    let req = {};
-    beforeEach(() => {
-      file = {};
-      req = {};
-    });
-    it('TEACHER Scenario', async () => {
-      req = { headers: { authorization: 'TEACHER' } };
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('STUDENT Scenario', async () => {
-      req = { headers: { authorization: 'STUDENT' } };
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('OTHER Scenario', async () => {
-      req = { headers: { authorization: 'OTHER' } };
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalledWith('not permissions to execute command');
-    });
-    it('PRINCIPLE Scenario not found', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no file name', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      file = {
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: 'mockId' });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no encoding', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      file = {
-        originalname: 'mockOriginalName',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: 'mockId' });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no mimetype', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: 'mockId' });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario with no buffer', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: 'mockId' });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario no size', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: 'mockId' });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.BAD_REQUEST);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence exist check fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
+
+  describe('Get Files Ids', () => {
+    it('Scenario for get ids', async () => {
+      (dbServiceMock.getConnection().collection(collectioName).find as jest.Mock).mockReturnValue({
+        toArray: jest.fn().mockReturnValue([{ _id: new ObjectID().toString() }, { _id: new ObjectID().toString() }]),
       });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
+      await filesystemController.getAllFillesIds(res as Response);
+      expect(res.json).toHaveBeenCalled();
     });
-    it('PRINCIPLE Scenario persistence exist return no id', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({});
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence exist return null id', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: null });
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence update fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({});
-      (fileSystemPersistenceService.updateFile as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
+    it('PRINCIPLE Scenarifor get ids fails', async () => {
+      (dbServiceMock.getConnection().collection(collectioName).find as jest.Mock).mockImplementationOnce(() => {
+        throw new Error('can not delete file');
       });
-      await filesystemController.update('floorMock', file, req, res as Response);
+      await filesystemController.getAllFillesIds(res as Response);
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce({ _id: 'mockId' });
-      (fileSystemPersistenceService.updateFile as jest.Mock).mockReturnValueOnce({});
-      await filesystemController.update('floorMock', file, req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
-      expect(res.send).toHaveBeenCalled();
     });
   });
-  describe('Get File Tests', () => {
-    let req = {};
-    beforeEach(() => {
-      req = {};
+
+  describe('Get Files metaData', () => {
+    it('Scenario for get metadata', async () => {
+      const obj = {
+        description: 'קומה ראשונה',
+        filename: 'Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg',
+        floor: 2,
+      };
+      const id = new ObjectID().toString();
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(obj);
+      await filesystemController.getFileMetaData(id, res as Response);
+      expect(res.json).toHaveBeenCalled();
     });
-    it('NO EXIST ROLE Scenario', async () => {
-      req = { headers: { authorization: 'NO EXIST ROLE' } };
-      await filesystemController.get('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.FORBIDDEN);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario not found', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(null);
-      await filesystemController.get('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_FOUND);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('PRINCIPLE Scenario persistence exist check fails', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockImplementationOnce(() => {
-        throw new Error('test');
-      });
-      await filesystemController.get('floorMock', req, res as Response);
+    it('PRINCIPLE Scenarifor get metadata fails', async () => {
+      const id = new ObjectID().toString();
+
+      (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
+
+      await filesystemController.getFileMetaData(id, res as Response);
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
-      expect(res.send).toHaveBeenCalled();
-    });
-    it('TEACHER Scenario', async () => {
-      req = { headers: { authorization: 'TEACHER' } };
-      const file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(file);
-      await filesystemController.get('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
-      expect(res.send).toHaveBeenCalledWith(file);
-    });
-    it('STUDENT Scenario', async () => {
-      req = { headers: { authorization: 'STUDENT' } };
-      const file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(file);
-      await filesystemController.get('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
-      expect(res.send).toHaveBeenCalledWith(file);
-    });
-    it('PRINCIPLE Scenario', async () => {
-      req = { headers: { authorization: 'PRINCIPLE' } };
-      const file = {
-        originalname: 'mockOriginalName',
-        encoding: 'mockEncoding',
-        mimetype: 'mockmimetype',
-        buffer: 'mockBuffer',
-        size: 'mockSize',
-      };
-      (fileSystemPersistenceService.getFileByFilters as jest.Mock).mockReturnValueOnce(file);
-      await filesystemController.get('floorMock', req, res as Response);
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.OK);
-      expect(res.send).toHaveBeenCalledWith(file);
     });
   });
 });
