@@ -1,4 +1,4 @@
-import { Injectable, Logger, BadRequestException } from '@nestjs/common';
+import { Injectable, BadRequestException } from '@nestjs/common';
 import { FileSystemDbModel } from '@models/file-system.db.model';
 import { IFileMetaData } from '../model/file';
 
