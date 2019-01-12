@@ -1,180 +1,119 @@
-import { FileSystemDbModel } from '@models/file-system.db.model';
-import { UserTokenProfile } from '@models/user-token-profile.model';
+import * as Joi from 'joi';
 import {
   Body,
   Controller,
   Delete,
   FileInterceptor,
   Get,
-  HttpStatus,
   Logger,
   Param,
   Post,
-  Put,
-  Req,
+  UsePipes,
   Res,
   UploadedFile,
   UseInterceptors,
+  UseGuards,
+  NotFoundException,
+  BadRequestException,
+  HttpStatus,
 } from '@nestjs/common';
-import { Response } from 'express';
-import { UserRole } from '../../../models/user.db.model';
-import { AuthService } from '../../../modules/auth/auth-service/auth.service';
-import { FileSystemPersistenceService } from '../../persistence/file-system.persistence.service';
 
-const NO_PERMISSION = 'not permissions to execute command';
-const ALREADY_EXIST = 'Map already exist, try update (PUT)';
+import { Response } from 'express';
+import { FileSystemPersistenceService } from '../../persistence/file-system.persistence.service';
+import { JoiValidationPipe } from '../pipe/validation-pipe';
+import { ObjectID } from 'bson';
+import { FileUtilesService } from '../services/file-utiles';
+import { AuthFileGuard } from '../guard/guard-file-system';
+
+const uploadschema = Joi.object().keys({
+  floor: Joi.number()
+    .min(-100)
+    .max(100)
+    .required(),
+  mapName: Joi.required(),
+});
+
 @Controller('/map')
+@UseGuards(new AuthFileGuard())
 export class FileSystemController {
   private logger = new Logger('FileSystemController');
-  constructor(private readonly filePersistenceService: FileSystemPersistenceService) {}
-  @Post()
+  constructor(
+    private readonly filePersistenceService: FileSystemPersistenceService,
+    private readonly fileUtilesService: FileUtilesService,
+  ) {}
+  @Post('/upload')
   @UseInterceptors(FileInterceptor('mapFilename'))
-  async upload(@UploadedFile() file, @Req() req, @Body() body, @Res() res: Response) {
-    if (!this.checkPermission(req.headers.authorization, res)) {
-      return;
-    }
-    if (body.floor === undefined || body.floor === null) {
-      sendBack(res, HttpStatus.BAD_REQUEST, null);
-    }
+  @UsePipes(new JoiValidationPipe(uploadschema))
+  async upload(@UploadedFile() file, @Body() body, @Res() res: Response) {
     try {
-      const existMap = await this.filePersistenceService.getFileByFilters({ description: body.floor });
-      if (existMap !== null) {
-        sendBack(res, HttpStatus.BAD_REQUEST, ALREADY_EXIST);
-        return;
-      }
+      await this.filePersistenceService.isFileExist({ description: body.mapName, floor: body.floor });
+      this.fileUtilesService.validateFiles(file);
+      const id = await this.filePersistenceService.createFile(
+        this.fileUtilesService.createNewFile(file, body.floor, body.mapName),
+      );
+      return res.status(HttpStatus.CREATED).json({ status: 'created', id });
     } catch (error) {
-      this.logger.error('this.filePersistenceService.createFile failed to check exist');
-      sendBack(res, HttpStatus.INTERNAL_SERVER_ERROR, null);
+      this.errorHandle(error, res, 'upload Map');
     }
-    if (!checkFile(file)) {
-      sendBack(res, HttpStatus.BAD_REQUEST, null);
-      return;
-    }
-    const newFile = createNewFile(file, body);
+  }
+
+  @Delete(':id')
+  async deleteMap(@Param('id') id: string, @Res() res: Response) {
     try {
-      await this.filePersistenceService.createFile(newFile);
-      sendBack(res, HttpStatus.CREATED, null);
+      const mapObject = await this.filePersistenceService.getFileByFilters({ _id: new ObjectID(id) });
+      await this.filePersistenceService.deleteFile(mapObject._id);
+      return res.status(HttpStatus.NO_CONTENT).end(null);
     } catch (error) {
-      this.errorHandle(res, 'create');
+      this.errorHandle(error, res, 'delete map by Id');
     }
   }
 
-  @Delete(':floor')
-  @UseInterceptors(FileInterceptor('mapFilename'))
-  async delete(@Param('floor') floor: string, @Req() req, @Res() res: Response) {
-    if (!this.checkPermission(req.headers.authorization, res)) {
-      return;
-    }
+  @Get()
+  async getAllFillesIds(@Res() res) {
     try {
-      const existMap = await this.filePersistenceService.getFileByFilters({ description: floor });
-      if (!existMap) {
-        sendBack(res, HttpStatus.NOT_FOUND, null);
-        return;
-      }
-      await this.filePersistenceService.deleteFile(existMap._id);
-      sendBack(res, HttpStatus.NO_CONTENT, null);
-    } catch (err) {
-      this.errorHandle(res, 'delete');
+      return res.json(await this.filePersistenceService.collectIDs());
+    } catch (error) {
+      return this.errorHandle(error, res, 'get id lists');
     }
   }
 
-  @Put(':floor')
-  @UseInterceptors(FileInterceptor('mapFilename'))
-  async update(@Param('floor') floor: string, @UploadedFile() file, @Req() req, @Res() res: Response) {
-    if (!this.checkPermission(req.headers.authorization, res)) {
-      return;
-    }
+  @Get('/download/:id')
+  async downloadFile(@Param('id') id: string, @Res() res: Response): Promise<void> {
     try {
-      const existMap = await this.filePersistenceService.getFileByFilters({ description: floor });
-      if (!existMap) {
-        sendBack(res, HttpStatus.NOT_FOUND, null);
-        return;
-      }
-      if (existMap._id === undefined || existMap._id === null) {
-        throw new Error('error: mongo file without id');
-      }
-
-      if (!checkFile(file)) {
-        sendBack(res, HttpStatus.BAD_REQUEST, null);
-        return;
-      }
-      const newFile: FileSystemDbModel = {
-        content: file,
-        description: floor,
-        filename: file.originalname,
-      };
-      delete newFile.content.fieldname;
-
-      await this.filePersistenceService.updateFile(existMap._id, newFile);
-      sendBack(res, HttpStatus.OK, null);
-    } catch (err) {
-      this.errorHandle(res, 'update');
+      const fileContent = await this.filePersistenceService.getFileByFilters(
+        { _id: new ObjectID(id) },
+        { content: 1, _id: 0 },
+      );
+      const image = this.fileUtilesService.convertToFile(fileContent);
+      res.setHeader('Content-Type', image.mime);
+      res.setHeader('Content-Length', Buffer.byteLength(image.fileData));
+      res.end(image.fileData);
+    } catch (error) {
+      return this.errorHandle(error, res, 'download one map');
     }
   }
 
-  @Get(':floor')
-  async get(@Param('floor') floor: string, @Req() req, @Res() res: Response): Promise<void> {
-    const userProfile: UserTokenProfile = AuthService.getUserProfileFromToken(req.headers.authorization);
-    if (userProfile === null) {
-      sendBack(res, HttpStatus.FORBIDDEN, null);
-      return;
-    }
+  @Get('/metadata/:id')
+  async getFileMetaData(@Param('id') id: string, @Res() res: Response): Promise<void> {
     try {
-      const existMap = await this.filePersistenceService.getFileByFilters({ description: floor });
-      if (!existMap) {
-        sendBack(res, HttpStatus.NOT_FOUND, null);
-        return;
-      }
-      sendBack(res, HttpStatus.OK, existMap);
-    } catch (err) {
-      this.errorHandle(res, 'get');
+      const map = await this.filePersistenceService.getFileByFilters(
+        { _id: new ObjectID(id) },
+        { description: 1, filename: 1, floor: 1, _id: 0 },
+      );
+      res.json(map);
+    } catch (error) {
+      return this.errorHandle(error, res, 'download one map');
     }
   }
-  private errorHandle(res: Response, sourceFunction: string) {
+
+  private errorHandle(error: any, res: Response, sourceFunction: string) {
     this.logger.error(`this.filePersistenceService.${sourceFunction} failed`);
-    sendBack(res, HttpStatus.INTERNAL_SERVER_ERROR, null);
-  }
-
-  private checkPermission(token: string, res: Response) {
-    const userProfile: UserTokenProfile = AuthService.getUserProfileFromToken(token);
-    if (userProfile === null || userProfile.role !== UserRole.PRINCIPLE) {
-      sendBack(res, HttpStatus.FORBIDDEN, NO_PERMISSION);
-      return false;
+    if (error instanceof NotFoundException) {
+      return res.status(HttpStatus.NOT_FOUND).end(null);
     }
-    return true;
+    if (error instanceof BadRequestException) {
+      return res.status(HttpStatus.BAD_REQUEST).end(null);
+    }
+    return res.status(HttpStatus.INTERNAL_SERVER_ERROR).end(null);
   }
-}
-function sendBack(res: Response, code: HttpStatus, message: any) {
-  res.status(code);
-  res.send(message);
-}
-
-function createNewFile(file: any, body: any): FileSystemDbModel {
-  let newFile: FileSystemDbModel = null;
-  newFile = {
-    content: file,
-    description: body.floor,
-    filename: file.originalname,
-  };
-  delete newFile.content.fieldname;
-  return newFile;
-}
-
-function checkFile(file: any): boolean {
-  if (file.originalname === undefined) {
-    return false;
-  }
-  if (file.encoding === undefined) {
-    return false;
-  }
-  if (file.mimetype === undefined) {
-    return false;
-  }
-  if (file.buffer === undefined) {
-    return false;
-  }
-  if (file.size === undefined) {
-    return false;
-  }
-  return true;
 }

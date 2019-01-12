@@ -3,4 +3,5 @@ export interface FileSystemDbModel {
   filename: string;
   description: string;
   content: any;
+  floor: number;
 }

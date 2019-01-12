@@ -1,6 +1,12 @@
-import { Collection } from 'mongodb';
+import { Collection, Cursor, ObjectID, FindOneOptions } from 'mongodb';
 import { FileSystemDbModel } from '@models/file-system.db.model';
-import { Logger, Injectable } from '@nestjs/common';
+import {
+  Logger,
+  Injectable,
+  NotFoundException,
+  BadRequestException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { DbService } from './db.service';
 
 @Injectable()
@@ -11,48 +17,83 @@ export class FileSystemPersistenceService {
     const db = this.dbService.getConnection();
     this.collection = db.collection<FileSystemDbModel>('fileSystem');
   }
-  private buildMongoFilterFromQuery(query: { [id: string]: any }, id?: string): { [id: string]: string } {
-    // if (id) {
-    //   const mongoId = new ObjectID(id);
-    //   query._id = mongoId;
-    // }
-    return query;
-  }
-  async createFile(newFile: FileSystemDbModel): Promise<void> {
+
+  async createFile(newFile: FileSystemDbModel): Promise<any> {
     try {
       this.logger.log(`FileSystemPersistenceService createFile`);
-      await this.collection.insertOne(newFile);
+      const uploadedFile = await this.collection.insertOne(newFile);
+      if (uploadedFile) {
+        return uploadedFile.insertedId.toString();
+      }
+      return null;
     } catch (error) {
       this.logger.error('FileSystemPersistenceService::createFile:: error create File', error.stack);
-      throw error;
+      throw new InternalServerErrorException('can not insert file to db');
     }
   }
-  async getFileByFilters(queyParams: { [id: string]: string }, id?: string): Promise<FileSystemDbModel> {
+
+  async isFileExist(queyParams: { [id: string]: string | number | ObjectID }) {
+    const item = await this.collection.findOne(queyParams);
+    if (item) {
+      throw new BadRequestException('item is exist');
+    }
+    return;
+  }
+
+  async getFileByFilters(
+    queyParams: { [id: string]: string | number | ObjectID },
+    // tslint:disable-next-line:align
+    projection?: { [id: string]: number },
+  ): Promise<FileSystemDbModel> {
     try {
-      const mongoQuery = this.buildMongoFilterFromQuery(queyParams, id);
+      let option: FindOneOptions;
       this.logger.log(`getFileByFilters:: fetching file by parameters `);
-      return await this.collection.findOne(mongoQuery);
+      if (projection) {
+        option = { projection };
+      }
+      const item = await this.collection.findOne(queyParams, option);
+      if (!item) {
+        throw new NotFoundException('item is not found');
+      }
+      return item;
     } catch (error) {
       this.logger.error(`getFileByFilters:: error fetching user by parameters`, error.stack);
-      throw error;
+      throw new InternalServerErrorException('can not filter file');
     }
   }
-  async updateFile(id: string, newFile: FileSystemDbModel): Promise<void> {
-    try {
-      this.logger.log(`FileSystemPersistenceService updateFile`);
-      await this.collection.findOneAndReplace({ _id: id }, newFile);
-    } catch (error) {
-      this.logger.error('FileSystemPersistenceService::updateFile:: error update File', error.stack);
-      throw error;
-    }
-  }
+
   async deleteFile(id: string): Promise<void> {
     try {
       this.logger.log(`FileSystemPersistenceService deleteFile`);
       await this.collection.deleteOne({ _id: id });
     } catch (error) {
       this.logger.error('FileSystemPersistenceService::deleteFile:: error delete File', error.stack);
-      throw error;
+      throw new InternalServerErrorException('can not delete file');
     }
+  }
+
+  async filterOnlyIdsFromFSObject(): Promise<any> {
+    this.logger.log(`FileSystemPersistenceService getAllNames`);
+    const curser = await this.collection.find({}, { projection: { _id: 1 } });
+    return await this.scarpIdsFromDbObjects(curser);
+  }
+
+  async collectIDs(): Promise<any> {
+    try {
+      this.logger.log(`FileSystemPersistenceService getAllNames`);
+      return await this.filterOnlyIdsFromFSObject();
+    } catch (error) {
+      this.logger.error('FileSystemPersistenceService::deleteFile:: error delete File', error.stack);
+      throw new InternalServerErrorException('can not insert file to db');
+    }
+  }
+
+  private async scarpIdsFromDbObjects(cursor: Cursor<any>) {
+    const resultIds = [];
+    const objectDbList = await cursor.toArray();
+    objectDbList.forEach((item) => {
+      resultIds.push(item._id.toString());
+    });
+    return resultIds;
   }
 }
