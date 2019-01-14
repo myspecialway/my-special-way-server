@@ -41,7 +41,7 @@ export class FileSystemController {
     private readonly filePersistenceService: FileSystemPersistenceService,
     private readonly fileUtilesService: FileUtilesService,
   ) {}
-  @Post('/upload')
+  @Post()
   @UseInterceptors(FileInterceptor('mapFilename'))
   @UsePipes(new JoiValidationPipe(uploadschema))
   async upload(@UploadedFile() file, @Body() body, @Res() res: Response) {
@@ -77,34 +77,46 @@ export class FileSystemController {
     }
   }
 
-  @Get('/download/:id')
-  async downloadFile(@Param('id') id: string, @Res() res: Response): Promise<void> {
-    try {
-      const fileContent = await this.filePersistenceService.getFileByFilters(
-        { _id: new ObjectID(id) },
-        { content: 1, _id: 0 },
-      );
-      const image = this.fileUtilesService.convertToFile(fileContent);
-      res.setHeader('Content-Type', image.mime);
-      res.setHeader('Content-Length', Buffer.byteLength(image.fileData));
-      res.end(image.fileData);
-    } catch (error) {
-      return this.errorHandle(error, res, 'download one map');
-    }
-  }
-
-  @Get('/metadata/:id')
-  async getFileMetaData(@Param('id') id: string, @Res() res: Response): Promise<void> {
+  @Get(':id')
+  async downloadWithMetadata(@Param('id') id: string, @Res() res: Response): Promise<void> {
     try {
       const map = await this.filePersistenceService.getFileByFilters(
         { _id: new ObjectID(id) },
-        { description: 1, filename: 1, floor: 1, _id: 0 },
+        { description: 1, filename: 1, floor: 1, _id: 0, content: 1 },
       );
-      res.json(map);
+      res.status(200).send(this.fileUtilesService.scarpFile(map));
     } catch (error) {
       return this.errorHandle(error, res, 'download one map');
     }
   }
+  // @Get('/download/:id')
+  // async downloadFile(@Param('id') id: string, @Res() res: Response): Promise<void> {
+  //   try {
+  //     const fileContent = await this.filePersistenceService.getFileByFilters(
+  //       { _id: new ObjectID(id) },
+  //       { content: 1, _id: 0 },
+  //     );
+  //     const image = this.fileUtilesService.convertToFile(fileContent);
+  //     res.setHeader('Content-Type', image.mime);
+  //     res.setHeader('Content-Length', Buffer.byteLength(image.fileData));
+  //     res.end(image.fileData);
+  //   } catch (error) {
+  //     return this.errorHandle(error, res, 'download one map');
+  //   }
+  // }
+
+  // @Get('/metadata/:id')
+  // async getFileMetaData(@Param('id') id: string, @Res() res: Response): Promise<void> {
+  //   try {
+  //     const map = await this.filePersistenceService.getFileByFilters(
+  //       { _id: new ObjectID(id) },
+  //       { description: 1, filename: 1, floor: 1, _id: 0 },
+  //     );
+  //     res.json(map);
+  //   } catch (error) {
+  //     return this.errorHandle(error, res, 'download one map');
+  //   }
+  // }
 
   private errorHandle(error: any, res: Response, sourceFunction: string) {
     this.logger.error(`this.filePersistenceService.${sourceFunction} failed`);

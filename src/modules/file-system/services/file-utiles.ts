@@ -4,6 +4,14 @@ import { IFileMetaData } from '../model/file';
 
 @Injectable()
 export class FileUtilesService {
+  scarpFile(mapFile: FileSystemDbModel): any {
+    return {
+      id: mapFile._id,
+      fileName: mapFile.description,
+      floor: mapFile.floor,
+      src: mapFile.content.buffer,
+    };
+  }
   convertToFile(fileContent: FileSystemDbModel): IFileMetaData {
     const content = fileContent.content;
     return {
