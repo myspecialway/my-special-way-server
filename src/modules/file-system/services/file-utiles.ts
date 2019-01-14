@@ -9,6 +9,7 @@ export class FileUtilesService {
       id: mapFile._id,
       fileName: mapFile.description,
       floor: mapFile.floor,
+      mime: mapFile.content.mimetype,
       src: mapFile.content.buffer,
     };
   }
