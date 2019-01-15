@@ -4,9 +4,9 @@ import { IFileMetaData } from '../model/file';
 
 @Injectable()
 export class FileUtilesService {
-  scarpFile(mapFile: FileSystemDbModel): any {
+  scarpFile(mapFile: FileSystemDbModel, id: string): any {
     return {
-      id: mapFile._id,
+      id,
       fileName: mapFile.description,
       floor: mapFile.floor,
       mime: mapFile.content.mimetype,

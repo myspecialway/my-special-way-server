@@ -84,7 +84,7 @@ export class FileSystemController {
         { _id: new ObjectID(id) },
         { description: 1, filename: 1, floor: 1, _id: 0, content: 1 },
       );
-      res.status(200).send(this.fileUtilesService.scarpFile(map));
+      res.status(200).send(this.fileUtilesService.scarpFile(map, id));
     } catch (error) {
       return this.errorHandle(error, res, 'download one map');
     }
