@@ -78,7 +78,7 @@ export class FileSystemController {
   }
 
   @Get(':id')
-  async downloadWithMetadata(@Param('id') id: string, @Res() res: Response): Promise<void> {
+  async getMap(@Param('id') id: string, @Res() res: Response): Promise<void> {
     try {
       const map = await this.filePersistenceService.getFileByFilters(
         { _id: new ObjectID(id) },
@@ -89,34 +89,6 @@ export class FileSystemController {
       return this.errorHandle(error, res, 'download one map');
     }
   }
-  // @Get('/download/:id')
-  // async downloadFile(@Param('id') id: string, @Res() res: Response): Promise<void> {
-  //   try {
-  //     const fileContent = await this.filePersistenceService.getFileByFilters(
-  //       { _id: new ObjectID(id) },
-  //       { content: 1, _id: 0 },
-  //     );
-  //     const image = this.fileUtilesService.convertToFile(fileContent);
-  //     res.setHeader('Content-Type', image.mime);
-  //     res.setHeader('Content-Length', Buffer.byteLength(image.fileData));
-  //     res.end(image.fileData);
-  //   } catch (error) {
-  //     return this.errorHandle(error, res, 'download one map');
-  //   }
-  // }
-
-  // @Get('/metadata/:id')
-  // async getFileMetaData(@Param('id') id: string, @Res() res: Response): Promise<void> {
-  //   try {
-  //     const map = await this.filePersistenceService.getFileByFilters(
-  //       { _id: new ObjectID(id) },
-  //       { description: 1, filename: 1, floor: 1, _id: 0 },
-  //     );
-  //     res.json(map);
-  //   } catch (error) {
-  //     return this.errorHandle(error, res, 'download one map');
-  //   }
-  // }
 
   private errorHandle(error: any, res: Response, sourceFunction: string) {
     this.logger.error(`this.filePersistenceService.${sourceFunction} failed`);
