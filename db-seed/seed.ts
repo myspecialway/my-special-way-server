@@ -6,6 +6,7 @@ import * as path from 'path';
 import { MongoClient, Collection, ObjectID } from 'mongodb';
 import { ArgumentParser } from 'argparse';
 import { getConfig } from '../src/config/config-loader';
+import * as EJSON from 'mongodb-extjson';
 
 const logger = winston.createLogger({
   format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
@@ -124,7 +125,7 @@ function getFilesJSONContent(relativeFolderPath: string): FileCollectionContent[
   const jsonContent: FileCollectionContent[] = [];
   for (const filePath of filesPaths) {
     const fileContent = fs.readFileSync(filePath, { encoding: 'utf8' });
-    const collection = JSON.parse(fileContent);
+    const collection = EJSON.parse(fileContent);
     jsonContent.push(collection);
   }
 
