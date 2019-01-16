@@ -1,5 +1,6 @@
 {
   "collection": "locations",
+  "loadOrder": 5,
   "data": [
     {
       "name": "כניסה/יציאה ראשית",
