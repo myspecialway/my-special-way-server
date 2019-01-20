@@ -17,9 +17,25 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
   async getAll(): Promise<LocationDbModel[]> {
     try {
       this.logger.log('getAll:: fetching locations');
-      return await this.collection.find({}).sort({ name: 1 }).toArray();
+      return await this.collection
+        .find({})
+        .sort({ name: 1 })
+        .toArray();
     } catch (error) {
       this.logger.error('getAll:: error fetching locations', error.stack);
+      throw error;
+    }
+  }
+  async getByImageId(imageId: string) {
+    try {
+      const mongoId = new ObjectID(imageId);
+      this.logger.log(`getAll:: fetching location by id ${imageId}`);
+      return await this.collection
+        .find({ image_id: mongoId })
+        .sort({ name: 1 })
+        .toArray();
+    } catch (error) {
+      this.logger.error(`getAll:: error location class by id ${imageId}`, error.stack);
       throw error;
     }
   }
@@ -50,8 +66,11 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
     const mongoId = new ObjectID(id);
     try {
       this.logger.log(`LocationPersistence::updateLocation:: updating location ${mongoId}`);
-      const updatedDocument = await this.collection.findOneAndUpdate({ _id: mongoId },
-        { $set: { ...locationObj } }, { returnOriginal: false });
+      const updatedDocument = await this.collection.findOneAndUpdate(
+        { _id: mongoId },
+        { $set: { ...locationObj } },
+        { returnOriginal: false },
+      );
       this.logger.log(`LocationPersistence::updateLocation:: updated DB :${JSON.stringify(updatedDocument.value)}`);
       return updatedDocument.value;
     } catch (error) {

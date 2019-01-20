@@ -3,16 +3,21 @@ import { LocationsPersistenceService } from '../../persistence/locations.persist
 
 @Resolver('Locations')
 export class LocationsResolver {
-    constructor(private locationsPersistence: LocationsPersistenceService) { }
+  constructor(private locationsPersistence: LocationsPersistenceService) {}
 
-    @Query('locations')
-    async getLocations(_, {}, context) {
-        return this.locationsPersistence.getAll();
-    }
+  @Query('locations')
+  async getLocations(_, {}, context) {
+    return this.locationsPersistence.getAll();
+  }
 
   @Query('locationById')
   async getLocationById(obj, args, context, info) {
     return await this.locationsPersistence.getById(args.id);
+  }
+
+  @Query('locationsByMapId')
+  async getLocationsByMapId(obj, args, context, info) {
+    return await this.locationsPersistence.getByImageId(args.image_id);
   }
 
   @Mutation('createLocation')
@@ -21,12 +26,12 @@ export class LocationsResolver {
   }
 
   @Mutation('updateLocation')
-  async updateLocation(_, {id, location}, context) {
+  async updateLocation(_, { id, location }, context) {
     return this.locationsPersistence.updateLocation(id, location);
   }
 
   @Mutation('deleteLocation')
-  async deleteLocation(_, {id}, context) {
+  async deleteLocation(_, { id }, context) {
     return this.locationsPersistence.deleteLocation(id);
   }
 }

@@ -10,6 +10,7 @@ type Location {
   position: Point
   icon: String
   type: String
+  image_id: String
 }
 
 input InputLocation {
@@ -20,4 +21,5 @@ input InputLocation {
   position: InputPoint
   icon: String
   type: String
+  image_id: String
 }
