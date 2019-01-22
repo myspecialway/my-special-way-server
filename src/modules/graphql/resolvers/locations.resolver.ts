@@ -17,7 +17,14 @@ export class LocationsResolver {
 
   @Query('locationsByMapId')
   async getLocationsByMapId(obj, args, context, info) {
-    return await this.locationsPersistence.getByImageId(args.image_id);
+    const results = await Promise.all([
+      this.locationsPersistence.getLocationsFromTypeStep(args.floor),
+      this.locationsPersistence.getByImageId(args.image_id),
+    ]);
+    const zipArray = [].concat.apply([], results);
+    return zipArray;
+    // await this.locationsPersistence.getLocationsFromTypeStep(args.floor);
+    // return await this.locationsPersistence.getByImageId(args.image_id);
   }
 
   @Mutation('createLocation')

@@ -14,6 +14,22 @@ export class BlockedSectionsPersistenceService {
     this.collection = db.collection<BlockedSectionsDbModel>('blocked_sections');
   }
 
+  async getBlockSectionsByLocation(locations: string[]): Promise<BlockedSectionsDbModel[]> {
+    try {
+      this.logger.log('getAll:: fetching blocked_sections');
+
+      const blocksections = await this.collection
+        .find({
+          $or: [{ from: { $in: locations } }, { to: { $in: locations } }],
+        })
+        .toArray();
+      return blocksections;
+    } catch (error) {
+      this.logger.error('getAll:: error fetching blocked_sections', error.stack);
+      throw error;
+    }
+  }
+
   async getAll(): Promise<BlockedSectionsDbModel[]> {
     try {
       this.logger.log('getAll:: fetching blocked_sections');

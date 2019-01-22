@@ -26,10 +26,31 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
       throw error;
     }
   }
+
+  async getLocationsFromTypeStep(floor: number) {
+    try {
+      this.logger.log(`getAll:: fetching location by id ${floor}`);
+      return await this.collection
+        .find({
+          $and: [
+            { 'position.floor': { $gte: floor - 1 } },
+            { 'position.floor': { $lte: floor + 1 } },
+            { 'position.floor': { $ne: floor } },
+            { type: { $eq: 'מדרגות' } },
+          ],
+        })
+        .sort({ name: 1 })
+        .toArray();
+    } catch (error) {
+      this.logger.error(`getAll:: error location class by id ${floor}`, error.stack);
+      throw error;
+    }
+  }
+
   async getByImageId(imageId: string) {
     try {
       const mongoId = new ObjectID(imageId);
-      this.logger.log(`getAll:: fetching location by id ${imageId}`);
+      this.logger.log(`getByImageId:: fetching location by image id ${imageId}`);
       return await this.collection
         .find({ image_id: mongoId })
         .sort({ name: 1 })
