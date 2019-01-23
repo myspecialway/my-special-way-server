@@ -1,4 +1,5 @@
 import Point from './point.db.model';
+import { ObjectId } from 'bson';
 export default interface LocationDbModel {
   _id: string;
   name: string;
@@ -6,4 +7,5 @@ export default interface LocationDbModel {
   position: Point;
   icon: string;
   type: string;
+  image_id: string | ObjectId;
 }

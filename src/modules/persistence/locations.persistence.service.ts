@@ -1,15 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
-import { Collection, ObjectID } from 'mongodb';
+import { Collection, ObjectID, ObjectId } from 'mongodb';
 import LocationDbModel from 'models/location.db.model';
 import { ILocationsPersistenceService } from './interfaces/locations.persistence.service.interface';
+import { BlockedSectionsPersistenceService } from './blocked-sections.persistence.service';
 
 @Injectable()
 export class LocationsPersistenceService implements ILocationsPersistenceService {
   private collection: Collection<LocationDbModel>;
   private logger = new Logger('LocationsPersistenceService');
 
-  constructor(private dbService: DbService) {
+  constructor(
+    private dbService: DbService,
+    private blockedSectionsPersistenceService: BlockedSectionsPersistenceService,
+  ) {
     const db = this.dbService.getConnection();
     this.collection = db.collection<LocationDbModel>('locations');
   }
@@ -75,6 +79,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
   async createLocation(location: LocationDbModel): Promise<LocationDbModel> {
     try {
       this.logger.log(`LocationsPersistenceService::createLocation:: create location`);
+      location.image_id = new ObjectId(location.image_id);
       const insertResponse = await this.collection.insertOne(location);
       return await this.getById(insertResponse.insertedId.toString());
     } catch (error) {
@@ -104,6 +109,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
     try {
       const mongoId = new ObjectID(id);
       this.logger.log(`LocationPersistence::deleteLocation:: deleting location by id ${id}`);
+      const deleteSectionResponse = await this.blockedSectionsPersistenceService.deleteBlockSectionsByLocation(id);
       const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
       this.logger.log(`LocationPersistence::deleteLocation:: removed ${deleteResponse.deletedCount} documents`);
       return deleteResponse.deletedCount;

@@ -23,8 +23,6 @@ export class LocationsResolver {
     ]);
     const zipArray = [].concat.apply([], results);
     return zipArray;
-    // await this.locationsPersistence.getLocationsFromTypeStep(args.floor);
-    // return await this.locationsPersistence.getByImageId(args.image_id);
   }
 
   @Mutation('createLocation')

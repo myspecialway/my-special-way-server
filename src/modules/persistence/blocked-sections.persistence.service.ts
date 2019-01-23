@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, BadRequestException } from '@nestjs/common';
 import { DbService } from './db.service';
 import { Collection, ObjectID } from 'mongodb';
 import BlockedSectionsDbModel from 'models/blocked-sections.db.model';
@@ -29,6 +29,17 @@ export class BlockedSectionsPersistenceService {
       throw error;
     }
   }
+  async deleteBlockSectionsByLocation(location: string) {
+    const blockSections: BlockedSectionsDbModel[] = await this.getBlockSectionsByLocation([location]);
+    const blockSectionIds = this.getBlockSectionsIds(blockSections);
+    const result = await this.collection.deleteMany({ _id: { $in: blockSectionIds } });
+    return result;
+  }
+  private getBlockSectionsIds(blockSections: BlockedSectionsDbModel[]) {
+    return blockSections.map((blockSection) => {
+      return blockSection._id;
+    });
+  }
 
   async getAll(): Promise<BlockedSectionsDbModel[]> {
     try {
@@ -53,6 +64,21 @@ export class BlockedSectionsPersistenceService {
   async createBlockedSection(blockedSection: BlockedSectionsDbModel): Promise<BlockedSectionsDbModel> {
     try {
       this.logger.log(`BlockedSectionsPersistenceService::createBlockedSection:: create blockedSection`);
+      const blocksections = await this.collection
+        .find({
+          $or: [
+            {
+              $and: [{ from: blockedSection.from }, { to: blockedSection.to }],
+            },
+            {
+              $and: [{ from: blockedSection.to }, { to: blockedSection.from }],
+            },
+          ],
+        })
+        .toArray();
+      if (blocksections.length) {
+        throw new BadRequestException('bloock section is exist');
+      }
       const insertResponse = await this.collection.insertOne(blockedSection);
       return await this.getById(insertResponse.insertedId.toString());
     } catch (error) {
