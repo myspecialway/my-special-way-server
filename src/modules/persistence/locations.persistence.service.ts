@@ -50,7 +50,12 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
       throw error;
     }
   }
-
+  async deleteLocationsByImageId(imageId: string) {
+    const locations = await this.getByImageId(imageId);
+    locations.forEach(async (location) => {
+      await this.deleteLocation(location._id.toString());
+    });
+  }
   async getByImageId(imageId: string) {
     try {
       const mongoId = new ObjectID(imageId);
@@ -88,8 +93,9 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
     }
   }
 
-  async updateLocation(id: string, locationObj: LocationDbModel): Promise<LocationDbModel> {
+  updateLocation = async (id: string, locationObj: LocationDbModel): Promise<LocationDbModel> => {
     const mongoId = new ObjectID(id);
+    locationObj.image_id = new ObjectID(locationObj.image_id);
     try {
       this.logger.log(`LocationPersistence::updateLocation:: updating location ${mongoId}`);
       const updatedDocument = await this.collection.findOneAndUpdate(
@@ -103,7 +109,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
       this.logger.error(`LocationPersistence::updateLocation:: error updating location ${mongoId}`, error.stack);
       throw error;
     }
-  }
+  };
 
   async deleteLocation(id: string): Promise<number> {
     try {

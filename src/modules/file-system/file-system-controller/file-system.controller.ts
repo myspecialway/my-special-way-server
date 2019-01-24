@@ -60,6 +60,7 @@ export class FileSystemController {
   @Delete(':id')
   async deleteMap(@Param('id') id: string, @Res() res: Response) {
     try {
+      await this.filePersistenceService.deleteAllChildernOfMap(id);
       const mapObject = await this.filePersistenceService.getFileByFilters({ _id: new ObjectID(id) });
       await this.filePersistenceService.deleteFile(mapObject._id);
       return res.status(HttpStatus.NO_CONTENT).end(null);

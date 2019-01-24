@@ -8,12 +8,13 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { DbService } from './db.service';
+import { LocationsPersistenceService } from './locations.persistence.service';
 
 @Injectable()
 export class FileSystemPersistenceService {
   private collection: Collection<FileSystemDbModel>;
   private logger = new Logger('FilePersistenceService');
-  constructor(private dbService: DbService) {
+  constructor(private dbService: DbService, private locationsPersistence: LocationsPersistenceService) {
     const db = this.dbService.getConnection();
     this.collection = db.collection<FileSystemDbModel>('fileSystem');
   }
@@ -38,6 +39,9 @@ export class FileSystemPersistenceService {
       throw new BadRequestException('item is exist');
     }
     return;
+  }
+  async deleteAllChildernOfMap(mapId: string) {
+    await this.locationsPersistence.deleteLocationsByImageId(mapId);
   }
 
   async getFileByFilters(

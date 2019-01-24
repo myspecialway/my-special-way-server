@@ -1,5 +1,5 @@
 import Point from './point.db.model';
-import { ObjectId } from 'bson';
+import { ObjectId } from 'mongodb';
 export default interface LocationDbModel {
   _id: string;
   name: string;
