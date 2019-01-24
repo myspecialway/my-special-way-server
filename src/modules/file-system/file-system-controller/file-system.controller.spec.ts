@@ -7,14 +7,19 @@ import { Response } from 'express';
 import { ObjectID } from 'bson';
 import { DbService } from '../../persistence/db.service';
 import { Collection, Db } from 'mongodb';
+import { LocationsPersistenceService } from '../../persistence/locations.persistence.service';
 
 describe('file-system controller', () => {
   const collectioName = 'fileSystem';
   let filesystemController: FileSystemController;
   let fileSystemPersistenceService: FileSystemPersistenceService;
+  let locationsPersistenceService: Partial<LocationsPersistenceService>;
   let dbServiceMock: Partial<DbService>;
   let res: Partial<Response>;
   beforeEach(() => {
+    locationsPersistenceService = {
+      deleteLocationsByImageId: jest.fn().mockReturnValue(true),
+    };
     dbServiceMock = {
       getConnection: jest.fn().mockReturnValue({
         collection: jest.fn().mockReturnValue({
@@ -30,7 +35,10 @@ describe('file-system controller', () => {
     };
 
     res = mockRes();
-    fileSystemPersistenceService = new FileSystemPersistenceService(dbServiceMock as DbService);
+    fileSystemPersistenceService = new FileSystemPersistenceService(
+      dbServiceMock as DbService,
+      locationsPersistenceService as LocationsPersistenceService,
+    );
     filesystemController = new FileSystemController(
       fileSystemPersistenceService as FileSystemPersistenceService,
       new FileUtilesService(),

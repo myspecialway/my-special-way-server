@@ -3,21 +3,24 @@ import * as common from '@nestjs/common';
 import { LocationsPersistenceService } from './locations.persistence.service';
 import { DbService } from './db.service';
 import { Collection, Db } from 'mongodb';
+import { BlockedSectionsPersistenceService } from './blocked-sections.persistence.service';
 
 describe('locations persistence', () => {
   let locationsPersistanceService: LocationsPersistenceService;
   let dbServiceMock: Partial<DbService>;
-  const locationsMockArray = [{
-    id: '1',
-    name: 'פטל כיתת',
-    disabled: true,
-    location_id: 'A',
-    position: {
-      latitude: 31.986417758011342,
-      longitude: 34.91077744955874,
-      floor: 0,
+  let blockedSectionsPersistenceService: Partial<BlockedSectionsPersistenceService>;
+  const locationsMockArray = [
+    {
+      id: '1',
+      name: 'פטל כיתת',
+      disabled: true,
+      location_id: 'A',
+      position: {
+        latitude: 31.986417758011342,
+        longitude: 34.91077744955874,
+        floor: 0,
+      },
     },
-  },
     {
       id: '2',
       name: 'כיתת סחלב',
@@ -28,7 +31,8 @@ describe('locations persistence', () => {
         longitude: 34.91078563034535,
         floor: 1,
       },
-    }];
+    },
+  ];
 
   beforeAll(() => {
     const errorFunc = common.Logger.error.bind(common.Logger);
@@ -38,6 +42,10 @@ describe('locations persistence', () => {
   });
 
   beforeEach(() => {
+    blockedSectionsPersistenceService = {
+      deleteBlockSectionsByLocation: jest.fn().mockReturnValue({}),
+    };
+
     dbServiceMock = {
       getConnection: jest.fn().mockReturnValue({
         collection: jest.fn().mockReturnValue({
@@ -51,7 +59,10 @@ describe('locations persistence', () => {
       } as Partial<Db>),
     };
 
-    locationsPersistanceService = new LocationsPersistenceService(dbServiceMock as DbService);
+    locationsPersistanceService = new LocationsPersistenceService(
+      dbServiceMock as DbService,
+      blockedSectionsPersistenceService as BlockedSectionsPersistenceService,
+    );
   });
 
   it('should get all locations successfuly on getAll', async () => {
@@ -89,7 +100,8 @@ describe('locations persistence', () => {
       throw new Error('mock error');
     });
 
-    await locationsPersistanceService.getById('507f1f77bcf86cd799439011')
+    await locationsPersistanceService
+      .getById('507f1f77bcf86cd799439011')
       .catch((error) => expect(error).not.toBeUndefined());
   });
 
@@ -110,7 +122,8 @@ describe('locations persistence', () => {
         latitude: 31.986487941086967,
         longitude: 34.91072729229928,
         floor: 1,
-      }});
+      },
+    });
 
     expect(createdLocation).toEqual(expected);
   });
@@ -137,30 +150,31 @@ describe('locations persistence', () => {
         latitude: 31.986487941086967,
         longitude: 34.91072729229928,
         floor: 1,
-      }};
-    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockReturnValueOnce(
-      {
-        id: '1',
-        name: 'פטל כיתת',
-        disabled: true,
-        location_id: 'A',
+      },
+    };
+    (dbServiceMock.getConnection().collection('locations').findOne as jest.Mock).mockReturnValueOnce({
+      id: '1',
+      name: 'פטל כיתת',
+      disabled: true,
+      location_id: 'A',
+      position: {
+        latitude: 31.986417758011342,
+        longitude: 34.91077744955874,
+        floor: 0,
+      },
+    });
+    (dbServiceMock.getConnection().collection('locations').findOneAndUpdate as jest.Mock).mockReturnValueOnce({
+      value: {
+        name: 'כיתת ניצן',
+        disabled: false,
+        location_id: 'B_0',
         position: {
-          latitude: 31.986417758011342,
-          longitude: 34.91077744955874,
-          floor: 0,
+          latitude: 31.986487941086967,
+          longitude: 34.91072729229928,
+          floor: 1,
         },
-      });
-    (dbServiceMock.getConnection().collection('locations').findOneAndUpdate as jest.Mock).mockReturnValueOnce(
-      {value: {
-          name: 'כיתת ניצן',
-          disabled: false,
-          location_id: 'B_0',
-          position: {
-            latitude: 31.986487941086967,
-            longitude: 34.91072729229928,
-            floor: 1,
-          }}},
-    );
+      },
+    });
 
     const updatedLocation = await locationsPersistanceService.updateLocation('1', {
       _id: '1',
@@ -183,7 +197,9 @@ describe('locations persistence', () => {
       throw new Error('mock error');
     });
 
-    await locationsPersistanceService.updateLocation('507f1f77bcf86cd799439011', {}).catch((error) => expect(error).toBeDefined());
+    await locationsPersistanceService
+      .updateLocation('507f1f77bcf86cd799439011', {})
+      .catch((error) => expect(error).toBeDefined());
   });
 
   it('should delete location successfully on deleteClass', async () => {
@@ -203,6 +219,8 @@ describe('locations persistence', () => {
       throw new Error('mock error');
     });
 
-    await locationsPersistanceService.deleteLocation('507f1f77bcf86cd799439011').catch((error) => expect(error).toBeDefined());
+    await locationsPersistanceService
+      .deleteLocation('507f1f77bcf86cd799439011')
+      .catch((error) => expect(error).toBeDefined());
   });
 });

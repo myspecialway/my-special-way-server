@@ -88,22 +88,45 @@ describe('BlockedSectionsPersistenceService', () => {
     expect.hasAssertions();
     const expected = {
       _id: '507f1f77bcf86cd799439011',
-      from: 'C',
-      to: 'D',
+      from: '5c49737841e5b627ec107648',
+      to: '5c49737841e5b627ec10763f',
       reason: 'some reason2',
     };
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(expected);
-    (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
+    (dbServiceMock.getConnection().collection(collectioName).find as jest.Mock).mockReturnValue({
+      toArray: jest.fn().mockReturnValue([]),
+    });
+    (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValue({
       insertedId: '507f1f77bcf86cd799439011',
     });
-
     const blockedSection = await blockedSectionsPersistenceService.createBlockedSection({
-      from: 'C',
-      to: 'D',
+      from: '5c49737841e5b627ec107648',
+      to: '5c49737841e5b627ec10763f',
       reason: 'some reason2',
     });
 
     expect(blockedSection).toEqual(expected);
+  });
+
+  it('should return error on createBlockedSection when error block is exist', async () => {
+    expect.hasAssertions();
+    (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
+    });
+    (dbServiceMock.getConnection().collection(collectioName).find as jest.Mock).mockReturnValueOnce({
+      toArray: jest.fn().mockRejectedValue([
+        {
+          _id: '507f1f77bcf86cd799439011',
+          from: '5c49737841e5b627ec107648',
+          to: '5c49737841e5b627ec10763f',
+          reason: 'some reason2',
+        },
+      ]),
+    });
+
+    await blockedSectionsPersistenceService
+      .createBlockedSection({})
+      .catch((error) => expect(error).not.toBeUndefined());
   });
 
   it('should return error on createBlockedSection when error happened', async () => {
@@ -111,7 +134,7 @@ describe('BlockedSectionsPersistenceService', () => {
     (dbServiceMock.getConnection().collection(collectioName).insertOne as jest.Mock).mockReturnValueOnce({
       insertedId: '507f1f77bcf86cd799439011',
     });
-    (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementationOnce(() => {
+    (dbServiceMock.getConnection().collection(collectioName).find as jest.Mock).mockImplementationOnce(() => {
       throw new Error('mock error');
     });
 
@@ -145,15 +168,15 @@ describe('BlockedSectionsPersistenceService', () => {
   it('should update a blocked section successfully on updateBlockedSection', async () => {
     expect.hasAssertions();
     const expected = {
-      from: 'A',
-      to: 'A',
+      from: '5c49737841e5b627ec10763f',
+      to: '5c49737841e5b627ec107648',
       reason: 'some updated reason2',
       _id: '507f1f77bcf86cd799439011',
     };
     const current = {
       _id: '507f1f77bcf86cd799439011',
-      from: 'C',
-      to: 'D',
+      from: '5c49737841e5b627ec10763f',
+      to: '5c49737841e5b627ec107648',
       reason: 'some reason2',
     };
     (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockImplementation(() => {
