@@ -96,7 +96,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     }
     const subject: string = 'שחזור ססמא למערכת בדרכי שלי';
     const msgBody = this.createResetEmailMessage(userResponse);
-    const sent = await sendemail('', email, subject, msgBody.html, msgBody.text);
+    const sent = await sendemail(`"בדרכי שלי"<mswemailclient@gmail.com>`, email, subject, msgBody.html, msgBody.text);
     if (!sent) {
       const errorMessage = `resetPassword:: error send email to user ${userResponse.username} by email ${email}`;
       this.logger.error(errorMessage);
@@ -106,17 +106,48 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   }
 
   private createResetEmailMessage(user: UserDbModel): EmailBody {
+    const BASE_URL = getConfig().BASE_URL;
     const msgStr: string =
-      `שלום ${user.firstname} ${user.lastname}\n אנו שולחים לך לינק חדש לכניסה למערכת.\n` +
+      `שלום ${user.firstname} ${user.lastname},\n אנו שולחים לך לינק חדש לכניסה למערכת.\n` +
       `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
-      `http://localhost:4200/login/${user.username}\n` +
+      `${BASE_URL}/login/${user.username}\n` +
       ` תודה שהצטרפת!`;
-    const msgHtml: string =
-      `<p>שלום ${user.firstname} ${user.lastname}<br>` +
-      `אנו שולחים לך לינק חדש לכניסה למערכת<br>` +
-      `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:<br>` +
-      //    `<a href=http://localhost:4200/first-login/${user.firstLoginData.token}>בדרכי שלי</a><br>` +
-      `תודה שהצטרפת!</p>`;
+    let msgHtml: string = `
+    <!DOCTYPE html>
+      <html>
+        <head dir="rtl" lang="he">
+          <meta charset="utf-8" />
+          <style type="text/css">
+            body {background-color: white;}
+            .textStyle   {
+              font-family: Arial;
+              color: #222222;
+              letter-spacing: 0.2px;
+              dir: "rtl";
+              }
+            .linkStyle{
+              font-family: Arial;
+              color: #222222;
+              letter-spacing: 0.2px;
+              dir: "rtl";
+            }
+          </style>
+        </head>`;
+
+    msgHtml += `<body style="text-align:right;">
+        <div class="textStyle">שלום ${user.firstname} ${user.lastname},&rlm;</div>
+        <br/>
+        <div class="textStyle">אנו שולחים לך לינק חדש לכניסה למערכת&rlm;</div>
+        <br/>
+        <div class="textStyle">על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;</div>
+        <br/>
+        <div class="linkStyle">
+        <a href=${BASE_URL}/login/${user.username}>בדרכי שלי&rlm;</a></div>
+        <br/>
+        <div class="textStyle">תודה שהצטרפת!&rlm;</div>
+        </body>
+        </html> `;
+    //        <a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי&rlm;</a></div>
     return {
       text: msgStr,
       html: msgHtml,
@@ -180,11 +211,11 @@ export class UsersPersistenceService implements IUsersPersistenceService {
   createFirstEmailMessage(user: UserDbModel): EmailBody {
     const BASE_URL = getConfig().BASE_URL;
     const msgStr: string =
-      `שלום ${user.firstname} ${user.lastname}\nאנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו.\n` +
+      `שלום ${user.firstname} ${user.lastname},\nאנו מברכים על הצטרפותך למערכת בדרכי שלי - ביה"ס יחדיו.\n` +
       `המערכת מאפשרת לך לנהל את רשימות התלמידים, מערכת השעות שלהם, תזכורות שונות ועוד.\n` +
       `שם המשתמש שלך: ${user.username}\n` +
       ` על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
-      `${BASE_URL}/login/${user.username}\n` +
+      `${BASE_URL}/first-login/${user.firstLoginData.token}\n` +
       ` תודה שהצטרפת!`;
 
     let msgHtml: string = `
@@ -210,7 +241,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
           </head>`;
 
     msgHtml += `<body style="text-align:right;">
-          <div class="textStyle">שלום ${user.firstname} ${user.lastname}</div>
+          <div class="textStyle">שלום ${user.firstname} ${user.lastname},&rlm;</div>
           <br/>
           <div class="textStyle">אנו מברכים על הצטרפותך למערכת בדרכי שלי - בית הספר יחדיו.&rlm;</div>
           <div class="textStyle">שם המשתמש שלך: ${user.username}&rlm;</div>
