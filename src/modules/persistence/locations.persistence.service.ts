@@ -93,7 +93,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
     }
   }
 
-  updateLocation = async (id: string, locationObj: LocationDbModel): Promise<LocationDbModel> => {
+  async updateLocation(id: string, locationObj: LocationDbModel): Promise<LocationDbModel> {
     const mongoId = new ObjectID(id);
     locationObj.image_id = new ObjectID(locationObj.image_id);
     try {
@@ -109,7 +109,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
       this.logger.error(`LocationPersistence::updateLocation:: error updating location ${mongoId}`, error.stack);
       throw error;
     }
-  };
+  }
 
   async deleteLocation(id: string): Promise<number> {
     try {
