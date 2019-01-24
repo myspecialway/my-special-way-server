@@ -115,7 +115,7 @@ export class LocationsPersistenceService implements ILocationsPersistenceService
     try {
       const mongoId = new ObjectID(id);
       this.logger.log(`LocationPersistence::deleteLocation:: deleting location by id ${id}`);
-      const deleteSectionResponse = await this.blockedSectionsPersistenceService.deleteBlockSectionsByLocation(id);
+      await this.blockedSectionsPersistenceService.deleteBlockSectionsByLocation(id);
       const deleteResponse = await this.collection.deleteOne({ _id: mongoId });
       this.logger.log(`LocationPersistence::deleteLocation:: removed ${deleteResponse.deletedCount} documents`);
       return deleteResponse.deletedCount;

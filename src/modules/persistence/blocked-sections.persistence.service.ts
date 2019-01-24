@@ -33,6 +33,7 @@ export class BlockedSectionsPersistenceService {
     }
   }
   async deleteBlockSectionsByLocation(location: string) {
+    //TODO: throw error if delete block is failed
     const blockSections: BlockedSectionsDbModel[] = await this.getBlockSectionsByLocation([location]);
     const blockSectionIds = this.getBlockSectionsIds(blockSections);
     const result = await this.collection.deleteMany({ _id: { $in: blockSectionIds } });
