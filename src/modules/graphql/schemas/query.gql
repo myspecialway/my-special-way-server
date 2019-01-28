@@ -15,8 +15,9 @@ type Query {
 
   locations: [Location]!
   locationById(id: ID!): Location
-
+  locationsByMapId(image_id: String!, floor: Int): [Location]!
   blockedSections: [BlockedSection]!
+  blockedSectionsByLocations(locations: [String]!): [BlockedSection]!
 
   nonActiveTimes: [NonActiveTime]
 }

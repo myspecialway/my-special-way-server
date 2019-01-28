@@ -3,6 +3,8 @@
 import * as winston from 'winston';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as _ from 'lodash';
+
 import { MongoClient, Collection, ObjectID } from 'mongodb';
 import { ArgumentParser } from 'argparse';
 import { getConfig } from '../src/config/config-loader';
@@ -99,8 +101,18 @@ async function init() {
         .toArray();
 
       for (const destinationDocument of destinationDocuments) {
-        const randomIndex = Math.floor(Math.random() * sourceDocuments.length);
-        destinationDocument[collectionRelation.to_field] = sourceDocuments[randomIndex]._id;
+        if (collectionRelation.by === 'random') {
+          const randomIndex = Math.floor(Math.random() * sourceDocuments.length);
+          destinationDocument[collectionRelation.to_field] = sourceDocuments[randomIndex]._id;
+        } else if (collectionRelation.by === 'prop') {
+          logger.info(`porperty connection`);
+          try {
+            const stringId = findPropertyId(sourceDocuments, destinationDocument, collectionRelation);
+            destinationDocument[collectionRelation.to_field] = stringId;
+          } catch (error) {
+            logger.info(`dbseed:: filling collection `);
+          }
+        }
         await relation.collection.update({ _id: new ObjectID(destinationDocument._id) }, destinationDocument);
       }
     }
@@ -109,6 +121,15 @@ async function init() {
   await client.close();
 }
 
+function findPropertyId(sourceDocuments, destinationDocument, collectionRelation): string {
+  const pathSourceList = collectionRelation.pathSource.split('.');
+  const identiferDest = destinationDocument[pathSourceList[0]][pathSourceList[1]];
+  const pathDest = collectionRelation.pathDest;
+  const document = _.find(sourceDocuments, (doc: any) => {
+    return +doc[pathDest] === identiferDest;
+  });
+  return document._id;
+}
 function getFilesJSONContent(relativeFolderPath: string): FileCollectionContent[] {
   const folderPath = path.resolve(__dirname, relativeFolderPath);
   logger.info(`dbseed:: reading files from ${folderPath}`);

@@ -1,5 +1,14 @@
 {
   "collection": "locations",
+  "add_relations": [
+    {
+      "from_collection": "fileSystem",
+      "to_field": "image_id",
+      "by": "prop",
+      "pathSource": "position.floor",
+      "pathDest": "floor"
+    }
+  ],
   "data": [
     {
       "name": "כניסה/יציאה ראשית",

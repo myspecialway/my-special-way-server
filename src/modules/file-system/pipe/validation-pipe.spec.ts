@@ -2,7 +2,7 @@ import * as Joi from 'joi';
 import { JoiValidationPipe } from './validation-pipe';
 import { BadRequestException } from '@nestjs/common';
 
-describe.only('file-system guard', () => {
+describe('file-system guard', () => {
   const uploadschema = Joi.object().keys({
     floor: Joi.number()
       .min(-100)

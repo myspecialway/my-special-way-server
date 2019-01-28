@@ -5,7 +5,7 @@ import { FileSystemPersistenceService } from './file-system.persistence.service'
 import { FileSystemDbModel } from '../../models/file-system.db.model';
 import { InternalServerErrorException } from '@nestjs/common';
 
-describe.only('File Persistence Service', () => {
+describe('File Persistence Service', () => {
   const collectioName = 'fileSystem';
   let fileSystemPersistenceService: FileSystemPersistenceService;
   let dbServiceMock: Partial<DbService>;

@@ -7,14 +7,19 @@ import { Response } from 'express';
 import { ObjectID } from 'bson';
 import { DbService } from '../../persistence/db.service';
 import { Collection, Db } from 'mongodb';
+import { LocationsPersistenceService } from '../../persistence/locations.persistence.service';
 
 describe('file-system controller', () => {
   const collectioName = 'fileSystem';
   let filesystemController: FileSystemController;
   let fileSystemPersistenceService: FileSystemPersistenceService;
+  let locationsPersistenceService: Partial<LocationsPersistenceService>;
   let dbServiceMock: Partial<DbService>;
   let res: Partial<Response>;
   beforeEach(() => {
+    locationsPersistenceService = {
+      deleteLocationsByImageId: jest.fn().mockReturnValue(true),
+    };
     dbServiceMock = {
       getConnection: jest.fn().mockReturnValue({
         collection: jest.fn().mockReturnValue({
@@ -30,7 +35,10 @@ describe('file-system controller', () => {
     };
 
     res = mockRes();
-    fileSystemPersistenceService = new FileSystemPersistenceService(dbServiceMock as DbService);
+    fileSystemPersistenceService = new FileSystemPersistenceService(
+      dbServiceMock as DbService,
+      locationsPersistenceService as LocationsPersistenceService,
+    );
     filesystemController = new FileSystemController(
       fileSystemPersistenceService as FileSystemPersistenceService,
       new FileUtilesService(),
@@ -140,24 +148,29 @@ describe('file-system controller', () => {
     });
   });
 
-  describe('Get Files metaData', () => {
-    it('Scenario for get metadata', async () => {
+  describe('Get Files map', () => {
+    it('Scenario for get map', async () => {
       const obj = {
         description: 'קומה ראשונה',
         filename: 'Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg',
         floor: 2,
+        content: {
+          mimetype: 'mimeytpe',
+          buffer: 'mockbuffer',
+        },
       };
       const id = new ObjectID().toString();
       (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(obj);
-      await filesystemController.getFileMetaData(id, res as Response);
-      expect(res.json).toHaveBeenCalled();
+      await filesystemController.getMap(id, res as Response);
+      expect(res.send).toHaveBeenCalled();
+      expect(res.status).toBeCalledWith(200);
     });
     it('PRINCIPLE Scenarifor get metadata fails', async () => {
       const id = new ObjectID().toString();
 
       (dbServiceMock.getConnection().collection(collectioName).findOne as jest.Mock).mockReturnValueOnce(null);
 
-      await filesystemController.getFileMetaData(id, res as Response);
+      await filesystemController.getMap(id, res as Response);
       expect(res.status).toHaveBeenCalledWith(HttpStatus.INTERNAL_SERVER_ERROR);
     });
   });

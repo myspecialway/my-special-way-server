@@ -1871,6 +1871,10 @@ bser@^2.0.0:
   dependencies:
     node-int64 "^0.4.0"
 
+bson@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/bson/-/bson-3.0.2.tgz#2467a76507a98c63ce34072f9965f4024e753dfc"
+
 bson@~1.0.4:
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/bson/-/bson-1.0.9.tgz#12319f8323b1254739b7c6bef8d3e89ae05a2f57"
@@ -6429,6 +6433,12 @@ mongodb-core@3.1.0:
     require_optional "^1.0.1"
   optionalDependencies:
     saslprep "^1.0.0"
+
+mongodb-extjson@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/mongodb-extjson/-/mongodb-extjson-3.0.3.tgz#5ef19bb997cbaf3eabc2fd91171d8598db4abdc5"
+  dependencies:
+    bson "^3.0.2"
 
 mongodb@^3.0.10:
   version "3.1.1"

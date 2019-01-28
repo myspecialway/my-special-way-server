@@ -10,6 +10,11 @@ export class BlockedSectionsResolver {
     return this.blockedSectionsPersistence.getAll();
   }
 
+  @Query('blockedSectionsByLocations')
+  async getblockedSectionsByLocations(obj, args, context, info) {
+    return this.blockedSectionsPersistence.getBlockSectionsByLocation(args.locations);
+  }
+
   @Mutation('createBlockedSection')
   async createBlockedSection(obj, { blockedSection }) {
     return this.blockedSectionsPersistence.createBlockedSection(blockedSection);
