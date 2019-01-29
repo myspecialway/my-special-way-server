@@ -21,7 +21,7 @@ import {
 import { Response } from 'express';
 import { FileSystemPersistenceService } from '../../persistence/file-system.persistence.service';
 import { JoiValidationPipe } from '../pipe/validation-pipe';
-import { ObjectID } from 'bson';
+import { ObjectID } from 'mongodb';
 import { FileUtilesService } from '../services/file-utiles';
 import { AuthFileGuard } from '../guard/guard-file-system';
 
