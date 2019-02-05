@@ -14,7 +14,7 @@ instance.use(bodyParser.urlencoded({ extended: false }));
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, instance, {
-    logger: new MSWLogger(getConfig().isProd, getConfig().PAPERTRAIL_HOST_PORT),
+    logger: new MSWLogger(false, getConfig().PAPERTRAIL_HOST_PORT),
   });
   app.setGlobalPrefix('/api');
   app.enableCors();
