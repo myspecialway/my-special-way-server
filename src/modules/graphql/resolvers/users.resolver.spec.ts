@@ -129,7 +129,7 @@ describe('user resolver', () => {
     try {
       await usersResolver.updateUserPassword(null, { username: 'someOneElse', password: '123456' }, MOCK_CONTEXT);
     } catch (error) {
-      expect(error.message).toBe('not permissions to execute command');
+      expect(error.message).toBe('no access for the user');
     }
   });
 
@@ -137,9 +137,10 @@ describe('user resolver', () => {
     (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.FORBID);
     (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
     try {
-      await usersResolver.updateUserPassword(null, { username: 'someOneElse', password: '123456' }, MOCK_CONTEXT);
+      await usersResolver.updateUserPassword(null, { username: 'test_username', password: '123456' }, MOCK_CONTEXT);
+      //      await usersResolver.updateUserPassword(null, { username: 'someOneElse', password: '123456' }, MOCK_CONTEXT);
     } catch (error) {
-      expect(error.message).toBe('not permissions to execute command');
+      expect(error.message).toBe('no permissions to execute command');
     }
   });
 
@@ -221,7 +222,7 @@ describe('user resolver', () => {
     try {
       await usersResolver.userForgetPassword(null, { username: MOCK_USER.username }, MOCK_CONTEXT);
     } catch (error) {
-      expect(error.message).toBe('not permissions to execute command');
+      expect(error.message).toBe('no permissions to execute command');
     }
   });
 });
