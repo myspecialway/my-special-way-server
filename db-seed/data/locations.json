@@ -47,15 +47,6 @@
       "type": "רגיל"
     },
     {
-      "name": "חצר לימודית",
-      "location_id": "A93",
-      "position": {
-        "floor": 0
-      },
-      "icon": "learning playground.png",
-      "type": "חוץ"
-    },
-    {
       "name": "כיתת אלון",
       "location_id": "A7",
       "position": {
