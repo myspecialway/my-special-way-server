@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { UserTokenProfile } from '../../../models/user-token-profile.model';
 import { AuthServiceInterface } from './auth.service.interface';
 import { UsersPersistenceService } from '../../persistence/users.persistence.service';
-import { UserDbModel, UserRole } from '../../../models/user.db.model';
+import { UserDbModel, UserRole, Gender } from '../../../models/user.db.model';
 import { UserLoginRequest } from '../../../models/user-login-request.model';
 import { UserUniqueValidationRequest } from '../../../models/user-unique-validation-request.model';
 
@@ -105,8 +105,11 @@ export class AuthService implements AuthServiceInterface {
       firstname: user.firstname,
       lastname: user.lastname,
       class_id: user.class_id,
-      gender: user.gender.toString(),
+      gender: Gender.MALE,
     };
+    if (user.gender) {
+      userCridentials.gender = user.gender.toString();
+    }
 
     return [
       null,

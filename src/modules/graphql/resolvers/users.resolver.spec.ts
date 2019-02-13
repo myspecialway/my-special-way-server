@@ -122,15 +122,7 @@ describe('user resolver', () => {
     expect(response).toEqual(MOCK_USER);
     expect(userPersistence.updateUserPassword).toHaveBeenCalledWith(MOCK_USER.username, '123456');
   });
-  it('should call updateUserPassword function by someOneElse', async () => {
-    (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.OWN);
-    (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
-    try {
-      await usersResolver.updateUserPassword(null, { username: 'someOneElse', password: '123456' }, MOCK_CONTEXT);
-    } catch (error) {
-      expect(error.message).toBe('not permissions to execute command');
-    }
-  });
+
   it('should call updateUserPassword function by someOneElse', async () => {
     (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.FORBID);
     (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
