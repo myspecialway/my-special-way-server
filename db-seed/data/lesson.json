@@ -59,6 +59,10 @@
       "icon": "Typing"
     },
     {
+      "title": "התארגנות סוף יום",
+      "icon": "end of day preparation"
+    },
+    {
       "title": "זהירות בדרכים",
       "icon": "traffic"
     },
@@ -69,10 +73,6 @@
     {
       "title": "חווה",
       "icon": "farm"
-    },
-    {
-      "title": "חינוך",
-      "icon": "education"
     },
     {
       "title": "חקלאות",
@@ -97,6 +97,10 @@
     {
       "title": "יום הולדת",
       "icon": "birthday"
+    },
+    {
+      "title": "יוצאים יחדיו",
+      "icon": "going out together"
     },
     {
       "title": "כלכלת בית",
@@ -227,7 +231,7 @@
       "icon": "subject"
     },
     {
-      "title": "שעת סיפור",
+      "title": "ספרות",
       "icon": "story"
     },
     {
