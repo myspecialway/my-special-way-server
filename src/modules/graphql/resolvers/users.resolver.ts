@@ -9,7 +9,8 @@ import { NonActiveTimePersistenceService } from '../../persistence/non-active-ti
 import { NonActiveTimeDbModel } from '@models/non-active-time.db.model';
 import { UserRole } from '../../../models/user.db.model';
 
-export const NO_PERMISSION = 'not permissions to execute command';
+export const NO_PERMISSION = 'no permissions to execute command';
+export const NO_ACCESS = 'no access for the user';
 
 @Resolver('User')
 export class UsersResolver {
@@ -53,9 +54,13 @@ export class UsersResolver {
   async updateUserPassword(_, { username, password }, context) {
     const caller = Get.getObject(context, 'user') as UserTokenProfile;
     const permission = checkAndGetBasePermission(caller, DBOperation.UPDATE, Asset.USER);
-    if (permission !== Permission.OWN || username !== caller.username) {
+    if (username !== caller.username) {
+      throw new Error(NO_ACCESS);
+    }
+    if (permission !== Permission.OWN) {
       throw new Error(NO_PERMISSION);
     }
+
     // TODO: Handle errors!!!!
     const [, response] = await this.usersPersistence.updateUserPassword(username, password);
     return response;
