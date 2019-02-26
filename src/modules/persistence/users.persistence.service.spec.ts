@@ -688,4 +688,21 @@ describe('users persistence', () => {
     const result = await usersPersistanceService.resetPassword('someEmail');
     expect(result).toEqual([null, true]);
   });
+
+  it('should fail to send email when resetPassword is called', async () => {
+    common.Logger.error = jest.fn();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValue({
+      email: 'someEmail',
+      firstLoginData: { token: '1234' },
+      username: 'someUsername',
+    });
+
+    (sendemail as jest.Mock).mockReturnValue(false);
+
+    const result = await usersPersistanceService.resetPassword('someEmail');
+    expect(result).toEqual([
+      new Error('resetPassword:: error send email to user someUsername by email someEmail'),
+      false,
+    ]);
+  });
 });
