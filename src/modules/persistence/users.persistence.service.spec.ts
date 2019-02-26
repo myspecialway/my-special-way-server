@@ -681,12 +681,29 @@ describe('users persistence', () => {
     (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValue({
       email: 'someEmail',
       firstLoginData: { token: '1234' },
+      role: UserRole.PRINCIPLE,
+      _id: 'someId',
     });
 
     (sendemail as jest.Mock).mockReturnValue(true);
 
     const result = await usersPersistanceService.resetPassword('someEmail');
     expect(result).toEqual([null, true]);
+  });
+
+  it('should fail to send email when resetPassword is called and userRole is Student', async () => {
+    common.Logger.error = jest.fn();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValue({
+      email: 'someEmail',
+      firstLoginData: { token: '1234' },
+      role: UserRole.STUDENT,
+      _id: 'someId',
+    });
+
+    (sendemail as jest.Mock).mockReturnValue(true);
+
+    const result = await usersPersistanceService.resetPassword('someEmail');
+    expect(result).toEqual([new Error('resetPassword:: user role is invalid for email someEmail'), false]);
   });
 
   it('should fail to send email when resetPassword is called', async () => {

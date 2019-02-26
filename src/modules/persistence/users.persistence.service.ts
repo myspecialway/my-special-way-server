@@ -94,6 +94,22 @@ export class UsersPersistenceService implements IUsersPersistenceService {
       this.logger.error(errorMessage);
       return [new Error(errorMessage), false];
     }
+
+    if (userResponse.role !== UserRole.STUDENT) {
+      userResponse.passwordStatus = PasswordStatus.NOT_SET;
+      userResponse.firstLoginData = this.makeFirstLoginData();
+      const updatedDocument = await this.collection.findOneAndUpdate(
+        { _id: userResponse._id },
+        { $set: userResponse },
+        { returnOriginal: false },
+      );
+      this.logger.log(`resetPassword::  set first login data)}`);
+    } else {
+      const errorMessage = `resetPassword:: user role is invalid for email ${email}`;
+      this.logger.error(errorMessage);
+      return [new Error(errorMessage), false];
+    }
+
     const subject: string = 'שחזור ססמא למערכת בדרכי שלי';
     const msgBody = this.createResetEmailMessage(userResponse);
     const sent = await sendemail(`"בדרכי שלי"<mswemailclient@gmail.com>`, email, subject, msgBody.html, msgBody.text);
