@@ -110,7 +110,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     const msgStr: string =
       `שלום ${user.firstname} ${user.lastname},\n אנו שולחים לך לינק חדש לכניסה למערכת.\n` +
       `על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:\n` +
-      `${BASE_URL}/login/${user.username}\n` +
+      `<a href=${BASE_URL}/first-login/${user.firstLoginData.token}\n` +
       ` תודה שהצטרפת!`;
     let msgHtml: string = `
     <!DOCTYPE html>
@@ -142,7 +142,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
         <div class="textStyle">על מנת להתחיל להשתמש במערכת, יש ללחוץ על הלינק הבא ולהגדיר את סיסמתך:&rlm;</div>
         <br/>
         <div class="linkStyle">
-        <a href=${BASE_URL}/login/${user.username}>בדרכי שלי&rlm;</a></div>
+        <a href=${BASE_URL}/first-login/${user.firstLoginData.token}>בדרכי שלי&rlm;</a></div>
         <br/>
         <div class="textStyle">תודה שהצטרפת!&rlm;</div>
         </body>

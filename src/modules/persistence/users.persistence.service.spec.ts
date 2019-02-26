@@ -668,21 +668,41 @@ describe('users persistence', () => {
   });
   it('should get correct error when resetPassword is called and email is not sent', async () => {
     common.Logger.error = jest.fn();
-    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      toArray: jest.fn().mockReturnValueOnce(true),
+    (dbServiceMock.getConnection().collection(collectionName).insertOne as jest.Mock).mockReturnValueOnce({
+      insertedId: '507f1f77bcf86cd799439011',
     });
 
     const result = await usersPersistanceService.resetPassword('someEmail');
-    expect(result).toEqual([new Error('resetPassword:: error send email to user undefined by email someEmail'), false]);
+    expect(result).toEqual([new Error('resetPassword:: error fetching user by email someEmail'), false]);
   });
+
   it('should send email when resetPassword is called', async () => {
     common.Logger.error = jest.fn();
-    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValueOnce({
-      toArray: jest.fn().mockReturnValueOnce(true),
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValue({
+      email: 'someEmail',
+      firstLoginData: { token: '1234' },
     });
+
     (sendemail as jest.Mock).mockReturnValue(true);
 
     const result = await usersPersistanceService.resetPassword('someEmail');
     expect(result).toEqual([null, true]);
+  });
+
+  it('should fail to send email when resetPassword is called', async () => {
+    common.Logger.error = jest.fn();
+    (dbServiceMock.getConnection().collection(collectionName).findOne as jest.Mock).mockReturnValue({
+      email: 'someEmail',
+      firstLoginData: { token: '1234' },
+      username: 'someUsername',
+    });
+
+    (sendemail as jest.Mock).mockReturnValue(false);
+
+    const result = await usersPersistanceService.resetPassword('someEmail');
+    expect(result).toEqual([
+      new Error('resetPassword:: error send email to user someUsername by email someEmail'),
+      false,
+    ]);
   });
 });
