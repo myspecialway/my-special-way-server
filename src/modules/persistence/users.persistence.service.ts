@@ -98,7 +98,7 @@ export class UsersPersistenceService implements IUsersPersistenceService {
     if (userResponse.role !== UserRole.STUDENT) {
       userResponse.passwordStatus = PasswordStatus.NOT_SET;
       userResponse.firstLoginData = this.makeFirstLoginData();
-      const updatedDocument = await this.collection.findOneAndUpdate(
+      await this.collection.findOneAndUpdate(
         { _id: userResponse._id },
         { $set: userResponse },
         { returnOriginal: false },
