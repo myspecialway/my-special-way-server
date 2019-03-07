@@ -4,7 +4,6 @@ import { Collection, ObjectID, Db } from 'mongodb';
 import { ClassDbModel } from 'models/class.db.model';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
 import { UserDbModel } from '@models/user.db.model';
-import { CollectionReference } from '@google-cloud/firestore';
 
 @Injectable()
 export class ClassPersistenceService {
