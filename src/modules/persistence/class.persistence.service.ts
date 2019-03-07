@@ -1,16 +1,19 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { DbService } from './db.service';
-import { Collection, ObjectID } from 'mongodb';
+import { Collection, ObjectID, Db } from 'mongodb';
 import { ClassDbModel } from 'models/class.db.model';
 import { SchedulePersistenceHelper } from './schedule.persistence.helper';
+import { UserDbModel } from '@models/user.db.model';
+import { CollectionReference } from '@google-cloud/firestore';
 
 @Injectable()
 export class ClassPersistenceService {
   private collection: Collection<ClassDbModel>;
   private logger = new Logger('ClassPersistenceService');
+  private db: Db;
   constructor(private dbService: DbService, private schedulePersistenceHelper: SchedulePersistenceHelper) {
-    const db = this.dbService.getConnection();
-    this.collection = db.collection<ClassDbModel>('classes');
+    this.db = this.dbService.getConnection();
+    this.collection = this.db.collection<ClassDbModel>('classes');
     this.createIndex();
   }
 
@@ -92,6 +95,18 @@ export class ClassPersistenceService {
   }
 
   async deleteClass(id: string): Promise<number> {
+    try {
+      const studentCollection = this.db.collection<UserDbModel>('users');
+      this.logger.log(`ClassPersistence::deleteClass:: fetching students by class id ${id}`);
+      const res = await studentCollection.find({ class_id: new ObjectID(id), role: 'STUDENT' }).toArray();
+      if (res.length > 0) {
+        this.logger.log(`ClassPersistence::deleteClass::  not deleting ${id}; it is not empty`);
+        return;
+      }
+    } catch (error) {
+      this.logger.error(`ClassPersistence::deleteClass:: error fetching students by class id ${id}`, error.stack);
+      throw [error, null];
+    }
     try {
       const mongoId = new ObjectID(id);
       this.logger.log(`ClassPersistence::deleteClass:: deleting class by id ${id}`);
