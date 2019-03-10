@@ -100,7 +100,7 @@ export class ClassPersistenceService {
       const res = await studentCollection.find({ class_id: new ObjectID(id), role: 'STUDENT' }).toArray();
       if (res.length > 0) {
         this.logger.log(`ClassPersistence::deleteClass::  not deleting ${id}; it is not empty`);
-        return;
+        return 0;
       }
     } catch (error) {
       this.logger.error(`ClassPersistence::deleteClass:: error fetching students by class id ${id}`, error.stack);
