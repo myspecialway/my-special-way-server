@@ -1,26 +1,26 @@
 language: node_js
 node_js:
-- node
+  - 8
 sudo: required
 services:
-- docker
+  - docker
 
 before_install:
-- echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
-- . ./scripts/prepare-repo
-- . ./scripts/k8s/init
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - . ./scripts/prepare-repo
+  - . ./scripts/k8s/init
 
 install:
-- yarn   
-- yarn tslint
-- yarn build
-- yarn test:ci
+  - yarn
+  - yarn tslint
+  - yarn build
+  - yarn test:ci
 
 script:
-- yarn docker
-- yarn docker:push
-- yarn docker:deploy 
-- yarn git:push
+  - yarn docker
+  - yarn docker:push
+  - yarn docker:deploy
+  - yarn git:push
 
 notifications:
   slack:
