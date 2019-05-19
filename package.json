@@ -32,7 +32,9 @@
     "stryker": "npx stryker run",
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
-    "seed": "ts-node ./db-seed/seed.ts -c mongodb://localhost:27017"
+    "seed": "ts-node ./db-seed/seed.ts -c mongodb://localhost:27017",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
@@ -67,7 +69,8 @@
     "rxjs": "^6.0.0",
     "typescript": "^2.8.3",
     "winston": "^3.1.0",
-    "winston-papertrail": "^1.0.5"
+    "winston-papertrail": "^1.0.5",
+    "snyk": "^1.161.1"
   },
   "devDependencies": {
     "@playlyfe/gql": "^2.6.0",
@@ -145,5 +148,6 @@
       "!**/*.model.ts",
       "!config/**/*.ts"
     ]
-  }
+  },
+  "snyk": true
 }
