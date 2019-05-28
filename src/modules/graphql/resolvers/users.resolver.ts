@@ -57,8 +57,10 @@ export class UsersResolver {
     if (username !== caller.username) {
       throw new Error(NO_ACCESS);
     }
-    if (permission !== Permission.OWN) {
-      throw new Error(NO_PERMISSION);
+    if (caller.role !== UserRole.PRINCIPLE) {
+      if (permission !== Permission.OWN) {
+        throw new Error(NO_PERMISSION);
+      }
     }
 
     // TODO: Handle errors!!!!

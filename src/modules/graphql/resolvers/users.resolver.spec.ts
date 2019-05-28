@@ -136,6 +136,7 @@ describe('user resolver', () => {
   it('should call updateUserPassword function by someOneElse', async () => {
     (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.FORBID);
     (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
+    MOCK_USER.role = UserRole.STUDENT;
     try {
       await usersResolver.updateUserPassword(null, { username: 'test_username', password: '123456' }, MOCK_CONTEXT);
       //      await usersResolver.updateUserPassword(null, { username: 'someOneElse', password: '123456' }, MOCK_CONTEXT);
@@ -205,7 +206,8 @@ describe('user resolver', () => {
     expect(nonActiveTimePersistence.getAll).toHaveBeenCalledWith();
   });
   it('should call userForgetPassword function only by Principle', async () => {
-    (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.OWN);
+    MOCK_USER.role = UserRole.PRINCIPLE;
+    (checkAndGetBasePermission as jest.Mock).mockReturnValueOnce(Permission.ALLOW);
     (Get.getObject as jest.Mock).mockReturnValueOnce(MOCK_USER);
     (userPersistence.userForgetPassword as jest.Mock).mockReturnValue(Promise.resolve([null, MOCK_USER]));
 
