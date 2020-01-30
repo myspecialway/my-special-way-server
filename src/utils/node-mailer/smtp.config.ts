@@ -15,5 +15,5 @@ export const CONFIG: SMTPConfig = {
   // username: 'mswemailclient@gmail.com', // SMTP username
   // password: 'm$wema!lCl1ent', // SMTP passowrd adding a comment just for testing the build
   username: getConfig().EMAIL_CLIENT_USERNAME,
-  password: getConfig().EMAIL_CLIENT_PASSWORD,  
+  password: getConfig().EMAIL_CLIENT_PASSWORD,
 };
