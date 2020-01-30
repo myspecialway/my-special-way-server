@@ -1,6 +1,7 @@
 import * as nodemailer from 'nodemailer';
 import { CONFIG } from './smtp.config';
 import { Logger } from '@nestjs/common';
+import { getConfig } from '../../config/config-loader';
 
 export async function sendemail(
   emailFrom: string,
@@ -17,8 +18,10 @@ export async function sendemail(
     port: CONFIG.port,
     secure: CONFIG.secure, // true for 465, false for other ports
     auth: {
-      user: CONFIG.username,
-      pass: CONFIG.password,
+    //  user: CONFIG.username,
+    //  pass: CONFIG.password,
+      user: getConfig().EMAIL_CLIENT_USERNAME,
+      pass: getConfig().EMAIL_CLIENT_PASSWORD,
     },
     tls: {
       rejectUnauthorized: false,
