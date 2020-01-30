@@ -19,7 +19,7 @@ export function getEnvalidValidations(): { [K in keyof ProcessEnvConfig]: envali
     PAPERTRAIL_HOST_PORT: envalid.str({ default: 'logs7.papertrailapp.com:32979' }),
     BASE_URL: envalid.str({ default: 'http://mswppr.tel-aviv.gov.il' }),
     EXPIRATION_FIRST_TOKEN_MINUTES: envalid.str({ default: '15' }),
-    EMAIL_CLIENT_USERNAME: envalid.str(),
-    EMAIL_CLIENT_PASSWORD: envalid.str(),
+    EMAIL_CLIENT_USERNAME: envalid.str({ default: 'username'}),
+    EMAIL_CLIENT_PASSWORD: envalid.str({ default: 'password'}),
   };
 }
