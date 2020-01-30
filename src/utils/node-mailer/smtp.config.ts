@@ -11,5 +11,5 @@ export const CONFIG: SMTPConfig = {
   port: 587, // SMTP server port
   secure: false, // true for 465, false for other ports
   username: 'mswemailclient@gmail.com', // SMTP username
-  password: 'm$wema!lCl1ent', // SMTP passowrd
+  password: 'm$wema!lCl1ent', // SMTP passowrd adding a comment just for testing the build
 };
