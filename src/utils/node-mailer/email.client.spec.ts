@@ -1,8 +1,6 @@
 jest.mock('nodemailer');
 import { sendemail } from './email.client';
 import * as nodemailer from 'nodemailer';
-import { getConfig } from '../../config/config-loader';
-import { ProcessEnvConfig } from '../../config/config-interface';
 
 describe('email.client', () => {
   let transportMock;
@@ -12,11 +10,6 @@ describe('email.client', () => {
     transportMock = {
       sendMail: jest.fn(),
     };
-
-    (getConfig as jest.Mock).mockReturnValue({
-      EMAIL_CLIENT_USERNAME: '',
-      EMAIL_CLIENT_PASSWORD: '',
-  } as ProcessEnvConfig);
 
     transportMock.sendMail.mockReturnValue = '';
     createTransportMock.mockReturnValue(transportMock);
