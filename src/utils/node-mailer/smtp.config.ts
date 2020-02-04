@@ -1,5 +1,3 @@
-import { getConfig } from '../../config/config-loader';
-
 export interface SMTPConfig {
   host: string;
   port: number;
