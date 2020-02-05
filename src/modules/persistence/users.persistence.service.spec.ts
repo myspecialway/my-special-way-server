@@ -1,3 +1,5 @@
+jest.mock('../../config/config-loader');
+
 import { DEFAULT_REMINDERS } from './../../models/reminder.db.model';
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
