@@ -1,3 +1,5 @@
+jest.mock('../../config/config-loader');
+
 import { DEFAULT_REMINDERS } from './../../models/reminder.db.model';
 import * as common from '@nestjs/common';
 import { UsersPersistenceService } from './users.persistence.service';
@@ -40,6 +42,11 @@ describe('users persistence', () => {
     common.Logger.error = (message, trace, context) => {
       errorFunc(message, '', context);
     };
+
+    (getConfig as jest.Mock).mockReturnValue({
+      BASE_URL: '',
+      EXPIRATION_FIRST_TOKEN_MINUTES: '1',
+    } as ProcessEnvConfig);
   });
 
   beforeEach(() => {
@@ -75,11 +82,6 @@ describe('users persistence', () => {
       classPersistanceService as ClassPersistenceService,
       schedulePersistenceHelper,
     );
-
-    (getConfig as jest.Mock).mockReturnValue({
-      BASE_URL: '',
-      EXPIRATION_FIRST_TOKEN_MINUTES: '1',
-    } as ProcessEnvConfig);
   });
 
   it('should get all users successfuly on getAll', async () => {
@@ -684,7 +686,6 @@ describe('users persistence', () => {
 
       role: UserRole.PRINCIPLE,
       _id: 'someId',
-
     });
 
     (sendemail as jest.Mock).mockReturnValue(true);
@@ -692,7 +693,6 @@ describe('users persistence', () => {
     const result = await usersPersistanceService.resetPassword('someEmail');
     expect(result).toEqual([null, true]);
   });
-
 
   it('should fail to send email when resetPassword is called and userRole is Student', async () => {
     common.Logger.error = jest.fn();
