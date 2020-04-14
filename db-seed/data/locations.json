@@ -5,52 +5,58 @@
       "from_collection": "fileSystem",
       "to_field": "image_id",
       "by": "prop",
-      "pathSource": "position.floor",
-      "pathDest": "floor"
+      "pathSource": "position.mapOriginalName",
+      "pathDest": "filename"
     }
   ],
+  "loadOrder": 6,
   "data": [
     {
-      "name": "כניסה/יציאה ראשית",
+      "name": "שער הסעות",
       "location_id": "A1",
       "icon": "03149.png",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "type": "כניסה/יציאה ראשי"
     },
     {
-      "name": "חדר הנהלה",
+      "name": "סגניות בניין ישן",
       "location_id": "A18",
       "icon": "03490.png",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "type": "רגיל"
     },
     {
-      "name": "מדרגות 0 דרומי",
+      "name": "מדרגות דר' קומת קרקע",
       "location_id": "A5",
-      "icon": "",
+      "icon": "55116.png",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "type": "מדרגות"
     },
     {
-      "name": "חדר מורים",
+      "name": "כיתת ארז",
       "location_id": "A4",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "teachers lounge.png",
+      "icon": "class-erez.png",
       "type": "רגיל"
     },
     {
       "name": "כיתת אלון",
       "location_id": "A7",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Alon.png",
       "type": "רגיל"
@@ -59,7 +65,8 @@
       "name": "כיתת דקל",
       "location_id": "A9",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Dekel.png",
       "type": "רגיל"
@@ -68,7 +75,8 @@
       "name": "כיתת סחלב",
       "location_id": "A11",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Sahlav.png",
       "type": "רגיל"
@@ -77,17 +85,19 @@
       "name": "כיתת פיקוס",
       "location_id": "A13",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Ficus.png",
       "type": "רגיל"
     },
     {
-      "name": "מדרגות 0 צפוני",
+      "name": "מדרגות צפ' קומת קרקע",
       "location_id": "A17",
-      "icon": "",
+      "icon": "55116.png",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "type": "מדרגות"
     },
@@ -95,70 +105,88 @@
       "name": "ספרייה",
       "location_id": "B4",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "03636.png",
       "type": "רגיל"
     },
     {
-      "name": "מדרגות 1 דרומי",
+      "name": "מדרגות דר' קומה 1",
       "location_id": "B3",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": null,
+      "icon": "55116.png",
       "type": "מדרגות"
     },
     {
-      "name": "כיתת נרקיס",
+      "name": "כיתת קקטוס",
       "location_id": "B10",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "class-Narkis.png",
+      "icon": "class-kaktus.png",
       "type": "רגיל"
     },
     {
-      "name": "כיתת שקד",
+      "name": "כיתת ליצ'י",
+      "location_id": "B12",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
+      },
+      "icon": "class-lichi.png",
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת מנגו",
       "location_id": "B8",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "class-Shaked.png",
+      "icon": "class-mango.png",
       "type": "רגיל"
     },
     {
-      "name": "כיתת תאנה",
+      "name": "כיתת פפאיה",
       "location_id": "B6",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "class-Te-enna.png",
+      "icon": "class-papaya.png",
       "type": "רגיל"
     },
     {
       "name": "חדר היועצת",
       "location_id": "B15",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "counselor.png",
       "type": "רגיל"
     },
     {
-      "name": "מדרגות 1 צפוני",
+      "name": "מדרגות צפ' קומה 1",
       "location_id": "B16",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": null,
+      "icon": "55116.png",
       "type": "מדרגות"
     },
     {
       "name": "שירותים קומה 1",
       "location_id": "B14",
       "position": {
-        "floor": 1
+        "floor": 1,
+        "mapOriginalName": "Floor_1_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "toilet floor 1.png",
       "type": "שירותים"
@@ -167,25 +195,28 @@
       "name": "שירותים קומה 2",
       "location_id": "C14",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "toilet floor 2.png",
       "type": "שירותים"
     },
     {
       "name": "ברזיה אולם ספורט",
-      "location_id": "A96",
+      "location_id": "OOOOO-A96",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "drinking fountain gym.png",
       "type": "חוץ"
     },
     {
-      "name": "ג'ימבורי",
+      "name": "מקלט דרומי (ג'ימבורי)",
       "location_id": "D18",
       "position": {
-        "floor": -1
+        "floor": -1,
+        "mapOriginalName": "Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "gimbori.png",
       "type": "רגיל"
@@ -194,16 +225,18 @@
       "name": "כיתת ניצן",
       "location_id": "C6",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Nitsan.png",
       "type": "רגיל"
     },
     {
       "name": "חממה",
-      "location_id": "A94",
+      "location_id": "OOOOO-A94",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "greenhouse.png",
       "type": "חוץ"
@@ -212,106 +245,108 @@
       "name": "שירותים קומת קרקע",
       "location_id": "A15",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "toilet floor 0.png",
       "type": "שירותים"
     },
     {
-      "name": "חדר תחזוקה",
+      "name": "חדר שכפול",
       "location_id": "A16",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "01320.png",
+      "icon": "01967.png",
       "type": "רגיל"
     },
     {
       "name": "אולם ספורט",
-      "location_id": "A90",
+      "location_id": "OOOOO-A90",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "sport.png",
       "type": "חוץ"
     },
     {
       "name": "חצר גדולה",
-      "location_id": "A91",
+      "location_id": "OOOOO-A91",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "large playground.png",
       "type": "חוץ"
     },
     {
       "name": "חצר חדשה",
-      "location_id": "A92",
+      "location_id": "OOOOO-A92",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "new playgroud.png",
       "type": "חוץ"
     },
     {
       "name": "גינה חקלאית",
-      "location_id": "A95",
+      "location_id": "OOOOO-A95",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "agriculture garden1.png",
       "type": "חוץ"
     },
     {
       "name": "חדר חיצוני קטן",
-      "location_id": "A97",
+      "location_id": "OOOOO-A97",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "small room by new playgroud.png",
       "type": "חוץ"
     },
     {
       "name": "חדר בעלי חיים גדול",
-      "location_id": "A98",
+      "location_id": "OOOOO-A98",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "animal room large.png",
       "type": "חוץ"
     },
     {
       "name": "חדר בעלי חיים קטן",
-      "location_id": "A99",
+      "location_id": "OOOOO-A99",
       "position": {
-        "floor": 0
+        "floor": 0,
+        "mapOriginalName": "Floor_0_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "animal room small.png",
       "type": "חוץ"
     },
     {
-      "name": "חדר שכפול",
-      "location_id": "A16",
-      "position": {
-        "floor": 0
-      },
-      "icon": "01967.png",
-      "type": "רגיל"
-    },
-    {
-      "name": "מדרגות 2 דרומי",
+      "name": "מדרגות דר' קומה 2",
       "location_id": "C3",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "",
+      "icon": "55116.png",
       "type": "מדרגות"
     },
     {
       "name": "חדר מוסיקה",
       "location_id": "C4",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "01294.png",
       "type": "רגיל"
@@ -320,7 +355,8 @@
       "name": "כיתת תמר",
       "location_id": "C8",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Tamar.png",
       "type": "רגיל"
@@ -329,7 +365,8 @@
       "name": "כיתת ברוש",
       "location_id": "C10",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Brosh.png",
       "type": "רגיל"
@@ -338,7 +375,8 @@
       "name": "כיתת הדר",
       "location_id": "C12",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "class-Hadar.png",
       "type": "רגיל"
@@ -347,73 +385,392 @@
       "name": "מדרגות 2 צפוני",
       "location_id": "C16",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "",
+      "icon": "55116.png",
       "type": "מדרגות"
     },
     {
       "name": "חדר סנוזלן",
       "location_id": "C15",
       "position": {
-        "floor": 2
+        "floor": 2,
+        "mapOriginalName": "Floor_2_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "Snoozeland.png",
       "type": "רגיל"
     },
     {
-      "name": "מדרגות 1-  צפוני",
+      "name": "מדרגות צפ' קומת מרתף",
       "location_id": "D16",
       "position": {
-        "floor": -1
+        "floor": -1,
+        "mapOriginalName": "Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "",
+      "icon": "55116.png",
       "type": "מדרגות"
-    },
-    {
-      "name": "חדר הכנה לחיים",
-      "location_id": "D15",
-      "position": {
-        "floor": -1
-      },
-      "icon": "01219.png",
-      "type": "רגיל"
     },
     {
       "name": "חדר קלינאיות תקשורת",
       "location_id": "D15",
       "position": {
-        "floor": -1
+        "floor": -1,
+        "mapOriginalName": "Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "commuicatios.png",
       "type": "רגיל"
     },
     {
-      "name": "חדר הבעה ביצירה",
+      "name": "מחסן אומנות",
       "location_id": "D12",
       "position": {
-        "floor": -1
+        "floor": -1,
+        "mapOriginalName": "Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "01354.png",
       "type": "רגיל"
     },
     {
-      "name": "חדר אומנות",
+      "name": "חדר אומנות ישן",
       "location_id": "D17",
       "position": {
-        "floor": -1
+        "floor": -1,
+        "mapOriginalName": "Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg"
       },
       "icon": "01307.png",
       "type": "רגיל"
     },
     {
-      "name": "מקלט לימודי",
+      "name": "מקלט צפוני (אומנות)",
       "location_id": "D10",
       "position": {
-        "floor": -1
+        "floor": -1,
+        "mapOriginalName": "Floor_BAEMENT_TOP_SHOT_MAP_V2.jpg"
       },
-      "icon": "03540.png",
+      "icon": "shelter.png",
       "type": "רגיל"
+    },
+    {
+      "name": "כניסה/יציאה מז' חירום קומת קרקע",
+      "location_id": "E1",
+      "icon": "going out together.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "כניסה/יציאה"
+    },
+    {
+      "name": "מדרגות מז' קומת קרקע",
+      "location_id": "E3",
+      "icon": "55116.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "אב בית",
+      "location_id": "E5",
+      "icon": "01320.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "סגנית",
+      "location_id": "E7",
+      "icon": "03490.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מזכירות",
+      "location_id": "E9",
+      "icon": "secretary.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מנהלת",
+      "location_id": "E11",
+      "icon": "03490.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "חדר מורים",
+      "location_id": "E12",
+      "icon": "teachers lounge.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "כלכלת בית",
+      "location_id": "E13",
+      "icon": "58226.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מדרגות מע' חירום קומת קרקע",
+      "location_id": "E16",
+      "icon": "55116.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "כניסה ראשית",
+      "location_id": "E17",
+      "icon": "01899.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "כניסה/יציאה ראשי"
+    },
+    {
+      "name": "יציאה/כניסה דר'",
+      "location_id": "E18",
+      "icon": "break-icon.png",
+      "position": {
+        "floor": 0,
+        "mapOriginalName": "newWing.Ground.Floor.jpg"
+      },
+      "type": "כניסה/יציאה"
+    },
+    {
+      "name": "מדרגות חירום מז' קומה 1",
+      "location_id": "F2",
+      "icon": "55116.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "כניסה/יציאה"
+    },
+    {
+      "name": "שירותים קומה 1",
+      "location_id": "F3",
+      "icon": "toilet floor 1.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "הבעה בהקלדה",
+      "location_id": "F5",
+      "icon": "Typing.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "שירותים"
+    },
+    {
+      "name": "הכנה לחיים",
+      "location_id": "F6",
+      "icon": "reality.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "תקשוב",
+      "location_id": "F7",
+      "icon": "55354.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת נרקיס",
+      "location_id": "F9",
+      "icon": "class-Narkis.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "תרפיה באומנות",
+      "location_id": "F11",
+      "icon": "01307.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת סביון",
+      "location_id": "F12",
+      "icon": "03540.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מדרגות מע' קומה 1",
+      "location_id": "F16",
+      "icon": "55116.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "ממק קומה 1",
+      "location_id": "F18",
+      "icon": "shelter.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "כיתת פטל",
+      "location_id": "F21",
+      "icon": "class-Petel.png",
+      "position": {
+        "floor": 1,
+        "mapOriginalName": "newWing.1st.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מדרגות חירום מז' קומה 2",
+      "location_id": "G1",
+      "icon": "55116.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "שירותים קומה 2",
+      "location_id": "G3",
+      "icon": "toilet floor 2.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "שירותים"
+    },
+    {
+      "name": "הבעה ביצירה",
+      "location_id": "G5",
+      "icon": "01354.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מרכז למידה",
+      "location_id": "G7",
+      "icon": "03427.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "ריפוי בעיסוק",
+      "location_id": "G9",
+      "icon": "occupational-therapy.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "חדר ישיבות",
+      "location_id": "G11",
+      "icon": "teachers lounge.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "סטודיו",
+      "location_id": "G12",
+      "icon": "ritmusic.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מדרגות מע' קומה 2",
+      "location_id": "G16",
+      "icon": "55116.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "מדרגות"
+    },
+    {
+      "name": "אומנות",
+      "location_id": "G17",
+      "icon": "01307.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל"
+    },
+    {
+      "name": "מרפסת אומנות",
+      "location_id": "G21",
+      "icon": "01307.png",
+      "position": {
+        "floor": 2,
+        "mapOriginalName": "newWing.2nd.Floor.jpg"
+      },
+      "type": "רגיל",
+      "image_id": "000"
     }
   ]
 }
