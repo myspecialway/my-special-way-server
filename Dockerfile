@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM node:10.20.1-jessie-slim
 
 EXPOSE 3000
 
