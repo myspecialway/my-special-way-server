@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import { MongoClient, Collection, ObjectID } from 'mongodb';
 import { ArgumentParser } from 'argparse';
 import { getConfig } from '../src/config/config-loader';
+import { currentId } from 'async_hooks';
 
 const logger = winston.createLogger({
   format: winston.format.combine(winston.format.colorize(), winston.format.simple()),
@@ -105,7 +106,6 @@ async function init() {
           const randomIndex = Math.floor(Math.random() * sourceDocuments.length);
           destinationDocument[collectionRelation.to_field] = sourceDocuments[randomIndex]._id;
         } else if (collectionRelation.by === 'prop') {
-          logger.info(`porperty connection`);
           try {
             const stringId = findPropertyId(sourceDocuments, destinationDocument, collectionRelation);
             destinationDocument[collectionRelation.to_field] = stringId;
@@ -122,11 +122,13 @@ async function init() {
 }
 
 function findPropertyId(sourceDocuments, destinationDocument, collectionRelation): string {
-  const pathSourceList = collectionRelation.pathSource.split('.');
-  const identiferDest = destinationDocument[pathSourceList[0]][pathSourceList[1]];
+  // const pathSourceList = collectionRelation.pathSource.split('.');
+  const identiferDest = destinationDocument.position.mapOriginalName;
   const pathDest = collectionRelation.pathDest;
   const document = _.find(sourceDocuments, (doc: any) => {
-    return +doc[pathDest] === identiferDest;
+    if (doc[pathDest] === identiferDest) {
+      return doc;
+    }
   });
   return document._id;
 }

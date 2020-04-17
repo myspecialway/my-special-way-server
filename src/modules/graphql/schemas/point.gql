@@ -1,8 +1,10 @@
 # A type that describes lat lang cordinates.
 type Point {
   floor: Int
+  mapOriginalName: String
 }
 
 input InputPoint {
   floor: Int!
+  mapOriginalName: String!
 }

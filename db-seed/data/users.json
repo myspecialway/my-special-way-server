@@ -1,6 +1,6 @@
 {
   "collection": "users",
-  "loadOrder": 3,
+  "loadOrder": 2,
   "data": [
     {
       "username": "teacher",
