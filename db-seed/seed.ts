@@ -127,8 +127,32 @@ function findPropertyId(sourceDocuments, destinationDocument, collectionRelation
   const pathDest = collectionRelation.pathDest;
   const document = _.find(sourceDocuments, (doc: any) => {
     if (doc[pathDest] === identiferDest) {
-      return doc;
+      logger.info(
+        'Y |' +
+          destinationDocument.location_id +
+          '|' +
+          identiferDest +
+          '|' +
+          doc[pathDest] +
+          '|' +
+          pathDest +
+          '|' +
+          doc._id,
+      );
+      return doc._id;
     }
+    logger.info(
+      'N |' +
+        destinationDocument.location_id +
+        '|' +
+        identiferDest +
+        '|' +
+        doc[pathDest] +
+        '|' +
+        pathDest +
+        '|' +
+        doc._id,
+    );
   });
   return document._id;
 }
