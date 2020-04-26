@@ -6,5 +6,5 @@ type Point {
 
 input InputPoint {
   floor: Int!
-  mapOriginalName: String!
+  mapOriginalName: String
 }
