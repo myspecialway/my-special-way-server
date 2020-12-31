@@ -37,7 +37,7 @@
     "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
-    "@nestjs/common": "^5.0.0-beta.6",
+    "@nestjs/common": "^7.6.5",
     "@nestjs/core": "^5.0.0-beta.6",
     "@nestjs/graphql": "^3.0.0",
     "@nestjs/microservices": "^5.0.0-beta.6",
