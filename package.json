@@ -37,7 +37,7 @@
     "prepublish": "npm run snyk-protect"
   },
   "dependencies": {
-    "@nestjs/common": "^5.0.0-beta.6",
+    "@nestjs/common": "^7.5.0",
     "@nestjs/core": "^5.0.0-beta.6",
     "@nestjs/graphql": "^3.0.0",
     "@nestjs/microservices": "^5.0.0-beta.6",
@@ -67,7 +67,7 @@
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0",
-    "snyk": "^1.161.1",
+    "snyk": "^1.465.0",
     "typescript": "^2.8.3",
     "winston": "^3.1.0",
     "winston-papertrail": "^1.0.5"
