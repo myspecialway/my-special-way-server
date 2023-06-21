@@ -49,7 +49,7 @@
     "class-validator": "^0.9.1",
     "dotenv": "^6.0.0",
     "envalid": "^4.1.4",
-    "fastify-formbody": "^2.0.0",
+    "fastify-formbody": "^4.0.0",
     "firebase-admin": "^6.1.0",
     "global": "^4.3.2",
     "graphiql": "^0.11.11",
@@ -67,7 +67,7 @@
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0",
-    "snyk": "^1.161.1",
+    "snyk": "^1.685.0",
     "typescript": "^2.8.3",
     "winston": "^3.1.0",
     "winston-papertrail": "^1.0.5"
