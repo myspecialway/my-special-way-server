@@ -1,5 +1,5 @@
 # Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
-version: v1.13.3
+version: v1.25.1
 ignore: {}
 # patches apply the minimum changes required to fix a vulnerability
 patch:
@@ -28,3 +28,31 @@ patch:
         patched: '2019-05-06T04:47:42.712Z'
     - firebase-admin > @google-cloud/storage > @google-cloud/common > google-auto-auth > google-auth-library > gcp-metadata > axios:
         patched: '2019-05-06T04:47:42.712Z'
+  SNYK-JS-HTTPSPROXYAGENT-469131:
+    - firebase-admin > @google-cloud/firestore > google-gax > google-auth-library > https-proxy-agent:
+        patched: '2023-08-31T17:16:56.183Z'
+        id: SNYK-JS-HTTPSPROXYAGENT-469131
+        path: >-
+          firebase-admin > @google-cloud/firestore > google-gax >
+          google-auth-library > https-proxy-agent
+  SNYK-JS-LODASH-567746:
+    - firebase-admin > @google-cloud/firestore > google-gax > @grpc/grpc-js > lodash:
+        patched: '2023-08-31T17:16:56.183Z'
+        id: SNYK-JS-LODASH-567746
+        path: >-
+          firebase-admin > @google-cloud/firestore > google-gax > @grpc/grpc-js
+          > lodash
+    - firebase-admin > @google-cloud/firestore > google-gax > grpc > lodash:
+        patched: '2023-08-31T17:16:56.183Z'
+        id: SNYK-JS-LODASH-567746
+        path: firebase-admin > @google-cloud/firestore > google-gax > grpc > lodash
+    - firebase-admin > @google-cloud/firestore > google-gax > lodash:
+        patched: '2023-08-31T17:16:56.183Z'
+        id: SNYK-JS-LODASH-567746
+        path: firebase-admin > @google-cloud/firestore > google-gax > lodash
+    - firebase-admin > @google-cloud/storage > @google-cloud/common > google-auto-auth > async > lodash:
+        patched: '2023-08-31T17:16:56.183Z'
+        id: SNYK-JS-LODASH-567746
+        path: >-
+          firebase-admin > @google-cloud/storage > @google-cloud/common >
+          google-auto-auth > async > lodash

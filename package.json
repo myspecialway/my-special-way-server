@@ -33,8 +33,8 @@
     "format:fix": "pretty-quick --staged",
     "format:check": "prettier --config ./.prettierrc --list-different \"src/app/**/*{.ts, .scss}\"",
     "seed": "ts-node ./db-seed/seed.ts -c mongodb://localhost:27017",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "snyk-protect": "snyk-protect",
+    "prepublish": "yarn run snyk-protect"
   },
   "dependencies": {
     "@nestjs/common": "^5.0.0-beta.6",
@@ -44,13 +44,13 @@
     "@nestjs/passport": "^1.0.10",
     "@nestjs/testing": "^5.0.0-beta.6",
     "@nestjs/websockets": "^5.0.0-beta.6",
-    "apollo-server-express": "^1.3.6",
+    "apollo-server-express": "^2.1.0",
     "class-transformer": "^0.2.0",
     "class-validator": "^0.9.1",
     "dotenv": "^6.0.0",
     "envalid": "^4.1.4",
     "fastify-formbody": "^2.0.0",
-    "firebase-admin": "^6.1.0",
+    "firebase-admin": "^9.0.0",
     "global": "^4.3.2",
     "graphiql": "^0.11.11",
     "graphql": "^0.13.2",
@@ -67,10 +67,10 @@
     "passport-jwt": "^4.0.0",
     "reflect-metadata": "^0.1.12",
     "rxjs": "^6.0.0",
-    "snyk": "^1.161.1",
     "typescript": "^2.8.3",
     "winston": "^3.1.0",
-    "winston-papertrail": "^1.0.5"
+    "winston-papertrail": "^1.0.5",
+    "@snyk/protect": "latest"
   },
   "devDependencies": {
     "@playlyfe/gql": "^2.6.0",
